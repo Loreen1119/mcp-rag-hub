@@ -1,0 +1,130 @@
+{
+  "description": "RAG GoldenTestSet — 15 组场景 Query，按检索难度分三类",
+  "categories": {
+    "exact_match": "专有名词精确匹配 — 测 BM25 优势",
+    "semantic": "语义相似但字面不同 — 测向量检索优势",
+    "mixed": "混合复杂查询 — 测 RRF+重排整体效果"
+  },
+  "test_cases": [
+    {
+      "id": "E01",
+      "query": "BM25 算法",
+      "category": "exact_match",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "BM25 是一种基于词频统计的关键词检索算法，核心公式包含 TF 饱和曲线、IDF 逆文档频率和文档长度归一化三个因子。它对专有名词和精确匹配极为有效。",
+      "notes": "文中直接出现 'BM25' 这个术语，BM25 应给出高分"
+    },
+    {
+      "id": "E02",
+      "query": "Cross-Encoder 重排序",
+      "category": "exact_match",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档，将 query 和 doc 拼接后做完整注意力计算，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
+      "notes": "文中直接出现 'Cross-Encoder' 这个术语"
+    },
+    {
+      "id": "E03",
+      "query": "RRF 融合算法",
+      "category": "exact_match",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "RRF（Reciprocal Rank Fusion）是一种排名融合算法，通过将多路检索的排名转换为倒数权重来融合结果，公式为 1/(k+rank)，可以在不依赖量纲归一化的前提下融合 BM25 和向量检索的排序结果。",
+      "notes": "文中直接出现 'RRF' 和完整公式，BM25 优势明显"
+    },
+    {
+      "id": "E04",
+      "query": "Faithfulness 忠实度指标",
+      "category": "exact_match",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "Faithfulness（忠实度）是 RAG 评测的核心指标之一，用于衡量生成内容是否忠于检索到的原文，通过 LLM 逐句比对检测幻觉。",
+      "notes": "文中提到 Faithfulness 评估指标"
+    },
+    {
+      "id": "E05",
+      "query": "512 token 滑窗切片",
+      "category": "exact_match",
+      "golden_chunk_sources": ["sample_rag_paper.md", "sample_notes.txt"],
+      "golden_answer": "滑窗切片策略通常采用 512 token 作为基础单元，并保留 128 token 的重叠区间，以确保语义边界不被机械割裂。",
+      "notes": "两个文档都提到了 512/128 参数"
+    },
+    {
+      "id": "S01",
+      "query": "如何让大模型回答更准确不瞎编？",
+      "category": "semantic",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "通过 RAG（检索增强生成）技术，将外部知识库的实时检索结果作为生成模型的上下文前缀，可以缓解大模型的幻觉问题，提升答案的事实一致性。",
+      "notes": "字面不匹配但语义指向 RAG 的幻觉缓解功能"
+    },
+    {
+      "id": "S02",
+      "query": "关键词搜索和语义搜索怎么配合使用？",
+      "category": "semantic",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "结合 BM25 关键词检索与向量语义检索的混合召回方案，通过 RRF 算法在不对原始得分做量纲归一化的前提下融合多路排序结果。",
+      "notes": "字面没出现 '配合使用'，但语义指向混合检索"
+    },
+    {
+      "id": "S03",
+      "query": "怎么评价一个检索系统好不好？",
+      "category": "semantic",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "基于 Ragas 框架的 Faithfulness、Relevancy 和 ContextRecall 三维评估体系，为 RAG 系统提供可量化的迭代优化闭环。",
+      "notes": "字面没出现 '评价'，但语义指向评测"
+    },
+    {
+      "id": "S04",
+      "query": "文档太长模型处理不了怎么办？",
+      "category": "semantic",
+      "golden_chunk_sources": ["sample_rag_paper.md", "sample_notes.txt"],
+      "golden_answer": "采用滑窗切片策略将文档切分为适当大小的 Chunk，512 token 为基础单元、128 token 重叠，确保语义完整性同时控制输入长度。",
+      "notes": "指向切片策略"
+    },
+    {
+      "id": "S05",
+      "query": "怎么防止 AI 编造不存在的信息？",
+      "category": "semantic",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "通过 Faithfulness 指标评估生成内容的忠实度，LLM 逐句比对检索到的原文与生成答案，检测是否存在幻觉。",
+      "notes": "指向 Faithfulness 评测"
+    },
+    {
+      "id": "M01",
+      "query": "RAG 系统中怎么样才能提高检索的准确率？",
+      "category": "mixed",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "通过多方面的优化：数据预处理阶段使用合适的切片策略、检索阶段结合 BM25 和向量检索的混合召回、通过 RRF 融合排序、使用 Cross-Encoder 对 Top-K 进行精排，以及建立评测闭环持续迭代。",
+      "notes": "需要综合多个段落的信息"
+    },
+    {
+      "id": "M02",
+      "query": "企业搭建知识库检索系统需要考虑哪些技术？",
+      "category": "mixed",
+      "golden_chunk_sources": ["sample_rag_paper.md", "sample_notes.txt"],
+      "golden_answer": "需要文档解析（PyMuPDF）、向量数据库（ChromaDB）、嵌入模型（BGE-M3/sentence-transformers）、混合检索（BM25+向量）、重排序（Cross-Encoder）、评估框架（Ragas）以及 MCP 接口封装。",
+      "notes": "两个文档都涉及企业技术选型"
+    },
+    {
+      "id": "M03",
+      "query": "混合检索加重排序比单纯用向量检索好在哪里？",
+      "category": "mixed",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "单纯向量检索对专有名词和精确匹配支持弱，混合检索通过 BM25 补充了关键词匹配能力，RRF 融合两路优势，Cross-Encoder 在候选集上做精细重排序，最终 Top-K 命中率显著高于任一单路方案。",
+      "notes": "需要对比分析"
+    },
+    {
+      "id": "M04",
+      "query": "传统关键词检索和现代语义检索各自的优缺点",
+      "category": "mixed",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "BM25 关键词检索对专有名词和编号敏感，但无法理解同义词；向量语义检索能捕获语义相似性，但对专有名词支持弱。两者互补，混合使用效果最佳。",
+      "notes": "对比分析题"
+    },
+    {
+      "id": "M05",
+      "query": "RAG 技术未来的发展方向是什么？",
+      "category": "mixed",
+      "golden_chunk_sources": ["sample_rag_paper.md"],
+      "golden_answer": "未来方向包括 Agent 化（RAG 与 Agent 框架结合实现多轮检索决策）、多模态 RAG（处理图片、表格等多种格式）、以及自适应切片策略。",
+      "notes": "开放性问题，需要从总结部分提取"
+    }
+  ]
+}

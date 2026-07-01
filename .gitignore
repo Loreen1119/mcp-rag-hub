@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# ChromaDB 向量数据（几百MB，不提交）
+chroma_db/
+
+# 实验数据（临时文件）
+experiments/
+
+# Claude 配置
+.claude/
+
+# 环境
+.env
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# 系统
+.DS_Store
+Thumbs.db

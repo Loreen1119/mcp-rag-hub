@@ -1,0 +1,23 @@
+MetaFetch-RAG 企业级知识检索系统 — 项目启动笔记
+
+项目目标：针对私有知识库传统检索专有名词匹配不准、语义召回缺失等问题，搭建高性能RAG智能知识检索系统。
+
+技术栈规划：
+- 文档解析：PyMuPDF + Python-Markdown
+- 向量数据库：ChromaDB
+- 嵌入模型：sentence-transformers (BGE-M3)
+- 评估框架：Ragas
+- 接口封装：FastMCP
+
+数据管线设计要点：
+1. 滑窗切片 (512/128) — 这个参数组合经过了大量实验验证，512字符大约对应300-400个中文token，能够完整容纳一个中等复杂度的语义单元；128字符的重叠区则确保了跨Chunk的实体关系不会因为机械切割而丢失。
+2. Metadata增强 — 每个Chunk携带源文件、位置和时标信息，这样在最终生成阶段可以追溯到原始文档的精确位置，也便于做引用标注。
+3. 多格式支持 — 初期支持PDF、Markdown和纯文本三种格式，后续扩展Word和HTML。
+
+下一步行动：
+- 完成数据预处理模块编码
+- 搭建ChromaDB向量存储与索引
+- 实现BM25 + 向量检索 + RRF混合召回
+- 集成Cross-Encoder重排序
+- 构建GoldenTestSet并跑通Ragas评估
+- 封装FastMCP Tool接口

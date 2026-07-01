@@ -1,0 +1,38 @@
+# ============================================================
+# RAG 智能知识检索系统 — 依赖清单
+# 安装方式：pip install -r requirements.txt
+#
+# 注意：PyTorch 通过 conda 安装（Windows DLL 兼容性更好）
+#       conda install pytorch cpuonly -c pytorch
+# ============================================================
+
+# --- Embedding & Models ---
+sentence-transformers>=2.7,<3.0
+transformers>=4.40,<4.45
+chromadb>=0.5,<1.0
+rank-bm25>=0.2.2
+
+# --- Document Parsing ---
+pdfplumber>=0.10,<1.0
+tiktoken>=0.7,<1.0
+jieba>=0.42,<1.0
+
+# --- UI ---
+streamlit>=1.35,<2.0
+
+# --- Evaluation ---
+ragas>=0.2,<1.0
+datasets>=2.0
+
+# --- MCP ---
+fastmcp>=2.0,<3.0
+
+# --- Agent ---
+langgraph>=0.2,<1.0
+langgraph-checkpoint>=2.0,<3.0
+
+# --- Local LLM (LangGraph Agent 用, 可选) ---
+ollama>=0.4,<1.0
+
+# --- Utilities ---
+rich>=13.0,<15.0
