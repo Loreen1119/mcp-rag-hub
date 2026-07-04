@@ -16,3 +16,7 @@ _HF_CACHE = Path("D:/huggingface_cache")
 if _HF_CACHE.parent.exists():
     _HF_CACHE.mkdir(parents=True, exist_ok=True)
     os.environ.setdefault("HF_HOME", str(_HF_CACHE))
+
+# 强制离线模式 — 模型已缓存在本地，不需要每次连 huggingface.co 检查更新
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")

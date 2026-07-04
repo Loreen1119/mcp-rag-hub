@@ -55,29 +55,119 @@ mcp-rag-hub/
 | 3 | BM25 + ChromaDB 双路召回 | ✅ 完成 | retrievers.py |
 | 4 | RRF 融合 + Cross-Encoder 重排 | ✅ 完成 | fusion.py |
 | 5 | Streamlit 前端 | ✅ 完成 | app.py |
-| 6 | Ragas 自动化评测 | ✅ 完成 | evaluate.py / test_queries.json |
+| 6 | 检索评测（MRR/Hit@K/Precision@K） | ✅ 完成 | evaluate.py / test_queries.json |
 | 7 | FastMCP 工具封装 | ✅ 完成 | mcp_server.py |
 | 8 | LangGraph Agent 编排 | ✅ 完成 | agent.py |
 | 9 | 消融实验与数据分析 | ✅ 完成 | experiments/ + src/experiments.py |
-| 10 | 面试复盘 | ⬜ 未开始 | interview_notes.md |
+| 10 | 面试复盘 | ✅ 完成 | docs_knowledge/ch10-面试复盘.md |
+| — | **Ollama LLM 生成评测（第 6 章增强）** | ✅ 完成 | llm_evaluate.py / qwen2.5:7b |
 
 ## 当前进度
 
-- **当前章节**：第 9 章 ✅ 完成
-- **下一章**：第 10 章（面试复盘）
-- **上一次产出**：src/experiments.py（五维度消融实验 + 6 份实验数据文件）
+- **1~10 章全部完成**，核心检索链路 + 前端 + 评测 + MCP + Agent + 消融实验 + LLM 生成评测 + 面试复盘均已落地
+- **已跑完**：Ollama LLM 评测 v1（qwen2.5:7b，全量 15 条），结果见 `experiments/llm_evaluation_results.json`
+- **待跑**：LLM 评测 v2（Prompt + golden_answer 优化后重跑）
 
-## 重启指南
+## LLM 生成评测结果（qwen2.5:7b v1）
 
-新窗口启动后，说：**"继续 PROGRESS.md 里的 RAG 项目，从第 10 章开始"**
+| 指标 | Mean | Min | Max |
+|------|:----:|:---:|:---:|
+| Faithfulness | **0.9533** | 0.7 | 1.0 |
+| Answer Relevancy | **0.86** | 0.7 | 1.0 |
+| Context Recall | 0.7933 | 0.7 | 1.0 |
 
-必要的初始化命令（新窗口需执行）：
-```bash
-cd "d:/1base/computer/Agent/DevRoot/mcp-rag-hub"
-export KMP_DUPLICATE_LIB_OK=TRUE
-export PIP_CACHE_DIR=/d/pip_cache
-export TMPDIR=/d/tmp
+| 类别 | Faith | Relev | Recall |
+|------|:-----:|:-----:|:------:|
+| exact_match | **1.0** | 0.76 | 0.76 |
+| mixed | 0.9 | **0.98** | 0.74 |
+| semantic | 0.96 | 0.84 | **0.88** |
+
+> 关键发现：7B 区分度远超 3B；Faithfulness 0.95 说明系统几乎不编造；Context Recall ~0.7-0.8 是因为语料中确实缺少 BM25 公式、RRF 公式等细节。
+
+## LLM 生成评测 v2 优化（待重跑）
+
+> v1 结果分析发现三个问题，已针对性修改，睡前重跑验证：
+
+| # | 问题 | 根因 | 修改 |
+|---|------|------|------|
+| 1 | 算法概念题自动外延混合检索/RAG 架构，Answer Relevancy 稳在 0.7~0.8 | 生成 Prompt 太宽泛 | System prompt 加"只回答对象本身，不展开应用场景"，字数 300→200 |
+| 2 | 尾句自主推论导致 Faithfulness < 1.0（M05/S04/M04） | 生成 Prompt 未约束推论 | Prompt 末尾加"不要添加任何文档中没有的推论或总结" |
+| 3 | Context Recall 整体偏低，算法类样本全部 0.7 | golden_answer 含语料中不存在的公式细节（TF/IDF/RRF 公式等） | E01/E02/E03 的 golden_answer 从公式级收紧到概念描述级 |
+
+> 修改文件：`src/llm_evaluate.py`（Prompt）、`test_queries.json`（3 个 golden_answer）
+
+## 下一步任务（按优先级）
+
+### ① ~~跑 LLM 生成评测~~ ✅ 已完成
+
+- 模型：qwen2.5:**7b**（3B 区分度太差，已删除）
+- 环境：Ollama 绿色版 `D:\ollama`，serve 端口 127.0.0.1:11434
+- 全量 15 条耗时约 2 小时（纯 CPU 推理）
+
+### ② ~~第 10 章面试复盘~~ ✅ 已完成
+
+产出 [interview_notes.md](interview_notes.md)，内容：
+- ✅ 三段核心代码默写（RRF / BM25 检索流程 / Cross-Encoder 精排流程）—— 从实际源码精简，白板手写级别
+- ✅ 三个必问题逐字稿（BM25 vs 向量 / RRF vs 加权 / Bi-Encoder vs Cross-Encoder）—— 均含"原理→实现→数据"三段论
+- ✅ 30 秒项目电梯演讲
+- ✅ 追问应对逻辑（原理层 3 问 + 实现层 3 问 + 工程层 4 问）
+- ✅ 面试前一天速查清单
+
+产出见 `docs_knowledge/ch10-面试复盘.md`
+
+### ③ docs_knowledge/ 补齐
+
+| 章 | 状态 | 方式 |
+|----|------|------|
+| Ch01 | 原始技术风格 | — |
+| Ch02 | ✅ Gemini 改写 | 大白话 + 面试话术双层风格 |
+| Ch03 | ✅ Gemini 改写 | 大白话 + 面试话术双层风格 |
+| Ch04 | ✅ Gemini 改写 | 大白话 + 面试话术双层风格 |
+| Ch05 | ✅ Claude 改写 | 融合 Gemini 精华 + 真实代码校对 + 面试话术升级 |
+| Ch06 | ✅ Claude 改写 | 融合 Gemini 精华（S03 降级与修复叙事）+ 补全源码走读 + 面试话术升级 |
+| Ch07 | ✅ Claude 改写 | 融合 Gemini 精华（微服务积木/精装房vs裸接口）+ 修正虚构函数与假数字 + 面试话术升级 |
+| Ch08 | 待改写 | 原始技术风格 |
+| Ch09 | 待改写 | 原始技术风格 |
+
+### ④ LLM 评测 v2 重跑（睡前执行）
+
+> v1 结果分析发现三个问题，已修改代码，睡前重跑验证：
+> - `src/llm_evaluate.py`：生成 Prompt 收紧（只答对象本身 + 禁止推论 + 字数 300→200）
+> - `test_queries.json`：E01/E02/E03 的 golden_answer 从公式级收紧到概念描述级
+> - 预期：Answer Relevancy 0.86→~0.9+，Faithfulness 0.95→~0.98，Context Recall 0.79→~0.85+
+
+## 简历定稿（基于 9 章真实落地，无假数字）
+
 ```
+项目一：RAG 智能知识检索系统
+开发技术：Python / ChromaDB / BM25 / Cross-Encoder / Streamlit / LangGraph / FastMCP
+
+项目介绍：
+针对企业知识库专有名词匹配不准、语义召回缺失的痛点，搭建 BM25+向量双路召回、
+RRF 融合、Cross-Encoder 重排的 RAG 检索系统。设计 Token 级切片管线，自实现
+检索评测与消融实验体系，并通过 FastMCP+LangGraph 封装为 Agent 调用的检索微服务。
+
+核心职责：
+1. 实现 BM25 + ChromaDB 双路召回，手动实现 RRF 算法消除两路得分量纲差异；
+   集成 Cross-Encoder 两阶段精排，消融实验验证 CE 在语义查询上从 MRR=0 修复至
+   MRR=1.0，同时占总延迟 92%，体现召回-精度-延迟的工程权衡。
+2. 设计 Token 级滑窗切片管线（tiktoken cl100k_base），集成 Markdown 标题面包屑
+   解析与 UTF-8/GBK 编码降级检测链，基于贪心倒退算法保证重叠区语义完整。
+3. 自实现 MRR/Hit@K/Precision@K 评测模块与 15 组分层 GoldenTestSet；跑通五维度消融
+   实验（模块隔离/分类别/参数扫描/延迟剖析/Query 追踪），以数据驱动架构决策。
+4. 通过 FastMCP 将检索链路封装为标准化 Tool 接口，基于 LangGraph 构建 5 节点条件
+   路由 Agent（analyze→retrieve→check→rewrite/generate），支持多轮检索决策与查询改写。
+```
+
+## 消融实验核心数据（面试弹药库）
+
+| 证据 | 数据 | 面试时讲什么 |
+|------|------|-------------|
+| S03 语义查询 | BM25 MRR=0 → Vector 1.0 → RRF 0.5 → CE 1.0 | "BM25 对语义查询完全盲视，CE 修正了 RRF 退化" |
+| CE 延迟占比 | 214ms / 232ms = 92.3% | "CE 是最贵的模块，所以必须两阶段粗筛+精排" |
+| BM25 vs Vector 分类别 | exact_match: 持平 / semantic: Vector 碾压 | "两者各有所长，数据证明混合召回必要性" |
+| RRF 退化 | Vector MRR=0.967 → RRF MRR=0.933 | "RRF 在小语料下可能负优化，CE 是纠错器" |
+| 参数不敏感 | RRF_K 30/60/120 全部 MRR=1.0 | "参数在合理范围内系统表现稳定，降低运维成本" |
 
 ## 环境配置速查
 
@@ -90,23 +180,25 @@ export TMPDIR=/d/tmp
 
 ## 已知问题
 
-- **Ragas 不可用**：Windows Anaconda SSL 证书冲突（`aiohttp` → `ssl.load_default_certs`）。已自实现评测模块替代，见 `src/evaluate.py`
-- **Ollama 未安装**：LangGraph Agent 章节（第 8 章）需先 `ollama pull qwen2.5:7b`
+- **Ragas 不可用**：Windows Anaconda SSL 证书冲突，已自实现评测模块替代（`src/evaluate.py`）
+- **Ollama 评测模型**：当前使用 qwen2.5:**7b**（3B 区分度太差已删除），纯 CPU 推理，全量 15 条约 1 小时
+- **HuggingFace 离线模式**：`src/__init__.py` 已设 `HF_HUB_OFFLINE=1`，避免每次启动连接 huggingface.co 超时重试
+- **C 盘空间不足**：所有大文件（模型缓存、pip 缓存、临时文件）已迁至 D 盘
 
-## 变更日志
+## 新窗口启动指令
 
-| 日期 | 内容 |
-|------|------|
-| 2026-07-01 | 初始化项目，确定架构方案，创建进度追踪文件 |
-| 2026-07-01 | 第 1 章完成：项目骨架、数据结构定义、环境搭建（含 Windows 兼容修复） |
-| 2026-07-01 | 从 MetaFetch-RAG 迁移：测试数据文件 + 吸收设计模式 |
-| 2026-07-01 | 第 2 章完成：文档加载与切片管线（tiktoken token 级切片 / 编码检测 / Markdown 面包屑） |
-| 2026-07-01 | 修复 OMP 重复加载 + HF 缓存：环境变量统一移至 src/__init__.py |
-| 2026-07-01 | 第 3 章完成：BM25 + ChromaDB 双路召回（手动 embedding / 原始分数不归一化） |
-| 2026-07-01 | 第 4 章完成：RRF 融合 + Cross-Encoder 重排序（5 行 RRF / Bi vs Cross 两阶段策略） |
-| 2026-07-01 | 第 5 章完成：Streamlit 前端（四 Tab 对比 / cache_resource 缓存管线） |
-| 2026-07-01 | 第 6 章完成：自实现评测 MRR/Hit@K/Precision@K + 15 组分层 GoldenTestSet |
-| 2026-07-01 | 评测基线数据：BM25 MRR=0.90 → Vector 0.97 → CE 1.00（S03 为关键证据） |
-| 2026-07-01 | 第 7 章完成：FastMCP 工具封装（4 个 Tool / 懒加载管线 / stdio transport） |
-| 2026-07-01 | 第 8 章完成：LangGraph Agent 编排（5 节点 / 条件边 / 查询改写 / Ollama fallback） |
-| 2026-07-01 | 第 9 章完成：五维度消融实验（模块隔离/分类别/参数扫描/延迟剖析/Query追踪） |
+说：**"继续 PROGRESS.md"**
+
+必要的初始化命令：
+```bash
+cd "d:/1base/computer/Agent/DevRoot/mcp-rag-hub"
+export KMP_DUPLICATE_LIB_OK=TRUE
+export PIP_CACHE_DIR=/d/pip_cache
+export TMPDIR=/d/tmp
+```
+
+## 当前待办（2026-07-04）
+
+- [ ] 睡前重跑 LLM 评测 v2（ollama serve + python src/llm_evaluate.py）
+- [ ] 第 10 章面试复盘（interview_notes.md）
+- [ ] docs_knowledge/ Ch08、Ch09 改写

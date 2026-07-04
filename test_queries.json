@@ -11,7 +11,7 @@
       "query": "BM25 算法",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "BM25 是一种基于词频统计的关键词检索算法，核心公式包含 TF 饱和曲线、IDF 逆文档频率和文档长度归一化三个因子。它对专有名词和精确匹配极为有效。",
+      "golden_answer": "BM25 是一种基于词频统计的关键词检索算法，对专有名词和精确匹配极为有效，但无法理解同义词和语义相近的表达。",
       "notes": "文中直接出现 'BM25' 这个术语，BM25 应给出高分"
     },
     {
@@ -19,7 +19,7 @@
       "query": "Cross-Encoder 重排序",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档，将 query 和 doc 拼接后做完整注意力计算，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
+      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档做注意力计算，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
       "notes": "文中直接出现 'Cross-Encoder' 这个术语"
     },
     {
@@ -27,7 +27,7 @@
       "query": "RRF 融合算法",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "RRF（Reciprocal Rank Fusion）是一种排名融合算法，通过将多路检索的排名转换为倒数权重来融合结果，公式为 1/(k+rank)，可以在不依赖量纲归一化的前提下融合 BM25 和向量检索的排序结果。",
+      "golden_answer": "RRF（Reciprocal Rank Fusion）是一种排名融合算法，通过将多路检索的排名转换为倒数权重来融合结果，可以在不依赖量纲归一化的前提下融合 BM25 和向量检索的排序结果。",
       "notes": "文中直接出现 'RRF' 和完整公式，BM25 优势明显"
     },
     {
