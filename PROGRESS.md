@@ -66,7 +66,7 @@ mcp-rag-hub/
 
 - **1~10 章全部完成**，核心检索链路 + 前端 + 评测 + MCP + Agent + 消融实验 + LLM 生成评测 + 面试复盘均已落地
 - **已跑完**：Ollama LLM 评测 v1（qwen2.5:7b，全量 15 条），结果见 `experiments/llm_evaluation_results.json`
-- **待跑**：LLM 评测 v2（Prompt + golden_answer 优化后重跑）
+- **待跑**：LLM 评测 v1 重跑（当前 `experiments/llm_evaluation_results.json` 为 v2 废弃数据，需跑一次覆盖）
 
 ## LLM 生成评测结果（qwen2.5:7b v1）
 
@@ -196,6 +196,8 @@ export TMPDIR=/d/tmp
 
 ## 当前待办（2026-07-05）
 
-- [ ] 重跑 LLM 评测 v1（ollama serve + python src/llm_evaluate.py）
+- [ ] 重跑 LLM 评测 v1（`ollama serve` + `python src/llm_evaluate.py`）—— `experiments/llm_evaluation_results.json` 当前为 v2 废弃数据，需重跑覆盖为 v1 真实结果
 - [x] 第 10 章面试复盘（docs_knowledge/ch10-面试复盘.md）
 - [x] docs_knowledge/ Ch05、Ch06、Ch07 改写
+- [x] docs_knowledge/ Ch02、Ch03、Ch04 Gemini 改写
+- [ ] Ch08、Ch09 不改写（用户决定保持原始技术风格）
