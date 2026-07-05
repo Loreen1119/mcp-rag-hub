@@ -84,17 +84,17 @@ mcp-rag-hub/
 
 > 关键发现：7B 区分度远超 3B；Faithfulness 0.95 说明系统几乎不编造；Context Recall ~0.7-0.8 是因为语料中确实缺少 BM25 公式、RRF 公式等细节。
 
-## LLM 生成评测 v2 优化（待重跑）
+## LLM 生成评测 v2 尝试（已废弃）
 
-> v1 结果分析发现三个问题，已针对性修改，睡前重跑验证：
+> v1 结果分析后尝试收紧 Prompt，但效果负面——E01 Faithfulness 暴跌至 0.0。
+> 已回退至 v1，此为最终版本。v2 数据留档 `experiments/llm_evaluation_results.json`。
 
-| # | 问题 | 根因 | 修改 |
+| # | 尝试 | 结果 | 结论 |
 |---|------|------|------|
-| 1 | 算法概念题自动外延混合检索/RAG 架构，Answer Relevancy 稳在 0.7~0.8 | 生成 Prompt 太宽泛 | System prompt 加"只回答对象本身，不展开应用场景"，字数 300→200 |
-| 2 | 尾句自主推论导致 Faithfulness < 1.0（M05/S04/M04） | 生成 Prompt 未约束推论 | Prompt 末尾加"不要添加任何文档中没有的推论或总结" |
-| 3 | Context Recall 整体偏低，算法类样本全部 0.7 | golden_answer 含语料中不存在的公式细节（TF/IDF/RRF 公式等） | E01/E02/E03 的 golden_answer 从公式级收紧到概念描述级 |
+| 1 | 生成 Prompt 收紧（200字/禁止推论） | Faithfulness 0.95→0.91, E01 崩至 0.0 | 过度约束导致 7B 回答过于简短偏离原文 |
+| 2 | golden_answer 从公式级收紧到概念级 | Context Recall 无变化 | 公式缺失本质是语料问题，改 golden_answer 无意义 |
 
-> 修改文件：`src/llm_evaluate.py`（Prompt）、`test_queries.json`（3 个 golden_answer）
+> 终版结论：**v1 Prompt（300字/允许自然关联技术说明）** 是当前 7B + 3 Chunk 小语料下的最优平衡。
 
 ## 下一步任务（按优先级）
 
@@ -129,12 +129,9 @@ mcp-rag-hub/
 | Ch08 | 待改写 | 原始技术风格 |
 | Ch09 | 待改写 | 原始技术风格 |
 
-### ④ LLM 评测 v2 重跑（睡前执行）
+### ④ ~~LLM 评测 v2 重跑~~ → 已废弃，回退至 v1
 
-> v1 结果分析发现三个问题，已修改代码，睡前重跑验证：
-> - `src/llm_evaluate.py`：生成 Prompt 收紧（只答对象本身 + 禁止推论 + 字数 300→200）
-> - `test_queries.json`：E01/E02/E03 的 golden_answer 从公式级收紧到概念描述级
-> - 预期：Answer Relevancy 0.86→~0.9+，Faithfulness 0.95→~0.98，Context Recall 0.79→~0.85+
+> v2 Prompt 收紧效果负面，已回退。终版为 v1 结果（F=0.95 / AR=0.86 / CR=0.79）。
 
 ## 简历定稿（基于 9 章真实落地，无假数字）
 
@@ -197,8 +194,8 @@ export PIP_CACHE_DIR=/d/pip_cache
 export TMPDIR=/d/tmp
 ```
 
-## 当前待办（2026-07-04）
+## 当前待办（2026-07-05）
 
-- [ ] 睡前重跑 LLM 评测 v2（ollama serve + python src/llm_evaluate.py）
-- [ ] 第 10 章面试复盘（interview_notes.md）
-- [ ] docs_knowledge/ Ch08、Ch09 改写
+- [ ] 重跑 LLM 评测 v1（ollama serve + python src/llm_evaluate.py）
+- [x] 第 10 章面试复盘（docs_knowledge/ch10-面试复盘.md）
+- [x] docs_knowledge/ Ch05、Ch06、Ch07 改写
