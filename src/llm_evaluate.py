@@ -1,26 +1,25 @@
-# -*- coding: utf-8 -*-
 """
-LLM-as-Judge 生成评测 -- 基于 Ollama 的三维 LLM 裁判打分.
+LLM-as-Judge 生成评测 — 基于 Ollama 的三维 LLM 裁判打分。
 
-三个 Ragas 标准指标:
-- Faithfulness:  生成答案是否忠实于检索到的上下文？(逐句比对,检测幻觉)
-- Answer Relevancy: 生成答案是否紧扣用户问题？(检测跑题)
-- Context Recall: 检索上下文是否覆盖了参考答案的关键信息？(检测检索遗漏)
+三个 Ragas 标准指标：
+- Faithfulness:  生成答案是否忠实于检索到的上下文？（逐句比对，检测幻觉）
+- Answer Relevancy: 生成答案是否紧扣用户问题？（检测跑题）
+- Context Recall: 检索上下文是否覆盖了参考答案的关键信息？（检测检索遗漏）
 
-与 evaluate.py 的关系:
-- evaluate.py 测检索阶段(MRR / Hit@K / Precision@K)
-- llm_evaluate.py 测生成阶段(Faithfulness / Answer Relevancy / Context Recall)
+与 evaluate.py 的关系：
+- evaluate.py 测检索阶段（MRR / Hit@K / Precision@K）
+- llm_evaluate.py 测生成阶段（Faithfulness / Answer Relevancy / Context Recall）
 - 两者共用 test_queries.json 的 golden_answer 字段
 
-前置条件:
+前置条件：
     1. 安装 Ollama: winget install Ollama.Ollama
     2. 设置模型目录到 D 盘: set OLLAMA_MODELS=D:\ollama_models
     3. 拉取模型: ollama pull qwen2.5:7b
     4. 启动服务: ollama serve  (通常安装后自动启动)
 
-运行:
+运行：
     python src/llm_evaluate.py              # 跑全部 15 组评测
-    python src/llm_evaluate.py --sample 3    # 只跑前 3 组(快速验证)
+    python src/llm_evaluate.py --sample 3    # 只跑前 3 组（快速验证）
 """
 
 from __future__ import annotations
@@ -71,7 +70,7 @@ def _ensure_pipeline():
     _vector = VectorRetriever(_chunks, rebuild=True)
     _pipeline = FusionPipeline()
     _initialized = True
-    logger.info("管线就绪 -- %d 个 Chunk", len(_chunks))
+    logger.info("管线就绪 — %d 个 Chunk", len(_chunks))
 
 
 # ============================================================
@@ -80,7 +79,7 @@ def _ensure_pipeline():
 
 
 def _call_ollama(prompt: str, system: str = "") -> str:
-    """通过 HTTP 直接调用 Ollama API(绕过 SDK 版本兼容问题)."""
+    """通过 HTTP 直接调用 Ollama API（绕过 SDK 版本兼容问题）。"""
     try:
         import requests
 
@@ -110,44 +109,44 @@ def _call_ollama(prompt: str, system: str = "") -> str:
 
 
 # ============================================================
-# 评分 Prompt 模板(三个指标各一个独立 prompt)
+# 评分 Prompt 模板（三个指标各一个独立 prompt）
 # ============================================================
 
-FAITHFULNESS_SYSTEM = """你是一个严格的评审专家.你的任务是对比"生成答案"和"检索到的上下文",判断生成答案中的每一条陈述是否可以在上下文中找到依据.
+FAITHFULNESS_SYSTEM = """你是一个严格的评审专家。你的任务是对比"生成答案"和"检索到的上下文"，判断生成答案中的每一条陈述是否可以在上下文中找到依据。
 
-评分标准(0~1 之间):
-- 1.0: 答案中的所有陈述都能在上下文中直接找到原文支持,没有任何编造
-- 0.7~0.9: 绝大部分有依据,有一处轻微的推论性表述(上下文暗示了但没有明确说)
+评分标准（0~1 之间）：
+- 1.0: 答案中的所有陈述都能在上下文中直接找到原文支持，没有任何编造
+- 0.7~0.9: 绝大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）
 - 0.4~0.6: 有 1~2 处明显的事实错误或编造
-- 0.1~0.3: 大量编造,只有少量信息来自上下文
-- 0.0: 答案完全脱离上下文,或与上下文矛盾
+- 0.1~0.3: 大量编造，只有少量信息来自上下文
+- 0.0: 答案完全脱离上下文，或与上下文矛盾
 
-输出格式(严格 JSON):
-{"score": <0~1 的浮点数>, "reason": "<一句话说明扣分原因,满分则说'全部有据可查'>"}"""
+输出格式（严格 JSON）：
+{"score": <0~1 的浮点数>, "reason": "<一句话说明扣分原因，满分则说'全部有据可查'>"}"""
 
-ANSWER_RELEVANCY_SYSTEM = """你是一个严格的评审专家.你的任务是判断"生成答案"是否紧扣"用户问题",有没有答非所问或跑题.
+ANSWER_RELEVANCY_SYSTEM = """你是一个严格的评审专家。你的任务是判断"生成答案"是否紧扣"用户问题"，有没有答非所问或跑题。
 
-评分标准(0~1 之间):
-- 1.0: 答案完全围绕问题展开,每句话都在回应问题的核心诉求,没有废话
-- 0.7~0.9: 基本扣题,有少量扩展性内容但不影响核心回答
-- 0.4~0.6: 部分内容与问题相关,但有明显的跑题或答非所问
-- 0.1~0.3: 大部分内容与问题无关,只有一两句沾边
+评分标准（0~1 之间）：
+- 1.0: 答案完全围绕问题展开，每句话都在回应问题的核心诉求，没有废话
+- 0.7~0.9: 基本扣题，有少量扩展性内容但不影响核心回答
+- 0.4~0.6: 部分内容与问题相关，但有明显的跑题或答非所问
+- 0.1~0.3: 大部分内容与问题无关，只有一两句沾边
 - 0.0: 完全答非所问
 
-输出格式(严格 JSON):
+输出格式（严格 JSON）：
 {"score": <0~1 的浮点数>, "reason": "<一句话说明得分理由>"}"""
 
-CONTEXT_RECALL_SYSTEM = """你是一个严格的评审专家.你的任务是判断"检索到的上下文"是否覆盖了"参考答案"中的所有关键信息点.
+CONTEXT_RECALL_SYSTEM = """你是一个严格的评审专家。你的任务是判断"检索到的上下文"是否覆盖了"参考答案"中的所有关键信息点。
 
-评分标准(0~1 之间):
+评分标准（0~1 之间）：
 - 1.0: 参考答案里的每一个关键信息点都能在上下文中找到对应原文
-- 0.7~0.9: 绝大部分关键信息被覆盖,有 1 个次要信息点缺失
+- 0.7~0.9: 绝大部分关键信息被覆盖，有 1 个次要信息点缺失
 - 0.4~0.6: 覆盖了主要信息但缺失了 2 个以上关键点
-- 0.1~0.3: 只有少量信息被覆盖,大部分关键信息缺失
+- 0.1~0.3: 只有少量信息被覆盖，大部分关键信息缺失
 - 0.0: 上下文完全不包含参考答案中的任何信息
 
-输出格式(严格 JSON):
-{"score": <0~1 的浮点数>, "reason": "<一句话说明缺失了哪些关键信息,满分则说'全部覆盖'>"}"""
+输出格式（严格 JSON）：
+{"score": <0~1 的浮点数>, "reason": "<一句话说明缺失了哪些关键信息，满分则说'全部覆盖'>"}"""
 
 
 def _build_faithfulness_prompt(answer: str, context: str) -> str:
@@ -159,7 +158,7 @@ def _build_faithfulness_prompt(answer: str, context: str) -> str:
 
 {answer}
 
-请逐句比对生成答案与上下文,给 Faithfulness 打分.只输出 JSON."""
+请逐句比对生成答案与上下文，给 Faithfulness 打分。只输出 JSON。"""
 
 
 def _build_answer_relevancy_prompt(answer: str, query: str) -> str:
@@ -171,7 +170,7 @@ def _build_answer_relevancy_prompt(answer: str, query: str) -> str:
 
 {answer}
 
-请判断答案是否紧扣问题,给 Answer Relevancy 打分.只输出 JSON."""
+请判断答案是否紧扣问题，给 Answer Relevancy 打分。只输出 JSON。"""
 
 
 def _build_context_recall_prompt(context: str, golden_answer: str) -> str:
@@ -179,11 +178,11 @@ def _build_context_recall_prompt(context: str, golden_answer: str) -> str:
 
 {context}
 
-## 参考答案(理想情况应该覆盖的信息)
+## 参考答案（理想情况应该覆盖的信息）
 
 {golden_answer}
 
-请判断上下文是否覆盖了参考答案中的关键信息,给 Context Recall 打分.只输出 JSON."""
+请判断上下文是否覆盖了参考答案中的关键信息，给 Context Recall 打分。只输出 JSON。"""
 
 
 # ============================================================
@@ -192,7 +191,7 @@ def _build_context_recall_prompt(context: str, golden_answer: str) -> str:
 
 
 def _parse_score(raw: str) -> tuple[float, str]:
-    """从 LLM 返回的 JSON 中提取 score 和 reason.解析失败返回 0 分."""
+    """从 LLM 返回的 JSON 中提取 score 和 reason。解析失败返回 0 分。"""
     try:
         # 尝试提取 JSON 块
         if "```json" in raw:
@@ -213,7 +212,7 @@ def _parse_score(raw: str) -> tuple[float, str]:
 
 
 def _retrieve_and_generate(query: str) -> tuple[str, str]:
-    """检索 + 生成:返回 (generated_answer, context_text)."""
+    """检索 + 生成：返回 (generated_answer, context_text)。"""
     _ensure_pipeline()
 
     bm25_results = _bm25.search(query)
@@ -224,7 +223,7 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
     if not ce_results:
         return "[无检索结果]", ""
 
-    # 构建上下文(Top-3 Chunk 拼接)
+    # 构建上下文（Top-3 Chunk 拼接）
     context_parts = []
     for i, r in enumerate(ce_results[:3]):
         src = r.chunk.metadata.get("source", "unknown")
@@ -232,7 +231,7 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
     context = "\n\n".join(context_parts)
 
     # 用 RAG prompt 生成答案
-    system = "你是一个知识检索助手.请严格基于提供的文档内容回答用户问题.只回答查询对象本身是什么,不要展开应用场景、配套技术或系统架构.如果文档内容不足以回答,请如实说明.控制在 200 字以内."
+    system = "你是一个知识检索助手。请严格基于提供的文档内容回答用户问题。如果文档内容不足以回答，请如实说明。不要编造文档中没有的信息。控制在 300 字以内。"
 
     prompt = f"""## 检索到的文档内容
 
@@ -242,7 +241,7 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
 
 {query}
 
-请基于上述文档内容回答用户问题.不要添加任何文档中没有的推论或总结."""
+请基于上述文档内容回答用户问题。"""
 
     answer = _call_ollama(prompt, system=system)
 
@@ -257,14 +256,14 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
 
 
 def _save_checkpoint(details: list[dict], output_path: Path):
-    """逐条增量写入, 以防中途挂掉丢失已有结果."""
-    checkpoint = {"summary": {"model": LLM_MODEL, "total_cases": len(details), "note": "进行中..."}, "details": details}
+    """逐条增量写入，以防中途挂掉丢失已有结果。"""
+    checkpoint = {"summary": {"model": LLM_MODEL, "total_cases": len(details), "note": "进行中…"}, "details": details}
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
 
 def evaluate_one(tc: dict, verbose: bool = True) -> dict:
-    """对单条 test case 跑完整评测链路:检索 -> 生成 -> 三维 LLM 打分.
+    """对单条 test case 跑完整评测链路：检索 → 生成 → 三维 LLM 打分。
 
     Returns:
         {"id": ..., "query": ..., "answer": ..., "faithfulness": {...},
@@ -333,7 +332,7 @@ def evaluate_one(tc: dict, verbose: bool = True) -> dict:
 
 
 def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = True) -> dict:
-    """对全部 test cases 跑 LLM 生成评测.
+    """对全部 test cases 跑 LLM 生成评测。
 
     Returns:
         {"summary": {per_metric_avg, per_category}, "details": [...per test case]}
@@ -369,7 +368,7 @@ def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = Tru
             metrics_accum[metric].append(s)
             category_accum[cat][metric].append(s)
 
-        # 逐条即时写入,防止中途挂掉丢数据
+        # 逐条即时写入，防止中途挂掉丢数据
         _save_checkpoint(details, output_path)
 
     # 汇总
@@ -419,11 +418,11 @@ def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = Tru
         c = summary["by_category"][cat]
         print(f"  {cat:<18s} {c['faithfulness']:>7.4f}  {c['answer_relevancy']:>7.4f}  {c['context_recall']:>7.4f}")
 
-    # 保存(最终版含 summary)
+    # 保存（最终版含 summary）
     output = {"summary": summary, "details": details}
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"\n  -> 已保存: {output_path}")
+    print(f"\n  → 已保存: {output_path}")
 
     return output
 
@@ -434,16 +433,16 @@ def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = Tru
 
 
 def run_quick_check(n: int = 3) -> None:
-    """快速验证 Ollama 连接 + prompt 是否正常.只跑前 n 条."""
+    """快速验证 Ollama 连接 + prompt 是否正常。只跑前 n 条。"""
     with open(TEST_QUERIES_FILE, "r", encoding="utf-8") as f:
         test_cases = json.load(f)["test_cases"][:n]
 
     print("=" * 60)
-    print(f"  快速验证模式(前 {n} 条)")
+    print(f"  快速验证模式（前 {n} 条）")
     print("=" * 60)
 
     # 先检查 Ollama 是否可用
-    test_resp = _call_ollama("Reply OK", system="Only reply OK.")
+    test_resp = _call_ollama("回复'OK'", system="只回复OK两个字。")
     if not test_resp:
         print("\n  [ERROR] Ollama 未连接！请检查:")
         print("    1. ollama serve 是否在运行")
@@ -451,7 +450,7 @@ def run_quick_check(n: int = 3) -> None:
         print("    3. set OLLAMA_MODELS=D:\\ollama_models")
         return
 
-    print(f"  Ollama 连接正常 -> 响应: {test_resp.strip()[:50]}")
+    print(f"  Ollama 连接正常 → 响应: {test_resp.strip()[:50]}")
     run_llm_evaluation(test_cases, verbose=True)
 
 
