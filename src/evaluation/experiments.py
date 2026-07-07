@@ -8,9 +8,9 @@
 4. 延迟分析: 各阶段耗时统计
 
 运行:
-    python src/experiments.py              # 运行全部实验
-    python src/experiments.py --quick       # 快速模式（跳过参数扫描）
-    python src/experiments.py --export      # 仅导出已有数据
+    python src/evaluation/experiments.py              # 运行全部实验
+    python src/evaluation/experiments.py --quick       # 快速模式（跳过参数扫描）
+    python src/evaluation/experiments.py --export      # 仅导出已有数据
 
 输出:
     experiments/ablation_results.json       # 结构化实验数据
@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import List, Dict, Callable
 
 # 确保项目根目录在 sys.path 中（支持从 src/ 目录直接运行）
-_PROJECT_ROOT = Path(__file__).parent.parent
+_PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
@@ -47,6 +47,14 @@ from src.models import Chunk, RetrievalResult
 from src.data_pipeline import process_directory, process_document
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline, reciprocal_rank_fusion
+from src.evaluation.metrics import (
+    load_test_cases,
+    is_relevant,
+    mrr,
+    hit_at_k,
+    precision_at_k,
+    recall_at_k,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -54,44 +62,8 @@ EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ============================================================
-# 测试数据加载
+# 通用评测函数
 # ============================================================
-
-
-def _load_test_cases() -> list[dict]:
-    with open(TEST_QUERIES_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)["test_cases"]
-
-
-def _is_relevant(result: RetrievalResult, golden_sources: list[str]) -> bool:
-    source = result.chunk.metadata.get("source", "")
-    return source in golden_sources
-
-
-# ============================================================
-# 指标计算
-# ============================================================
-
-
-def _mrr(results: list[RetrievalResult], golden_sources: list[str], k: int = 10) -> float:
-    for rank, r in enumerate(results[:k], start=1):
-        if _is_relevant(r, golden_sources):
-            return 1.0 / rank
-    return 0.0
-
-
-def _hit_at_k(results: list[RetrievalResult], golden_sources: list[str], k: int = 5) -> float:
-    for r in results[:k]:
-        if _is_relevant(r, golden_sources):
-            return 1.0
-    return 0.0
-
-
-def _precision_at_k(results: list[RetrievalResult], golden_sources: list[str], k: int = 5) -> float:
-    if not results[:k]:
-        return 0.0
-    hits = sum(1 for r in results[:k] if _is_relevant(r, golden_sources))
-    return hits / min(k, len(results[:k]))
 
 
 def _evaluate_single(
@@ -100,15 +72,16 @@ def _evaluate_single(
 ) -> dict:
     """对一组 test cases 运行检索函数并汇总指标。"""
     n = len(test_cases)
-    total: dict[str, float] = {"mrr": 0.0, "hit@5": 0.0, "precision@5": 0.0}
+    total: dict[str, float] = {"mrr": 0.0, "hit@5": 0.0, "precision@5": 0.0, "recall@5": 0.0}
 
     for tc in test_cases:
         query = tc["query"]
         golden_sources = tc["golden_chunk_sources"]
         results = results_fn(query)
-        total["mrr"] += _mrr(results, golden_sources)
-        total["hit@5"] += _hit_at_k(results, golden_sources)
-        total["precision@5"] += _precision_at_k(results, golden_sources)
+        total["mrr"] += mrr(results, golden_sources)
+        total["hit@5"] += hit_at_k(results, golden_sources)
+        total["precision@5"] += precision_at_k(results, golden_sources)
+        total["recall@5"] += recall_at_k(results, golden_sources, k=5)
 
     for k in total:
         total[k] = round(total[k] / n, 4)
@@ -157,7 +130,7 @@ def run_module_ablation(test_cases: list[dict] | None = None) -> dict:
     返回每模块的 MRR/Hit@5/Prec@5。
     """
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     print("\n" + "=" * 60)
     print("  实验 1: Module Ablation")
@@ -219,7 +192,7 @@ def run_category_breakdown(test_cases: list[dict] | None = None) -> dict:
     揭示各模块对不同难度类型 query 的处理能力差异。
     """
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     print("\n" + "=" * 60)
     print("  实验 2: Per-Category Breakdown")
@@ -329,7 +302,7 @@ def run_parameter_sweep(
     quick 模式: 仅扫描 RRF_K（最快，不需要重建索引）
     """
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     print("\n" + "=" * 60)
     print("  实验 3: Parameter Sensitivity Sweep")
@@ -428,7 +401,7 @@ def run_latency_profile(test_cases: list[dict] | None = None) -> dict:
     对每个 test case 运行一次完整管线，记录每步耗时。
     """
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     print("\n" + "=" * 60)
     print("  实验 4: Latency Profile")
@@ -504,7 +477,7 @@ def run_query_deep_dive(test_cases: list[dict] | None = None) -> dict:
     选取 S03（BM25 失败的语义查询）和 E03（BM25 擅长的精确匹配）做对比。
     """
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     print("\n" + "=" * 60)
     print("  实验 5: Query Deep Dive")
@@ -542,7 +515,7 @@ def run_query_deep_dive(test_cases: list[dict] | None = None) -> dict:
                     "score": round(r.score, 4),
                     "source": r.chunk.metadata.get("source", ""),
                     "headings": r.chunk.metadata.get("heading_breadcrumb", ""),
-                    "relevant": _is_relevant(r, golden),
+                    "relevant": is_relevant(r, golden),
                     "preview": r.chunk.content[:80],
                 }
                 for i, r in enumerate(rl[:k])
@@ -555,10 +528,10 @@ def run_query_deep_dive(test_cases: list[dict] | None = None) -> dict:
             "vector_top5": _top_info(vector_r),
             "rrf_top5": _top_info(rrf_r),
             "ce_top5": _top_info(ce_r),
-            "bm25_mrr": _mrr(bm25_r, golden),
-            "vector_mrr": _mrr(vector_r, golden),
-            "rrf_mrr": _mrr(rrf_r, golden),
-            "ce_mrr": _mrr(ce_r, golden),
+            "bm25_mrr": mrr(bm25_r, golden),
+            "vector_mrr": mrr(vector_r, golden),
+            "rrf_mrr": mrr(rrf_r, golden),
+            "ce_mrr": mrr(ce_r, golden),
         }
         results["queries"][qid] = q_info
 

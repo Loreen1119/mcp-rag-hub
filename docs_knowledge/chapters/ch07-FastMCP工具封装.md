@@ -4,7 +4,8 @@
 
 ### 1. 什么是 MCP 协议
 
-MCP（Model Context Protocol）是 Anthropic 发布的开放协议，定义了 AI 应用与外部工具/数据源之间的标准通信方式。在 MCP 出现之前，每个大模型调用外部工具都讲自己的"方言"，后端必须为不同客户端写胶水翻译代码。MCP 相当于一套"标准英语通信系统"——只要 RAG 按 MCP 规范做成标准插座，任何支持 MCP 的客户端插上即可自动发现工具列表和参数 Schema，零胶水对接。
+MCP（Model Context Protocol）是 Anthropic 发布的开放协议，定义了 AI 应用与外部工具/数据源之间的标准通信方式。
+在 MCP 出现之前，每个大模型调用外部工具都讲自己的"方言"，后端必须为不同客户端写胶水翻译代码。MCP 相当于一套"标准英语通信系统"——只要 RAG 按 MCP 规范做成标准插座，任何支持 MCP 的客户端插上即可自动发现工具列表和参数 Schema，零胶水对接。
 
 **核心架构**：Client ↔ Server 模式
 - **Server**：暴露 Tools（可调用的函数）、Resources（可读取的数据）、Prompts（预设模板）

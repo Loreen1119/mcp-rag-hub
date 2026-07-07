@@ -43,9 +43,10 @@ BM25_TOP_K = 20            # BM25 召回数量
 VECTOR_TOP_K = 20          # ChromaDB 向量召回数量
 RRF_K = 60                 # RRF 平滑常数
 CE_TOP_K = 5               # Cross-Encoder 最终返回数量
+CE_THRESHOLD = 3.0           # CE 分数阈值：低于此值触发查询改写（ms-marco-MiniLM 经验值）
 
 # ============================================================
 # Ragas 评测参数
 # ============================================================
 RAGAS_LLM = "ollama/qwen2.5:7b"   # 评测用 LLM（本地 Ollama 模型）
-TEST_QUERIES_FILE = PROJECT_ROOT / "test_queries.json"
+TEST_QUERIES_FILE = PROJECT_ROOT / "data" / "test_queries.json"

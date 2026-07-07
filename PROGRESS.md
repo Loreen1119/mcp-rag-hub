@@ -25,25 +25,42 @@
 
 ```
 mcp-rag-hub/
+├── app.py                     # Streamlit 前端入口（第5章）
+├── agent.py                   # LangGraph Agent 入口（第8章）
+├── config.py                  # 全局配置中心
+├── requirements.txt
+├── PROGRESS.md                # 本文件
+│
 ├── src/
 │   ├── __init__.py
-│   ├── models.py          # Chunk / RetrievalResult 数据结构
-│   ├── data_pipeline.py   # 文档加载 + 切片（第2章）
-│   ├── retrievers.py      # BM25 + ChromaDB 双路召回（第3章）
-│   ├── fusion.py          # RRF 融合 + Cross-Encoder 重排（第4章）
-│   ├── evaluate.py        # Ragas 评测（第6章）
-│   └── mcp_server.py      # FastMCP 工具封装（第7章）
-├── docs/                  # 测试文档
+│   ├── models.py              # Chunk / RetrievalResult 数据结构
+│   ├── data_pipeline.py       # 文档加载 + 切片（第2章）
+│   ├── retrievers.py          # BM25 + ChromaDB 双路召回（第3章）
+│   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排（第4章）
+│   ├── mcp_server.py          # FastMCP 工具封装（第7章）
+│   └── evaluation/            # 评测子包
+│       ├── __init__.py
+│       ├── metrics.py         # 共享评测指标
+│       ├── retrieval_eval.py  # 检索质量评测（第6章）
+│       ├── llm_eval.py        # LLM-as-Judge 生成评测
+│       ├── agent_eval.py      # Agent 改写评测
+│       └── experiments.py     # 消融实验与数据分析（第9章）
+│
+├── data/
+│   └── test_queries.json      # GoldenTestSet（第6章）
+│
+├── docs/                      # 测试文档
 │   ├── sample_rag_paper.md    # RAG 综述（Markdown, 含标题层级）
 │   └── sample_notes.txt       # 项目笔记（纯文本）
-├── docs_knowledge/        # 每章知识点汇总
-├── experiments/           # 消融实验数据
-├── app.py                 # Streamlit 前端（第5章）
-├── agent.py               # LangGraph Agent（第8章）
-├── test_queries.json      # GoldenTestSet（第6章）
-├── config.py              # 全局配置
-├── requirements.txt
-└── PROGRESS.md            # 本文件
+│
+├── docs_knowledge/            # 项目文档与章节笔记
+│   ├── README.md              # 文档导航
+│   ├── 项目详解.md             # 面向非技术读者的项目介绍
+│   ├── 技术视角详解.md         # 面向技术读者的架构详解
+│   └── chapters/              # 面试复习笔记（10章）
+│
+├── experiments/               # 消融实验数据（JSON）
+└── chroma_db/                 # ChromaDB 持久化向量库（gitignore）
 ```
 
 ## 章节目录与进度
@@ -55,12 +72,12 @@ mcp-rag-hub/
 | 3 | BM25 + ChromaDB 双路召回 | ✅ 完成 | retrievers.py |
 | 4 | RRF 融合 + Cross-Encoder 重排 | ✅ 完成 | fusion.py |
 | 5 | Streamlit 前端 | ✅ 完成 | app.py |
-| 6 | 检索评测（MRR/Hit@K/Precision@K） | ✅ 完成 | evaluate.py / test_queries.json |
+| 6 | 检索评测（MRR/Hit@K/Precision@K） | ✅ 完成 | evaluation/retrieval_eval.py / data/test_queries.json |
 | 7 | FastMCP 工具封装 | ✅ 完成 | mcp_server.py |
 | 8 | LangGraph Agent 编排 | ✅ 完成 | agent.py |
-| 9 | 消融实验与数据分析 | ✅ 完成 | experiments/ + src/experiments.py |
-| 10 | 面试复盘 | ✅ 完成 | docs_knowledge/ch10-面试复盘.md |
-| — | **Ollama LLM 生成评测（第 6 章增强）** | ✅ 完成 | llm_evaluate.py / qwen2.5:7b |
+| 9 | 消融实验与数据分析 | ✅ 完成 | experiments/ + evaluation/experiments.py |
+| 10 | 面试复盘 | ✅ 完成 | docs_knowledge/chapters/ch10-面试复盘.md |
+| — | **Ollama LLM 生成评测（第 6 章增强）** | ✅ 完成 | evaluation/llm_eval.py / qwen2.5:7b |
 
 ## 当前进度
 
@@ -122,4 +139,4 @@ mcp-rag-hub/
 
 ## 当前待办（2026-07-05）
 
-- [ ] 重跑 `python src/llm_evaluate.py` 覆盖 v2 废弃数据
+- [ ] 重跑 `python src/evaluation/llm_eval.py` 覆盖 v2 废弃数据

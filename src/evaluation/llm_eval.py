@@ -6,9 +6,9 @@ LLM-as-Judge 生成评测 — 基于 Ollama 的三维 LLM 裁判打分。
 - Answer Relevancy: 生成答案是否紧扣用户问题？（检测跑题）
 - Context Recall: 检索上下文是否覆盖了参考答案的关键信息？（检测检索遗漏）
 
-与 evaluate.py 的关系：
-- evaluate.py 测检索阶段（MRR / Hit@K / Precision@K）
-- llm_evaluate.py 测生成阶段（Faithfulness / Answer Relevancy / Context Recall）
+与 retrieval_eval.py 的关系：
+- retrieval_eval.py 测检索阶段（MRR / Hit@K / Precision@K）
+- llm_eval.py 测生成阶段（Faithfulness / Answer Relevancy / Context Recall）
 - 两者共用 test_queries.json 的 golden_answer 字段
 
 前置条件：
@@ -18,8 +18,8 @@ LLM-as-Judge 生成评测 — 基于 Ollama 的三维 LLM 裁判打分。
     4. 启动服务: ollama serve  (通常安装后自动启动)
 
 运行：
-    python src/llm_evaluate.py              # 跑全部 15 组评测
-    python src/llm_evaluate.py --sample 3    # 只跑前 3 组（快速验证）
+    python src/evaluation/llm_eval.py              # 跑全部 15 组评测
+    python src/evaluation/llm_eval.py --sample 3    # 只跑前 3 组（快速验证）
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import List
 
 # 确保项目根目录在 sys.path 中
-_PROJECT_ROOT = Path(__file__).parent.parent
+_PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 

@@ -13,69 +13,23 @@ RAG 系统自动化评测。
 
 from __future__ import annotations
 
-import json
 import logging
-from collections import defaultdict
-from pathlib import Path
 from typing import List, Dict
 
 from config import TEST_QUERIES_FILE, CE_TOP_K, BM25_TOP_K
-from src.models import RetrievalResult
+from src.evaluation.metrics import (
+    load_test_cases,
+    is_relevant,
+    mrr,
+    hit_at_k,
+    precision_at_k,
+    recall_at_k,
+)
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline, reciprocal_rank_fusion
 
 logger = logging.getLogger(__name__)
-
-# ============================================================
-# 评测数据：为每个 Query 标注相关 Chunk
-# ============================================================
-
-# 基于文档内容做 relevance 判定：用 Chunk 的 source 文件匹配
-# test_queries.json 中的 golden_chunk_sources 字段指定了相关文档
-# 本函数将其转换为 Chunk 级别的匹配
-
-
-def _load_test_cases(path: str | Path = TEST_QUERIES_FILE) -> list[dict]:
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return data["test_cases"]
-
-
-def _is_relevant(result: RetrievalResult, golden_sources: list[str]) -> bool:
-    """判定检索结果是否相关：source 文件在 golden_sources 中。"""
-    source = result.chunk.metadata.get("source", "")
-    return source in golden_sources
-
-
-# ============================================================
-# 单指标计算
-# ============================================================
-
-
-def _mrr(results: List[RetrievalResult], golden_sources: list[str], k: int = 10) -> float:
-    """MRR@K — 第一个相关结果的倒数排名。无命中返回 0。"""
-    for rank, r in enumerate(results[:k], start=1):
-        if _is_relevant(r, golden_sources):
-            return 1.0 / rank
-    return 0.0
-
-
-def _hit_at_k(results: List[RetrievalResult], golden_sources: list[str], k: int = 5) -> float:
-    """Hit@K — Top-K 中是否至少有一个相关结果。返回 0 或 1。"""
-    for r in results[:k]:
-        if _is_relevant(r, golden_sources):
-            return 1.0
-    return 0.0
-
-
-def _precision_at_k(results: List[RetrievalResult], golden_sources: list[str], k: int = 5) -> float:
-    """Precision@K — Top-K 中相关结果的比例。"""
-    if not results[:k]:
-        return 0.0
-    hits = sum(1 for r in results[:k] if _is_relevant(r, golden_sources))
-    return hits / min(k, len(results[:k]))
-
 
 # ============================================================
 # 全量评测
@@ -88,7 +42,7 @@ def run_evaluation(
 ) -> dict:
     """对全部 test cases 跑四阶段评测，返回汇总指标。"""
     if test_cases is None:
-        test_cases = _load_test_cases()
+        test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     # 加载管线（只做一次）
     chunks = process_directory()
@@ -99,7 +53,8 @@ def run_evaluation(
     # 四阶段指标累加
     stages = ["bm25", "vector", "rrf", "cross_encoder"]
     accum: dict[str, dict[str, float]] = {
-        s: {"mrr": 0.0, "hit@5": 0.0, "precision@5": 0.0} for s in stages
+        s: {"mrr": 0.0, "hit@5": 0.0, "precision@5": 0.0, "recall@5": 0.0}
+        for s in stages
     }
     per_query: list[dict] = []
 
@@ -124,17 +79,20 @@ def run_evaluation(
         q_metrics: dict = {"id": tc["id"], "query": query, "category": tc["category"]}
         for stage in stages:
             results = stage_results[stage]
-            mrr = _mrr(results, golden_sources)
-            hit = _hit_at_k(results, golden_sources, k=5)
-            prec = _precision_at_k(results, golden_sources, k=5)
+            mrr_val = mrr(results, golden_sources)
+            hit = hit_at_k(results, golden_sources, k=5)
+            prec = precision_at_k(results, golden_sources, k=5)
+            recall = recall_at_k(results, golden_sources, k=5)
 
-            accum[stage]["mrr"] += mrr
+            accum[stage]["mrr"] += mrr_val
             accum[stage]["hit@5"] += hit
             accum[stage]["precision@5"] += prec
+            accum[stage]["recall@5"] += recall
 
-            q_metrics[f"{stage}_mrr"] = round(mrr, 4)
+            q_metrics[f"{stage}_mrr"] = round(mrr_val, 4)
             q_metrics[f"{stage}_hit@5"] = int(hit)
             q_metrics[f"{stage}_precision@5"] = round(prec, 4)
+            q_metrics[f"{stage}_recall@5"] = round(recall, 4)
 
         per_query.append(q_metrics)
 
@@ -149,6 +107,7 @@ def run_evaluation(
             "mrr": round(accum[stage]["mrr"] / n, 4),
             "hit@5": round(accum[stage]["hit@5"] / n, 4),
             "precision@5": round(accum[stage]["precision@5"] / n, 4),
+            "recall@5": round(accum[stage]["recall@5"] / n, 4),
         }
 
     if verbose:
@@ -173,7 +132,7 @@ def ablation_analysis(summary: dict) -> dict:
     print("  Ablation Study")
     print("=" * 60)
 
-    for metric in ["mrr", "hit@5", "precision@5"]:
+    for metric in ["mrr", "hit@5", "precision@5", "recall@5"]:
         print(f"\n  [{metric}]")
         prev = 0.0
         for stage in stages_order:
@@ -200,14 +159,15 @@ def _print_query_result(qm: dict) -> None:
     print(f"\n{'-'*50}")
     print(f"  [{qm['id']}] {qm['query'][:40]}")
     print(f"  category: {qm['category']}")
-    print(f"  {'Stage':<16s} {'MRR':>8s}  {'Hit@5':>6s}  {'Prec@5':>8s}")
-    print(f"  {'-'*44}")
+    print(f"  {'Stage':<16s} {'MRR':>8s}  {'Hit@5':>6s}  {'Prec@5':>8s}  {'Recall@5':>8s}")
+    print(f"  {'-'*52}")
     for stage in ["bm25", "vector", "rrf", "cross_encoder"]:
         print(
             f"  {stage:<16s}"
             f"  {qm[f'{stage}_mrr']:>8.4f}"
             f"  {qm[f'{stage}_hit@5']:>6d}"
             f"  {qm[f'{stage}_precision@5']:>8.4f}"
+            f"  {qm[f'{stage}_recall@5']:>8.4f}"
         )
 
 
@@ -215,14 +175,15 @@ def _print_summary(summary: dict) -> None:
     print(f"\n{'='*60}")
     print("  Summary")
     print(f"{'='*60}")
-    print(f"  {'Stage':<16s} {'MRR':>8s}  {'Hit@5':>8s}  {'Prec@5':>8s}")
-    print(f"  {'-'*50}")
+    print(f"  {'Stage':<16s} {'MRR':>8s}  {'Hit@5':>8s}  {'Prec@5':>8s}  {'Recall@5':>8s}")
+    print(f"  {'-'*58}")
     for stage, metrics in summary.items():
         print(
             f"  {stage:<16s}"
             f"  {metrics['mrr']:>8.4f}"
             f"  {metrics['hit@5']:>8.4f}"
             f"  {metrics['precision@5']:>8.4f}"
+            f"  {metrics['recall@5']:>8.4f}"
         )
 
 

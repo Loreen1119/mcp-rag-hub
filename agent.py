@@ -28,7 +28,7 @@ import operator
 
 from langgraph.graph import StateGraph, END
 
-from config import CE_TOP_K
+from config import CE_TOP_K, CE_THRESHOLD
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline
@@ -191,7 +191,7 @@ def check_results(state: AgentState) -> dict:
     chunks = state.get("retrieved_chunks", [])
     attempt = state["attempt"]
     max_attempts = 2
-    ce_threshold = 3.0
+    ce_threshold = CE_THRESHOLD
 
     best_score = chunks[0]["score"] if chunks else 0.0
     quality = "good" if best_score >= ce_threshold else "insufficient"
@@ -212,7 +212,7 @@ def _decide_next(state: AgentState) -> str:
     chunks = state.get("retrieved_chunks", [])
     attempt = state["attempt"]
     max_attempts = 2
-    ce_threshold = 3.0
+    ce_threshold = CE_THRESHOLD
 
     best_score = chunks[0]["score"] if chunks else 0.0
 
