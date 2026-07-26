@@ -36,3 +36,4 @@ ollama>=0.4,<1.0
 
 # --- Utilities ---
 rich>=13.0,<15.0
+networkx>=3.0,<4.0

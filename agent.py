@@ -32,6 +32,7 @@ from config import CE_TOP_K, CE_THRESHOLD
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline
+from src.graph_retriever import GraphRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -72,12 +73,13 @@ class AgentState(TypedDict):
 _chunks: list = []
 _bm25: BM25Retriever | None = None
 _vector: VectorRetriever | None = None
+_graph: GraphRetriever | None = None
 _pipeline: FusionPipeline | None = None
 _initialized: bool = False
 
 
 def _ensure_pipeline():
-    global _chunks, _bm25, _vector, _pipeline, _initialized
+    global _chunks, _bm25, _vector, _graph, _pipeline, _initialized
 
     if _initialized:
         return
@@ -86,9 +88,10 @@ def _ensure_pipeline():
     _chunks = process_directory()
     _bm25 = BM25Retriever(_chunks)
     _vector = VectorRetriever(_chunks, rebuild=True)
+    _graph = GraphRetriever(_chunks)
     _pipeline = FusionPipeline()
     _initialized = True
-    logger.info("RAG 管线就绪 — %d 个 Chunk 已索引", len(_chunks))
+    logger.info("RAG 管线就绪 — %d 个 Chunk 已索引, 图节点: %d", len(_chunks), _graph.graph.number_of_nodes())
 
 
 # ============================================================
@@ -152,7 +155,8 @@ def retrieve(state: AgentState) -> dict:
 
     bm25_results = _bm25.search(query)
     vector_results = _vector.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K)
+    graph_results = _graph.search(query)
+    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K, graph_results=graph_results)
 
     chunks = [
         {

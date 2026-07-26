@@ -157,20 +157,29 @@ class FusionPipeline:
         query: str,
         rrf_k: int = RRF_K,
         ce_top_k: int = CE_TOP_K,
+        graph_results: List[RetrievalResult] | None = None,
     ) -> dict:
         """执行完整融合链路。
 
+        Args:
+            bm25_results: BM25 关键词检索结果
+            vector_results: ChromaDB 向量检索结果
+            query: 用户查询
+            rrf_k: RRF 平滑常数
+            ce_top_k: Cross-Encoder 返回数量
+            graph_results: 可选，GraphRAG 图检索结果（三路融合时传入）
+
         Returns:
             {
-                "rrf": List[RetrievalResult],      # RRF 融合后的 Top-20
+                "rrf": List[RetrievalResult],      # RRF 融合后的结果
                 "cross_encoder": List[RetrievalResult],  # CE 精排后的 Top-K
             }
         """
-        # 阶段 1: RRF 融合
-        fused = reciprocal_rank_fusion(
-            [bm25_results, vector_results],
-            k=rrf_k,
-        )
+        # 阶段 1: RRF 融合（二路或三路）
+        rankings = [bm25_results, vector_results]
+        if graph_results:
+            rankings.append(graph_results)
+        fused = reciprocal_rank_fusion(rankings, k=rrf_k)
 
         # 阶段 2: Cross-Encoder 重排
         reranked = self.reranker.rerank(query, fused, top_k=ce_top_k)
@@ -187,11 +196,13 @@ if __name__ == "__main__":
 
     from src.data_pipeline import process_directory
     from src.retrievers import BM25Retriever, VectorRetriever
+    from src.graph_retriever import GraphRetriever
 
     # 1. 加载文档 & 建索引
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
     vector = VectorRetriever(chunks)
+    graph_retriever = GraphRetriever(chunks)
 
     pipeline = FusionPipeline()
 
@@ -208,7 +219,8 @@ if __name__ == "__main__":
 
         bm25_results = bm25.search(q)
         vector_results = vector.search(q)
-        output = pipeline.run(bm25_results, vector_results, q)
+        graph_results = graph_retriever.search(q)
+        output = pipeline.run(bm25_results, vector_results, q, graph_results=graph_results)
 
         print(f"\n  [RRF 融合 Top-5]")
         for r in output["rrf"][:5]:

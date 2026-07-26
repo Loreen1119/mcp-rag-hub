@@ -39,6 +39,7 @@ from config import (
     CE_TOP_K,
     BM25_TOP_K,
     VECTOR_TOP_K,
+    GRAPH_TOP_K,
     DOCS_DIR,
     EXPERIMENTS_DIR,
     TEST_QUERIES_FILE,
@@ -47,6 +48,7 @@ from src.models import Chunk, RetrievalResult
 from src.data_pipeline import process_directory, process_document
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline, reciprocal_rank_fusion
+from src.graph_retriever import GraphRetriever
 from src.evaluation.metrics import (
     load_test_cases,
     is_relevant,
@@ -139,11 +141,13 @@ def run_module_ablation(test_cases: list[dict] | None = None) -> dict:
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
     vector = VectorRetriever(chunks, rebuild=True)
+    graph_retriever = GraphRetriever(chunks)
     pipeline = FusionPipeline()
 
     configs: dict[str, Callable] = {
         "bm25_only": lambda q: bm25.search(q, top_k=BM25_TOP_K),
         "vector_only": lambda q: vector.search(q, top_k=VECTOR_TOP_K),
+        "graph_only": lambda q: graph_retriever.search(q, top_k=GRAPH_TOP_K),
         "concat_naive": lambda q: _dedup_concat(
             bm25.search(q, top_k=BM25_TOP_K),
             vector.search(q, top_k=VECTOR_TOP_K),
@@ -156,6 +160,12 @@ def run_module_ablation(test_cases: list[dict] | None = None) -> dict:
             bm25.search(q, top_k=BM25_TOP_K),
             vector.search(q, top_k=VECTOR_TOP_K),
             q,
+        )["cross_encoder"],
+        "triple_fusion": lambda q: pipeline.run(
+            bm25.search(q, top_k=BM25_TOP_K),
+            vector.search(q, top_k=VECTOR_TOP_K),
+            q,
+            graph_results=graph_retriever.search(q, top_k=GRAPH_TOP_K),
         )["cross_encoder"],
     }
 
@@ -201,13 +211,14 @@ def run_category_breakdown(test_cases: list[dict] | None = None) -> dict:
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
     vector = VectorRetriever(chunks, rebuild=True)
+    graph_retriever = GraphRetriever(chunks)
     pipeline = FusionPipeline()
 
     categories: dict[str, list[dict]] = defaultdict(list)
     for tc in test_cases:
         categories[tc["category"]].append(tc)
 
-    results: dict = {"description": "分 query 类别的模块增益矩阵", "categories": {}}
+    results: dict = {"description": "分 query 类别的模块增益矩阵（含 GraphRAG）", "categories": {}}
 
     for cat_name, cat_cases in sorted(categories.items()):
         cat_results: dict = {}
@@ -221,7 +232,11 @@ def run_category_breakdown(test_cases: list[dict] | None = None) -> dict:
         vec_m = _evaluate_single(
             lambda q: vector.search(q, top_k=VECTOR_TOP_K), cat_cases
         )
-        # Full pipeline
+        # Graph only
+        graph_m = _evaluate_single(
+            lambda q: graph_retriever.search(q, top_k=GRAPH_TOP_K), cat_cases
+        )
+        # Full pipeline (dual)
         full_m = _evaluate_single(
             lambda q: pipeline.run(
                 bm25.search(q, top_k=BM25_TOP_K),
@@ -230,27 +245,46 @@ def run_category_breakdown(test_cases: list[dict] | None = None) -> dict:
             )["cross_encoder"],
             cat_cases,
         )
+        # Triple fusion
+        triple_m = _evaluate_single(
+            lambda q: pipeline.run(
+                bm25.search(q, top_k=BM25_TOP_K),
+                vector.search(q, top_k=VECTOR_TOP_K),
+                q,
+                graph_results=graph_retriever.search(q, top_k=GRAPH_TOP_K),
+            )["cross_encoder"],
+            cat_cases,
+        )
 
         cat_results["bm25_only"] = bm25_m
         cat_results["vector_only"] = vec_m
+        cat_results["graph_only"] = graph_m
         cat_results["full_pipeline"] = full_m
+        cat_results["triple_fusion"] = triple_m
         cat_results["bm25_to_full_gain"] = {
             m: round(full_m[m] - bm25_m[m], 4) for m in bm25_m
         }
         cat_results["vector_to_full_gain"] = {
             m: round(full_m[m] - vec_m[m], 4) for m in vec_m
         }
+        cat_results["full_to_triple_gain"] = {
+            m: round(triple_m[m] - full_m[m], 4) for m in full_m
+        }
 
         results["categories"][cat_name] = cat_results
 
-        print(f"    BM25 Only:  MRR={bm25_m['mrr']:.4f}  "
+        print(f"    BM25 Only:    MRR={bm25_m['mrr']:.4f}  "
               f"Hit@5={bm25_m['hit@5']:.4f}  Prec@5={bm25_m['precision@5']:.4f}")
-        print(f"    Vector Only: MRR={vec_m['mrr']:.4f}  "
+        print(f"    Vector Only:   MRR={vec_m['mrr']:.4f}  "
               f"Hit@5={vec_m['hit@5']:.4f}  Prec@5={vec_m['precision@5']:.4f}")
-        print(f"    Full Pipe:   MRR={full_m['mrr']:.4f}  "
+        print(f"    Graph Only:    MRR={graph_m['mrr']:.4f}  "
+              f"Hit@5={graph_m['hit@5']:.4f}  Prec@5={graph_m['precision@5']:.4f}")
+        print(f"    Full (双路):   MRR={full_m['mrr']:.4f}  "
               f"Hit@5={full_m['hit@5']:.4f}  Prec@5={full_m['precision@5']:.4f}")
-        print(f"    BM25→Full Δ: MRR={cat_results['bm25_to_full_gain']['mrr']:+.4f}  "
-              f"Hit@5={cat_results['bm25_to_full_gain']['hit@5']:+.4f}")
+        print(f"    Triple (三路): MRR={triple_m['mrr']:.4f}  "
+              f"Hit@5={triple_m['hit@5']:.4f}  Prec@5={triple_m['precision@5']:.4f}")
+        print(f"    Full→Triple Δ: MRR={cat_results['full_to_triple_gain']['mrr']:+.4f}  "
+              f"Hit@5={cat_results['full_to_triple_gain']['hit@5']:+.4f}")
 
     _save_json(results, "category_breakdown.json")
     return results
@@ -410,6 +444,7 @@ def run_latency_profile(test_cases: list[dict] | None = None) -> dict:
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
     vector = VectorRetriever(chunks, rebuild=True)
+    graph_retriever = GraphRetriever(chunks)
     ce_pipeline = FusionPipeline()
 
     timings: dict[str, list[float]] = defaultdict(list)
@@ -427,9 +462,14 @@ def run_latency_profile(test_cases: list[dict] | None = None) -> dict:
         vector_results = vector.search(query, top_k=VECTOR_TOP_K)
         timings["vector_search_ms"].append((time.perf_counter() - t0) * 1000)
 
-        # RRF
+        # Graph
         t0 = time.perf_counter()
-        rrf_results = reciprocal_rank_fusion([bm25_results, vector_results])
+        graph_results = graph_retriever.search(query, top_k=GRAPH_TOP_K)
+        timings["graph_search_ms"].append((time.perf_counter() - t0) * 1000)
+
+        # RRF (triple)
+        t0 = time.perf_counter()
+        rrf_results = reciprocal_rank_fusion([bm25_results, vector_results, graph_results])
         timings["rrf_fusion_ms"].append((time.perf_counter() - t0) * 1000)
 
         # Cross-Encoder
@@ -441,7 +481,7 @@ def run_latency_profile(test_cases: list[dict] | None = None) -> dict:
     print(f"\n  {'Stage':<22s} {'Mean':>8s}  {'Min':>8s}  {'Max':>8s}")
     print(f"  {'-'*50}")
 
-    for stage in ["bm25_search_ms", "vector_search_ms", "rrf_fusion_ms", "ce_rerank_ms"]:
+    for stage in ["bm25_search_ms", "vector_search_ms", "graph_search_ms", "rrf_fusion_ms", "ce_rerank_ms"]:
         vals = timings[stage]
         mean_val = sum(vals) / len(vals)
         min_val = min(vals)
@@ -550,7 +590,7 @@ def run_query_deep_dive(test_cases: list[dict] | None = None) -> dict:
         ]:
             top3_sources = []
             for r in stage_results[:3]:
-                rel = "[HIT]" if _is_relevant(r, golden) else "[MISS]"
+                rel = "[HIT]" if is_relevant(r, golden) else "[MISS]"
                 src = r.chunk.metadata.get("source", "?")
                 top3_sources.append(f"{rel} {src}")
             print(f"    {stage_name:<8s} Top-3: {' | '.join(top3_sources)}")
@@ -618,31 +658,35 @@ def generate_report(
         # 关键发现
         bm25_mrr = ar.get("bm25_only", {}).get("mrr", 0)
         vector_mrr = ar.get("vector_only", {}).get("mrr", 0)
+        graph_mrr = ar.get("graph_only", {}).get("mrr", 0)
         full_mrr = ar.get("full_pipeline", {}).get("mrr", 0)
+        triple_mrr = ar.get("triple_fusion", {}).get("mrr", 0)
         rrf_mrr = ar.get("rrf_fusion", {}).get("mrr", 0)
         concat_mrr = ar.get("concat_naive", {}).get("mrr", 0)
 
         lines.append(f"\n**BM25 → Full Pipeline MRR 提升: {full_mrr - bm25_mrr:+.4f}**")
         lines.append(f"**Vector → Full Pipeline MRR 提升: {full_mrr - vector_mrr:+.4f}**")
+        lines.append(f"**Full (双路) → Triple (三路+GraphRAG) MRR 提升: {triple_mrr - full_mrr:+.4f}**")
+        lines.append(f"**GraphRAG 独立 MRR: {graph_mrr:.4f}** (vs BM25={bm25_mrr:.4f}, Vector={vector_mrr:.4f})")
 
-        if rrf_mrr > concat_mrr:
-            lines.append(f"\n[OK] RRF ({rrf_mrr:.4f}) 优于 Naive Concat ({concat_mrr:.4f})，"
-                         f"验证了排名融合对消除量纲差异的作用。")
-        else:
-            lines.append(f"\n[WARN] RRF 未优于 Naive Concat，小语料下排名融合的优势不明显。")
+        if triple_mrr >= full_mrr:
+            lines.append(f"\n[OK] 三路混合检索（+GraphRAG）MRR={triple_mrr:.4f}，"
+                         f"图检索为双路召回提供了增量价值。")
 
     # --- 分类分析 ---
     if category and "categories" in category:
         lines.append("\n## 2. 分类表现\n")
 
-        lines.append("| 类别 | BM25 MRR | Vector MRR | Full MRR | BM25→Full Δ |")
-        lines.append("|------|----------|------------|----------|-------------|")
+        lines.append("| 类别 | BM25 MRR | Vector MRR | Graph MRR | Full MRR | Triple MRR | Full→Triple Δ |")
+        lines.append("|------|----------|------------|-----------|----------|------------|---------------|")
         for cat_name, cat_data in category["categories"].items():
             b_mrr = cat_data["bm25_only"]["mrr"]
             v_mrr = cat_data["vector_only"]["mrr"]
+            g_mrr = cat_data.get("graph_only", {}).get("mrr", 0)
             f_mrr = cat_data["full_pipeline"]["mrr"]
-            gain = cat_data["bm25_to_full_gain"]["mrr"]
-            lines.append(f"| {cat_name} | {b_mrr:.4f} | {v_mrr:.4f} | {f_mrr:.4f} | {gain:+.4f} |")
+            t_mrr = cat_data.get("triple_fusion", {}).get("mrr", 0)
+            gain = cat_data.get("full_to_triple_gain", {}).get("mrr", 0)
+            lines.append(f"| {cat_name} | {b_mrr:.4f} | {v_mrr:.4f} | {g_mrr:.4f} | {f_mrr:.4f} | {t_mrr:.4f} | {gain:+.4f} |")
 
         # 关键发现
         exact = category["categories"].get("exact_match", {})
@@ -727,7 +771,7 @@ if __name__ == "__main__":
     print(f"  输出目录: {EXPERIMENTS_DIR}")
     print("=" * 60)
 
-    test_cases = _load_test_cases()
+    test_cases = load_test_cases(TEST_QUERIES_FILE)
 
     # 实验 1: 模块消融
     ablation = run_module_ablation(test_cases)
