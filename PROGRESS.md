@@ -2,14 +2,15 @@
 
 ## 项目概述
 
-搭建高性能 RAG 智能知识检索系统，支持 BM25 + ChromaDB 双路召回、RRF 融合、Cross-Encoder 重排，Ragas 评测，FastMCP 封装，LangGraph Agent 编排。
+搭建高性能 RAG 智能知识检索系统，支持 BM25 + ChromaDB 双路召回 + 实体共现图三路混合检索、RRF 融合、Cross-Encoder 重排，Ragas 评测，FastMCP 封装，LangGraph Agent 编排。
 
 ## 关键决策
 
 - **Embedding 方式**：手动 sentence-transformers 做 embedding 再存 ChromaDB（不用 ChromaDB 内置），便于面试讲清向量生成过程
 - **LLM 选择**：优先本地 Ollama 模型，LangGraph Agent 章节可先出代码框架 + 状态图，不强求调通
 - **PDF 解析**：pdfplumber 提取文本，不处理表格/图片
-- **Chunk 策略**：512 token / 128 overlap 滑窗切片，使用 tiktoken (cl100k_base) 做精确 token 计数
+- **Chunk 策略**：256 token / 38 overlap 滑窗切片，使用 tiktoken (cl100k_base) 做精确 token 计数
+- **GraphRAG**：jieba + TF-IDF 实体抽取，NetworkX 共现图索引，子图遍历 + 邻居扩展检索
 - **分词**：中文用 jieba 分词后送入 BM25（比字符级 n-gram 更准确）
 - **Markdown 增强**：解析标题层级，为每个 Chunk 附加上下文面包屑（继承自旧版 MetaFetch-RAG 的设计）
 - **编码兼容**：自动检测 UTF-8/GBK/GB2312，兼容中文文档（继承自旧版设计）
@@ -36,7 +37,8 @@ mcp-rag-hub/
 │   ├── models.py              # Chunk / RetrievalResult 数据结构
 │   ├── data_pipeline.py       # 文档加载 + 切片（第2章）
 │   ├── retrievers.py          # BM25 + ChromaDB 双路召回（第3章）
-│   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排（第4章）
+│   ├── graph_retriever.py      # 实体共现图检索 — GraphRAG
+│   ├── fusion.py               # RRF 融合 + Cross-Encoder 重排（第4章）
 │   ├── mcp_server.py          # FastMCP 工具封装（第7章）
 │   └── evaluation/            # 评测子包
 │       ├── __init__.py
@@ -81,7 +83,7 @@ mcp-rag-hub/
 
 ## 当前进度
 
-- **1~10 章全部完成**，核心检索链路 + 前端 + 评测 + MCP + Agent + 消融实验 + LLM 生成评测 + 面试复盘均已落地
+- **1~10 章全部完成**，核心检索链路（含 GraphRAG 三路融合）+ 前端 + 评测 + MCP + Agent + 消融实验 + LLM 生成评测 + 面试复盘均已落地
 - LLM 评测终版：qwen2.5:7b v1（F=0.95 / AR=0.86 / CR=0.79）
 - docs_knowledge/ Ch02~Ch07、Ch10 已改写，Ch01/Ch08/Ch09 保持原始技术风格
 - **唯一待办**：重跑 `python src/llm_evaluate.py` 覆盖 `experiments/llm_evaluation_results.json`（当前为 v2 废弃数据）

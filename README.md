@@ -1,13 +1,14 @@
 # MCP-RAG-Hub
 
-从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量双路召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。
+从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量+实体共现图三路召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。
 
 **[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)**
 
 ## 功能
 
 - **文档消化** — PDF / Markdown / TXT 自动加载，编码自检测，Token 级滑动窗口切块
-- **双路检索** — BM25 关键词（jieba 分词）+ 向量语义（all-MiniLM-L6-v2, ChromaDB）
+- **三路检索** — BM25 关键词 + 向量语义 + 实体共现图三路并行召回
+- **实体共现图** — jieba + TF-IDF 实体抽取，NetworkX 共现图索引，子图遍历与邻居扩展
 - **RRF 融合** — 基于排名的多路结果融合，消除量纲差异
 - **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排）
 - **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
@@ -33,8 +34,11 @@ python src/mcp_server.py
 # 运行检索评测
 python src/evaluation/retrieval_eval.py
 
-# 运行消融实验
+# 运行消融实验（含 GraphRAG）
 python src/evaluation/experiments.py
+
+# 运行图检索演示
+python src/graph_retriever.py
 ```
 
 ## 项目结构
@@ -50,6 +54,7 @@ mcp-rag-hub/
 │   ├── models.py              # Chunk / RetrievalResult 数据结构
 │   ├── data_pipeline.py       # 文档加载 + Token 级滑动窗口切块
 │   ├── retrievers.py          # BM25 + ChromaDB 双路召回
+│   ├── graph_retriever.py       # 实体共现图检索（GraphRAG）
 │   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排序
 │   ├── mcp_server.py          # FastMCP 工具封装
 │   └── evaluation/            # 评测子包
@@ -72,11 +77,11 @@ mcp-rag-hub/
 
 | 指标 | 值 |
 |------|-----|
-| 全管线 MRR | **1.00**（15/15 完美命中） |
-| BM25→全管线 MRR 提升 | +0.10（0.90 → 1.00） |
-| 语义类 MRR 提升 | +0.27（0.80 → 1.00） |
-| 全管线延迟 | ~232 ms（CE 占 92%） |
-| LLM Faithfulness | **0.95**（qwen2.5:7b） |
+| 全管线 MRR | **0.967** |
+| BM25→全管线 MRR 提升 | +0.067 |
+| 语义类 MRR 提升 | +0.167（0.800 → 0.967） |
+| 全管线延迟 | ~395 ms（CE 占 92%） |
+| 图检索 Precision@5 | **0.893**（延迟 0.85ms） |
 
 ## 技术栈
 
@@ -87,6 +92,7 @@ mcp-rag-hub/
 | Cross-Encoder | cross-encoder/ms-marco-MiniLM-L-6-v2 |
 | 向量库 | ChromaDB（HNSW 索引, cosine 距离） |
 | 关键词检索 | rank-bm25 + jieba 分词 |
+| 图检索 | NetworkX 实体共现图 + 子图遍历 |
 | 融合 | RRF（Reciprocal Rank Fusion, k=60） |
 | 代理 | LangGraph（声明式状态机, 条件路由） |
 | LLM | Ollama + qwen2.5:7b |
