@@ -9,6 +9,12 @@ chroma_db/
 # 实验数据（临时文件）
 experiments/
 
+# 备份文件
+*.bak
+
+# 自动生成的知识图谱三元组缓存（可通过 kg_builder.py 重新生成）
+data/knowledge_triples.jsonl
+
 # Claude 配置
 .claude/
 

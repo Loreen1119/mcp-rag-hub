@@ -51,11 +51,27 @@ CE_THRESHOLD = 3.0           # CE 分数阈值：低于此值触发查询改写�
 # GraphRAG 参数
 # ============================================================
 GRAPH_TOP_K = 20             # 图检索召回数量
-GRAPH_ENTITY_TOP_N = 10      # 每个 Chunk 提取的关键词/实体数上限
+GRAPH_ENTITY_TOP_N = 12      # 每个 Chunk 提取的关键词/实体数上限
 GRAPH_HOP = 1                # 图遍历跳数（1=1-hop 邻居，2=邻居的邻居）
+GRAPH_RRF_WEIGHT = 0.6       # 图检索在 RRF 融合中的权重（<1.0 可降低噪声影响）
 
 # ============================================================
 # Ragas 评测参数
 # ============================================================
 RAGAS_LLM = "ollama/qwen2.5:7b"   # 评测用 LLM（本地 Ollama 模型）
 TEST_QUERIES_FILE = PROJECT_ROOT / "data" / "test_queries.json"
+TRAIN_QUERIES_FILE = PROJECT_ROOT / "data" / "train_queries.json"
+KG_TRIPLES_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl"
+
+# DeepSeek API
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1"
+DEEPSEEK_MODEL = "deepseek-chat"
+
+# ============================================================
+# KG Retriever 参数
+# ============================================================
+KG_TOP_K = 20             # KG 检索召回数量
+KG_MAX_HOP = 2            # 两节点间最大路径跳数
+KG_RRF_WEIGHT = 0.5      # KG 路在 RRF 融合中的权重（<1.0 降低噪声影响）
+KG_TRIPLES_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl"

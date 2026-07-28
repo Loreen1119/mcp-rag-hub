@@ -20,6 +20,7 @@ from __future__ import annotations
 import logging
 import re
 from collections import defaultdict
+from difflib import SequenceMatcher
 from typing import List, Dict, Set, Tuple
 
 import jieba
@@ -64,7 +65,7 @@ def _is_valid_entity(text: str) -> bool:
         return False
     if re.match(r"^[\d\.\+\-\s]+$", text):
         return False
-    if re.match(r"^[，。！？、；：""''（）\(\)\[\]【】\s]+$", text):
+    if re.match("^[，。！？、；：""''（）()【】\\s]+$", text):
         return False
     # 过滤 Markdown 标题标记残留
     if re.match(r"^#+$", text):
@@ -228,9 +229,10 @@ class GraphRetriever:
     ) -> Dict[str, List[str]]:
         """将 Query 抽取的实体映射到图节点。
 
-        两级降级匹配策略:
+        三级降级匹配策略:
         1. 精确匹配: query_entity 与节点名完全相同
-        2. 模糊匹配: 子串包含 (query_entity in node 或 node in query_entity)
+        2. 子串包含匹配: (query_entity in node 或 node in query_entity)
+        3. 编辑距离兜底: 相似度 >= 0.8 且长度均 >= 4
 
         Returns:
             {query_entity: [matched_node_names]}
@@ -257,6 +259,21 @@ class GraphRetriever:
 
             if fuzzy_matches:
                 mapping[qe_normalized] = fuzzy_matches
+                continue
+
+            # L3: 编辑距离兜底（仅对长度>=4的实体，避免短词误匹配）
+            if len(qe_normalized) >= 4:
+                best_match: str | None = None
+                best_ratio = 0.0
+                for node_name in self._node_set:
+                    if len(node_name) < 4:
+                        continue
+                    ratio = SequenceMatcher(None, qe_lower, node_name.lower()).ratio()
+                    if ratio > best_ratio:
+                        best_ratio = ratio
+                        best_match = node_name
+                if best_match and best_ratio >= 0.8:
+                    mapping[qe_normalized] = [best_match]
 
         return mapping
 
@@ -322,8 +339,7 @@ class GraphRetriever:
         - Weight(e): 实体 e 在图中的全局权重 (TF-IDF 累加)
         - Hop(e): 实体距离 Query 实体的图跳数 (0=直接命中, 1=邻居)
 
-        实现: 对每个被命中实体关联的 Chunk，累加衰减后的实体权重，
-        最终按得分降序。
+        返回的得分已归一化到 [0, 1]，便于后续与其他检索路的分数融合或调试。
         """
         chunk_scores: Dict[int, float] = defaultdict(float)
 
@@ -337,7 +353,19 @@ class GraphRetriever:
             for chunk_idx in self.entity_to_chunks[entity]:
                 chunk_scores[chunk_idx] += decay
 
-        sorted_chunks = sorted(chunk_scores.items(), key=lambda x: x[1], reverse=True)
+        if not chunk_scores:
+            return []
+
+        max_score = max(chunk_scores.values())
+        if max_score <= 0:
+            return []
+
+        normalized = {
+            chunk_idx: score / max_score
+            for chunk_idx, score in chunk_scores.items()
+        }
+
+        sorted_chunks = sorted(normalized.items(), key=lambda x: x[1], reverse=True)
         return sorted_chunks
 
     # ----------------------------------------------------------
@@ -353,10 +381,12 @@ class GraphRetriever:
 
         流程:
         1. 从 Query 抽取实体
-        2. 实体映射到图节点 (精确→模糊)
-        3. k-hop 邻居扩展
-        4. Chunk 评分排序
-        5. 包装为 RetrievalResult 返回
+        2. 实体映射到图节点 (精确→模糊→编辑距离)
+        3. 只有当 >=2 个 query 实体命中图节点时才启用图检索，否则返回空
+           （避免单实体查询被图检索噪声污染）
+        4. k-hop 邻居扩展
+        5. Chunk 评分排序
+        6. 包装为 RetrievalResult 返回
         """
         # Step 1: Query 实体抽取
         query_entities_raw = extract_entities_from_text(query, top_n=GRAPH_ENTITY_TOP_N)
@@ -366,7 +396,7 @@ class GraphRetriever:
 
         query_entity_names = [e for e, _ in query_entities_raw]
 
-        # Step 2: 实体映射 (精确 + 模糊降级)
+        # Step 2: 实体映射 (精确 + 模糊降级 + 编辑距离兜底)
         node_mapping = self._map_query_to_nodes(query_entity_names)
         matched_nodes: List[str] = []
         for mapped_list in node_mapping.values():
@@ -377,6 +407,14 @@ class GraphRetriever:
             logger.debug(
                 "Query 实体未匹配到图节点: %s",
                 query_entity_names[:5],
+            )
+            return []
+
+        # Step 3: 查询路由 —— 只有多实体查询才启用图检索
+        if len(node_mapping) < 2:
+            logger.debug(
+                "Query 仅命中 %d 个图节点实体，不足 2 个，图检索返回空",
+                len(node_mapping),
             )
             return []
 

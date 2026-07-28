@@ -28,11 +28,11 @@ import operator
 
 from langgraph.graph import StateGraph, END
 
-from config import CE_TOP_K, CE_THRESHOLD
+from config import CE_TOP_K, CE_THRESHOLD, KG_RRF_WEIGHT
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.fusion import FusionPipeline
-from src.graph_retriever import GraphRetriever
+from src.kg_retriever import KGRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ class AgentState(TypedDict):
 _chunks: list = []
 _bm25: BM25Retriever | None = None
 _vector: VectorRetriever | None = None
-_graph: GraphRetriever | None = None
+_graph: KGRetriever | None = None
 _pipeline: FusionPipeline | None = None
 _initialized: bool = False
 
@@ -88,7 +88,7 @@ def _ensure_pipeline():
     _chunks = process_directory()
     _bm25 = BM25Retriever(_chunks)
     _vector = VectorRetriever(_chunks, rebuild=True)
-    _graph = GraphRetriever(_chunks)
+    _graph = KGRetriever(_chunks)
     _pipeline = FusionPipeline()
     _initialized = True
     logger.info("RAG 管线就绪 — %d 个 Chunk 已索引, 图节点: %d", len(_chunks), _graph.graph.number_of_nodes())
@@ -156,7 +156,7 @@ def retrieve(state: AgentState) -> dict:
     bm25_results = _bm25.search(query)
     vector_results = _vector.search(query)
     graph_results = _graph.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K, graph_results=graph_results)
+    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K, graph_results=graph_results, rrf_weights=[1.0, 1.0, KG_RRF_WEIGHT])
 
     chunks = [
         {

@@ -2,7 +2,7 @@
 FastMCP 工具封装 — 将 RAG 检索管线暴露为 MCP Server。
 
 提供 4 个 Tool:
-- search_knowledge: 全管线检索 (BM25 → Vector → RRF → Cross-Encoder)
+- search_knowledge: 全管线检索 (BM25 → Vector → Graph → RRF → Cross-Encoder)
 - list_documents: 列出已索引的文档清单
 - get_chunk: 按 chunk_id 获取切片详情
 - get_chunk_count: 返回已索引切片总数
@@ -19,9 +19,10 @@ from typing import List, Annotated
 
 from fastmcp import FastMCP
 
-from config import CE_TOP_K
+from config import CE_TOP_K, KG_RRF_WEIGHT
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
+from src.kg_retriever import KGRetriever
 from src.fusion import FusionPipeline
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 mcp = FastMCP(
     "RAG Knowledge Server",
     version="1.0.0",
-    instructions="RAG 智能知识检索系统 — BM25 + ChromaDB + RRF + Cross-Encoder",
+    instructions="RAG 智能知识检索系统 — BM25 + 向量 + 图三路融合 + RRF + Cross-Encoder",
 )
 
 # ============================================================
@@ -43,13 +44,14 @@ mcp = FastMCP(
 _chunks: list = []
 _bm25: BM25Retriever | None = None
 _vector: VectorRetriever | None = None
+_graph: KGRetriever | None = None
 _pipeline: FusionPipeline | None = None
 _initialized: bool = False
 
 
 def _ensure_pipeline():
     """懒加载：首次调用时初始化全部管线组件。"""
-    global _chunks, _bm25, _vector, _pipeline, _initialized
+    global _chunks, _bm25, _vector, _graph, _pipeline, _initialized
 
     if _initialized:
         return
@@ -58,6 +60,7 @@ def _ensure_pipeline():
     _chunks = process_directory()
     _bm25 = BM25Retriever(_chunks)
     _vector = VectorRetriever(_chunks, rebuild=True)
+    _graph = KGRetriever(_chunks)
     _pipeline = FusionPipeline()
     _initialized = True
     logger.info("RAG 管线就绪 — %d 个 Chunk 已索引", len(_chunks))
@@ -68,17 +71,18 @@ def _ensure_pipeline():
 # ============================================================
 
 
-@mcp.tool(description="检索知识库。输入自然语言查询，返回 Cross-Encoder 精排后的 Top-K 结果。")
+@mcp.tool(description="BM25+向量+图三路融合检索。输入自然语言查询，返回 Cross-Encoder 精排后的 Top-K 结果。")
 def search_knowledge(
     query: Annotated[str, "自然语言查询，例如：混合检索策略、RAG 的核心优化方向"],
     top_k: Annotated[int, "返回的结果数量，默认 5"] = 5,
 ) -> list[dict]:
-    """执行完整检索管线：BM25 + 向量 → RRF 融合 → Cross-Encoder 精排。"""
+    """执行完整检索管线：BM25 + 向量 + 图 → RRF 融合 → Cross-Encoder 精排。"""
     _ensure_pipeline()
 
     bm25_results = _bm25.search(query)
     vector_results = _vector.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=top_k)
+    graph_results = _graph.search(query)
+    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=top_k, graph_results=graph_results, rrf_weights=[1.0, 1.0, KG_RRF_WEIGHT])
 
     return [
         {

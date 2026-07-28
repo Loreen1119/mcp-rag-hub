@@ -27,10 +27,11 @@ def reciprocal_rank_fusion(
     rankings: List[List[RetrievalResult]],
     k: int = RRF_K,
     top_n: int | None = None,
+    weights: List[float] | None = None,
 ) -> List[RetrievalResult]:
     """RRF 算法 — 将多路排名转换为倒数权重后相加。
 
-    RRF(chunk) = Σ 1 / (k + rank(chunk))
+    RRF(chunk) = Σ weight_i * 1 / (k + rank_i(chunk))
 
     核心优势：不看原始分数的绝对大小，只看排名。
     BM25 得分 0~几十，向量余弦相似度 0~1，直接加权 BM25 会碾压。
@@ -40,6 +41,8 @@ def reciprocal_rank_fusion(
         rankings: 每路检索的排序结果列表（rank 1 在 list[0]）
         k: 平滑常数，k 越小排名靠前的文档权重越大
         top_n: 返回 Top-N，不传则返回全部
+        weights: 每路检索的 RRF 权重，长度需与 rankings 一致；
+                 可用于降低图检索等辅助召回路的贡献
 
     Returns:
         按 RRF 得分降序排列的结果，source 标记为 "rrf"
@@ -47,10 +50,15 @@ def reciprocal_rank_fusion(
     scores: defaultdict[str, float] = defaultdict(float)
     chunk_map: dict[str, tuple[Chunk, str]] = {}  # chunk_id → (Chunk, 原始来源)
 
-    for ranking in rankings:
+    if weights is None:
+        weights = [1.0] * len(rankings)
+    elif len(weights) != len(rankings):
+        raise ValueError(f"weights 长度 ({len(weights)}) 必须与 rankings 长度 ({len(rankings)}) 一致")
+
+    for ranking, weight in zip(rankings, weights):
         for rank, result in enumerate(ranking, start=1):
             cid = result.chunk.chunk_id
-            scores[cid] += 1.0 / (k + rank)
+            scores[cid] += weight * 1.0 / (k + rank)
             if cid not in chunk_map:
                 chunk_map[cid] = (result.chunk, result.source)
 
@@ -158,6 +166,7 @@ class FusionPipeline:
         rrf_k: int = RRF_K,
         ce_top_k: int = CE_TOP_K,
         graph_results: List[RetrievalResult] | None = None,
+        rrf_weights: List[float] | None = None,
     ) -> dict:
         """执行完整融合链路。
 
@@ -168,6 +177,8 @@ class FusionPipeline:
             rrf_k: RRF 平滑常数
             ce_top_k: Cross-Encoder 返回数量
             graph_results: 可选，GraphRAG 图检索结果（三路融合时传入）
+            rrf_weights: 可选，每路检索在 RRF 中的权重；
+                         例如 [1.0, 1.0, 0.5] 可降低图检索贡献
 
         Returns:
             {
@@ -179,7 +190,7 @@ class FusionPipeline:
         rankings = [bm25_results, vector_results]
         if graph_results:
             rankings.append(graph_results)
-        fused = reciprocal_rank_fusion(rankings, k=rrf_k)
+        fused = reciprocal_rank_fusion(rankings, k=rrf_k, weights=rrf_weights)
 
         # 阶段 2: Cross-Encoder 重排
         reranked = self.reranker.rerank(query, fused, top_k=ce_top_k)

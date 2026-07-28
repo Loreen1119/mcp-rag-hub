@@ -7,8 +7,8 @@
 ## 功能
 
 - **文档消化** — PDF / Markdown / TXT 自动加载，编码自检测，Token 级滑动窗口切块
-- **三路检索** — BM25 关键词 + 向量语义 + 实体共现图三路并行召回
-- **实体共现图** — jieba + TF-IDF 实体抽取，NetworkX 共现图索引，子图遍历与邻居扩展
+- **三路检索** — BM25 关键词 + 向量语义 + 知识图谱（LLM 抽取三元组）三路并行召回
+- **知识图谱** — DeepSeek LLM 抽取三元组，NetworkX 有向图索引，路径搜索与 Chunk 关联
 - **RRF 融合** — 基于排名的多路结果融合，消除量纲差异
 - **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排）
 - **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
@@ -53,7 +53,7 @@ mcp-rag-hub/
 ├── src/
 │   ├── models.py              # Chunk / RetrievalResult 数据结构
 │   ├── data_pipeline.py       # 文档加载 + Token 级滑动窗口切块
-│   ├── retrievers.py          # BM25 + ChromaDB 双路召回
+│   ├── retrievers.py          # BM25 + 向量双路召回
 │   ├── graph_retriever.py       # 实体共现图检索（GraphRAG）
 │   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排序
 │   ├── mcp_server.py          # FastMCP 工具封装
@@ -65,7 +65,9 @@ mcp-rag-hub/
 │       └── experiments.py     # 消融实验与数据分析
 │
 ├── data/
-│   └── test_queries.json      # GoldenTestSet（15 组三层分类）
+│   ├── test_queries_all.json  # 全部 36 条（E01-E08, S01-S08, M01-M08, G01-G12）
+│   ├── train_queries.json     # 训练集 18 条（按类别难度平衡分配）
+│   └── test_queries.json      # 测试集 18 条（与 train 互补，不参与调参）
 │
 ├── docs/                      # 测试文档
 ├── docs_knowledge/            # 项目文档与章节笔记
@@ -75,13 +77,40 @@ mcp-rag-hub/
 
 ## 关键数据
 
-| 指标 | 值 |
-|------|-----|
-| 全管线 MRR | **0.967** |
-| BM25→全管线 MRR 提升 | +0.067 |
-| 语义类 MRR 提升 | +0.167（0.800 → 0.967） |
-| 全管线延迟 | ~395 ms（CE 占 92%） |
-| 图检索 Precision@5 | **0.893**（延迟 0.85ms） |
+> 基于 36 组四层 Golden Test Set（exact_match / semantic / mixed / graph 四类），train/test 分离，test 全程不参与调参
+
+**最终指标（Test 集）：** BM25+向量双路 RRF 融合 MRR **0.78**，经 Cross-Encoder 精排后完整管线 MRR **0.81**，Hit@5 **100%**，Recall@5 **0.90**。
+
+**Train vs Test 揭示的规律：**
+
+| 分集 | RRF MRR | Hybrid MRR | CE MRR |
+|------|---------|-----------|--------|
+| Train | 0.6075 | 0.6662 | 0.5602 |
+| Test | 0.7824 | 0.5919 | **0.8148** |
+
+- Train 上 Hybrid > RRF：说明 KG 在部分关系型查询上确实有用
+- Test 上 Hybrid < RRF：说明 KG 泛化性不够，在新 queries 上引入了噪声
+- CE 精排救了场：Test CE 0.81 >> Hybrid 0.59，说明两阶段设计是稳健的
+
+**知识图谱的价值定位：** 展示 LLM 三元组抽取 + 有向知识图谱构建 + 三路融合设计，针对多实体关系型查询作为第三路召回补充。
+
+### Test 集（18 条）
+
+| 指标 | BM25 | Vector | RRF | Graph | Hybrid | CE（全管线） |
+|------|------|--------|-----|-------|--------|------|
+| MRR | 0.7913 | 0.6769 | 0.7824 | 0.5000 | 0.5919 | **0.8148** |
+| Hit@5 | 0.8333 | 0.7778 | 0.9444 | 0.5000 | 0.7778 | 0.9444 |
+| Prec@5 | 0.5111 | 0.4333 | 0.4444 | 0.4778 | 0.4444 | 0.5333 |
+| Recall@5 | 0.7130 | 0.6111 | 0.7685 | 0.3426 | 0.6296 | 0.7963 |
+
+### Train 集（18 条）
+
+| 指标 | BM25 | Vector | RRF | Graph | Hybrid | CE（全管线） |
+|------|------|--------|-----|-------|--------|------|
+| MRR | 0.6685 | 0.5836 | 0.6075 | 0.5000 | 0.6662 | 0.5602 |
+| Hit@5 | 0.8889 | 0.8889 | 0.8333 | 0.5000 | 0.8333 | 0.8889 |
+| Prec@5 | 0.4556 | 0.3667 | 0.4556 | 0.5000 | 0.4778 | 0.4444 |
+| Recall@5 | 0.8889 | 0.8611 | 0.8056 | 0.4167 | 0.7500 | 0.8889 |
 
 ## 技术栈
 
