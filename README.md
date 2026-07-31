@@ -6,7 +6,7 @@
 
 ## 功能
 
-- **文档消化** — PDF / Markdown / TXT 自动加载，编码自检测，Token 级滑动窗口切块
+- **文档消化** — PDF / Markdown / TXT / Python 自动加载，编码自检测；Markdown 标题面包屑 + Token 级滑动窗口切块，Python 源码按 AST 函数/类边界语义分块
 - **三路检索** — BM25 关键词 + 向量语义 + 知识图谱（LLM 抽取三元组）三路并行召回
 - **知识图谱** — DeepSeek LLM 抽取三元组，NetworkX 有向图索引，路径搜索与 Chunk 关联
 - **RRF 融合** — 基于排名的多路结果融合，消除量纲差异
@@ -52,7 +52,7 @@ mcp-rag-hub/
 │
 ├── src/
 │   ├── models.py              # Chunk / RetrievalResult 数据结构
-│   ├── data_pipeline.py       # 文档加载 + Token 级滑动窗口切块
+│   ├── data_pipeline.py       # 文档加载 + 按文件类型路由分块（Markdown 标题滑窗 / Python AST / 通用滑窗）
 │   ├── retrievers.py          # BM25 + 向量双路召回
 │   ├── graph_retriever.py       # 实体共现图检索（GraphRAG）
 │   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排序

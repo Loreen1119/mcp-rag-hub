@@ -139,8 +139,22 @@ Top K=7 召回了更多关键片段（包括 RRF 公式本身），回答明显�
 
 **临时结论**：免费/默认搜索工具不适合生产测试。下一步要么换成带稳定 API key 的搜索服务，要么先用本地工具（如 Calculator）验证 Agent 的工具调用逻辑，避免无限重试烧 token。
 
+## 当天落地：Python 代码 AST 分块
+
+文章写到一半没有停。基于 Dify 里发现的"代码被通用滑窗切散"问题，我直接给 `mcp-rag-hub` 写了一个 AST 分块方案并让 Cursor 生成实现：
+
+- `src/data_pipeline.py` 新增 `chunk_by_ast()`：按函数/类/模块级边界切分 Python 源码
+- `process_document()` 增加文件类型路由：`.md` → 标题面包屑 + 滑窗，`.py` → AST 分块，`.pdf/.txt` → 通用滑窗兜底
+- `load_document()` 支持 `.py` 走文本加载
+- `process_directory()` 支持 `.py`
+- metadata 附加 `source_type`（ast / fallback）、`start_line`、`end_line`
+- 类拆分条件没有按原方案用 token 阈值，而是改成 **"方法数 >= 2 就拆"**——因为默认 `CHUNK_SIZE=256` token 偏小，按 token 很难触发拆分，按方法数更实用
+- 新增 `tests/test_data_pipeline.py`，**11/11 测试通过**
+
+这次把"使用者视角的痛点"直接转化成了"建造者视角的代码改进"——Dify 里踩的坑，反哺了项目本身。
+
 ## 后续
 
 - 尝试**父子分段**（Parent-Child Retrieval），让检索精度和上下文完整性兼得
-- 给 `retrievers.py` 加更细粒度的函数级文档字符串，看能否进一步提升代码问答质量
+- 用实现了 AST 分块的 `mcp-rag-hub` 重新构建 Dify 知识库，验证代码问答质量是否进一步提升
 - 用 Dify 的 Agent 功能时，先配置稳定的工具 API key，并限制最大迭代次数，防止限流后无限重试
