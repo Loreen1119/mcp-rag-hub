@@ -122,10 +122,12 @@ def load_document(file_path: str | Path) -> str:
     suffix = path.suffix.lower()
     if suffix == ".pdf":
         return _load_pdf(path)
-    elif suffix in (".md", ".markdown", ".txt"):
+    elif suffix in (".md", ".markdown", ".txt", ".py"):
         return _load_text(path)
     else:
-        raise ValueError(f"暂不支持的文档格式: {suffix}  (支持: .pdf / .md / .txt)")
+        raise ValueError(
+            f"暂不支持的文档格式: {suffix}  (支持: .pdf / .md / .txt / .py)"
+        )
 
 
 def _load_pdf(path: Path) -> str:
@@ -233,6 +235,257 @@ def sliding_window_chunk(
 
 
 # ============================================================
+# AST 分块
+# ============================================================
+
+import ast
+
+
+def chunk_by_ast(
+    source_code: str,
+    chunk_size: int = CHUNK_SIZE,
+    overlap: int = CHUNK_OVERLAP,
+) -> list[dict]:
+    """基于 Python AST 按函数/类边界切分源码。
+
+    - 顶层函数/异步函数 → 各自一个 chunk，headings = ["def: 函数名"]
+    - 顶层类：
+        - token 数 <= chunk_size → 整个类一个 chunk
+        - token 数 > chunk_size → 类签名+docstring 作为 overview，其余方法各自 chunk
+    - 模块级代码（不在任何函数/类中）→ 一个 chunk，headings = ["module-level"]
+    - 超大 chunk（> chunk_size）→ 按顶层语句数硬切，不再复用 sentence 滑窗
+    - 解析失败 → 回退到 sliding_window_chunk，source_type = "fallback"
+
+    Args:
+        source_code: Python 源码文本。
+        chunk_size: 目标 chunk token 上限。
+        overlap: 相邻 chunk 重叠 token 数（AST 场景下不实际使用，仅保留签名兼容）。
+
+    Returns:
+        [{"text": str, "headings": [str, ...], "start_line": int, "end_line": int}, ...]
+    """
+    try:
+        tree = ast.parse(source_code)
+    except SyntaxError:
+        # 解析失败，回退到 sentence 滑窗
+        raw = sliding_window_chunk(source_code, chunk_size=chunk_size, overlap=overlap)
+        for r in raw:
+            r["start_line"] = 1
+            r["end_line"] = len(source_code.splitlines())
+        return raw
+
+    lines = source_code.splitlines()
+    n_lines = len(lines)
+
+    def get_source(start: int, end: int) -> str:
+        return "\n".join(lines[start - 1 : end])
+
+    def estimate_tokens(text: str) -> int:
+        return count_tokens(text)
+
+    chunks: list[dict] = []
+
+    # ----------------------------------------------------------
+    # 遍历顶层节点，分发到对应的 chunk 生成逻辑
+    # ----------------------------------------------------------
+    current_class: str | None = None
+
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            start = node.lineno
+            end = node.end_lineno
+            text = get_source(start, end)
+            func_name = node.name
+
+            headings = (
+                [current_class, f"def: {func_name}"]
+                if current_class
+                else [f"def: {func_name}"]
+            )
+
+            if estimate_tokens(text) <= chunk_size:
+                chunks.append(
+                    {
+                        "text": text,
+                        "headings": headings,
+                        "start_line": start,
+                        "end_line": end,
+                    }
+                )
+            else:
+                # 超大函数：按顶层语句数硬切，不复用 sentence 滑窗
+                sub_chunks = _split_by_statement(text, start, headings, chunk_size)
+                chunks.extend(sub_chunks)
+
+        elif isinstance(node, ast.ClassDef):
+            class_name = node.name
+            class_start = node.lineno
+            class_end = node.end_lineno
+            class_text = get_source(class_start, class_end)
+
+            # 统计方法数量（同步 + 异步），用于决定是否拆分
+            method_count = sum(
+                1
+                for item in node.body
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
+            )
+
+            # 拆分条件：方法数 >= 2 或 token 超标
+            # 单方法小类整体打包，避免过度碎片
+            if method_count < 2 and estimate_tokens(class_text) <= chunk_size:
+                # 整体打包
+                chunks.append(
+                    {
+                        "text": class_text,
+                        "headings": [f"class: {class_name}"],
+                        "start_line": class_start,
+                        "end_line": class_end,
+                    }
+                )
+            else:
+                # 拆解：类签名+docstring 作为 overview，其余方法各自 chunk
+                overview_text, method_nodes = _extract_class_parts(
+                    node, source_code, lines
+                )
+                if overview_text:
+                    chunks.append(
+                        {
+                            "text": overview_text,
+                            "headings": [f"class: {class_name}"],
+                            "start_line": class_start,
+                            "end_line": overview_text.count("\n") + class_start,
+                        }
+                    )
+                current_class = f"class: {class_name}"
+                for meth in method_nodes:
+                    m_start = meth.lineno
+                    m_end = meth.end_lineno
+                    m_text = get_source(m_start, m_end)
+                    headings = [f"class: {class_name}", f"def: {meth.name}"]
+                    if estimate_tokens(m_text) <= chunk_size:
+                        chunks.append(
+                            {
+                                "text": m_text,
+                                "headings": headings,
+                                "start_line": m_start,
+                                "end_line": m_end,
+                            }
+                        )
+                    else:
+                        sub_chunks = _split_by_statement(
+                            m_text, m_start, headings, chunk_size
+                        )
+                        chunks.extend(sub_chunks)
+                current_class = None
+
+        else:
+            # 模块级代码（import / 全局变量 / 执行语句等）
+            start = node.lineno
+            end = node.end_lineno or start
+            text = get_source(start, end)
+            if estimate_tokens(text) <= chunk_size:
+                chunks.append(
+                    {
+                        "text": text,
+                        "headings": ["module-level"],
+                        "start_line": start,
+                        "end_line": end,
+                    }
+                )
+            else:
+                sub_chunks = _split_by_statement(text, start, ["module-level"], chunk_size)
+                chunks.extend(sub_chunks)
+
+    # 按 start_line 排序
+    chunks.sort(key=lambda c: c["start_line"])
+    return chunks
+
+
+def _extract_class_parts(
+    node: ast.ClassDef, source_code: str, lines: list[str]
+) -> tuple[str, list[ast.FunctionDef | ast.AsyncFunctionDef]]:
+    """从 ClassDef 节点提取类签名+docstring，以及所有方法节点列表。"""
+    overview_lines = node.lineno
+    method_nodes: list[ast.FunctionDef | ast.AsyncFunctionDef] = []
+
+    for item in node.body:
+        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            method_nodes.append(item)
+        elif overview_lines == node.lineno:
+            # 第一个非方法节点之前的行都算类签名/docstring 范围
+            if isinstance(item, ast.Expr) and isinstance(item.value, ast.Constant):
+                # docstring
+                overview_lines = item.end_lineno or node.lineno
+            else:
+                overview_lines = item.end_lineno or node.lineno
+
+    end_line = overview_lines
+    overview_text = "\n".join(lines[node.lineno - 1 : end_line])
+    return overview_text, method_nodes
+
+
+def _split_by_statement(
+    text: str, base_start: int, headings: list[str], chunk_size: int
+) -> list[dict]:
+    """按顶层语句数硬切超大 chunk，不使用 sentence 滑窗。"""
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        # 无法解析，直接截断并 warn
+        import logging
+
+        logging.getLogger(__name__).warning(
+            "AST 解析失败，无法切分超大 chunk，截断处理 (start_line=%d)", base_start
+        )
+        return [
+            {
+                "text": text[:500],
+                "headings": headings,
+                "start_line": base_start,
+                "end_line": base_start,
+            }
+        ]
+
+    lines = text.splitlines()
+    chunks: list[dict] = []
+    current_lines: list[str] = []
+    current_tokens = 0
+    chunk_start = base_start
+
+    for node in ast.iter_child_nodes(tree):
+        node_text = "\n".join(lines[node.lineno - 1 : (node.end_lineno or node.lineno)])
+        node_tokens = count_tokens(node_text)
+
+        if current_tokens + node_tokens > chunk_size and current_lines:
+            chunks.append(
+                {
+                    "text": "\n".join(current_lines),
+                    "headings": headings,
+                    "start_line": chunk_start,
+                    "end_line": chunk_start + len(current_lines) - 1,
+                }
+            )
+            current_lines = []
+            current_tokens = 0
+            chunk_start = node.lineno + base_start - 1
+
+        current_lines.append(node_text)
+        current_tokens += node_tokens
+
+    if current_lines:
+        chunks.append(
+            {
+                "text": "\n".join(current_lines),
+                "headings": headings,
+                "start_line": chunk_start,
+                "end_line": chunk_start + len(current_lines) - 1,
+            }
+        )
+
+    return chunks
+
+
+# ============================================================
 # 主入口
 # ============================================================
 
@@ -249,16 +502,29 @@ def process_document(
         logger.warning("文档内容为空，无切片产出: %s", path.name)
         return []
 
-    # 仅对 Markdown 文件提取标题结构
-    is_md = path.suffix.lower() in (".md", ".markdown")
-    md_headings = _parse_md_headings(full_text) if is_md else None
+    suffix = path.suffix.lower()
 
-    raw_chunks = sliding_window_chunk(
-        full_text,
-        chunk_size=chunk_size,
-        overlap=overlap,
-        headings=md_headings,
-    )
+    # 文件类型路由
+    if suffix in (".md", ".markdown"):
+        md_headings = _parse_md_headings(full_text)
+        raw_chunks = sliding_window_chunk(
+            full_text,
+            chunk_size=chunk_size,
+            overlap=overlap,
+            headings=md_headings,
+        )
+        source_type = "markdown"
+    elif suffix == ".py":
+        raw_chunks = chunk_by_ast(full_text, chunk_size=chunk_size, overlap=overlap)
+        source_type = "ast"
+    else:
+        # .pdf / .txt 等兜底
+        raw_chunks = sliding_window_chunk(
+            full_text,
+            chunk_size=chunk_size,
+            overlap=overlap,
+        )
+        source_type = "text"
 
     results: list[Chunk] = []
     for idx, rc in enumerate(raw_chunks):
@@ -266,6 +532,9 @@ def process_document(
             "source": path.name,
             "chunk_index": idx,
             "token_count": count_tokens(rc["text"]),
+            "source_type": source_type,
+            "start_line": rc.get("start_line", 1),
+            "end_line": rc.get("end_line", 1),
         }
         if rc["headings"]:
             meta["headings"] = rc["headings"]
@@ -274,11 +543,13 @@ def process_document(
         chunk = Chunk(content=rc["text"], metadata=meta)
         results.append(chunk)
 
+    is_md = suffix in (".md", ".markdown")
     logger.info(
-        "处理完成 [%s] → %d 个 Chunk  (Markdown 标题追踪: %s)",
+        "处理完成 [%s] → %d 个 Chunk  (Markdown 标题追踪: %s, source_type: %s)",
         path.name,
         len(results),
         "ON" if is_md else "OFF",
+        source_type,
     )
     return results
 
@@ -294,7 +565,7 @@ def process_directory(
         raise FileNotFoundError(f"目录不存在: {dir_path}")
 
     all_chunks: list[Chunk] = []
-    supported = {".pdf", ".md", ".markdown", ".txt"}
+    supported = {".pdf", ".md", ".markdown", ".txt", ".py"}
 
     for file_path in sorted(dir_path.iterdir()):
         if file_path.suffix.lower() in supported:

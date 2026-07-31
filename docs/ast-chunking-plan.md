@@ -42,12 +42,12 @@ def chunk_by_ast(
 
 行为要求：
 
-1. **解析源码**：使用 `ast.parse(source_code)`，异常时 fallback 到 `sliding_window_chunk`。
+1. **解析源码**：使用 `ast.parse(source_code)`，异常时 fallback 到 `sliding_window_chunk`，并在 `metadata` 中标记 `source_type: "fallback"`。
 2. **识别顶层定义**：遍历 `ast.Module.body`，只处理以下节点类型：
    - `ast.FunctionDef`
    - `ast.AsyncFunctionDef`
    - `ast.ClassDef`
-3. **提取源码片段**：通过 `node.lineno` 和 `node.end_lineno` 从源码行切片。
+3. **提取源码片段**：通过 `node.lineno` 和 `node.end_lineno` 从源码行切片，同时在 metadata 中记录 `start_line` / `end_line`，方便后续定位源码。
 4. **函数 chunk**：
    - 每个函数作为一个 chunk
    - `headings = ["def: 函数名"]`
@@ -58,12 +58,32 @@ def chunk_by_ast(
      - 类签名 + docstring 作为类 overview chunk，`headings = ["class: 类名"]`
      - 每个方法单独作为 chunk，`headings = ["class: 类名", "def: 方法名"]`
 6. **模块级代码**：不在任何函数/类中的顶层代码（import、全局变量、执行语句）作为一个 chunk，`headings = ["module-level"]`。
-7. **超大 chunk 截断**：任何 chunk 超过 `chunk_size` 时，调用 `sliding_window_chunk` 进一步切分，但保留原始 `headings`。
-8. **重叠处理**：相邻 chunk 之间按 token 数重叠 `overlap`，类似现有 `sliding_window_chunk` 的回退逻辑。
+7. **超大 module-level chunk 硬切**：如果模块级代码 token 数超过 `chunk_size`，**不按句子滑窗切分**（import 语句滑窗切出来没意义），而是按顶层语句数硬切成若干块（例如每 N 条顶层语句一块），并记录 `start_line` / `end_line`。
+8. **相邻 AST chunk 之间不重叠**：Python 函数/类自身就是完整语义单元，开发者习惯直接跳转到函数定义，不需要在相邻函数边界叠加上下文。强行重叠会拼接相邻函数尾部/头部，反而引入噪声。
+9. **metadata 标记**：每个 AST chunk 的 metadata 包含 `source_type: "ast"`；fallback 的 chunk 标记 `source_type: "fallback"`。
 
 ---
 
-### 2. 修改 `process_document()` 增加文件类型路由
+### 2. 修改 `load_document()` 支持 `.py`
+
+当前 `load_document()` 按后缀分发加载，`.py` 不在支持列表里，会抛异常。需要把 `.py` 加入文本加载分支：
+
+```python
+def load_document(file_path: str | Path) -> str:
+    path = Path(file_path).resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"文件不存在: {path}")
+
+    suffix = path.suffix.lower()
+    if suffix == ".pdf":
+        return _load_pdf(path)
+    elif suffix in (".md", ".markdown", ".txt", ".py"):
+        return _load_text(path)
+    else:
+        raise ValueError(f"暂不支持的文档格式: {suffix}  (支持: .pdf / .md / .txt / .py)")
+```
+
+### 3. 修改 `process_document()` 增加文件类型路由
 
 在 `process_document()` 中，根据文件后缀选择分块策略：
 
@@ -84,16 +104,18 @@ def process_document(file_path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
             full_text, chunk_size=chunk_size, overlap=overlap, headings=md_headings
         )
     elif suffix == ".py":
-        raw_chunks = chunk_by_ast(full_text, chunk_size=chunk_size, overlap=overlap)
+        raw_chunks = chunk_by_ast(full_text, chunk_size=chunk_size)
     else:
         # .pdf / .txt 等兜底
         raw_chunks = sliding_window_chunk(
             full_text, chunk_size=chunk_size, overlap=overlap
         )
 
-    # 后续 metadata 包装逻辑保持不变
+    # 后续 metadata 包装逻辑：保留 raw_chunks 里的 start_line/end_line/source_type 等字段
     ...
 ```
+
+> 注意：`.py` 文件调用 `chunk_by_ast` 时不需要传 `overlap`，因为 AST chunk 不重叠。
 
 ---
 
@@ -143,10 +165,17 @@ class MyClass:
         return "b"
 '''
     chunks = chunk_by_ast(code)
-    assert len(chunks) >= 4  # module-level, helper, MyClass(method_a), method_b
+    # module-level, helper, MyClass overview, method_a, method_b
+    assert len(chunks) >= 4
+
     headings_list = [c["headings"] for c in chunks]
-    assert ["def: helper"] in headings_list
-    assert ["class: MyClass", "def: method_a"] in headings_list
+    assert any(h == ["def: helper"] for h in headings_list)
+    assert any(h == ["class: MyClass", "def: method_a"] for h in headings_list)
+    assert any(h == ["class: MyClass", "def: method_b"] for h in headings_list)
+
+    # 校验 metadata 包含源码定位信息
+    assert all("start_line" in c and "end_line" in c for c in chunks)
+    assert all(c.get("source_type") == "ast" for c in chunks)
 ```
 
 ### 测试 2：`process_document` 能处理 `.py`
@@ -159,6 +188,7 @@ def test_process_python_file():
     for chunk in chunks:
         assert len(chunk.content) > 20
         assert "source" in chunk.metadata
+        assert "source_type" in chunk.metadata
 ```
 
 ### 测试 3：`.md` 处理逻辑不被破坏
@@ -175,11 +205,13 @@ def test_process_markdown_file():
 
 ## 验收标准
 
-1. `python -m src.data_pipeline src/retrievers.py` 能正常跑通，产出多个 chunk。
-2. 每个 chunk 都包含完整函数/类/方法源码，不再出现 `def run(`、`}`、`continue` 等碎片。
-3. `chunk.metadata["headings"]` 中至少包含函数名或类名。
-4. 现有 `.md` / `.pdf` / `.txt` 处理逻辑完全不受影响。
-5. `process_directory("docs")` 可以同时处理目录下的 `.md` 和 `.py` 文件。
+1. `load_document("src/retrievers.py")` 能正常返回源码字符串。
+2. `python -m src.data_pipeline src/retrievers.py` 能正常跑通，产出多个 chunk。
+3. 每个 chunk 都包含完整函数/类/方法源码，不再出现 `def run(`、`}`、`continue` 等碎片。
+4. `chunk.metadata["headings"]` 中至少包含函数名或类名。
+5. `chunk.metadata` 包含 `start_line`、`end_line`、`source_type`。
+6. 现有 `.md` / `.pdf` / `.txt` 处理逻辑完全不受影响。
+7. `process_directory("docs")` 可以同时处理目录下的 `.md` 和 `.py` 文件。
 
 ---
 
@@ -195,4 +227,4 @@ def test_process_markdown_file():
 
 - 实现 **父子分块（Parent-Child）**：类作为父块，方法作为子块，检索时命中子块、生成时引用父块上下文。
 - 递归扫描 `docs/` 子目录中的 `.py` 文件。
-- 给 `.py` chunk 的 `metadata` 增加 `start_line` / `end_line`，方便定位源码位置。
+- 在 UI 层展示 `start_line` / `end_line`，让知识库问答能直接给出源码定位。
