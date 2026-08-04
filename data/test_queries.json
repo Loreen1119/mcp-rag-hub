@@ -1,10 +1,10 @@
 {
-  "description": "RAG GoldenTestSet — 测试集，18 条，按检索难度和类型分层平衡分配（与 train 互补）",
+  "description": "RAG GoldenTestSet — 测试集，18 条，基于当前 docs/ 知识库正文内容设计",
   "categories": {
     "exact_match": "专有名词精确匹配 — 测 BM25/关键词优势",
     "semantic": "语义相似但字面不同 — 测向量检索优势",
     "mixed": "混合复杂查询 — 测 RRF+重排整体效果",
-    "graph": "多实体关联查询 — 测实体共现图关联能力"
+    "graph": "多实体关联查询 — 测跨文档综合召回能力"
   },
   "split_logic": "每类按难度高低交替分配：E（2,4,6,8偶数）、S（2,4,6,8偶数）、M（2,4,6,8偶数）、G（低分+高分打散：2,3,5,6,8,12）",
   "test_cases": [
@@ -13,144 +13,144 @@
       "query": "Cross-Encoder 重排序",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档做注意力计算，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
-      "notes": "文中直接出现 'Cross-Encoder' 这个术语"
+      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
+      "notes": "sample_rag_paper.md 核心优化方向 #3 直接出现术语"
     },
     {
       "id": "E04",
       "query": "Faithfulness 忠实度指标",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "Faithfulness（忠实度）是 RAG 评测的核心指标之一，用于衡量生成内容是否忠于检索到的原文，通过 LLM 逐句比对检测幻觉。",
-      "notes": "文中提到 Faithfulness 评估指标"
+      "golden_answer": "Faithfulness（忠实度）是 RAG 评测的核心指标之一，用于衡量生成内容是否忠于检索到的原文。",
+      "notes": "sample_rag_paper.md 中直接出现 Faithfulness"
     },
     {
       "id": "E06",
-      "query": "BGE-M3 和 sentence-transformers 嵌入模型",
+      "query": "BGE-M3 嵌入模型",
       "category": "exact_match",
-      "golden_chunk_sources": ["sample_notes.txt"],
-      "golden_answer": "BGE-M3 和 sentence-transformers 是 MetaFetch-RAG 项目规划的嵌入模型选型，用于将文本块转换为向量表示存入 ChromaDB。",
-      "notes": "两个模型名在 sample_notes.txt 中直接出现"
+      "golden_chunk_sources": ["embedding-guide.md", "sample_notes.txt"],
+      "golden_answer": "BGE-M3 是 1024 维中英双语嵌入模型，MTEB 中文任务领先，开源可商用，mcp-rag-hub 当前选型。",
+      "notes": "embedding-guide.md 主流模型对比表和 sample_notes.txt 技术栈都提到"
     },
     {
       "id": "E08",
-      "query": "PyMuPDF 和 Python-Markdown 文档解析工具",
+      "query": "sentence-transformers",
       "category": "exact_match",
       "golden_chunk_sources": ["sample_notes.txt"],
-      "golden_answer": "PyMuPDF 和 Python-Markdown 是 MetaFetch-RAG 规划的文档解析技术栈，用于解析 PDF、Markdown 和纯文本等格式。",
-      "notes": "两个工具名在 sample_notes.txt 技术栈规划中直接出现"
+      "golden_answer": "sentence-transformers 是 mcp-rag-hub 项目规划使用的嵌入模型框架之一。",
+      "notes": "sample_notes.txt 技术栈规划中直接出现"
     },
     {
       "id": "S02",
-      "query": "关键词搜索和语义搜索怎么配合使用？",
+      "query": "关键词检索和语义检索如何互补？",
       "category": "semantic",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "结合 BM25 关键词检索与向量语义检索的混合召回方案，通过 RRF 算法在不对原始得分做量纲归一化的前提下融合多路排序结果。",
-      "notes": "字面没出现 '配合使用'，但语义指向混合检索"
+      "golden_answer": "BM25 关键词检索无法理解同义词，向量语义检索对专有名词支持弱，两者通过 RRF 融合可互补。",
+      "notes": "查询字面与文档中'混合检索策略'章节语义一致"
     },
     {
       "id": "S04",
-      "query": "文档太长模型处理不了怎么办？",
+      "query": "文档切片为什么要保留重叠区间？",
       "category": "semantic",
-      "golden_chunk_sources": ["sample_rag_paper.md", "sample_notes.txt"],
-      "golden_answer": "采用滑窗切片策略将文档切分为适当大小的 Chunk，512 token 为基础单元、128 token 重叠，确保语义完整性同时控制输入长度。",
-      "notes": "指向切片策略"
+      "golden_chunk_sources": ["sample_rag_paper.md", "chunking-strategies.md", "sample_notes.txt"],
+      "golden_answer": "保留 10%~20% 重叠可减少边界语义丢失，避免跨 Chunk 的实体关系因机械切割而断裂。",
+      "notes": "多文档都提到重叠切片的作用"
     },
     {
       "id": "S06",
-      "query": "中文企业知识库应该选哪个 Embedding 模型？",
+      "query": "中文场景应该选哪个 Embedding 模型？",
       "category": "semantic",
-      "golden_chunk_sources": ["embedding_guide.md"],
-      "golden_answer": "中文场景推荐 BGE（BAAI General Embedding），在 MTEB 榜单中文任务领先，开源可商用，是当前中文语义检索最具性价比的选择。",
-      "notes": "字面没有直接出现，但语义指向中文 Embedding 选型"
+      "golden_chunk_sources": ["embedding-guide.md"],
+      "golden_answer": "中文场景推荐 BGE（BAAI General Embedding），MTEB 中文任务领先，开源可商用。",
+      "notes": "embedding-guide.md 选型小结明确回答"
     },
     {
       "id": "S08",
-      "query": "怎么做到在切片时不把一段完整的意思拦腰截断？",
+      "query": "切片时如何避免把完整语义单元切断？",
       "category": "semantic",
-      "golden_chunk_sources": ["chunking_strategies.md", "sample_notes.txt"],
-      "golden_answer": "可在语义边界处切分（按句/段切片或语义切片），同时加入 10%~20% 的重叠区间，让相邻 Chunk 保留上下文连贯性，避免语义割裂。",
-      "notes": "指向语义切片和重叠切片的语义完整性保障"
+      "golden_chunk_sources": ["chunking-strategies.md", "sample_rag_paper.md"],
+      "golden_answer": "按语义或段落结构切分，过短合并、过长拆分，并加入 10%~20% 重叠保留上下文连贯性。",
+      "notes": "chunking-strategies.md 实际建议章节语义匹配"
     },
     {
       "id": "M02",
-      "query": "企业搭建知识库检索系统需要考虑哪些技术？",
+      "query": "搭建企业级 RAG 知识检索系统需要哪些技术组件？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_rag_paper.md", "sample_notes.txt"],
-      "golden_answer": "需要文档解析（PyMuPDF）、向量数据库（ChromaDB）、嵌入模型（BGE-M3/sentence-transformers）、混合检索（BM25+向量）、重排序（Cross-Encoder）、评估框架（Ragas）以及 MCP 接口封装。",
-      "notes": "两个文档都涉及企业技术选型"
+      "golden_chunk_sources": ["sample_notes.txt", "sample_rag_paper.md"],
+      "golden_answer": "需要文档解析、向量数据库、嵌入模型、混合检索、重排序模型、评估框架和 MCP 接口封装。",
+      "notes": "sample_notes.txt 技术栈规划 + sample_rag_paper.md 核心优化方向综合"
     },
     {
       "id": "M04",
-      "query": "传统关键词检索和现代语义检索各自的优缺点",
+      "query": "BM25 和向量检索各自的优缺点是什么？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "BM25 关键词检索对专有名词和编号敏感，但无法理解同义词；向量语义检索能捕获语义相似性，但对专有名词支持弱。两者互补，混合使用效果最佳。",
-      "notes": "对比分析题"
+      "golden_chunk_sources": ["sample_rag_paper.md", "embedding-guide.md"],
+      "golden_answer": "BM25 对精确术语匹配强但无法理解同义词；向量检索能捕捉语义相似性但对专有名词支持弱。",
+      "notes": "两文档都有明确对比"
     },
     {
       "id": "M06",
-      "query": "RAG 的检索和生成两个环节如何配合？存在哪些配合上的挑战？",
+      "query": "RAG 中 Retriever 和 Generator 各自负责什么？",
       "category": "mixed",
-      "golden_chunk_sources": ["rag_intro.md"],
-      "golden_answer": "Retriever 负责找对相关文档片段，Generator 负责基于上下文生成回答。挑战在于：如果检索返回无关片段，模型会被误导，因此常引入 Cross-Encoder 重排序做二次筛选来提升配合质量。",
-      "notes": "需要综合 Retriever 与 Generator 配合章节的信息"
+      "golden_chunk_sources": ["rag-intro.md"],
+      "golden_answer": "Retriever 负责找对相关内容，Generator 负责理解并生成回答；检索质量差会误导生成。",
+      "notes": "rag-intro.md Retriever 与 Generator 的配合章节直接回答"
     },
     {
       "id": "M08",
-      "query": "如何从零搭建一套企业级 RAG 知识检索系统？",
+      "query": "mcp-rag-hub 项目的技术栈规划是什么？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_notes.txt", "sample_rag_paper.md"],
-      "golden_answer": "完整流程包括：文档解析（PyMuPDF）→ 滑窗切片（512/128）→ 向量化（BGE-M3）→ ChromaDB 存储→ 混合检索（BM25+向量+RRF）→ Cross-Encoder 重排→ Ragas 评估→ FastMCP 接口封装。",
-      "notes": "需要综合 sample_notes.txt 技术栈和 sample_rag_paper.md 检索策略的信息"
+      "golden_chunk_sources": ["sample_notes.txt"],
+      "golden_answer": "文档解析用 PyMuPDF + Python-Markdown，向量库用 ChromaDB，嵌入模型用 sentence-transformers/BGE-M3，评估用 Ragas，接口用 FastMCP。",
+      "notes": "sample_notes.txt 技术栈规划直接回答"
     },
     {
       "id": "G02",
-      "query": "RAG 的幻觉问题和向量数据库、Embedding 模型有什么关系？",
+      "query": "RAG 如何通过 Embedding 模型和向量数据库缓解幻觉？",
       "category": "graph",
-      "golden_chunk_sources": ["rag_intro.md", "embedding_guide.md", "sample_rag_paper.md"],
-      "golden_answer": "幻觉根因是 LLM 仅依赖参数知识；Embedding 模型将文本转为向量供检索，向量数据库通过相似度搜索找到相关上下文，两者共同为 RAG 提供外部知识支撑，从而缓解幻觉。",
-      "notes": "需要同时命中 RAG、Embedding、向量数据库、幻觉等多个关联实体"
+      "golden_chunk_sources": ["rag-intro.md", "embedding-guide.md", "sample_rag_paper.md"],
+      "golden_answer": "Embedding 模型将文本转为向量，向量数据库检索相关上下文，RAG 把检索结果作为生成前缀，从而减少模型依赖参数知识产生的幻觉。",
+      "notes": "需要跨文档关联 RAG、Embedding、向量数据库、幻觉等概念"
     },
     {
       "id": "G03",
-      "query": "混合检索、RRF、Cross-Encoder 和 Faithfulness 评测之间有什么联系？",
+      "query": "混合检索、RRF、Cross-Encoder 和 Faithfulness 在 RAG 流程中是什么关系？",
       "category": "graph",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "混合检索通过 RRF 融合 BM25 和向量两路召回，Cross-Encoder 做精排提升 Top-K 命中率，共同提升检索质量；Faithfulness 评测则用于量化生成内容是否忠于检索到的原文，验证整个链路的效果。",
-      "notes": "需要同时命中混合检索、RRF、Cross-Encoder、Faithfulness 多个技术实体节点"
+      "golden_answer": "混合检索通过 RRF 融合 BM25 和向量两路召回，Cross-Encoder 做精排提升 Top-K 命中率，Faithfulness 评测生成内容是否忠于检索结果。",
+      "notes": "sample_rag_paper.md 核心优化方向 #2 和 #3 综合"
     },
     {
       "id": "G05",
-      "query": "滑窗切片、重叠切片和语义切片各自解决什么问题？之间如何互补？",
+      "query": "固定长度、按句/段、重叠切片、语义切片各适用于什么场景？",
       "category": "graph",
-      "golden_chunk_sources": ["chunking_strategies.md", "sample_notes.txt", "sample_rag_paper.md"],
-      "golden_answer": "滑窗切片（512/128）控制基础粒度，重叠切片保留跨边界上下文，语义切片确保每个 Chunk 内部语义高度一致。组合使用可兼顾粒度控制、上下文连贯和语义完整。",
-      "notes": "需要同时命中滑窗切片、重叠切片、语义切片三个实体及其各自特性"
+      "golden_chunk_sources": ["chunking-strategies.md"],
+      "golden_answer": "固定长度适合日志/网页；按句/段适合博客/新闻；重叠切片适合论文/法律；语义切片适合手册/指南。",
+      "notes": "chunking-strategies.md 策略对比表直接回答"
     },
     {
       "id": "G06",
-      "query": "Embedding 模型、余弦相似度、Dense 和 Sparse 向量在检索链路中各自扮演什么角色？",
+      "query": "Dense 向量和 Sparse 向量在检索中分别扮演什么角色？",
       "category": "graph",
-      "golden_chunk_sources": ["embedding_guide.md", "rag_intro.md"],
-      "golden_answer": "Embedding 模型将文本转为向量，Dense 捕捉语义相似性，Sparse（如 BM25）补充精确术语匹配，余弦相似度作为度量标准在向量数据库中进行 Top-K 检索，多者协同构成完整检索能力。",
-      "notes": "需要同时命中 Embedding、Dense、Sparse、余弦相似度等多个核心概念节点"
+      "golden_chunk_sources": ["embedding-guide.md", "rag-intro.md"],
+      "golden_answer": "Sparse 向量（如 BM25）基于 TF-IDF 做精确关键词匹配；Dense 向量捕捉语义相关性。两者互补，混合使用效果更佳。",
+      "notes": "embedding-guide.md Dense vs Sparse 章节 + rag-intro.md 检索策略"
     },
     {
       "id": "G08",
-      "query": "RRF 融合和 Cross-Encoder 重排两个阶段的输入输出分别是什么？它们为什么不能合并成一个阶段？",
+      "query": "为什么 RRF 融合和 Cross-Encoder 重排不能合并成一个阶段？",
       "category": "graph",
       "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "RRF 合并多路召回排名，CE 计算图文细粒度分数，分工不同无法合并。",
-      "notes": "需要理解 RRF 与 CE 的算法本质差异"
+      "golden_answer": "RRF 负责融合多路召回的排名，Cross-Encoder 负责计算查询与候选文档的细粒度相关分数，两者分工不同。",
+      "notes": "sample_rag_paper.md 中混合检索与重排序分别属于不同优化方向"
     },
     {
       "id": "G12",
-      "query": "RAG 能在多大程度上缓解大模型幻觉？幻觉问题的来源和检索质量之间有什么关系？",
+      "query": "Naive RAG 存在哪些主要局限？",
       "category": "graph",
-      "golden_chunk_sources": ["rag_intro.md"],
-      "golden_answer": "RAG 通过提供外部事实缓解幻觉，检索质量越高，生成幻觉越少。",
-      "notes": "需要理解幻觉根因与检索质量之间的因果链"
+      "golden_chunk_sources": ["rag-intro.md"],
+      "golden_answer": "Naive RAG 的局限包括语义鸿沟、上下文稀释、多跳推理无力和缺乏纠错机制。",
+      "notes": "rag-intro.md Naive RAG 的局限章节直接回答"
     }
   ]
 }
