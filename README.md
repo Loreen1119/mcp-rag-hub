@@ -1,14 +1,13 @@
 # MCP-RAG-Hub
 
-从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量+实体共现图三路召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。
+从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量混合召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。知识图谱路作为可选实验功能默认关闭。
 
 **[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)**
 
 ## 功能
 
 - **文档消化** — PDF / Markdown / TXT / Python 自动加载，编码自检测；Markdown 标题面包屑 + Token 级滑动窗口切块，Python 源码按 AST 函数/类边界语义分块
-- **三路检索** — BM25 关键词 + 向量语义 + 知识图谱（LLM 抽取三元组）三路并行召回
-- **知识图谱** — DeepSeek LLM 抽取三元组，NetworkX 有向图索引，路径搜索与 Chunk 关联
+- **混合检索** — BM25 关键词 + 向量语义双路召回，知识图谱作为可选实验功能（`ENABLE_KG` 开关）
 - **RRF 融合** — 基于排名的多路结果融合，消除量纲差异
 - **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排）
 - **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
@@ -54,7 +53,9 @@ mcp-rag-hub/
 │   ├── models.py              # Chunk / RetrievalResult 数据结构
 │   ├── data_pipeline.py       # 文档加载 + 按文件类型路由分块（Markdown 标题滑窗 / Python AST / 通用滑窗）
 │   ├── retrievers.py          # BM25 + 向量双路召回
-│   ├── graph_retriever.py       # 实体共现图检索（GraphRAG）
+│   ├── graph_retriever.py     # 实体共现图检索（可选实验功能）
+│   ├── kg_retriever.py        # LLM 三元组知识图谱检索（可选实验功能）
+│   ├── kg_builder.py          # DeepSeek LLM 抽取三元组、构建知识图谱缓存
 │   ├── fusion.py              # RRF 融合 + Cross-Encoder 重排序
 │   ├── mcp_server.py          # FastMCP 工具封装
 │   └── evaluation/            # 评测子包
@@ -69,7 +70,8 @@ mcp-rag-hub/
 │   ├── train_queries.json     # 训练集 18 条（按类别难度平衡分配）
 │   └── test_queries.json      # 测试集 18 条（与 train 互补，不参与调参）
 │
-├── docs/                      # 测试文档
+├── docs/                      # 知识库数据源
+├── journal/                   # 踩坑日志与学习笔记
 ├── docs_knowledge/            # 项目文档与章节笔记
 ├── experiments/               # 实验结果 JSON
 └── chroma_db/                 # ChromaDB 持久化向量库
@@ -92,7 +94,7 @@ mcp-rag-hub/
 - Test 上 Hybrid < RRF：说明 KG 泛化性不够，在新 queries 上引入了噪声
 - CE 精排救了场：Test CE 0.81 >> Hybrid 0.59，说明两阶段设计是稳健的
 
-**知识图谱的价值定位：** 展示 LLM 三元组抽取 + 有向知识图谱构建 + 三路融合设计，针对多实体关系型查询作为第三路召回补充。
+**知识图谱的价值定位：** 作为可选实验功能（`ENABLE_KG` 开关），展示 LLM 三元组抽取 + 有向知识图谱构建 + 三路融合设计。在当前小规模同主题语料下，消融实验表明 KG 路不提升指标，默认关闭。详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
 
 ### Test 集（18 条）
 
