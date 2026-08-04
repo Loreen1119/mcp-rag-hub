@@ -128,6 +128,7 @@ def _load_and_clean_triples(
                     "relation": rel,
                     "object": obj,
                     "source_doc": source_doc,
+                    "chunk_id": record.get("chunk_id"),
                 })
 
     logger.info("三元组清洗完成 — %d 条有效三元组", len(triples))
@@ -178,11 +179,18 @@ def _build_entity_chunk_index(
     triples: List[dict],
     chunks: List[Chunk],
 ) -> Dict[str, Set[int]]:
-    """基于 source_doc 将三元组实体关联到 Chunk 索引。
+    """将三元组实体关联到 Chunk 索引。
 
-    chunk.metadata["source"] 与 triple["source_doc"] 匹配。
+    优先使用 triple 自带的 chunk_id 精确关联到对应 Chunk；
+    若 chunk_id 缺失（兼容旧缓存），再回退到 source_doc 级关联。
     """
-    # 构建 source_doc → chunk indices 的映射
+    # chunk_id -> 索引（精确关联）
+    chunk_id_to_index: Dict[str, int] = {}
+    for idx, chunk in enumerate(chunks):
+        if chunk.chunk_id:
+            chunk_id_to_index[chunk.chunk_id] = idx
+
+    # source_doc -> chunk indices（兼容旧数据）
     doc_to_indices: Dict[str, Set[int]] = defaultdict(set)
     for idx, chunk in enumerate(chunks):
         source = chunk.metadata.get("source", "")
@@ -192,20 +200,22 @@ def _build_entity_chunk_index(
     entity_to_chunks: Dict[str, Set[int]] = defaultdict(set)
 
     for triple in triples:
-        subj, obj, doc = triple["subject"], triple["object"], triple.get("source_doc", "")
-        if doc in doc_to_indices:
-            for ci in doc_to_indices[doc]:
-                entity_to_chunks[subj].add(ci)
-                entity_to_chunks[obj].add(ci)
+        subj, obj = triple["subject"], triple["object"]
+        chunk_id = triple.get("chunk_id")
+
+        if chunk_id and chunk_id in chunk_id_to_index:
+            ci = chunk_id_to_index[chunk_id]
+            entity_to_chunks[subj].add(ci)
+            entity_to_chunks[obj].add(ci)
+        else:
+            # 兼容旧缓存：按 source_doc 关联全文所有 chunks
+            doc = triple.get("source_doc", "")
+            if doc in doc_to_indices:
+                for ci in doc_to_indices[doc]:
+                    entity_to_chunks[subj].add(ci)
+                    entity_to_chunks[obj].add(ci)
 
     return dict(entity_to_chunks)
-
-    logger.info(
-        "图谱构建完成 — %d 节点, %d 有向边",
-        graph.number_of_nodes(),
-        graph.number_of_edges(),
-    )
-    return graph
 
 
 # ============================================================

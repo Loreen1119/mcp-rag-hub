@@ -9,7 +9,17 @@
 """
 
 from dataclasses import dataclass, field
+import hashlib
 import uuid
+
+
+def make_chunk_id(source: str, index: int) -> str:
+    """确定性 chunk_id，基于 source + index 的 MD5 前 8 位。
+
+    替代 UUID，保证同一文件同一切片在多次 pipeline 运行中 ID 不变，
+    使 knowledge_triples.jsonl 的 chunk_id 缓存可跨次复用。
+    """
+    return hashlib.md5(f"{source}:{index}".encode()).hexdigest()[:8]
 
 
 @dataclass

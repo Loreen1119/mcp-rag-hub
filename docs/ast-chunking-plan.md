@@ -1,14 +1,23 @@
-# mcp-rag-hub 代码文件 AST 分块改造方案
+---
+title: "mcp-rag-hub 代码文件 AST 分块方案"
+status: "已实现"
+last_updated: "2026-08-04"
+implementation: "src/data_pipeline.py"
+---
+
+# mcp-rag-hub 代码文件 AST 分块方案
 
 > 目标：让 `src/data_pipeline.py` 支持按文件类型路由分块策略，解决 Python 代码文件被通用滑窗切散的问题。
+>
+> **状态：已实现**，细节以 `src/data_pipeline.py` 当前代码为准。本文档既是设计记录，也是实现说明。
 
 ---
 
 ## 背景
 
-当前 `data_pipeline.py` 对所有文件类型都使用同一种 `sliding_window_chunk`（按句子切分 + token 级滑窗）。对 Markdown 文档效果好，但对 Python 代码文件会把一个完整函数切成 `def run(`、`continue`、`}` 等几字符碎片，导致 RAG 检索质量差。
+此前 `data_pipeline.py` 对所有文件类型都使用同一种 `sliding_window_chunk`（按句子切分 + token 级滑窗）。对 Markdown 文档效果好，但对 Python 代码文件会把一个完整函数切成 `def run(`、`continue`、`}` 等几字符碎片，导致 RAG 检索质量差。
 
-本方案在不破坏现有 Markdown / PDF / TXT 处理逻辑的前提下，为 `.py` 文件新增 **AST 分块器**。
+本方案在不破坏现有 Markdown / PDF / TXT 处理逻辑的前提下，为 `.py` 文件新增 **AST 分块器**。目前已落地到 `src/data_pipeline.py`。
 
 ---
 
@@ -36,7 +45,7 @@ def chunk_by_ast(
     """基于 Python AST 按函数/类边界切分源码。
 
     Returns:
-        [{"text": str, "headings": [str, ...]}, ...]
+        [{"text": str, "headings": [str, ...], "start_line": int, "end_line": int}, ...]
     """
 ```
 
@@ -52,21 +61,23 @@ def chunk_by_ast(
    - 每个函数作为一个 chunk
    - `headings = ["def: 函数名"]`
    - 如果函数位于类内部，额外加上 `f"class: 类名"`，即 `headings = ["class: 类名", "def: 函数名"]`
+   - 如果单个函数 token 数超过 `chunk_size`，按顶层语句数硬切（不复用 sentence 滑窗）
 5. **类 chunk**：
-   - 如果类整体 token 数 <= `chunk_size`：整个类作为一个 chunk，`headings = ["class: 类名"]`
-   - 如果类整体 token 数 > `chunk_size`：拆成多个子 chunk
+   - 拆分条件：**方法数 < 2 且整体 token 数 <= `chunk_size`** 时，整个类作为一个 chunk，`headings = ["class: 类名"]`
+   - 否则拆成多个子 chunk：
      - 类签名 + docstring 作为类 overview chunk，`headings = ["class: 类名"]`
      - 每个方法单独作为 chunk，`headings = ["class: 类名", "def: 方法名"]`
+   - 单方法超过 `chunk_size` 时同样按顶层语句硬切
 6. **模块级代码**：不在任何函数/类中的顶层代码（import、全局变量、执行语句）作为一个 chunk，`headings = ["module-level"]`。
-7. **超大 module-level chunk 硬切**：如果模块级代码 token 数超过 `chunk_size`，**不按句子滑窗切分**（import 语句滑窗切出来没意义），而是按顶层语句数硬切成若干块（例如每 N 条顶层语句一块），并记录 `start_line` / `end_line`。
+7. **超大 chunk 硬切**：函数 / 类 / 模块级代码的 token 数超过 `chunk_size` 时，**不按句子滑窗切分**（import 语句滑窗切出来没意义），而是按 AST 顶层语句数硬切成若干块，并记录 `start_line` / `end_line`。
 8. **相邻 AST chunk 之间不重叠**：Python 函数/类自身就是完整语义单元，开发者习惯直接跳转到函数定义，不需要在相邻函数边界叠加上下文。强行重叠会拼接相邻函数尾部/头部，反而引入噪声。
 9. **metadata 标记**：每个 AST chunk 的 metadata 包含 `source_type: "ast"`；fallback 的 chunk 标记 `source_type: "fallback"`。
 
 ---
 
-### 2. 修改 `load_document()` 支持 `.py`
+### 2. `load_document()` 支持 `.py`
 
-当前 `load_document()` 按后缀分发加载，`.py` 不在支持列表里，会抛异常。需要把 `.py` 加入文本加载分支：
+`load_document()` 已按后缀分发加载，`.py` 走文本加载分支：
 
 ```python
 def load_document(file_path: str | Path) -> str:
@@ -104,18 +115,24 @@ def process_document(file_path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
             full_text, chunk_size=chunk_size, overlap=overlap, headings=md_headings
         )
     elif suffix == ".py":
-        raw_chunks = chunk_by_ast(full_text, chunk_size=chunk_size)
+        # overlap 仅保留签名兼容，AST chunk 之间实际不重叠
+        raw_chunks = chunk_by_ast(
+            full_text, chunk_size=chunk_size, overlap=overlap
+        )
+        source_type = "ast"
     else:
         # .pdf / .txt 等兜底
         raw_chunks = sliding_window_chunk(
             full_text, chunk_size=chunk_size, overlap=overlap
         )
+        source_type = "text"
 
-    # 后续 metadata 包装逻辑：保留 raw_chunks 里的 start_line/end_line/source_type 等字段
+    # 后续 metadata 包装逻辑：保留 raw_chunks 里的 start_line/end_line 等字段，
+    # 并统一附加 source / source_type / heading_breadcrumb
     ...
 ```
 
-> 注意：`.py` 文件调用 `chunk_by_ast` 时不需要传 `overlap`，因为 AST chunk 不重叠。
+> 注意：`chunk_by_ast` 签名保留 `overlap` 参数以保持与 `sliding_window_chunk` 的兼容，但 AST 分块按函数/类边界切分，相邻 chunk 之间**不重叠**。
 
 ---
 
@@ -129,15 +146,15 @@ supported = {".pdf", ".md", ".markdown", ".txt", ".py"}
 
 ---
 
-### 4. 可选：`config.py` 增加 AST 参数
+### 4. 配置项
+
+当前实现直接复用 `CHUNK_SIZE` 和 `CHUNK_OVERLAP`，未新增独立的 AST 配置项。后续如果需要为代码文件单独调参，可以再引入：
 
 ```python
-# AST 分块默认参数
+# AST 分块默认参数（预留）
 AST_CHUNK_SIZE = int(os.getenv("MCP_RAG_AST_CHUNK_SIZE", CHUNK_SIZE))
 AST_CHUNK_OVERLAP = int(os.getenv("MCP_RAG_AST_CHUNK_OVERLAP", CHUNK_OVERLAP))
 ```
-
-如果短期内不想增加配置项，也可以直接复用 `CHUNK_SIZE` 和 `CHUNK_OVERLAP`。
 
 ---
 
@@ -165,7 +182,7 @@ class MyClass:
         return "b"
 '''
     chunks = chunk_by_ast(code)
-    # module-level, helper, MyClass overview, method_a, method_b
+    # module-level, helper, MyClass overview, method_a, method_b（共 5 个）
     assert len(chunks) >= 4
 
     headings_list = [c["headings"] for c in chunks]

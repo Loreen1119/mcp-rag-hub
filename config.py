@@ -75,3 +75,4 @@ KG_TOP_K = 20             # KG 检索召回数量
 KG_MAX_HOP = 2            # 两节点间最大路径跳数
 KG_RRF_WEIGHT = 0.5      # KG 路在 RRF 融合中的权重（<1.0 降低噪声影响）
 KG_TRIPLES_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl"
+ENABLE_KG = os.environ.get("MCP_RAG_ENABLE_KG", "false").lower() in ("1", "true", "yes")  # 默认关闭 KG 路

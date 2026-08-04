@@ -19,7 +19,7 @@ from typing import List, Annotated
 
 from fastmcp import FastMCP
 
-from config import CE_TOP_K, KG_RRF_WEIGHT
+from config import CE_TOP_K, KG_RRF_WEIGHT, ENABLE_KG
 from src.data_pipeline import process_directory
 from src.retrievers import BM25Retriever, VectorRetriever
 from src.kg_retriever import KGRetriever
@@ -34,7 +34,10 @@ logger = logging.getLogger(__name__)
 mcp = FastMCP(
     "RAG Knowledge Server",
     version="1.0.0",
-    instructions="RAG 智能知识检索系统 — BM25 + 向量 + 图三路融合 + RRF + Cross-Encoder",
+    instructions=(
+        "RAG 智能知识检索系统 — BM25 + 向量 + 可选图三路融合 + RRF + Cross-Encoder。"
+        f"当前 KG 路状态：{'启用' if ENABLE_KG else '关闭'}。"
+    ),
 )
 
 # ============================================================
@@ -60,10 +63,14 @@ def _ensure_pipeline():
     _chunks = process_directory()
     _bm25 = BM25Retriever(_chunks)
     _vector = VectorRetriever(_chunks, rebuild=True)
-    _graph = KGRetriever(_chunks)
+    _graph = KGRetriever(_chunks) if ENABLE_KG else None
     _pipeline = FusionPipeline()
     _initialized = True
-    logger.info("RAG 管线就绪 — %d 个 Chunk 已索引", len(_chunks))
+    logger.info(
+        "RAG 管线就绪 — %d 个 Chunk 已索引，KG 路%s",
+        len(_chunks),
+        "已启用" if ENABLE_KG else "已关闭",
+    )
 
 
 # ============================================================
@@ -81,8 +88,14 @@ def search_knowledge(
 
     bm25_results = _bm25.search(query)
     vector_results = _vector.search(query)
-    graph_results = _graph.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=top_k, graph_results=graph_results, rrf_weights=[1.0, 1.0, KG_RRF_WEIGHT])
+    graph_results = _graph.search(query) if _graph else None
+    rrf_weights = [1.0, 1.0, KG_RRF_WEIGHT] if _graph else None
+    output = _pipeline.run(
+        bm25_results, vector_results, query,
+        ce_top_k=top_k,
+        graph_results=graph_results,
+        rrf_weights=rrf_weights,
+    )
 
     return [
         {

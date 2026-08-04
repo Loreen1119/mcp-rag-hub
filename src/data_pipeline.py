@@ -16,7 +16,7 @@ import tiktoken
 import pdfplumber
 
 from config import CHUNK_SIZE, CHUNK_OVERLAP, DOCS_DIR
-from src.models import Chunk
+from src.models import Chunk, make_chunk_id
 
 logger = logging.getLogger(__name__)
 
@@ -540,7 +540,11 @@ def process_document(
             meta["headings"] = rc["headings"]
             meta["heading_breadcrumb"] = " > ".join(rc["headings"])
 
-        chunk = Chunk(content=rc["text"], metadata=meta)
+        chunk = Chunk(
+            content=rc["text"],
+            metadata=meta,
+            chunk_id=make_chunk_id(path.name, idx),
+        )
         results.append(chunk)
 
     is_md = suffix in (".md", ".markdown")
