@@ -13,7 +13,7 @@
 - **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
 - **LangGraph 代理** — 五节点状态机，条件路由，查询改写与自我纠错
 - **MCP 工具** — FastMCP 封装四个工具接口，可接入任何 MCP 客户端
-- **完整评测** — MRR/Hit@K/Precision@K/Recall@K + LLM-as-Judge（Ragas）+ 消融实验
+- **完整评测** — MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
 
 ## 快速开始
 
@@ -79,40 +79,25 @@ mcp-rag-hub/
 
 ## 关键数据
 
-> 基于 36 组四层 Golden Test Set（exact_match / semantic / mixed / graph 四类），train/test 分离，test 全程不参与调参
+> 基于 36 条四类分层 Golden Test Set（exact_match / semantic / mixed / graph），train/test 严格分离，test 集不参与调参。
+> 以下为 2026-08-04 清理知识库（过程笔记迁出 docs/）并重写测试集后的**最终基线**，实验过程详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
 
-**最终指标（Test 集）：** BM25+向量双路 RRF 融合 MRR **0.78**，经 Cross-Encoder 精排后完整管线 MRR **0.81**，Hit@5 **100%**，Recall@5 **0.90**。
+### Test 集（18 条）各阶段指标
 
-**Train vs Test 揭示的规律：**
+| 阶段 | MRR@5 | Hit@5 | Prec@5 | Recall@5 |
+|------|-------|-------|--------|----------|
+| BM25 | **0.8704** | 0.9444 | 0.4667 | 0.8611 |
+| Vector | 0.7384 | 0.9444 | 0.4889 | 0.8981 |
+| RRF 融合 | 0.8565 | **1.0000** | 0.4889 | **0.9722** |
+| CE 精排（全管线） | 0.7546 | 0.9444 | **0.5556** | 0.8796 |
 
-| 分集 | RRF MRR | Hybrid MRR | CE MRR |
-|------|---------|-----------|--------|
-| Train | 0.6075 | 0.6662 | 0.5602 |
-| Test | 0.7824 | 0.5919 | **0.8148** |
+**怎么读这张表：**
 
-- Train 上 Hybrid > RRF：说明 KG 在部分关系型查询上确实有用
-- Test 上 Hybrid < RRF：说明 KG 泛化性不够，在新 queries 上引入了噪声
-- CE 精排救了场：Test CE 0.81 >> Hybrid 0.59，说明两阶段设计是稳健的
+- **RRF 融合阶段 Hit@5 = 100%**：召回侧能力充足，正确文档几乎必然进入候选集，后续只需排序
+- **CE 精排把 Precision@5 从 0.49 提升到 0.56**：精排的价值在于把最相关的文档顶到最前；MRR 略低于 RRF 系个别 case 被重排出 Top-5 所致，属已知权衡而非普遍问题
+- **延迟剖析（本地 CPU）**：全链路均值 395ms，其中 CE 精排 373ms 占 94%——这正是采用两阶段架构、将精排限制在 Top-20 候选内的原因（详见 `experiments/latency_profile.json`）
 
-**知识图谱的价值定位：** 作为可选实验功能（`ENABLE_KG` 开关），展示 LLM 三元组抽取 + 有向知识图谱构建 + 三路融合设计。在当前小规模同主题语料下，消融实验表明 KG 路不提升指标，默认关闭。详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
-
-### Test 集（18 条）
-
-| 指标 | BM25 | Vector | RRF | Graph | Hybrid | CE（全管线） |
-|------|------|--------|-----|-------|--------|------|
-| MRR | 0.7913 | 0.6769 | 0.7824 | 0.5000 | 0.5919 | **0.8148** |
-| Hit@5 | 0.8333 | 0.7778 | 0.9444 | 0.5000 | 0.7778 | 0.9444 |
-| Prec@5 | 0.5111 | 0.4333 | 0.4444 | 0.4778 | 0.4444 | 0.5333 |
-| Recall@5 | 0.7130 | 0.6111 | 0.7685 | 0.3426 | 0.6296 | 0.7963 |
-
-### Train 集（18 条）
-
-| 指标 | BM25 | Vector | RRF | Graph | Hybrid | CE（全管线） |
-|------|------|--------|-----|-------|--------|------|
-| MRR | 0.6685 | 0.5836 | 0.6075 | 0.5000 | 0.6662 | 0.5602 |
-| Hit@5 | 0.8889 | 0.8889 | 0.8333 | 0.5000 | 0.8333 | 0.8889 |
-| Prec@5 | 0.4556 | 0.3667 | 0.4556 | 0.5000 | 0.4778 | 0.4444 |
-| Recall@5 | 0.8889 | 0.8611 | 0.8056 | 0.4167 | 0.7500 | 0.8889 |
+**知识图谱的价值定位：** 作为可选实验功能（`ENABLE_KG` 开关），展示 LLM 三元组抽取 + 有向知识图谱构建 + 多路融合设计。通过对照实验发现：在小规模同主题语料上，KG 路因实体区分度不足而不提升指标（清理噪声文档后 KG Hit@5 从 33% 升至 100%，但 MRR 天花板仍低），故默认关闭——这是数据驱动的架构决策，不是妥协。完整归因过程见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
 
 ## 技术栈
 
@@ -127,6 +112,6 @@ mcp-rag-hub/
 | 融合 | RRF（Reciprocal Rank Fusion, k=60） |
 | 代理 | LangGraph（声明式状态机, 条件路由） |
 | LLM | Ollama + qwen2.5:7b |
-| 评测 | Ragas（Faithfulness / Answer Relevancy / Context Recall） |
+| 评测 | 自实现 LLM-as-Judge（Faithfulness / Answer Relevancy / Context Recall，Ollama qwen2.5:7b 评分） |
 | MCP | FastMCP 2.0（stdio 传输） |
 | UI | Streamlit |

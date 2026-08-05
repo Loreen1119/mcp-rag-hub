@@ -6,8 +6,10 @@ __pycache__/
 # ChromaDB 向量数据（几百MB，不提交）
 chroma_db/
 
-# 实验数据（临时文件）
-experiments/
+# 实验数据（大文件/中间产物不提交，README 引用的关键证据文件保留）
+experiments/*
+!experiments/latency_profile.json
+!experiments/kg_diag_report_control.json
 
 # 备份文件
 *.bak

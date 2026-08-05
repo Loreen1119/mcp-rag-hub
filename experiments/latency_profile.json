@@ -1,0 +1,31 @@
+{
+  "description": "各阶段平均延迟 (ms)",
+  "timings": {
+    "bm25_search_ms": {
+      "mean_ms": 0.38,
+      "min_ms": 0.23,
+      "max_ms": 0.66
+    },
+    "vector_search_ms": {
+      "mean_ms": 21.14,
+      "min_ms": 17.0,
+      "max_ms": 26.05
+    },
+    "graph_search_ms": {
+      "mean_ms": 0.85,
+      "min_ms": 0.27,
+      "max_ms": 1.79
+    },
+    "rrf_fusion_ms": {
+      "mean_ms": 0.06,
+      "min_ms": 0.03,
+      "max_ms": 0.08
+    },
+    "ce_rerank_ms": {
+      "mean_ms": 373.0,
+      "min_ms": 343.57,
+      "max_ms": 434.84
+    }
+  },
+  "total_mean_ms": 395.43
+}

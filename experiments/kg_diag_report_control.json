@@ -1,0 +1,298 @@
+{
+  "clean_docs": [
+    "chunking-strategies.md",
+    "embedding-guide.md",
+    "rag-intro.md",
+    "sample_rag_paper.md"
+  ],
+  "skipped_cases": 12,
+  "summary": {
+    "exact_match": {
+      "count": 2,
+      "mrr@5": 0.6666666666666666,
+      "hit@5": 1.0
+    },
+    "semantic": {
+      "count": 1,
+      "mrr@5": 0.5,
+      "hit@5": 1.0
+    },
+    "mixed": {
+      "count": 1,
+      "mrr@5": 0.3333333333333333,
+      "hit@5": 1.0
+    },
+    "graph": {
+      "count": 2,
+      "mrr@5": 0.375,
+      "hit@5": 1.0
+    }
+  },
+  "overall": {
+    "count": 6,
+    "mrr@5": 0.4861111111111111,
+    "hit@5": 1.0
+  },
+  "cases": [
+    {
+      "id": "E02",
+      "category": "exact_match",
+      "query": "Cross-Encoder 重排序",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "Cross",
+        "Encoder",
+        "排序"
+      ],
+      "matched_nodes": [
+        "Cross-Encoder重排序模型",
+        "重排序",
+        "Cross-Encoder 重排",
+        "多路排序结果",
+        "Cross-Encoder 精排",
+        "Cross-Encoder 重排序"
+      ],
+      "top_k_sources": [
+        "rag-intro.md",
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "hit_rank": 3,
+      "num_results": 5
+    },
+    {
+      "id": "E04",
+      "category": "exact_match",
+      "query": "Faithfulness 忠实度指标",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "Faithfulness",
+        "忠实度",
+        "指标"
+      ],
+      "matched_nodes": [
+        "Faithfulness"
+      ],
+      "top_k_sources": [
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0
+      ],
+      "hit_rank": 1,
+      "num_results": 1
+    },
+    {
+      "id": "S02",
+      "category": "semantic",
+      "query": "关键词搜索和语义搜索怎么配合使用？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "搜索",
+        "语义",
+        "关键词",
+        "配合",
+        "怎么"
+      ],
+      "matched_nodes": [
+        "精确关键词匹配",
+        "语义边界不被机械割裂",
+        "语义相关性",
+        "语义关联",
+        "BM25关键词检索",
+        "向量语义检索",
+        "语义切片",
+        "语义鸿沟",
+        "语义切分",
+        "同义词和语义相近的表达",
+        "语义完整性",
+        "语义理解能力",
+        "完整语义单元",
+        "BM25关键词检索与向量语义检索"
+      ],
+      "top_k_sources": [
+        "embedding-guide.md",
+        "sample_rag_paper.md",
+        "chunking-strategies.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.6667,
+        0.6667,
+        0.3333
+      ],
+      "hit_rank": 2,
+      "num_results": 5
+    },
+    {
+      "id": "M04",
+      "category": "mixed",
+      "query": "传统关键词检索和现代语义检索各自的优缺点",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "检索",
+        "优缺点",
+        "语义",
+        "关键词",
+        "各自",
+        "现代",
+        "传统"
+      ],
+      "matched_nodes": [
+        "精确关键词匹配",
+        "语义边界不被机械割裂",
+        "语义相关性",
+        "语义关联",
+        "检索",
+        "BM25关键词检索",
+        "现代 RAG",
+        "向量语义检索",
+        "语义切片",
+        "语义鸿沟",
+        "语义切分",
+        "同义词和语义相近的表达",
+        "语义完整性",
+        "语义理解能力",
+        "完整语义单元",
+        "BM25关键词检索与向量语义检索"
+      ],
+      "top_k_sources": [
+        "embedding-guide.md",
+        "chunking-strategies.md",
+        "sample_rag_paper.md",
+        "rag-intro.md",
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        1.0,
+        0.6667,
+        0.6667
+      ],
+      "hit_rank": 3,
+      "num_results": 5
+    },
+    {
+      "id": "G03",
+      "category": "graph",
+      "query": "混合检索、RRF、Cross-Encoder 和 Faithfulness 评测之间有什么联系？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "RRF",
+        "Cross",
+        "Encoder",
+        "Faithfulness",
+        "检索",
+        "评测",
+        "混合",
+        "联系",
+        "之间",
+        "什么"
+      ],
+      "matched_nodes": [
+        "RRF",
+        "Cross-Encoder重排序模型",
+        "检索",
+        "原生混合检索",
+        "混合检索",
+        "混合策略",
+        "混合召回方案",
+        "Faithfulness",
+        "Cross-Encoder 重排",
+        "混合架构",
+        "Cross-Encoder 精排",
+        "Cross-Encoder 重排序"
+      ],
+      "top_k_sources": [
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md",
+        "rag-intro.md",
+        "embedding-guide.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.6667,
+        0.6667,
+        0.6667,
+        0.6667
+      ],
+      "hit_rank": 2,
+      "num_results": 5
+    },
+    {
+      "id": "G08",
+      "category": "graph",
+      "query": "RRF 融合和 Cross-Encoder 重排两个阶段的输入输出分别是什么？它们为什么不能合并成一个阶段？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "RRF",
+        "Cross",
+        "Encoder",
+        "阶段",
+        "输入输出",
+        "重排",
+        "融合",
+        "合并",
+        "为什么",
+        "它们",
+        "分别",
+        "两个",
+        "不能",
+        "什么"
+      ],
+      "matched_nodes": [
+        "RRF",
+        "Cross-Encoder重排序模型",
+        "BM25 + Dense + RRF 融合",
+        "重排序",
+        "Cross-Encoder 重排",
+        "RRF 融合",
+        "Cross-Encoder 精排",
+        "Cross-Encoder 重排序",
+        "RRF 融合结果"
+      ],
+      "top_k_sources": [
+        "rag-intro.md",
+        "rag-intro.md",
+        "embedding-guide.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.75,
+        0.5,
+        0.25,
+        0.25
+      ],
+      "hit_rank": 4,
+      "num_results": 5
+    }
+  ]
+}
