@@ -1,5 +1,7 @@
 # MCP-RAG-Hub
 
+把 RAG 检索能力做成 MCP 服务器，Claude 等 AI 客户端通过标准接口就能检索你的知识库。
+
 从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量混合召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。知识图谱路作为可选实验功能默认关闭。
 
 **[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)**
