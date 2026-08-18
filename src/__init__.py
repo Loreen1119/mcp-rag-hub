@@ -12,11 +12,10 @@ if sys.platform == "win32":
     os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
 # HuggingFace 模型缓存路径 — 必须在任何 huggingface_hub import 之前设置
-_HF_CACHE = Path("D:/huggingface_cache")
-if _HF_CACHE.parent.exists():
-    _HF_CACHE.mkdir(parents=True, exist_ok=True)
-    os.environ.setdefault("HF_HOME", str(_HF_CACHE))
-
-# 强制离线模式 — 模型已缓存在本地，不需要每次连 huggingface.co 检查更新
-os.environ.setdefault("HF_HUB_OFFLINE", "1")
-os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+_HF_CACHE = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface"))
+_HF_CACHE.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("HF_HOME", str(_HF_CACHE))
+# 默认联网自动下载模型；若已本地缓存可设 HF_HUB_OFFLINE=1 提速
+if os.environ.get("HF_HUB_OFFLINE"):
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+    os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
