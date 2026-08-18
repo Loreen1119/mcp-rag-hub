@@ -14,6 +14,9 @@ experiments/*
 # 备份文件
 *.bak
 
+# 误将 pip 输出重定向成的垃圾文件（如 `pip install x>=3.0` 未加引号）
+=*
+
 # 自动生成的知识图谱三元组缓存（可通过 kg_builder.py 重新生成）
 data/knowledge_triples.jsonl
 
