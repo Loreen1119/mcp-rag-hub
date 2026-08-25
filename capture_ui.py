@@ -1,43 +1,69 @@
-"""Capture Streamlit UI screenshots for README showcase."""
+"""用 Playwright 重新截取 RAG 界面全量截图（覆盖旧的报错图）。
+
+前置：streamlit run app.py --server.port 8510 已在运行。
+输出：screenshots/ui-initial.png / ui-query-results.png / ui-tab-{BM25,vector,RRF,Cross-Encoder}.png
+"""
 import time
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 BASE = "http://localhost:8510"
-OUT = "screenshots"
-QUERY = "RAG 混合检索策略"  # a query with known good matches in docs/
+OUT = Path("screenshots")
+OUT.mkdir(exist_ok=True)
+QUERY = "RAG 混合检索策略"
+
+TABS = [
+    ("BM25 关键词", "ui-tab-BM25.png"),
+    ("向量语义", "ui-tab-vector.png"),
+    ("RRF 融合", "ui-tab-RRF.png"),
+    ("Cross-Encoder 精排", "ui-tab-Cross-Encoder.png"),
+]
+
 
 def click_tab(page, name_fragment):
-    """Click a tab by its text fragment."""
     try:
-        page.get_by_role("tab", name=name_fragment).first.click(timeout=5000)
-        time.sleep(1.2)
+        page.get_by_role("tab", name=name_fragment).first.click(timeout=8000)
+        time.sleep(1.5)
         return True
-    except Exception:
+    except Exception as e:
+        print(f"  ! 点击 Tab '{name_fragment}' 失败: {e}")
         return False
+
 
 with sync_playwright() as p:
     browser = p.chromium.launch(executable_path=r"C:\Program Files\Google\Chrome\Application\chrome.exe")
     ctx = browser.new_context(viewport={"width": 1400, "height": 1000})
     page = ctx.new_page()
-    page.goto(BASE, wait_until="networkidle")
-    time.sleep(15)  # let pipeline build & render
+    page.goto(BASE, wait_until="networkidle", timeout=90000)
+    page.wait_for_selector("input", timeout=60000)
+    time.sleep(3)
 
-    # 1) initial empty state
-    page.screenshot(path=f"{OUT}/ui-initial.png", full_page=False)
+    # 1) 空态
+    page.screenshot(path=str(OUT / "ui-initial.png"))
+    print("captured ui-initial.png")
 
-    # 2) submit a real query
-    box = page.locator("input[type='text']").first
+    # 2) 填查询并提交
+    box = page.locator("input[type=text]").first
     box.fill(QUERY)
     box.press("Enter")
-    time.sleep(4)  # wait for retrieval + CE rerank
+    time.sleep(6)
 
-    page.screenshot(path=f"{OUT}/ui-query-results.png", full_page=False)
+    # 出错即停，避免截到报错图
+    err = page.locator('[data-testid="stException"]')
+    if err.count() > 0:
+        print("!! 页面出现异常面板，中止：")
+        print(page.locator('[data-testid="stException"]').first.inner_text()[:500])
+        browser.close()
+        raise SystemExit(1)
 
-    # 3) four stage tabs (click each, capture)
-    tabs = ["BM25", "向量语义", "RRF", "Cross-Encoder"]
-    for t in tabs:
-        if click_tab(page, t):
-            page.screenshot(path=f"{OUT}/ui-tab-{t}.png", full_page=False)
+    page.screenshot(path=str(OUT / "ui-query-results.png"))
+    print("captured ui-query-results.png")
+
+    # 3) 四个阶段 Tab
+    for name, filename in TABS:
+        if click_tab(page, name):
+            page.screenshot(path=str(OUT / filename))
+            print(f"captured {filename}")
 
     browser.close()
-print("DONE")
+print("ALL DONE")

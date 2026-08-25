@@ -21,6 +21,35 @@ st.set_page_config(
     layout="wide",
 )
 
+
+def _render_results(results, source_label):
+    """渲染检索结果列表。"""
+    if not results:
+        st.warning("无结果")
+        return
+
+    for i, r in enumerate(results[:10]):
+        meta = r.chunk.metadata
+        heading = meta.get("heading_breadcrumb", meta.get("source", "?"))
+
+        with st.container():
+            # 排名 + 分数 + 来源
+            cols = st.columns([0.05, 0.15, 0.8])
+            with cols[0]:
+                st.markdown(f"**#{i+1}**")
+            with cols[1]:
+                if source_label in ("bm25", "vector"):
+                    st.metric("Score", f"{r.score:.4f}")
+                elif source_label == "rrf":
+                    st.metric("RRF", f"{r.score:.6f}")
+                else:
+                    st.metric("CE", f"{r.score:.4f}")
+            with cols[2]:
+                st.markdown(f"**{heading}**")
+                st.text(r.chunk.content[:300] + ("..." if len(r.chunk.content) > 300 else ""))
+
+            st.divider()
+
 # ============================================================
 # 缓存：文档加载 + 索引构建（只跑一次，后续从缓存读）
 # ============================================================
@@ -115,37 +144,3 @@ if query:
             f"RRF Score: {score_meta.get('rrf_score', 'N/A')}  |  "
             f"原始来源: {score_meta.get('original_source', 'N/A')}"
         )
-
-
-# ============================================================
-# 渲染函数
-# ============================================================
-
-
-def _render_results(results, source_label):
-    """渲染检索结果列表。"""
-    if not results:
-        st.warning("无结果")
-        return
-
-    for i, r in enumerate(results[:10]):
-        meta = r.chunk.metadata
-        heading = meta.get("heading_breadcrumb", meta.get("source", "?"))
-
-        with st.container():
-            # 排名 + 分数 + 来源
-            cols = st.columns([0.05, 0.15, 0.8])
-            with cols[0]:
-                st.markdown(f"**#{i+1}**")
-            with cols[1]:
-                if source_label in ("bm25", "vector"):
-                    st.metric("Score", f"{r.score:.4f}")
-                elif source_label == "rrf":
-                    st.metric("RRF", f"{r.score:.6f}")
-                else:
-                    st.metric("CE", f"{r.score:.4f}")
-            with cols[2]:
-                st.markdown(f"**{heading}**")
-                st.text(r.chunk.content[:300] + ("..." if len(r.chunk.content) > 300 else ""))
-
-            st.divider()
