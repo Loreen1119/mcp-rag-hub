@@ -25,6 +25,12 @@ data/knowledge_triples.jsonl.meta
 # Claude 配置
 .claude/
 
+# 工具产物（codex 会话/记忆）
+.codex/
+
+# 运行日志
+*.log
+
 # 环境
 .env
 .venv/

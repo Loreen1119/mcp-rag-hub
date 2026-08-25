@@ -1,46 +1,82 @@
 # MCP-RAG-Hub
 
-把 RAG 检索能力做成 MCP 服务器，Claude 等 AI 客户端通过标准接口就能检索你的知识库。
+一个可本地运行的 RAG 知识库 MCP 服务：把文档喂给它，Claude 等 AI 客户端就能通过标准接口检索你的本地 PDF / Markdown / TXT / Python 文档。
 
-从底层原理出发、全手工实现的 RAG 知识检索系统。覆盖文档解析、Token 级切块、BM25+向量混合召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及完整评测体系的端到端管线。知识图谱路作为可选实验功能默认关闭。
+<div align="center">
+  <img src="screenshots/ui-query-results.png" width="720" alt="RAG 检索界面：输入查询后展示 BM25/向量/RRF/Cross-Encoder 四阶段结果"/>
+  <br/>
+  <em>输入一条查询，界面同时展示关键词、语义、融合、精排四个阶段的检索结果</em>
+</div>
 
-**[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)**
+从底层原理出发、全手工实现（非调现成 RAG 框架）。覆盖文档解析、Token 级切块、BM25+向量混合召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及带 Golden Test Set 的完整评测体系。
+
+**[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)** · **[界面截图](screenshots/)**
 
 ## 功能
 
 - **文档消化** — PDF / Markdown / TXT / Python 自动加载，编码自检测；Markdown 标题面包屑 + Token 级滑动窗口切块，Python 源码按 AST 函数/类边界语义分块
-- **混合检索** — BM25 关键词 + 向量语义双路召回，知识图谱作为可选实验功能（`ENABLE_KG` 开关）
-- **RRF 融合** — 基于排名的多路结果融合，消除量纲差异
-- **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排）
+- **混合检索** — BM25 关键词 + 向量语义双路召回，按排名 RRF 融合，消除两路分数的量纲差异
+- **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排），将最相关文档顶到最前
 - **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
 - **LangGraph 代理** — 五节点状态机，条件路由，查询改写与自我纠错
-- **MCP 工具** — FastMCP 封装四个工具接口，可接入任何 MCP 客户端
-- **完整评测** — MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
+- **MCP 工具** — FastMCP 封装四个工具接口，可接入 Claude Desktop 等任何 MCP 客户端
+- **完整评测** — 36 条 Golden Test Set，MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
+- **知识图谱检索**（可选实验功能，默认关闭）— LLM 三元组抽取 + 有向图构建，用 `ENABLE_KG` 开关启用
+
+**四阶段检索界面实拍**（输入查询后四个标签页各自展示该阶段的检索结果）：
+
+| BM25 关键词召回 | 向量语义召回 |
+|:---:|:---:|
+| <img src="screenshots/ui-tab-BM25.png" width="330" alt="BM25 关键词召回阶段截图"/> | <img src="screenshots/ui-tab-vector.png" width="330" alt="向量语义召回阶段截图"/> |
+| **RRF 融合** | **Cross-Encoder 精排** |
+| <img src="screenshots/ui-tab-RRF.png" width="330" alt="RRF 融合阶段截图"/> | <img src="screenshots/ui-tab-Cross-Encoder.png" width="330" alt="Cross-Encoder 精排阶段截图"/> |
 
 ## 快速开始
 
+**前提**：Python 3.11+。知识库文件放在 `docs/` 目录（内置少量示例文档），首次运行会自动解析并构建索引。
+
 ```bash
-# 安装依赖
+# 1. 创建虚拟环境（Windows）
+python -m venv .venv
+.venv\Scripts\activate
+
+# 2. 安装依赖
 pip install -r requirements.txt
 
-# 确保 ChromaDB 模型可用（首次运行自动下载）
-python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+# 3. Windows 下额外安装 PyTorch（CPU 版即可，requirements.txt 不自动带）
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-# 启动 Streamlit 界面
+# 4. 启动 Streamlit 网页界面，浏览器打开 http://localhost:8501
 streamlit run app.py
-
-# 或启动 MCP 服务
-python src/mcp_server.py
-
-# 运行检索评测
-python src/evaluation/retrieval_eval.py
-
-# 运行消融实验（含 GraphRAG）
-python src/evaluation/experiments.py
-
-# 运行图检索演示
-python src/graph_retriever.py
 ```
+
+> 也可跳过界面，直接作为 MCP 服务使用（见下文）。Embedding 模型首次运行会自动下载到本地缓存，之后可设 `HF_HUB_OFFLINE=1` 离线启动。
+>
+> 纯检索演示无需 Ollama；仅 **LangGraph 代理 / LLM 评测（LLM-as-Judge）** 需要本机安装 Ollama 并拉取 `qwen2.5:7b`。
+
+## 接入 MCP 客户端（Claude Desktop / Cursor 等）
+
+把本服务作为知识库工具接入任何 MCP 客户端。以 Claude Desktop 为例，在 `claude_desktop_config.json` 中加：
+
+```json
+{
+  "mcpServers": {
+    "rag-knowledge": {
+      "command": "python",
+      "args": ["D:/path/to/mcp-rag-hub/src/mcp_server.py"]
+    }
+  }
+}
+```
+
+启动后暴露四个工具：
+
+| 工具 | 用途 |
+|------|------|
+| `search_knowledge` | 混合检索（BM25+向量→RRF→CE）并返回精排结果 |
+| `list_documents` | 查看当前知识库已索引的文档 |
+| `get_chunk` | 按编号获取指定切片的完整内容 |
+| `get_chunk_count` | 查看知识库切片总数 |
 
 ## 项目结构
 
