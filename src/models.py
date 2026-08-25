@@ -14,12 +14,13 @@ import uuid
 
 
 def make_chunk_id(source: str, index: int) -> str:
-    """确定性 chunk_id，基于 source + index 的 MD5 前 8 位。
+    """确定性 chunk_id，基于 source + index 的 sha256 前 16 位。
 
-    替代 UUID，保证同一文件同一切片在多次 pipeline 运行中 ID 不变，
-    使 knowledge_triples.jsonl 的 chunk_id 缓存可跨次复用。
+    保持"文件名 + chunk 序号"语义：同一文件同一切片在多次 pipeline 运行中
+    ID 不变，使 knowledge_triples.jsonl 的 chunk_id 缓存可跨次复用。
+    相比旧 MD5[:8]：碰撞空间 2^32 → 2^64。
     """
-    return hashlib.md5(f"{source}:{index}".encode()).hexdigest()[:8]
+    return hashlib.sha256(f"{source}:{index}".encode()).hexdigest()[:16]
 
 
 @dataclass

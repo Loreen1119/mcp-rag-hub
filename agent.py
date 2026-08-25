@@ -29,10 +29,7 @@ import operator
 from langgraph.graph import StateGraph, END
 
 from config import CE_TOP_K, CE_THRESHOLD, KG_RRF_WEIGHT
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.fusion import FusionPipeline
-from src.kg_retriever import KGRetriever
+from src.pipeline import get_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +45,16 @@ class AgentState(TypedDict):
     """
 
     query: str
+    """当前生效的查询（原始查询或改写后的查询）"""
+
+    original_query: str
     """用户原始查询"""
 
-    retrieved_chunks: Annotated[list[dict], operator.add]
-    """累积的检索结果（add 保证多次检索结果合并而非覆盖）"""
+    last_retrieved_chunks: list[dict]
+    """最近一轮检索的结果（普通赋值，每轮覆盖）"""
+
+    retrieval_history: Annotated[list[dict], operator.add]
+    """按轮次保存的检索观测（可观测性，不参与答案生成）"""
 
     rewritten_queries: Annotated[list[str], operator.add]
     """已尝试的改写查询列表"""
@@ -67,31 +70,8 @@ class AgentState(TypedDict):
 
 
 # ============================================================
-# 管线单例
+# 管线初始化：复用 src.pipeline.get_pipeline 的全局共享单例
 # ============================================================
-
-_chunks: list = []
-_bm25: BM25Retriever | None = None
-_vector: VectorRetriever | None = None
-_graph: KGRetriever | None = None
-_pipeline: FusionPipeline | None = None
-_initialized: bool = False
-
-
-def _ensure_pipeline():
-    global _chunks, _bm25, _vector, _graph, _pipeline, _initialized
-
-    if _initialized:
-        return
-
-    logger.info("初始化 RAG 管线...")
-    _chunks = process_directory()
-    _bm25 = BM25Retriever(_chunks)
-    _vector = VectorRetriever(_chunks, rebuild=True)
-    _graph = KGRetriever(_chunks)
-    _pipeline = FusionPipeline()
-    _initialized = True
-    logger.info("RAG 管线就绪 — %d 个 Chunk 已索引, 图节点: %d", len(_chunks), _graph.graph.number_of_nodes())
 
 
 # ============================================================
@@ -131,9 +111,11 @@ def analyze_query(state: AgentState) -> dict:
 
     return {
         "query": query,
+        "original_query": query,
         "attempt": 0,
         "rewritten_queries": [],
-        "retrieved_chunks": [],
+        "last_retrieved_chunks": [],
+        "retrieval_history": [],
         "search_log": [log_msg],
         "answer": "",
     }
@@ -146,17 +128,23 @@ def analyze_query(state: AgentState) -> dict:
 
 def retrieve(state: AgentState) -> dict:
     """执行 RAG 全管线检索。"""
-    _ensure_pipeline()
+    ctx = get_pipeline()
 
     query = state["query"]
     attempt = state["attempt"] + 1
     log_msg = f"[retrieve #{attempt}] 查询: '{query[:60]}'"
     logger.info(log_msg)
 
-    bm25_results = _bm25.search(query)
-    vector_results = _vector.search(query)
-    graph_results = _graph.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K, graph_results=graph_results, rrf_weights=[1.0, 1.0, KG_RRF_WEIGHT])
+    bm25_results = ctx.bm25.search(query)
+    vector_results = ctx.vector.search(query)
+    graph_results = ctx.graph.search(query) if ctx.graph else None
+    rrf_weights = [1.0, 1.0, KG_RRF_WEIGHT] if ctx.graph else None
+    output = ctx.pipeline.run(
+        bm25_results, vector_results, query,
+        ce_top_k=CE_TOP_K,
+        graph_results=graph_results,
+        rrf_weights=rrf_weights,
+    )
 
     chunks = [
         {
@@ -176,7 +164,18 @@ def retrieve(state: AgentState) -> dict:
     return {
         "query": query,
         "attempt": attempt,
-        "retrieved_chunks": chunks,
+        # 普通赋值：覆盖当前轮结果，不累积
+        "last_retrieved_chunks": chunks,
+        # 按轮次追加观测记录（可观测性）
+        "retrieval_history": [
+            {
+                "attempt": attempt,
+                "query": query,
+                "top_k": len(chunks),
+                "best_score": round(best_score, 4),
+                "source_docs": sorted({c["source_doc"] for c in chunks}),
+            }
+        ],
         "search_log": [log_msg],
     }
 
@@ -192,7 +191,7 @@ def check_results(state: AgentState) -> dict:
     评判标准：Top-1 的 Cross-Encoder 分数 > 阈值 or 达到最大重试次数。
     CE 分数阈值设为 3.0（ms-marco-MiniLM 的经验值，3 以下通常不相关）。
     """
-    chunks = state.get("retrieved_chunks", [])
+    chunks = state.get("last_retrieved_chunks", [])
     attempt = state["attempt"]
     max_attempts = 2
     ce_threshold = CE_THRESHOLD
@@ -213,7 +212,7 @@ def check_results(state: AgentState) -> dict:
 
 def _decide_next(state: AgentState) -> str:
     """条件路由：结果不足且未超最大次数 → 改写查询；否则 → 生成答案。"""
-    chunks = state.get("retrieved_chunks", [])
+    chunks = state.get("last_retrieved_chunks", [])
     attempt = state["attempt"]
     max_attempts = 2
     ce_threshold = CE_THRESHOLD
@@ -285,7 +284,7 @@ def generate_answer(state: AgentState) -> dict:
     LLM 不可用时返回检索 Top-3 的原文拼接。
     """
     query = state["query"]
-    chunks = state.get("retrieved_chunks", [])
+    chunks = state.get("last_retrieved_chunks", [])
     attempt = state["attempt"]
 
     if not chunks:
@@ -416,7 +415,9 @@ def run_query(query: str, verbose: bool = False) -> dict:
 
     initial_state: AgentState = {
         "query": query,
-        "retrieved_chunks": [],
+        "original_query": query,
+        "last_retrieved_chunks": [],
+        "retrieval_history": [],
         "rewritten_queries": [],
         "attempt": 0,
         "answer": "",
@@ -451,7 +452,7 @@ if __name__ == "__main__":
         print(f"\n{'='*60}")
         print(f"  查询: {result['query'][:80]}")
         print(f"  检索次数: {result['attempt']}")
-        print(f"  检索到 Chunk 数: {len(result.get('retrieved_chunks', []))}")
+        print(f"  检索到 Chunk 数: {len(result.get('last_retrieved_chunks', []))}")
         print(f"  改写历史: {result.get('rewritten_queries', [])}")
         print(f"{'='*60}")
         print(f"\n{result['answer']}")

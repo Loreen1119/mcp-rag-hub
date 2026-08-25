@@ -9,9 +9,7 @@ from __future__ import annotations
 import streamlit as st
 from pathlib import Path
 
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.fusion import FusionPipeline
+from src.pipeline import get_pipeline
 
 # ============================================================
 # 页面配置
@@ -30,13 +28,10 @@ st.set_page_config(
 
 @st.cache_resource
 def load_pipeline():
-    """加载文档、构建索引、初始化融合管线。全程缓存。"""
+    """获取共享 RAG 管线上下文（懒加载单例）。全程缓存。"""
     with st.spinner("正在加载文档并构建索引..."):
-        chunks = process_directory()
-        bm25 = BM25Retriever(chunks)
-        vector = VectorRetriever(chunks, rebuild=True)
-        pipeline = FusionPipeline()
-    return chunks, bm25, vector, pipeline
+        ctx = get_pipeline()
+    return ctx
 
 
 # ============================================================
@@ -48,7 +43,8 @@ with st.sidebar:
     st.divider()
 
     with st.spinner("加载中..."):
-        chunks, bm25, vector, pipeline = load_pipeline()
+        ctx = load_pipeline()
+    chunks, bm25, vector, pipeline = ctx.chunks, ctx.bm25, ctx.vector, ctx.pipeline
 
     st.metric("已索引 Chunk 数", len(chunks))
 

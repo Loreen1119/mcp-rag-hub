@@ -34,9 +34,8 @@ from config import (
     EXPERIMENTS_DIR,
 )
 from src.evaluation.metrics import load_test_cases, mrr, hit_at_k, precision_at_k, recall_at_k
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.fusion import FusionPipeline, reciprocal_rank_fusion
+from src.pipeline import get_pipeline
+from src.fusion import reciprocal_rank_fusion
 
 logger = logging.getLogger(__name__)
 
@@ -144,13 +143,13 @@ class AgentEvaluator:
         self.test_cases = test_cases
         self.results: list[dict] = []
 
-        # 初始化管线
+        # 初始化管线（共享单例）
         logger.info("初始化 RAG 管线...")
-        chunks = process_directory()
-        self.bm25 = BM25Retriever(chunks)
-        self.vector = VectorRetriever(chunks, rebuild=True)
-        self.pipeline = FusionPipeline()
-        logger.info("管线就绪 — %d 个 Chunk", len(chunks))
+        ctx = get_pipeline()
+        self.bm25 = ctx.bm25
+        self.vector = ctx.vector
+        self.pipeline = ctx.pipeline
+        logger.info("管线就绪 — %d 个 Chunk", len(ctx.chunks))
 
     # ----------------------------------------------------------
     # 主入口

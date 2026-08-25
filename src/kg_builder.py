@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
+import shutil
 import time
 from pathlib import Path
 
@@ -20,11 +22,17 @@ from tqdm import tqdm
 from config import (
     DOCS_DIR,
     KG_TRIPLES_FILE,
+    KG_TRIPLES_META_FILE,
+    CHUNK_ID_RULE_VERSION,
+    KG_META_VERSION,
+    CHUNK_SIZE,
+    CHUNK_OVERLAP,
     DEEPSEEK_API_KEY,
     DEEPSEEK_BASE_URL,
     DEEPSEEK_MODEL,
 )
-from src.data_pipeline import process_directory
+from src.data_pipeline import corpus_hash
+from src.pipeline import get_document_chunks
 from src.models import Chunk
 
 logger = logging.getLogger(__name__)
@@ -163,11 +171,64 @@ def extract_triples(chunk: Chunk, client: OpenAI) -> list[dict]:
 
 
 # ============================================================
-# 缓存读写
+# 缓存读写（sidecar 校验）
 # ============================================================
 
 
-def _load_cache() -> set[str]:
+def _load_sidecar() -> dict | None:
+    """读取 KG 缓存 sidecar；缺失或解析失败返回 None（视为不可验证）。"""
+    if not KG_TRIPLES_META_FILE.exists():
+        return None
+    try:
+        return json.loads(KG_TRIPLES_META_FILE.read_text(encoding="utf-8"))
+    except Exception as exc:
+        logger.warning("KG sidecar 读取失败，按全量重建处理: %s", exc)
+        return None
+
+
+def _write_sidecar(corpus_hash: str, docs_dir: str) -> None:
+    """写入 KG 缓存 sidecar（临时文件 + 原子替换）。
+
+    调用方应保证 JSONL 已成功落盘。sidecar 损坏/缺失会被视为缓存不可验证，
+    下次安全地全量重建，因此原子性主要避免读到一个半写的 meta。
+    """
+    meta = {
+        "docs_dir": docs_dir,
+        "chunk_size": CHUNK_SIZE,
+        "chunk_overlap": CHUNK_OVERLAP,
+        "chunk_id_rule_version": CHUNK_ID_RULE_VERSION,
+        "corpus_hash": corpus_hash,
+        "meta_version": KG_META_VERSION,
+    }
+    try:
+        tmp = KG_TRIPLES_META_FILE.with_suffix(KG_TRIPLES_META_FILE.suffix + ".tmp")
+        tmp.write_text(
+            json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        os.replace(tmp, KG_TRIPLES_META_FILE)
+    except Exception as exc:
+        logger.warning("KG sidecar 写入失败（下次将全量重建）: %s", exc)
+
+
+def _cache_is_valid(corpus_hash: str) -> bool:
+    """判断缓存是否可复用：JSONL 存在 + sidecar 版本/规则/内容 hash 全部匹配。
+
+    chunk_id 只依赖（文件名, 序号），与内容无关——所以仅 ID 对上不能说明
+    内容未变，必须用 corpus_hash 校验。任一条件不满足 → 全量重建。
+    """
+    if not KG_TRIPLES_FILE.exists():
+        return False
+    meta = _load_sidecar()
+    if not meta:
+        return False
+    return (
+        meta.get("meta_version") == KG_META_VERSION
+        and meta.get("chunk_id_rule_version") == CHUNK_ID_RULE_VERSION
+        and meta.get("corpus_hash") == corpus_hash
+    )
+
+
+def _load_cache_ids() -> set[str]:
     """读取已缓存的 chunk_id 集合。"""
     cache: set[str] = set()
     if not KG_TRIPLES_FILE.exists():
@@ -189,15 +250,18 @@ def _load_cache() -> set[str]:
     return cache
 
 
-def _append_record(chunk_id: str, source_doc: str, triples: list[dict]) -> None:
-    """追加一条记录到缓存文件。"""
+def _tmp_path() -> Path:
+    return KG_TRIPLES_FILE.with_suffix(KG_TRIPLES_FILE.suffix + ".tmp")
+
+
+def _write_line(fh, chunk_id: str, source_doc: str, triples: list[dict]) -> None:
+    """向文件句柄追加一条三元组记录。"""
     record = {
         "chunk_id": chunk_id,
         "source_doc": source_doc,
         "triples": triples,
     }
-    with KG_TRIPLES_FILE.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+    fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 # ============================================================
@@ -232,14 +296,24 @@ def build_knowledge_graph(
         base_url=DEEPSEEK_BASE_URL,
     )
 
-    # 加载 chunks
-    chunks = process_directory(docs_dir)
+    # 加载 chunks（只切片，不加载 embedding 模型）
+    chunks = get_document_chunks(docs_dir, CHUNK_SIZE, CHUNK_OVERLAP)
     if not chunks:
         logger.warning("未找到任何 Chunk，退出。")
         return {"total": 0, "skipped": 0, "processed": 0, "total_triples": 0, "failed": 0}
 
-    # 读取缓存
-    cache = _load_cache()
+    # 校验缓存：规则版本 + 内容 hash 任一不匹配 → 全量重建
+    cur_hash = corpus_hash(docs_dir, CHUNK_SIZE, CHUNK_OVERLAP)
+    if _cache_is_valid(cur_hash):
+        cache = _load_cache_ids()
+        # 以现有缓存文件为基底，追加到临时文件
+        shutil.copyfile(KG_TRIPLES_FILE, _tmp_path())
+        rebuild_reason = None
+    else:
+        cache = set()
+        # 清空临时文件，从零构建
+        _tmp_path().write_text("", encoding="utf-8")
+        rebuild_reason = "缓存缺失、规则版本或内容 hash 不匹配"
 
     pending = [c for c in chunks if c.chunk_id not in cache]
 
@@ -247,6 +321,8 @@ def build_knowledge_graph(
 
     if verbose:
         print(f"\n>>> 总 Chunk 数  : {stats['total']}")
+        if rebuild_reason:
+            print(f">>> 缓存重建    : {rebuild_reason}")
         print(f">>> 缓存命中    : {stats['skipped']} (跳过)")
         print(f">>> 待处理      : {len(pending)}")
         if stats["skipped"] > 0:
@@ -256,18 +332,25 @@ def build_knowledge_graph(
         logger.info("所有 Chunk 均已缓存，无需处理。")
         return stats
 
-    for chunk in tqdm(pending, desc="抽取三元组", disable=not verbose):
-        triples = extract_triples(chunk, client)
-        _append_record(
-            chunk_id=chunk.chunk_id,
-            source_doc=chunk.metadata.get("source", ""),
-            triples=triples,
-        )
-        if triples:
-            stats["processed"] += 1
-            stats["total_triples"] += len(triples)
-        else:
-            stats["failed"] += 1
+    # 抽取结果写入临时文件（不直接追加原文件，保证原子替换）
+    with _tmp_path().open("a", encoding="utf-8") as f:
+        for chunk in tqdm(pending, desc="抽取三元组", disable=not verbose):
+            triples = extract_triples(chunk, client)
+            _write_line(
+                f,
+                chunk_id=chunk.chunk_id,
+                source_doc=chunk.metadata.get("source", ""),
+                triples=triples,
+            )
+            if triples:
+                stats["processed"] += 1
+                stats["total_triples"] += len(triples)
+            else:
+                stats["failed"] += 1
+
+    # 先原子替换 JSONL，成功后才写 sidecar
+    os.replace(_tmp_path(), KG_TRIPLES_FILE)
+    _write_sidecar(cur_hash, str(docs_dir))
 
     if verbose:
         print(f"\n>>> 完成！")

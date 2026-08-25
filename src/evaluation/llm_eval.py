@@ -37,9 +37,7 @@ if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
 from config import TEST_QUERIES_FILE, CE_TOP_K, EXPERIMENTS_DIR
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.fusion import FusionPipeline
+from src.pipeline import get_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -50,27 +48,17 @@ LLM_MODEL = "qwen2.5:7b"
 
 
 # ============================================================
-# 管线单例
+# 管线（共享单例）
 # ============================================================
 
-_chunks: list = []
-_bm25: BM25Retriever | None = None
-_vector: VectorRetriever | None = None
-_pipeline: FusionPipeline | None = None
-_initialized: bool = False
+_ctx = None
 
 
 def _ensure_pipeline():
-    global _chunks, _bm25, _vector, _pipeline, _initialized
-    if _initialized:
-        return
-    logger.info("初始化 RAG 管线...")
-    _chunks = process_directory()
-    _bm25 = BM25Retriever(_chunks)
-    _vector = VectorRetriever(_chunks, rebuild=True)
-    _pipeline = FusionPipeline()
-    _initialized = True
-    logger.info("管线就绪 — %d 个 Chunk", len(_chunks))
+    global _ctx
+    if _ctx is None:
+        _ctx = get_pipeline()
+    return _ctx
 
 
 # ============================================================
@@ -213,11 +201,11 @@ def _parse_score(raw: str) -> tuple[float, str]:
 
 def _retrieve_and_generate(query: str) -> tuple[str, str]:
     """检索 + 生成：返回 (generated_answer, context_text)。"""
-    _ensure_pipeline()
+    ctx = _ensure_pipeline()
 
-    bm25_results = _bm25.search(query)
-    vector_results = _vector.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K)
+    bm25_results = ctx.bm25.search(query)
+    vector_results = ctx.vector.search(query)
+    output = ctx.pipeline.run(bm25_results, vector_results, query, ce_top_k=CE_TOP_K)
 
     ce_results = output["cross_encoder"]
     if not ce_results:

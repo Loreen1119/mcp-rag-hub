@@ -21,6 +21,44 @@ from src.models import Chunk, make_chunk_id
 logger = logging.getLogger(__name__)
 
 # ============================================================
+# 支持的文档后缀（全项目唯一来源）
+# ============================================================
+
+SUPPORTED_SUFFIXES = {".pdf", ".md", ".markdown", ".txt", ".py"}
+
+
+def iter_supported_docs(dir_path: str | Path) -> list[Path]:
+    """返回目录下所有受支持文档（与 process_directory 的 iterdir 平扫一致）。"""
+    dir_path = Path(dir_path)
+    return sorted(
+        p
+        for p in dir_path.iterdir()
+        if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES
+    )
+
+
+def corpus_hash(dir_path: str | Path, chunk_size: int, chunk_overlap: int) -> str:
+    """文档集内容 hash：文件相对路径 + 内容 + chunk 参数决定。
+
+    任一变化都会改变 hash，从而触发向量索引 / KG 缓存重建。
+    必须与 process_directory 使用同一份扫描逻辑，保证 hash 与实际切片一致。
+    """
+    import hashlib
+
+    dir_path = Path(dir_path)
+    h = hashlib.sha256()
+    h.update(f"chunk_size={chunk_size}\nchunk_overlap={chunk_overlap}\n".encode())
+    for p in iter_supported_docs(dir_path):
+        h.update(p.relative_to(dir_path).as_posix().encode())
+        h.update(b"\x00")
+        try:
+            h.update(p.read_bytes())
+        except OSError:
+            continue
+        h.update(b"\x00")
+    return h.hexdigest()
+
+# ============================================================
 # Token 计数器
 # ============================================================
 
@@ -569,12 +607,9 @@ def process_directory(
         raise FileNotFoundError(f"目录不存在: {dir_path}")
 
     all_chunks: list[Chunk] = []
-    supported = {".pdf", ".md", ".markdown", ".txt", ".py"}
-
-    for file_path in sorted(dir_path.iterdir()):
-        if file_path.suffix.lower() in supported:
-            chunks = process_document(file_path, chunk_size, overlap)
-            all_chunks.extend(chunks)
+    for file_path in iter_supported_docs(dir_path):
+        chunks = process_document(file_path, chunk_size, overlap)
+        all_chunks.extend(chunks)
 
     logger.info(
         "目录处理完成 [%s] → 总计 %d 个 Chunk", dir_path.name, len(all_chunks)

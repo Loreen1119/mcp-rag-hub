@@ -19,6 +19,8 @@ experiments/*
 
 # 自动生成的知识图谱三元组缓存（可通过 kg_builder.py 重新生成）
 data/knowledge_triples.jsonl
+# 缓存伴随的 sidecar 校验文件（运行时派生，缺失/损坏时 kg_builder 自动全量重建）
+data/knowledge_triples.jsonl.meta
 
 # Claude 配置
 .claude/

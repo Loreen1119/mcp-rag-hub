@@ -20,10 +20,7 @@ from typing import List, Annotated
 from fastmcp import FastMCP
 
 from config import CE_TOP_K, KG_RRF_WEIGHT, ENABLE_KG
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.kg_retriever import KGRetriever
-from src.fusion import FusionPipeline
+from src.pipeline import get_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -41,36 +38,18 @@ mcp = FastMCP(
 )
 
 # ============================================================
-# 管线初始化（模块级单例，所有 Tool 共享）
+# 管线初始化（共享单例，所有 Tool 共享同一批组件）
 # ============================================================
 
-_chunks: list = []
-_bm25: BM25Retriever | None = None
-_vector: VectorRetriever | None = None
-_graph: KGRetriever | None = None
-_pipeline: FusionPipeline | None = None
-_initialized: bool = False
+_ctx = None
 
 
 def _ensure_pipeline():
-    """懒加载：首次调用时初始化全部管线组件。"""
-    global _chunks, _bm25, _vector, _graph, _pipeline, _initialized
-
-    if _initialized:
-        return
-
-    logger.info("初始化 RAG 管线...")
-    _chunks = process_directory()
-    _bm25 = BM25Retriever(_chunks)
-    _vector = VectorRetriever(_chunks, rebuild=True)
-    _graph = KGRetriever(_chunks) if ENABLE_KG else None
-    _pipeline = FusionPipeline()
-    _initialized = True
-    logger.info(
-        "RAG 管线就绪 — %d 个 Chunk 已索引，KG 路%s",
-        len(_chunks),
-        "已启用" if ENABLE_KG else "已关闭",
-    )
+    """懒加载：首次调用时通过 src.pipeline 初始化全部管线组件。"""
+    global _ctx
+    if _ctx is None:
+        _ctx = get_pipeline()
+    return _ctx
 
 
 # ============================================================
@@ -84,13 +63,20 @@ def search_knowledge(
     top_k: Annotated[int, "返回的结果数量，默认 5"] = 5,
 ) -> list[dict]:
     """执行完整检索管线：BM25 + 向量 + 图 → RRF 融合 → Cross-Encoder 精排。"""
-    _ensure_pipeline()
+    # 参数校验
+    if not query or not query.strip():
+        raise ValueError("查询不能为空")
+    if len(query.strip()) > 500:
+        raise ValueError("查询过长（最多 500 字符）")
+    if not isinstance(top_k, int) or top_k < 1 or top_k > 50:
+        raise ValueError("top_k 必须在 1~50 之间")
 
-    bm25_results = _bm25.search(query)
-    vector_results = _vector.search(query)
-    graph_results = _graph.search(query) if _graph else None
-    rrf_weights = [1.0, 1.0, KG_RRF_WEIGHT] if _graph else None
-    output = _pipeline.run(
+    ctx = _ensure_pipeline()
+    bm25_results = ctx.bm25.search(query)
+    vector_results = ctx.vector.search(query)
+    graph_results = ctx.graph.search(query) if ctx.graph else None
+    rrf_weights = [1.0, 1.0, KG_RRF_WEIGHT] if ctx.graph else None
+    output = ctx.pipeline.run(
         bm25_results, vector_results, query,
         ce_top_k=top_k,
         graph_results=graph_results,
@@ -121,10 +107,10 @@ def search_knowledge(
 @mcp.tool(description="列出知识库中已索引的所有文档及其切片数量。")
 def list_documents() -> list[dict]:
     """返回已索引文档的清单（来源文件 + 切片数）。"""
-    _ensure_pipeline()
+    ctx = _ensure_pipeline()
 
     from collections import Counter
-    counts = Counter(ch.metadata.get("source", "unknown") for ch in _chunks)
+    counts = Counter(ch.metadata.get("source", "unknown") for ch in ctx.chunks)
     return [
         {"document": doc, "chunk_count": count}
         for doc, count in sorted(counts.items())
@@ -138,12 +124,14 @@ def list_documents() -> list[dict]:
 
 @mcp.tool(description="根据 chunk_id 获取切片的完整内容和元数据。")
 def get_chunk(
-    chunk_id: Annotated[str, "切片唯一标识符 (8 位 hex)"],
+    chunk_id: Annotated[str, "切片唯一标识符 (16 位 hex)"],
 ) -> dict | None:
     """按 chunk_id 查找并返回切片的完整信息。"""
-    _ensure_pipeline()
+    if not chunk_id or not chunk_id.strip():
+        raise ValueError("chunk_id 不能为空")
 
-    for ch in _chunks:
+    ctx = _ensure_pipeline()
+    for ch in ctx.chunks:
         if ch.chunk_id == chunk_id:
             return {
                 "chunk_id": ch.chunk_id,
@@ -161,8 +149,8 @@ def get_chunk(
 @mcp.tool(description="返回知识库中已索引的切片总数。")
 def get_chunk_count() -> int:
     """返回已索引的 Chunk 总数。"""
-    _ensure_pipeline()
-    return len(_chunks)
+    ctx = _ensure_pipeline()
+    return len(ctx.chunks)
 
 
 # ============================================================

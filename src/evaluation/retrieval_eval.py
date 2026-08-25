@@ -31,10 +31,8 @@ from src.evaluation.metrics import (
     precision_at_k,
     recall_at_k,
 )
-from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
-from src.fusion import FusionPipeline, reciprocal_rank_fusion
-from src.kg_retriever import KGRetriever
+from src.pipeline import get_pipeline
+from src.fusion import reciprocal_rank_fusion
 
 logger = logging.getLogger(__name__)
 
@@ -76,11 +74,11 @@ def run_evaluation(
             "test_cases 不能为 None，请通过 load_test_cases(_resolve_queries_file(split)) 传入"
         )
 
-    chunks = process_directory()
-    bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
-    pipeline = FusionPipeline()
-    graph_retriever = KGRetriever(chunks) if enable_graph else None
+    ctx = get_pipeline()
+    bm25 = ctx.bm25
+    vector = ctx.vector
+    pipeline = ctx.pipeline
+    graph_retriever = ctx.graph if enable_graph else None
 
     stages = ["bm25", "vector", "rrf", "cross_encoder"]
     if enable_graph:

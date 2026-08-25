@@ -42,6 +42,7 @@ from config import (
     GRAPH_TOP_K,
     DOCS_DIR,
     EXPERIMENTS_DIR,
+    EXPERIMENTS_CHROMA_DIR,
     TEST_QUERIES_FILE,
 )
 from src.models import Chunk, RetrievalResult
@@ -140,7 +141,7 @@ def run_module_ablation(test_cases: list[dict] | None = None) -> dict:
 
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
+    vector = VectorRetriever(chunks, rebuild=True, persist_dir=EXPERIMENTS_CHROMA_DIR, collection_name="exp__module_ablation")
     graph_retriever = GraphRetriever(chunks)
     pipeline = FusionPipeline()
 
@@ -210,7 +211,7 @@ def run_category_breakdown(test_cases: list[dict] | None = None) -> dict:
 
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
+    vector = VectorRetriever(chunks, rebuild=True, persist_dir=EXPERIMENTS_CHROMA_DIR, collection_name="exp__category")
     graph_retriever = GraphRetriever(chunks)
     pipeline = FusionPipeline()
 
@@ -309,7 +310,12 @@ def _rebuild_and_evaluate(
         overlap=overlap,
     )
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
+    vector = VectorRetriever(
+        chunks,
+        rebuild=True,
+        persist_dir=EXPERIMENTS_CHROMA_DIR,
+        collection_name=f"exp__sweep_cs{chunk_size}_ov{overlap}",
+    )
 
     ce_pipeline = FusionPipeline()
 
@@ -348,7 +354,7 @@ def run_parameter_sweep(
         # 快速模式：仅扫描 RRF_K 和 CE_TOP_K（不需要重建索引）
         chunks = process_directory()
         bm25 = BM25Retriever(chunks)
-        vector = VectorRetriever(chunks, rebuild=True)
+        vector = VectorRetriever(chunks, rebuild=True, persist_dir=EXPERIMENTS_CHROMA_DIR, collection_name="exp__quick")
 
         for rrf_k in [30, 60, 120]:
             for ce_k in [3, 5, 10]:
@@ -443,7 +449,7 @@ def run_latency_profile(test_cases: list[dict] | None = None) -> dict:
 
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
+    vector = VectorRetriever(chunks, rebuild=True, persist_dir=EXPERIMENTS_CHROMA_DIR, collection_name="exp__latency")
     graph_retriever = GraphRetriever(chunks)
     ce_pipeline = FusionPipeline()
 
@@ -531,7 +537,7 @@ def run_query_deep_dive(test_cases: list[dict] | None = None) -> dict:
 
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks, rebuild=True)
+    vector = VectorRetriever(chunks, rebuild=True, persist_dir=EXPERIMENTS_CHROMA_DIR, collection_name="exp__deepdive")
     pipeline = FusionPipeline()
 
     results: dict = {"description": "典型 Query 的全链路追踪", "queries": {}}

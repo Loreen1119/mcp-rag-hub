@@ -22,7 +22,18 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent
 DOCS_DIR = PROJECT_ROOT / "docs"
 CHROMA_PERSIST_DIR = PROJECT_ROOT / "chroma_db"
+
+# 索引 schema 版本：改变 chunk 参数 / ID 规则 / collection 元数据含义时递增，
+# 旧版本 collection 不会在新版本下被误复用（版本化 collection 命名的一部分）。
+INDEX_SCHEMA_VERSION = 2
+# chunk_id 生成规则版本：make_chunk_id 算法变化时递增，
+# 用于 KG 缓存 sidecar 判定旧缓存是否仍可用（只依赖文件名+序号，与内容无关）。
+CHUNK_ID_RULE_VERSION = 2
+# KG 缓存 sidecar 格式版本：sidecar 字段含义变化时递增。
+KG_META_VERSION = 1
 EXPERIMENTS_DIR = PROJECT_ROOT / "experiments"
+# experiments.py 独立索引目录：与生产 chroma_db 隔离，防止实验删掉线上集合。
+EXPERIMENTS_CHROMA_DIR = EXPERIMENTS_DIR / "chroma_db"
 
 # ============================================================
 # 切片参数
@@ -62,6 +73,9 @@ RAGAS_LLM = "ollama/qwen2.5:7b"   # 评测用 LLM（本地 Ollama 模型）
 TEST_QUERIES_FILE = PROJECT_ROOT / "data" / "test_queries.json"
 TRAIN_QUERIES_FILE = PROJECT_ROOT / "data" / "train_queries.json"
 KG_TRIPLES_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl"
+# KG 缓存 sidecar：记录缓存对应的 chunk_id_rule_version + corpus_hash，
+# 用于判断旧缓存是否仍可复用（规则/内容任一变化 → 全量重建）。
+KG_TRIPLES_META_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl.meta"
 
 # DeepSeek API
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
