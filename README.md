@@ -8,16 +8,14 @@
   <em>输入一条查询，界面同时展示关键词、语义、融合、精排四个阶段的检索结果</em>
 </div>
 
-从底层原理出发、全手工实现（非调现成 RAG 框架）。覆盖文档解析、Token 级切块、BM25+向量混合召回、RRF 融合、Cross-Encoder 重排序、LangGraph 代理编排、FastMCP 工具封装、以及带 Golden Test Set 的完整评测体系。
+全手工实现（非调现成 RAG 框架）的端到端管线：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 36 条 Golden Test Set 完整评测。
 
 **[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)** · **[界面截图](screenshots/)**
 
 ## 功能
 
-- **文档消化** — PDF / Markdown / TXT / Python 自动加载，编码自检测；Markdown 标题面包屑 + Token 级滑动窗口切块，Python 源码按 AST 函数/类边界语义分块
-- **混合检索** — BM25 关键词 + 向量语义双路召回，按排名 RRF 融合，消除两路分数的量纲差异
-- **CE 精排** — Cross-Encoder 联合编码重排序，两阶段检索（Bi-Encoder 粗筛 → CE 精排），将最相关文档顶到最前
-- **Streamlit 交互** — 四标签页展示 BM25/向量/RRF/CE 各阶段检索结果
+- **全手工 RAG 管线** — 文档解析（PDF/Markdown/TXT/Python，按类型分块）→ BM25+向量双路召回 → RRF 融合 → Cross-Encoder 精排，全链路自研，不依赖现成 RAG 框架
+- **Streamlit 交互** — 四标签页逐阶段展示 BM25/向量/RRF/CE 检索结果，输入一条查询即可看到每路召回与最终排序
 - **LangGraph 代理** — 五节点状态机，条件路由，查询改写与自我纠错
 - **MCP 工具** — FastMCP 封装四个工具接口，可接入 Claude Desktop 等任何 MCP 客户端
 - **完整评测** — 36 条 Golden Test Set，MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
@@ -80,6 +78,9 @@ streamlit run app.py
 
 ## 项目结构
 
+<details>
+<summary>点开看完整目录树（含各模块职责）</summary>
+
 ```
 mcp-rag-hub/
 ├── app.py                     # Streamlit 前端入口
@@ -114,6 +115,8 @@ mcp-rag-hub/
 ├── experiments/               # 实验结果 JSON
 └── chroma_db/                 # ChromaDB 持久化向量库
 ```
+
+</details>
 
 ## 关键数据
 
