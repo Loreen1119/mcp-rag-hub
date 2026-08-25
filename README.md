@@ -10,8 +10,6 @@
 
 全手工实现（非调现成 RAG 框架）的端到端管线：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 36 条 Golden Test Set 完整评测。
 
-**[项目详解](docs_knowledge/项目详解.md)** · **[技术视角详解](docs_knowledge/技术视角详解.md)** · **[章节笔记](docs_knowledge/chapters/)** · **[界面截图](screenshots/)**
-
 ## 功能
 
 - **全手工 RAG 管线** — 文档解析（PDF/Markdown/TXT/Python，按类型分块）→ BM25+向量双路召回 → RRF 融合 → Cross-Encoder 精排，全链路自研，不依赖现成 RAG 框架
@@ -21,7 +19,7 @@
 - **完整评测** — 36 条 Golden Test Set，MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
 - **知识图谱检索**（可选实验功能，默认关闭）— LLM 三元组抽取 + 有向图构建，用 `ENABLE_KG` 开关启用
 
-**四阶段检索界面实拍**（输入查询后四个标签页各自展示该阶段的检索结果）：
+**四阶段检索界面实拍**：
 
 | BM25 关键词召回 | 向量语义召回 |
 |:---:|:---:|
@@ -156,3 +154,11 @@ mcp-rag-hub/
 | 评测 | 自实现 LLM-as-Judge（Faithfulness / Answer Relevancy / Context Recall，Ollama qwen2.5:7b 评分） |
 | MCP | FastMCP 2.0（stdio 传输） |
 | UI | Streamlit |
+
+## 文档导航
+
+| 我 想... | 读这篇 |
+|---------|--------|
+| 了解这个项目做了什么、怎么用的 | [docs_knowledge/项目详解.md](docs_knowledge/项目详解.md) |
+| 深入技术细节和架构决策 | [docs_knowledge/技术视角详解.md](docs_knowledge/技术视角详解.md) |
+| 系统学习每一层的实现笔记 | [docs_knowledge/chapters/](docs_knowledge/chapters/) |
