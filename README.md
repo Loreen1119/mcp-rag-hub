@@ -8,7 +8,7 @@
   <em>输入一条查询，界面同时展示关键词、语义、融合、精排四个阶段的检索结果</em>
 </div>
 
-全手工实现（非调现成 RAG 框架）的端到端管线：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 36 条 Golden Test Set 完整评测。
+全链路自研（非调现成 RAG 框架）：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 36 条评测。
 
 ## 功能
 
