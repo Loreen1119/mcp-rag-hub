@@ -28,7 +28,8 @@ import operator
 
 from langgraph.graph import StateGraph, END
 
-from config import CE_TOP_K, CE_THRESHOLD, KG_RRF_WEIGHT
+from config import ANSWER_TOP_K, CE_TOP_K, CE_THRESHOLD, KG_RRF_WEIGHT, MIN_EVIDENCE_COUNT
+from src.answer_validator import AnswerStatus, AnswerValidator, RefusalReason
 from src.pipeline import get_pipeline
 
 logger = logging.getLogger(__name__)
@@ -62,8 +63,8 @@ class AgentState(TypedDict):
     attempt: int
     """当前检索尝试次数"""
 
-    answer: str
-    """最终生成的答案"""
+    answer: dict
+    """结构化最终答案（状态、正文、引用和原因）。"""
 
     search_log: Annotated[list[str], operator.add]
     """检索过程日志（可观测性）"""
@@ -82,7 +83,8 @@ class AgentState(TypedDict):
 def _call_llm(prompt: str, system: str = "") -> str:
     """调用本地 Ollama 模型生成文本。
 
-    Ollama 不可用时返回空字符串，由调用方做 fallback 处理。
+    连接失败 / 超时 / 模型不可用时返回空字符串。
+    调用方需自行兜底：generate_answer 会回落到 _bm25_fallback，rewrite_query 会规则式改写。
     """
     try:
         import ollama
@@ -117,7 +119,7 @@ def analyze_query(state: AgentState) -> dict:
         "last_retrieved_chunks": [],
         "retrieval_history": [],
         "search_log": [log_msg],
-        "answer": "",
+        "answer": {"status": "", "answer": "", "used_source_ids": [], "reason": None},
     }
 
 
@@ -281,7 +283,14 @@ def generate_answer(state: AgentState) -> dict:
     """基于检索结果生成最终答案。
 
     用 Ollama 做 RAG 生成（retrieval-augmented generation）。
-    LLM 不可用时返回检索 Top-3 的原文拼接。
+
+    流程：
+    1. 无检索结果 → insufficient_evidence（不是 LLM 问题，保留前置拦截）。
+    2. 有结果 → 调用 LLM，由 LLM/validator 判断证据是否足够回答。
+       拒答完全由 LLM/validator 决定，不用 CE 分数做任何门控（CE 分数仅用于
+       retrieve 阶段的排序与前端展示）。
+    3. LLM 返回空（服务未起/超时）→ 回落到 BM25 原文拼接，状态标
+       generation_unavailable 但 answer 字段塞拼接文本，保证用户始终看到内容。
     """
     query = state["query"]
     chunks = state.get("last_retrieved_chunks", [])
@@ -289,21 +298,21 @@ def generate_answer(state: AgentState) -> dict:
 
     if not chunks:
         return {
-            "answer": "未找到相关文档，请尝试更换查询表述。",
+            "answer": {"status": AnswerStatus.INSUFFICIENT_EVIDENCE.value, "answer": "", "used_source_ids": [], "reason": RefusalReason.INSUFFICIENT_CONTEXT.value},
             "search_log": ["[generate] 无检索结果，终止"],
         }
 
     # 构建上下文
     context_parts = []
-    for i, ch in enumerate(chunks[:3]):
+    for i, ch in enumerate(chunks[:ANSWER_TOP_K]):
         context_parts.append(
-            f"[文档 {i+1}] 来源: {ch['source_doc']}\n"
+            f"[{i+1}] 来源: {ch['source_doc']}\n"
             f"标题: {ch['headings']}\n"
             f"内容: {ch['content']}"
         )
     context = "\n\n".join(context_parts)
 
-    system = "你是一个知识检索助手。请基于提供的文档内容回答用户的问题。如果文档内容不足以回答问题，请如实说明。不要编造文档中没有的信息。"
+    system = "你是一个知识检索助手。只基于证据回答，不要编造。必须只输出 JSON，不要 Markdown。"
 
     prompt = f"""## 检索到的文档内容
 
@@ -315,27 +324,55 @@ def generate_answer(state: AgentState) -> dict:
 
 ## 要求
 
-请基于上述文档内容回答用户问题。引用文档中的具体段落支持你的回答。控制在 300 字以内。"""
+请输出 JSON：{{"status":"answered|insufficient_evidence", "answer":"...", "used_source_ids":[1,2], "reason":"..."}}。
+仅当证据足够时使用 answered，并在 used_source_ids 中填写实际引用的编号；否则使用 insufficient_evidence。控制在 300 字以内。"""
 
-    answer = _call_llm(prompt, system=system)
+    raw_answer = _call_llm(prompt, system=system)
+    if raw_answer:
+        validated = AnswerValidator(len(chunks[:ANSWER_TOP_K]), MIN_EVIDENCE_COUNT).validate(raw_answer)
+    else:
+        # LLM 不可用：回落到 BM25 原文拼接，让用户至少看到检索到的证据内容。
+        validated = {
+            "status": AnswerStatus.GENERATION_UNAVAILABLE.value,
+            "answer": _bm25_fallback(chunks[:ANSWER_TOP_K]),
+            "used_source_ids": [],
+            "reason": RefusalReason.CONNECTION_ERROR.value,
+        }
 
-    # fallback: 返回检索片段拼接
-    if not answer:
-        answer = f"[本地 LLM 未连接] 基于检索结果 (共 {attempt} 次检索, Top-{len(chunks)} 结果):\n\n"
-        for i, ch in enumerate(chunks[:3]):
-            answer += (
-                f"--- 来源 {i+1}: {ch['source_doc']} | "
-                f"CE Score: {ch['score']:.4f} ---\n"
-                f"{ch['content'][:300]}\n\n"
-            )
-
-    log_msg = f"[generate] attempt={attempt} chunks_used={min(3, len(chunks))} answer_len={len(answer)}"
+    log_msg = f"[generate] attempt={attempt} chunks_used={min(ANSWER_TOP_K, len(chunks))} status={validated['status']}"
     logger.info(log_msg)
 
     return {
-        "answer": answer,
+        "answer": validated,
         "search_log": [log_msg],
     }
+
+
+def _bm25_fallback(chunks: list[dict]) -> str:
+    """LLM 不可用时，把检索 Top-K 的原文拼接成一段可读文本。
+
+    与历史 docstring 承诺的"LLM 不可用时返回 Top-3 原文拼接"对齐：
+    之前代码只有 generation_unavailable 没有拼接，这里补齐兜底。
+    """
+    if not chunks:
+        return ""
+
+    parts = []
+    for i, ch in enumerate(chunks, start=1):
+        source = ch.get("source_doc", "未知来源")
+        headings = ch.get("headings", "")
+        content = ch.get("content", "").strip()
+        if not content:
+            continue
+        head = f"[{i}] {source}"
+        if headings:
+            head += f" · {headings}"
+        parts.append(f"{head}\n{content}")
+
+    body = "\n\n".join(parts)
+    return (
+        "（回答生成服务暂不可用，以下为检索到的原始证据，供参考）\n\n" + body
+    )
 
 
 # ============================================================
@@ -420,7 +457,7 @@ def run_query(query: str, verbose: bool = False) -> dict:
         "retrieval_history": [],
         "rewritten_queries": [],
         "attempt": 0,
-        "answer": "",
+        "answer": {"status": "", "answer": "", "used_source_ids": [], "reason": None},
         "search_log": [],
     }
 

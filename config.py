@@ -57,6 +57,11 @@ VECTOR_TOP_K = 20          # ChromaDB 向量召回数量
 RRF_K = 60                 # RRF 平滑常数
 CE_TOP_K = 5               # Cross-Encoder 最终返回数量
 CE_THRESHOLD = 3.0           # CE 分数阈值：低于此值触发查询改写（ms-marco-MiniLM 经验值）
+ANSWER_TOP_K = 3
+RETRIEVAL_CHECK_TOP_K = 5
+MIN_EVIDENCE_COUNT = 1
+LLM_TIMEOUT_SECONDS = 20
+LLM_MAX_RETRIES = 1
 
 # ============================================================
 # GraphRAG 参数

@@ -283,12 +283,17 @@ class VectorRetriever:
 
         if existing is not None:
             meta = existing.metadata or {}
+            # 关键校验：metadata 声明的 chunk_count 必须与实际 count() 一致。
+            # 历史 bug：构建时把 chunk_count 写进 metadata，但 add 失败时留下
+            # "声明 45 条 / 实际 0 条"的空壳集合，摘要匹配导致静默复用、向量检索恒返回 0。
+            # count() 是唯一能当场抓住这种分裂的判据。
             if (
                 meta.get("hnsw:space") == "cosine"
                 and meta.get("schema_version") == str(schema_version)
                 and meta.get("corpus_hash") == self.corpus_hash
                 and meta.get("chunk_count") == len(chunks)
                 and meta.get("chunk_id_count") == len(self._by_id)
+                and existing.count() == len(chunks)
             ):
                 logger.info(
                     "复用已有 ChromaDB 集合（摘要匹配，无重建）: %s", collection_name
@@ -331,11 +336,26 @@ class VectorRetriever:
     # Embedding
     # ----------------------------------------------------------
 
+    @staticmethod
+    def _sanitize_metadata(meta: dict) -> dict:
+        """chromadb>=0.6 要求 metadata 值为 str/int/float/bool 标量，
+        将 list/tuple 扁平化为 '; ' 分隔字符串，dict 转为字符串，避免 add 时报错。
+        仅影响写入 Chroma 的内容，不影响内存中的 chunk.metadata。"""
+        clean = {}
+        for k, v in (meta or {}).items():
+            if isinstance(v, (list, tuple)):
+                clean[k] = "; ".join(str(x) for x in v)
+            elif isinstance(v, dict):
+                clean[k] = str(v)
+            else:
+                clean[k] = v
+        return clean
+
     def _index_chunks(self, collection: "chromadb.Collection", chunks: List[Chunk]) -> None:
         """手动对所有 Chunk 做 embedding 并存入 ChromaDB。"""
         texts = [c.content for c in chunks]
         ids = [c.chunk_id for c in chunks]
-        metadatas = [c.metadata for c in chunks]
+        metadatas = [self._sanitize_metadata(c.metadata) for c in chunks]
 
         logger.info("开始批量 Embedding (%d 条文本)...", len(texts))
         embeddings = self.model.encode(
@@ -360,6 +380,11 @@ class VectorRetriever:
         Chroma 返回的命中优先关联回内存 chunk（保持与 get_chunk / list_documents
         同一数据源），未命中的 ID 用文档内容重建 Chunk 兜底。
         """
+        if self.collection is None or self.collection.count() == 0:
+            raise RuntimeError(
+                "向量集合未初始化或为空（count=0），请检查 rebuild 路径是否正常赋值 self.collection"
+            )
+
         query_embedding = self.model.encode(query)
 
         results = self.collection.query(
