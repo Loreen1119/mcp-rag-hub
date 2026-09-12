@@ -32,6 +32,8 @@ from config import (
     CE_THRESHOLD,
     BM25_TOP_K,
     EXPERIMENTS_DIR,
+    LLM_MODEL,
+    JUDGE_MODEL,
 )
 from src.evaluation.metrics import load_test_cases, mrr, hit_at_k, precision_at_k, recall_at_k
 from src.pipeline import get_pipeline
@@ -46,7 +48,7 @@ EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
 # ============================================================
 
 
-def _call_ollama(prompt: str, system: str = "") -> str:
+def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str:
     try:
         import requests
 
@@ -58,7 +60,7 @@ def _call_ollama(prompt: str, system: str = "") -> str:
         r = requests.post(
             "http://127.0.0.1:11434/api/chat",
             json={
-                "model": "qwen2.5:7b",
+                "model": model or LLM_MODEL,
                 "messages": messages,
                 "stream": False,
                 "options": {"temperature": 0.0, "num_predict": 256},
@@ -258,6 +260,7 @@ class AgentEvaluator:
         raw = _call_ollama(
             _build_fidelity_prompt(original, rewritten),
             system=FIDELITY_SYSTEM,
+            model=JUDGE_MODEL,
         )
         score, reason = self._parse_score(raw)
         return {"score": score, "reason": reason}

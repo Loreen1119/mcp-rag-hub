@@ -1,156 +1,156 @@
 {
-  "description": "RAG GoldenTestSet — 测试集，18 条，基于当前 docs/ 知识库正文内容设计",
+  "description": "RAG GoldenTestSet — 18 条，基于 corpora/fastapi-zh 语料（FastAPI 中文文档，来源见 corpora/README.md）。每条 golden_answer 都能在 golden_chunk_sources 指定的文件正文中找到原文依据。",
   "categories": {
     "exact_match": "专有名词精确匹配 — 测 BM25/关键词优势",
     "semantic": "语义相似但字面不同 — 测向量检索优势",
     "mixed": "混合复杂查询 — 测 RRF+重排整体效果",
-    "graph": "多实体关联查询 — 测跨文档综合召回能力"
+    "graph": "多概念关联查询 — 测跨文档综合召回能力"
   },
-  "split_logic": "每类按难度高低交替分配：E（2,4,6,8偶数）、S（2,4,6,8偶数）、M（2,4,6,8偶数）、G（低分+高分打散：2,3,5,6,8,12）",
+  "split_logic": "每类按难度高低交替分配：E（2,4,6,8偶数）、S（2,4,6,8偶数）、M（2,4,6,8偶数）、G（2,3,5,6,8,12）",
   "test_cases": [
     {
       "id": "E02",
-      "query": "Cross-Encoder 重排序",
+      "query": "路径操作装饰器",
       "category": "exact_match",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
-      "notes": "sample_rag_paper.md 核心优化方向 #3 直接出现术语"
+      "golden_chunk_sources": ["tutorial/first-steps.md"],
+      "golden_answer": "`@app.get(\"/\")` 就是路径操作装饰器：`@something` 语法在 Python 中被称为「装饰器」，它接收位于其下方的函数并告诉 FastAPI 该函数对应着路径 `/` 加上 `get` 操作。",
+      "notes": "tutorial/first-steps.md「定义一个路径操作装饰器」小节直接定义"
     },
     {
       "id": "E04",
-      "query": "Faithfulness 忠实度指标",
+      "query": "CORSMiddleware 的 allow_origins 参数",
       "category": "exact_match",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "Faithfulness（忠实度）是 RAG 评测的核心指标之一，用于衡量生成内容是否忠于检索到的原文。",
-      "notes": "sample_rag_paper.md 中直接出现 Faithfulness"
+      "golden_chunk_sources": ["tutorial/cors.md"],
+      "golden_answer": "`allow_origins` 是一个允许跨域请求的源列表，例如 `['https://example.org', 'https://www.example.org']`；也可以使用 `['*']` 允许任何源。",
+      "notes": "tutorial/cors.md 参数列表逐条列出，含默认值说明"
     },
     {
       "id": "E06",
-      "query": "BGE-M3 嵌入模型",
+      "query": "依赖注入",
       "category": "exact_match",
-      "golden_chunk_sources": ["embedding-guide.md", "sample_notes.txt"],
-      "golden_answer": "BGE-M3 是 1024 维中英双语嵌入模型，MTEB 中文任务领先，开源可商用，mcp-rag-hub 当前选型。",
-      "notes": "embedding-guide.md 主流模型对比表和 sample_notes.txt 技术栈都提到"
+      "golden_chunk_sources": ["tutorial/dependencies/index.md"],
+      "golden_answer": "「依赖注入」指的是：你的代码（路径操作函数）声明其运行所需并要使用的东西——「依赖」；然后由系统（在 FastAPI 中即 FastAPI 本身）负责执行所有必要的逻辑，为你的代码提供这些所需的依赖，也就是「注入」依赖。",
+      "notes": "tutorial/dependencies/index.md「什么是『依赖注入』」小节给出定义"
     },
     {
       "id": "E08",
-      "query": "sentence-transformers",
+      "query": "HTTPException",
       "category": "exact_match",
-      "golden_chunk_sources": ["sample_notes.txt"],
-      "golden_answer": "sentence-transformers 是 mcp-rag-hub 项目规划使用的嵌入模型框架之一。",
-      "notes": "sample_notes.txt 技术栈规划中直接出现"
+      "golden_chunk_sources": ["tutorial/handling-errors.md"],
+      "golden_answer": "`HTTPException` 是额外包含了和 API 有关数据的常规 Python 异常。向客户端返回 HTTP 错误响应可以使用它；如果在路径操作函数调用的工具函数内部触发，那么路径操作函数中后续代码不会继续执行，请求会立刻终止，并把 HTTP 错误发送给客户端。",
+      "notes": "tutorial/handling-errors.md「使用 HTTPException」小节"
     },
     {
       "id": "S02",
-      "query": "关键词检索和语义检索如何互补？",
+      "query": "应用启动时只想执行一次初始化、关闭时再做收尾，该用什么机制？",
       "category": "semantic",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "BM25 关键词检索无法理解同义词，向量语义检索对专有名词支持弱，两者通过 RRF 融合可互补。",
-      "notes": "查询字面与文档中'混合检索策略'章节语义一致"
+      "golden_chunk_sources": ["advanced/events.md"],
+      "golden_answer": "使用 FastAPI 应用的 `lifespan` 参数配合一个「上下文管理器」来定义启动和关闭逻辑：用一个带 `yield` 的异步函数 `lifespan()`，`yield` 之前的代码在应用开始处理请求之前执行（启动期间），`yield` 之后的代码在应用完成处理请求后、关闭之前执行，可用来释放内存或 GPU 等资源。",
+      "notes": "查询用自然语言描述需求，文档对应「生命周期事件 / Lifespan」章节"
     },
     {
       "id": "S04",
-      "query": "文档切片为什么要保留重叠区间？",
+      "query": "怎样在请求进入具体接口之前、以及响应返回之前，插入一段自己写的通用逻辑？",
       "category": "semantic",
-      "golden_chunk_sources": ["sample_rag_paper.md", "chunking-strategies.md", "sample_notes.txt"],
-      "golden_answer": "保留 10%~20% 重叠可减少边界语义丢失，避免跨 Chunk 的实体关系因机械切割而断裂。",
-      "notes": "多文档都提到重叠切片的作用"
+      "golden_chunk_sources": ["tutorial/middleware.md"],
+      "golden_answer": "通过「中间件」实现。中间件是一个函数，它会在每个特定的路径操作处理每个请求之前运行，也会在返回每个响应之前运行：先接收应用的每一个请求并对其执行代码，再把请求传递给后续的路径操作处理，之后获取路径操作产生的响应并对其执行代码，最后返回该响应。",
+      "notes": "查询是「中间件」的口语化描述，文档「中间件」章节给出逐步说明"
     },
     {
       "id": "S06",
-      "query": "中文场景应该选哪个 Embedding 模型？",
+      "query": "怎么把配置项放在代码之外、运行时再读进程序，并保证类型正确？",
       "category": "semantic",
-      "golden_chunk_sources": ["embedding-guide.md"],
-      "golden_answer": "中文场景推荐 BGE（BAAI General Embedding），MTEB 中文任务领先，开源可商用。",
-      "notes": "embedding-guide.md 选型小结明确回答"
+      "golden_chunk_sources": ["advanced/settings.md"],
+      "golden_answer": "用「环境变量」：它是存在于 Python 代码之外、操作系统中的值，可由应用和其他程序读取。注意环境变量只能处理文本字符串，因此从环境变量读到的任何值都是 `str` 类型，到其他类型的转换和验证必须在代码里完成——Pydantic 提供的 Settings 管理工具正是用来处理这类设置的。",
+      "notes": "advanced/settings.md「设置和环境变量」「Pydantic 的 Settings」两节综合"
     },
     {
       "id": "S08",
-      "query": "切片时如何避免把完整语义单元切断？",
+      "query": "接口想直接返回一段网页而不是 JSON，应该怎么做？",
       "category": "semantic",
-      "golden_chunk_sources": ["chunking-strategies.md", "sample_rag_paper.md"],
-      "golden_answer": "按语义或段落结构切分，过短合并、过长拆分，并加入 10%~20% 重叠保留上下文连贯性。",
-      "notes": "chunking-strategies.md 实际建议章节语义匹配"
+      "golden_chunk_sources": ["advanced/custom-response.md"],
+      "golden_answer": "使用 `HTMLResponse` 从 FastAPI 直接返回 HTML 响应：先导入 `HTMLResponse`，再把它作为路径操作的 `response_class` 参数传入。",
+      "notes": "advanced/custom-response.md「HTMLResponse」小节；本查询不含 HTMLResponse 字面词"
     },
     {
       "id": "M02",
-      "query": "搭建企业级 RAG 知识检索系统需要哪些技术组件？",
+      "query": "FastAPI 中的请求体和响应体分别指什么？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_notes.txt", "sample_rag_paper.md"],
-      "golden_answer": "需要文档解析、向量数据库、嵌入模型、混合检索、重排序模型、评估框架和 MCP 接口封装。",
-      "notes": "sample_notes.txt 技术栈规划 + sample_rag_paper.md 核心优化方向综合"
+      "golden_chunk_sources": ["tutorial/body.md"],
+      "golden_answer": "请求体是客户端发送给你的 API 的数据，响应体是你的 API 发送给客户端的数据。API 几乎总是需要发送响应体，但客户端不一定总是发送请求体——它可能只请求某个路径、带上一些查询参数而不发送请求体。请求体用 Pydantic 模型来声明。",
+      "notes": "tutorial/body.md 开头两段给出定义与对比"
     },
     {
       "id": "M04",
-      "query": "BM25 和向量检索各自的优缺点是什么？",
+      "query": "怎么指定某个接口返回的 HTTP 状态码？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_rag_paper.md", "embedding-guide.md"],
-      "golden_answer": "BM25 对精确术语匹配强但无法理解同义词；向量检索能捕捉语义相似性但对专有名词支持弱。",
-      "notes": "两文档都有明确对比"
+      "golden_chunk_sources": ["tutorial/response-status-code.md"],
+      "golden_answer": "在路径操作中使用 `status_code` 参数声明响应状态码。注意 `status_code` 是（`get`、`post` 等）装饰器方法中的参数，不是路径操作函数的参数；它接收表示 HTTP 状态码的数字，也可以接收 `IntEnum` 类型（如 Python 的 `http.HTTPStatus`），并会在响应中返回该状态码、在 OpenAPI schema 中记录该状态码。",
+      "notes": "tutorial/response-status-code.md 明确区分装饰器参数与函数参数"
     },
     {
       "id": "M06",
-      "query": "RAG 中 Retriever 和 Generator 各自负责什么？",
+      "query": "如何让某段耗时的处理在响应返回之后再执行？",
       "category": "mixed",
-      "golden_chunk_sources": ["rag-intro.md"],
-      "golden_answer": "Retriever 负责找对相关内容，Generator 负责理解并生成回答；检索质量差会误导生成。",
-      "notes": "rag-intro.md Retriever 与 Generator 的配合章节直接回答"
+      "golden_chunk_sources": ["tutorial/background-tasks.md"],
+      "golden_answer": "使用 `BackgroundTasks`：先在路径操作函数中用 `BackgroundTasks` 类型声明一个参数，FastAPI 会创建一个该类型的对象并作为参数传入；再创建要作为后台任务运行的函数，并在路径操作函数里用 `.add_task()` 方法把任务函数传进后台任务对象，任务会在返回响应之后运行。它也适用于依赖注入系统，可在多个级别声明该参数，所有后台任务会被合并在一起随后在后台运行。",
+      "notes": "tutorial/background-tasks.md「使用 BackgroundTasks」「添加后台任务」两节"
     },
     {
       "id": "M08",
-      "query": "mcp-rag-hub 项目的技术栈规划是什么？",
+      "query": "FastAPI 应用怎么做测试？",
       "category": "mixed",
-      "golden_chunk_sources": ["sample_notes.txt"],
-      "golden_answer": "文档解析用 PyMuPDF + Python-Markdown，向量库用 ChromaDB，嵌入模型用 sentence-transformers/BGE-M3，评估用 Ragas，接口用 FastMCP。",
-      "notes": "sample_notes.txt 技术栈规划直接回答"
+      "golden_chunk_sources": ["tutorial/testing.md"],
+      "golden_answer": "使用 `TestClient`（来自 Starlette）：先安装 `httpx`，导入 `TestClient`，传入你的 FastAPI 应用创建一个 `TestClient` 对象，然后像使用 `httpx` 那样使用它发送请求。注意测试函数是普通的 `def`，不是 `async def`；也可以写成 `from starlette.testclient import TestClient`。",
+      "notes": "tutorial/testing.md「使用 TestClient」小节"
     },
     {
       "id": "G02",
-      "query": "RAG 如何通过 Embedding 模型和向量数据库缓解幻觉？",
+      "query": "JWT 是什么？在 FastAPI 里生成和校验它需要装什么？",
       "category": "graph",
-      "golden_chunk_sources": ["rag-intro.md", "embedding-guide.md", "sample_rag_paper.md"],
-      "golden_answer": "Embedding 模型将文本转为向量，向量数据库检索相关上下文，RAG 把检索结果作为生成前缀，从而减少模型依赖参数知识产生的幻觉。",
-      "notes": "需要跨文档关联 RAG、Embedding、向量数据库、幻觉等概念"
+      "golden_chunk_sources": ["tutorial/security/oauth2-jwt.md"],
+      "golden_answer": "JWT 意为「JSON Web Tokens」。在 FastAPI 中结合密码哈希使用 JWT 令牌可以让应用真正安全起来；要在 Python 中生成和校验 JWT 令牌，需要安装 `PyJWT`。",
+      "notes": "tutorial/security/oauth2-jwt.md「关于 JWT」「安装 PyJWT」两节"
     },
     {
       "id": "G03",
-      "query": "混合检索、RRF、Cross-Encoder 和 Faithfulness 在 RAG 流程中是什么关系？",
+      "query": "OAuth2 密码流程中，前端把用户名和密码发到哪里？用哪个类实现？",
       "category": "graph",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "混合检索通过 RRF 融合 BM25 和向量两路召回，Cross-Encoder 做精排提升 Top-K 命中率，Faithfulness 评测生成内容是否忠于检索结果。",
-      "notes": "sample_rag_paper.md 核心优化方向 #2 和 #3 综合"
+      "golden_chunk_sources": ["tutorial/security/first-steps.md"],
+      "golden_answer": "OAuth2 使用「表单数据」来发送 `username` 和 `password`；前端（运行在用户浏览器中）把 `username` 和 `password` 发送到 API 中的特定 URL，该 URL 通过 `tokenUrl=\"token\"` 声明。示例使用 OAuth2 的 Password 流程并配合 Bearer 令牌，通过 `OAuth2PasswordBearer` 类实现。",
+      "notes": "tutorial/security/first-steps.md 密码流程说明 + OAuth2PasswordBearer 小节"
     },
     {
       "id": "G05",
-      "query": "固定长度、按句/段、重叠切片、语义切片各适用于什么场景？",
+      "query": "SQLModel 与 SQLAlchemy、Pydantic 是什么关系？怎么定义一张表？",
       "category": "graph",
-      "golden_chunk_sources": ["chunking-strategies.md"],
-      "golden_answer": "固定长度适合日志/网页；按句/段适合博客/新闻；重叠切片适合论文/法律；语义切片适合手册/指南。",
-      "notes": "chunking-strategies.md 策略对比表直接回答"
+      "golden_chunk_sources": ["tutorial/sql-databases.md"],
+      "golden_answer": "SQLModel 基于 SQLAlchemy 和 Pydantic 构建，由 FastAPI 的同一作者制作，旨在完美匹配需要使用 SQL 数据库的 FastAPI 应用；因为基于 SQLAlchemy，可用任何被 SQLAlchemy 支持的数据库（生产环境常用 PostgreSQL）。定义表模型时，`table=True` 告诉 SQLModel 这是一个表模型（表示 SQL 数据库中的一张表，而不只是普通数据模型），`Field(primary_key=True)` 声明 `id` 是数据库中的主键。",
+      "notes": "tutorial/sql-databases.md 技术关系说明 + 表模型定义注释"
     },
     {
       "id": "G06",
-      "query": "Dense 向量和 Sparse 向量在检索中分别扮演什么角色？",
+      "query": "容器和容器镜像有什么区别？",
       "category": "graph",
-      "golden_chunk_sources": ["embedding-guide.md", "rag-intro.md"],
-      "golden_answer": "Sparse 向量（如 BM25）基于 TF-IDF 做精确关键词匹配；Dense 向量捕捉语义相关性。两者互补，混合使用效果更佳。",
-      "notes": "embedding-guide.md Dense vs Sparse 章节 + rag-intro.md 检索策略"
+      "golden_chunk_sources": ["deployment/docker.md"],
+      "golden_answer": "容器是从容器镜像运行的。容器镜像是容器中所有文件、环境变量以及应该运行的默认命令/程序的一个静态版本——它本身并不在运行，仅仅是被打包的文件和元数据。容器则通常指一个正在运行的实例。容器启动运行后对文件、环境变量等的修改只存在于该容器中，不会持久化回底层的容器镜像。",
+      "notes": "deployment/docker.md「什么是容器镜像」小节"
     },
     {
       "id": "G08",
-      "query": "为什么 RRF 融合和 Cross-Encoder 重排不能合并成一个阶段？",
+      "query": "直接返回 Response 会有什么副作用？声明 JSON 媒体类型时又有什么区别？",
       "category": "graph",
-      "golden_chunk_sources": ["sample_rag_paper.md"],
-      "golden_answer": "RRF 负责融合多路召回的排名，Cross-Encoder 负责计算查询与候选文档的细粒度相关分数，两者分工不同。",
-      "notes": "sample_rag_paper.md 中混合检索与重排序分别属于不同优化方向"
+      "golden_chunk_sources": ["advanced/custom-response.md"],
+      "golden_answer": "如果直接返回一个 `Response`（或其任意子类，比如 `JSONResponse`），返回的数据不会自动转换（即使你声明了 `response_model`），也不会自动生成文档——例如生成的 OpenAPI 中 HTTP 头 `Content-Type` 里的特定「媒体类型」不会被包含。如果在 `response_class` 中声明的是一个 JSON 媒体类型（`application/json`）的类，比如 `JSONResponse`，那么返回的数据会使用你在路径操作装饰器中声明的任意 Pydantic `response_model` 自动转换和过滤。",
+      "notes": "advanced/custom-response.md 关于直接返回 Response 的说明段"
     },
     {
       "id": "G12",
-      "query": "Naive RAG 存在哪些主要局限？",
+      "query": "在 FastAPI 里做 WebSocket 需要额外安装什么？",
       "category": "graph",
-      "golden_chunk_sources": ["rag-intro.md"],
-      "golden_answer": "Naive RAG 的局限包括语义鸿沟、上下文稀释、多跳推理无力和缺乏纠错机制。",
-      "notes": "rag-intro.md Naive RAG 的局限章节直接回答"
+      "golden_chunk_sources": ["advanced/websockets.md"],
+      "golden_answer": "需要把 `websockets` 添加到项目中——它是一个让使用「WebSocket」协议更容易的 Python 库，文档示例用的命令是 `uv add websockets`。",
+      "notes": "advanced/websockets.md「安装 websockets」小节"
     }
   ]
 }

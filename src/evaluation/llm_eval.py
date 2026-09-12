@@ -11,15 +11,21 @@ LLM-as-Judge 生成评测 — 基于 Ollama 的三维 LLM 裁判打分。
 - llm_eval.py 测生成阶段（Faithfulness / Answer Relevancy / Context Recall）
 - 两者共用 test_queries.json 的 golden_answer 字段
 
+模型分工：
+- 生成用 config.LLM_MODEL（默认 3b，与生产链路一致，CPU 可跑）
+- 裁判用 config.JUDGE_MODEL（默认 7b，3b 当裁判会给出自相矛盾的分数）
+- 两者都可用 --model / --judge-model 覆盖
+
 前置条件：
     1. 安装 Ollama: winget install Ollama.Ollama
-    2. 设置模型目录到 D 盘: set OLLAMA_MODELS=D:\ollama_models
-    3. 拉取模型: ollama pull qwen2.5:7b
+    2. 设置模型目录（本机实际路径）: set OLLAMA_MODELS=D:\1software\ollama_models
+    3. 拉取模型: ollama pull qwen2.5:3b && ollama pull qwen2.5:7b
     4. 启动服务: ollama serve  (通常安装后自动启动)
 
 运行：
-    python src/evaluation/llm_eval.py              # 跑全部 15 组评测
-    python src/evaluation/llm_eval.py --sample 3    # 只跑前 3 组（快速验证）
+    python src/evaluation/llm_eval.py                  # 跑全部 18 组评测
+    python src/evaluation/llm_eval.py --sample 3        # 只跑前 3 组（快速验证）
+    python src/evaluation/llm_eval.py --judge-model qwen2.5:7b
 """
 
 from __future__ import annotations
@@ -36,15 +42,24 @@ _PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from config import TEST_QUERIES_FILE, CE_TOP_K, EXPERIMENTS_DIR
+from config import (
+    TEST_QUERIES_FILE,
+    CE_TOP_K,
+    CE_RELATIVE_THRESHOLD,
+    EXPERIMENTS_DIR,
+    LLM_MODEL as _DEFAULT_LLM_MODEL,
+    JUDGE_MODEL as _DEFAULT_JUDGE_MODEL,
+)
 from src.pipeline import get_pipeline
 
 logger = logging.getLogger(__name__)
 
 EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# 可通过 --model 命令行参数覆盖
-LLM_MODEL = "qwen2.5:7b"
+# 生成模型：默认从 config.LLM_MODEL 读取，可用 --model 覆盖
+LLM_MODEL = _DEFAULT_LLM_MODEL
+# 裁判模型：默认从 config.JUDGE_MODEL 读取，可用 --judge-model 覆盖
+JUDGE_MODEL = _DEFAULT_JUDGE_MODEL
 
 
 # ============================================================
@@ -66,8 +81,11 @@ def _ensure_pipeline():
 # ============================================================
 
 
-def _call_ollama(prompt: str, system: str = "") -> str:
-    """通过 HTTP 直接调用 Ollama API（绕过 SDK 版本兼容问题）。"""
+def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str:
+    """通过 HTTP 直接调用 Ollama API（绕过 SDK 版本兼容问题）。
+
+    model 为 None 时用生成模型 LLM_MODEL；裁判调用需显式传 JUDGE_MODEL。
+    """
     try:
         import requests
 
@@ -79,7 +97,7 @@ def _call_ollama(prompt: str, system: str = "") -> str:
         r = requests.post(
             "http://127.0.0.1:11434/api/chat",
             json={
-                "model": LLM_MODEL,
+                "model": model or LLM_MODEL,
                 "messages": messages,
                 "stream": False,
                 "options": {"temperature": 0.0, "num_predict": 512},
@@ -211,6 +229,15 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
     if not ce_results:
         return "[无检索结果]", ""
 
+    # 与 agent.py retrieve() 保持一致的相对阈值过滤：
+    # 低于 top1 分数 CE_RELATIVE_THRESHOLD 比例的视为噪声丢弃，避免 top5 硬取带入无关 chunk。
+    top1 = ce_results[0].score
+    if top1 > 0:
+        kept = [r for r in ce_results if r.score >= CE_RELATIVE_THRESHOLD * top1]
+    else:
+        kept = ce_results[:1]
+    ce_results = kept or ce_results[:1]
+
     # 构建上下文（Top-3 Chunk 拼接）
     context_parts = []
     for i, r in enumerate(ce_results[:3]):
@@ -245,7 +272,15 @@ def _retrieve_and_generate(query: str) -> tuple[str, str]:
 
 def _save_checkpoint(details: list[dict], output_path: Path):
     """逐条增量写入，以防中途挂掉丢失已有结果。"""
-    checkpoint = {"summary": {"model": LLM_MODEL, "total_cases": len(details), "note": "进行中…"}, "details": details}
+    checkpoint = {
+        "summary": {
+            "model": LLM_MODEL,
+            "judge_model": JUDGE_MODEL,
+            "total_cases": len(details),
+            "note": "进行中…",
+        },
+        "details": details,
+    }
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
@@ -280,6 +315,7 @@ def evaluate_one(tc: dict, verbose: bool = True) -> dict:
         raw = _call_ollama(
             _build_faithfulness_prompt(answer, context),
             system=FAITHFULNESS_SYSTEM,
+            model=JUDGE_MODEL,
         )
         score, reason = _parse_score(raw)
     else:
@@ -290,6 +326,7 @@ def evaluate_one(tc: dict, verbose: bool = True) -> dict:
     raw = _call_ollama(
         _build_answer_relevancy_prompt(answer, query),
         system=ANSWER_RELEVANCY_SYSTEM,
+        model=JUDGE_MODEL,
     )
     score, reason = _parse_score(raw)
     result["answer_relevancy"] = {"score": score, "reason": reason}
@@ -299,6 +336,7 @@ def evaluate_one(tc: dict, verbose: bool = True) -> dict:
         raw = _call_ollama(
             _build_context_recall_prompt(context, golden_answer),
             system=CONTEXT_RECALL_SYSTEM,
+            model=JUDGE_MODEL,
         )
         score, reason = _parse_score(raw)
     else:
@@ -331,7 +369,7 @@ def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = Tru
 
     print("=" * 60)
     print("  LLM-as-Judge 生成评测")
-    print(f"  模型: {LLM_MODEL}  |  Test Cases: {len(test_cases)}")
+    print(f"  生成模型: {LLM_MODEL}  |  裁判模型: {JUDGE_MODEL}  |  Test Cases: {len(test_cases)}")
     print("=" * 60)
 
     details: list[dict] = []
@@ -363,6 +401,7 @@ def run_llm_evaluation(test_cases: list[dict] | None = None, verbose: bool = Tru
     n = len(test_cases)
     summary: dict = {
         "model": LLM_MODEL,
+        "judge_model": JUDGE_MODEL,
         "total_cases": n,
         "overall": {},
         "by_category": {},
@@ -434,8 +473,8 @@ def run_quick_check(n: int = 3) -> None:
     if not test_resp:
         print("\n  [ERROR] Ollama 未连接！请检查:")
         print("    1. ollama serve 是否在运行")
-        print("    2. ollama pull qwen2.5:7b 是否完成")
-        print("    3. set OLLAMA_MODELS=D:\\ollama_models")
+        print(f"    2. ollama pull {LLM_MODEL} / {JUDGE_MODEL} 是否完成")
+        print("    3. set OLLAMA_MODELS=D:\\1software\\ollama_models")
         return
 
     print(f"  Ollama 连接正常 → 响应: {test_resp.strip()[:50]}")
@@ -454,7 +493,13 @@ if __name__ == "__main__":
         idx = sys.argv.index("--model")
         if idx + 1 < len(sys.argv):
             LLM_MODEL = sys.argv[idx + 1]
-            print(f"[INFO] 使用模型: {LLM_MODEL}")
+            print(f"[INFO] 生成模型: {LLM_MODEL}")
+
+    if "--judge-model" in sys.argv:
+        idx = sys.argv.index("--judge-model")
+        if idx + 1 < len(sys.argv):
+            JUDGE_MODEL = sys.argv[idx + 1]
+            print(f"[INFO] 裁判模型: {JUDGE_MODEL}")
 
     if "--sample" in sys.argv:
         idx = sys.argv.index("--sample")

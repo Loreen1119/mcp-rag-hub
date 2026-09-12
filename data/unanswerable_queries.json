@@ -1,0 +1,72 @@
+[
+  {
+    "query_id": "U01",
+    "query": "FastAPI 背后的公司去年营收是多少？",
+    "category": "out_of_domain",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "语料为 FastAPI 框架的中文技术文档，不包含任何公司经营、财务或营收数据"
+  },
+  {
+    "query_id": "U02",
+    "query": "知识库里有哪些维护者的个人简历和联系方式？",
+    "category": "near_miss",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "help-fastapi.md 提到了作者 Sebastián Ramírez（tiangolo）并给出其个人站点链接，但语料不含任何人的简历、职务或联系方式清单 —— 术语命中但事实缺失，属典型 near miss"
+  },
+  {
+    "query_id": "U03",
+    "query": "Spring Boot 的自动配置（AutoConfiguration）是怎么实现的？",
+    "category": "out_of_domain",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "语料只覆盖 FastAPI 及少数同类 Python 框架（Django / Flask / Starlette），完全不涉及 Java 生态与 Spring Boot"
+  },
+  {
+    "query_id": "U04",
+    "query": "Vue 3 的 Composition API 里 ref 和 reactive 有什么区别？",
+    "category": "near_miss",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "tutorial/frontend.md 在列举前端工具链时确实出现了 Vue 这个字面词，但只作为名称罗列，没有任何 Composition API、ref 或 reactive 的解释 —— 字面命中、语义无答案"
+  },
+  {
+    "query_id": "U05",
+    "query": "Django ORM 中 ForeignKey 的 on_delete 参数有哪些可选值？",
+    "category": "near_miss",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "alternatives.md 有专门小节讨论 Django 与 Django REST Framework，但只做框架定位比较，不涉及 ORM 模型定义或 on_delete 等 API 细节"
+  },
+  {
+    "query_id": "U06",
+    "query": "Flask 里 Blueprint 的 url_prefix 参数应该怎么配置？",
+    "category": "near_miss",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "tutorial/bigger-applications.md 明确写道「如果你来自 Flask，那这将相当于 Flask 的 Blueprints」，即 Blueprint 一词确实出现在语料中，但语料只做概念类比，不提供 Flask 侧的 url_prefix 等配置用法"
+  },
+  {
+    "query_id": "U07",
+    "query": "把一个已有的 Django 项目迁移到 FastAPI，模型层和视图层分别要怎么改写？",
+    "category": "near_miss",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "语料提到 Django 仅用于说明 FastAPI 的定位差异（alternatives.md），不含任何迁移步骤、对照表或模型/视图改写指南"
+  },
+  {
+    "query_id": "U08",
+    "query": "FastAPI 内置的图形化管理后台（Admin UI）要怎么开启？",
+    "category": "missing_feature",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "FastAPI 本身不提供内置管理后台，语料中也不存在 Admin UI 相关的任何章节或配置项 —— 属于产品不具备的能力"
+  },
+  {
+    "query_id": "U09",
+    "query": "本系统在生产环境承诺的 SLA 和可用性指标是多少？",
+    "category": "missing_detail",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "语料为框架使用文档，不包含任何服务等级协议（SLA）、可用性承诺或运维指标；deployment/ 目录只讲部署方式，不含承诺性指标"
+  },
+  {
+    "query_id": "U10",
+    "query": "这个知识库目前一共收录了多少篇文档，上一次更新是什么时候？",
+    "category": "missing_detail",
+    "expected_status": "insufficient_evidence",
+    "reasoning": "问的是知识库自身的元数据（文档数量、更新时间），这类信息由系统维护，不在被索引的文档正文中 —— 检索必然只能拿到语义相近的正文片段而非答案"
+  }
+]

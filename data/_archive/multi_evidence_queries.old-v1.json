@@ -1,0 +1,50 @@
+[
+  {
+    "query_id": "ME01",
+    "query": "解释 RRF 融合和 Cross-Encoder 精排如何协同工作来改进检索效果",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "RRF 融合的原理与实现",
+        "keywords": ["RRF", "rank fusion", "BM25", "vector", "分数归一化"]
+      },
+      {
+        "description": "Cross-Encoder 精排的作用与局限",
+        "keywords": ["Cross-Encoder", "重排序", "ms-marco", "MiniLM", "Top-K"]
+      }
+    ],
+    "reasoning": "完整答案需要同时说明 RRF 如何融合多路召回、Cross-Encoder 如何在融合基础上进行精排"
+  },
+  {
+    "query_id": "ME02",
+    "query": "为什么这个项目同时采用 BM25 和向量检索，而不是只用其中一种？",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "BM25 关键词检索的优势与局限",
+        "keywords": ["BM25", "精确匹配", "词频", "jieba", "分词"]
+      },
+      {
+        "description": "向量语义检索的优势与互补性",
+        "keywords": ["embedding", "向量", "语义", "ChromaDB", "相似度"]
+      }
+    ],
+    "reasoning": "需要对比两种方法的优劣，说明为什么混合检索优于单一方法"
+  },
+  {
+    "query_id": "ME03",
+    "query": "LangGraph Agent 的状态机设计如何利用检索结果来改写查询和生成答案？",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "LangGraph 状态机的五节点设计与条件路由",
+        "keywords": ["LangGraph", "state machine", "analyze", "retrieve", "check_results"]
+      },
+      {
+        "description": "查询改写和答案生成的具体逻辑",
+        "keywords": ["rewrite_query", "generate_answer", "Ollama", "LLM"]
+      }
+    ],
+    "reasoning": "需要同时理解状态机的整体架构和每个关键节点的业务逻辑"
+  }
+]

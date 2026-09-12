@@ -10,8 +10,11 @@ RAG 系统自动化评测。
 
 评测 LLM 模式（可选）：如果安装了 Ollama，可计算 Faithfulness。
 
+数据集：单一 Golden Test Set（`data/test_queries.json`，18 条）。
+历史说明：曾支持 `--split train|test|all`，那是 Phase 0 调 CE 拒答阈值时的拆分，
+方案证伪后已移除（详见 config.TEST_QUERIES_FILE 处注释）。
+
 命令行参数：
-  --split  train | test | all  (默认 all)
   --graph  启用 GraphRAG 图检索（默认关闭）
 """
 
@@ -21,8 +24,7 @@ import argparse
 import logging
 from typing import List, Dict
 
-from config import (PROJECT_ROOT, TEST_QUERIES_FILE, TRAIN_QUERIES_FILE,
-                    CE_TOP_K, BM25_TOP_K, KG_RRF_WEIGHT)
+from config import TEST_QUERIES_FILE, CE_TOP_K, BM25_TOP_K, KG_RRF_WEIGHT
 from src.evaluation.metrics import (
     load_test_cases,
     is_relevant,
@@ -35,21 +37,6 @@ from src.pipeline import get_pipeline
 from src.fusion import reciprocal_rank_fusion
 
 logger = logging.getLogger(__name__)
-
-
-# ============================================================
-# 文件路径映射
-# ============================================================
-
-
-def _resolve_queries_file(split: str) -> str:
-    """根据 split 参数返回对应的 JSON 文件路径。"""
-    if split == "train":
-        return str(TRAIN_QUERIES_FILE)
-    elif split == "test":
-        return str(TEST_QUERIES_FILE)
-    else:  # "all"
-        return str(PROJECT_ROOT / "data" / "test_queries_all.json")
 
 
 # ============================================================
@@ -71,7 +58,7 @@ def run_evaluation(
     """
     if test_cases is None:
         raise ValueError(
-            "test_cases 不能为 None，请通过 load_test_cases(_resolve_queries_file(split)) 传入"
+            "test_cases 不能为 None，请通过 load_test_cases(TEST_QUERIES_FILE) 传入"
         )
 
     ctx = get_pipeline()
@@ -255,12 +242,6 @@ def _print_summary(summary: dict, enable_graph: bool = False) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RAG 检索评测")
     parser.add_argument(
-        "--split",
-        choices=["train", "test", "all"],
-        default="all",
-        help="选择评测数据集：train (15条) / test (15条) / all (默认 test_queries.json)",
-    )
-    parser.add_argument(
         "--graph",
         action="store_true",
         help="启用 GraphRAG 图检索（三路 RRF 融合）",
@@ -269,14 +250,10 @@ if __name__ == "__main__":
 
     logging.basicConfig(level=logging.WARNING)
 
-    split = args.split
-    queries_file = _resolve_queries_file(split)
-    split_label = split
-
-    print(f"\n>>> 加载数据集: {split_label}  ({queries_file})")
+    print(f"\n>>> 加载数据集: {TEST_QUERIES_FILE}")
     print(f">>> GraphRAG: {'启用' if args.graph else '关闭'}")
 
-    test_cases = load_test_cases(queries_file)
+    test_cases = load_test_cases(TEST_QUERIES_FILE)
     print(f">>> 共 {len(test_cases)} 条测试用例\n")
 
     result = run_evaluation(

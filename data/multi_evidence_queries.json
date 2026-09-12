@@ -1,0 +1,53 @@
+[
+  {
+    "query_id": "ME01",
+    "query": "如何在应用启动时建立数据库连接、并在应用关闭时把它释放掉？",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "应用生命周期（Lifespan）：启动/关闭钩子怎么写",
+        "keywords": ["lifespan", "yield", "启动", "关闭", "上下文管理器"]
+      },
+      {
+        "description": "数据库会话的创建与依赖注入用法",
+        "keywords": ["SQLModel", "Session", "engine", "依赖项", "yield"]
+      }
+    ],
+    "reasoning": "答案需要同时来自两处：advanced/events.md 定义 lifespan 的启动与关闭时机，tutorial/sql-databases.md 给出 Session 与 engine 的获取方式。只讲 lifespan 不知道连接怎么建，只讲数据库不知道何时建何时关。",
+    "golden_chunk_sources": ["advanced/events.md", "tutorial/sql-databases.md"]
+  },
+  {
+    "query_id": "ME02",
+    "query": "如何用依赖注入配合 OAuth2 密码流，做一个只有登录用户才能访问的接口？",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "OAuth2 密码流与 JWT 令牌的签发与校验",
+        "keywords": ["JWT", "token", "get_current_user", "密码哈希"]
+      },
+      {
+        "description": "依赖注入：把鉴权逻辑抽成可复用依赖（含子依赖）",
+        "keywords": ["Depends", "依赖", "子依赖", "路径操作函数"]
+      }
+    ],
+    "reasoning": "需要跨 tutorial/security/oauth2-jwt.md 与 tutorial/dependencies/：前者提供令牌获取与当前用户解析，后者说明如何用 Depends 把这段逻辑挂到路径操作上。单看任一篇都拼不出完整做法。",
+    "golden_chunk_sources": ["tutorial/security/oauth2-jwt.md", "tutorial/dependencies/index.md"]
+  },
+  {
+    "query_id": "ME03",
+    "query": "如何接收客户端上传的文件，并在响应返回之后用后台任务记录一条处理日志？",
+    "expected_status": "answered",
+    "required_sources": [
+      {
+        "description": "接收上传文件：File 与 UploadFile",
+        "keywords": ["UploadFile", "File", "表单", "python-multipart", "上传"]
+      },
+      {
+        "description": "后台任务：在响应返回之后执行",
+        "keywords": ["BackgroundTasks", "后台任务", "响应"]
+      }
+    ],
+    "reasoning": "文件接收细节在 tutorial/request-files.md，后台任务注册在 tutorial/background-tasks.md。查询同时要求两件事，命中单篇只能答一半。",
+    "golden_chunk_sources": ["tutorial/request-files.md", "tutorial/background-tasks.md"]
+  }
+]

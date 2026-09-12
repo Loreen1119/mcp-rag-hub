@@ -28,7 +28,17 @@ import operator
 
 from langgraph.graph import StateGraph, END
 
-from config import ANSWER_TOP_K, CE_TOP_K, CE_THRESHOLD, KG_RRF_WEIGHT, MIN_EVIDENCE_COUNT
+from config import (
+    ANSWER_TOP_K,
+    CE_TOP_K,
+    CE_RELATIVE_THRESHOLD,
+    CE_THRESHOLD,
+    KG_RRF_WEIGHT,
+    LLM_MAX_RETRIES,
+    LLM_MODEL,
+    LLM_TIMEOUT_SECONDS,
+    MIN_EVIDENCE_COUNT,
+)
 from src.answer_validator import AnswerStatus, AnswerValidator, RefusalReason
 from src.pipeline import get_pipeline
 
@@ -80,24 +90,76 @@ class AgentState(TypedDict):
 # ============================================================
 
 
-def _call_llm(prompt: str, system: str = "") -> str:
-    """调用本地 Ollama 模型生成文本。
+def _classify_llm_error(exc: BaseException) -> str:
+    """把 LLM 调用异常归类到 RefusalReason 的枚举值。
 
-    连接失败 / 超时 / 模型不可用时返回空字符串。
-    调用方需自行兜底：generate_answer 会回落到 _bm25_fallback，rewrite_query 会规则式改写。
+    用"类名 + 消息"做子串匹配，可同时覆盖 httpx 原始异常和被 ollama
+    包装后的异常（ollama 只暴露 RequestError / ResponseError 两类）。
+    """
+    text = f"{type(exc).__name__} {exc}".lower()
+    # 先判 connect：ConnectTimeout 说明连不上（服务没起），比"读超时"更该报连接错误
+    if "connect" in text or "refused" in text:
+        return RefusalReason.CONNECTION_ERROR.value
+    if "timeout" in text or "timed out" in text:
+        return RefusalReason.TIMEOUT.value
+    return RefusalReason.SERVICE_ERROR.value
+
+
+def _call_llm(prompt: str, system: str = "", json_mode: bool = False) -> tuple[str, str]:
+    """调用本地 Ollama 模型生成文本，返回 (content, error_reason)。
+
+    成功时 error_reason 为空串；失败时 content 为空串，error_reason 取
+    RefusalReason 的 timeout / connection_error / service_error 之一，
+    供 generate_answer 写进降级结果的 reason 字段（旧实现一律写
+    connection_error，把"模型加载慢导致超时"误报成"服务没起"）。
+
+    超时取自 config 的 LLM_TIMEOUT_SECONDS。注意旧代码根本没传 timeout，
+    而这个值原本是 20 秒，对纯 CPU 推理（3b 约 15~25 秒）必然超时。
+
+    仅对连接失败和读超时重试 LLM_MAX_RETRIES 次；服务端明确报错
+    （如模型不存在、参数非法）不重试，避免无意义等待。
+
+    json_mode=True 时用 Ollama 的 format="json" 约束输出必须是合法 JSON，
+    小模型尤其需要，可显著降低 malformed_json 率。
+
+    调用方需自行兜底：generate_answer 会回落到 _bm25_fallback，
+    rewrite_query 会规则式改写。
     """
     try:
         import ollama
+    except ImportError:
+        logger.warning("[llm] 未安装 ollama 包，跳过生成")
+        return "", RefusalReason.SERVICE_ERROR.value
 
-        messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
 
-        response = ollama.chat(model="qwen2.5:7b", messages=messages)
-        return response["message"]["content"]
-    except Exception:
-        return ""
+    kwargs: dict = {"model": LLM_MODEL, "messages": messages}
+    if json_mode:
+        kwargs["format"] = "json"
+
+    client = ollama.Client(timeout=LLM_TIMEOUT_SECONDS)
+    last_error = ""
+    for attempt_no in range(1, LLM_MAX_RETRIES + 2):
+        try:
+            response = client.chat(**kwargs)
+            content = (response.get("message") or {}).get("content") or ""
+            return content, ""
+        except Exception as exc:  # noqa: BLE001 - 需把任意异常归一成枚举原因
+            last_error = _classify_llm_error(exc)
+            logger.warning(
+                "[llm] 第 %d/%d 次调用失败 (%s): %s",
+                attempt_no, LLM_MAX_RETRIES + 1, last_error, exc,
+            )
+            if last_error not in (
+                RefusalReason.CONNECTION_ERROR.value,
+                RefusalReason.TIMEOUT.value,
+            ):
+                break  # 服务端明确报错，重试无意义
+
+    return "", last_error
 
 
 # ============================================================
@@ -148,6 +210,18 @@ def retrieve(state: AgentState) -> dict:
         rrf_weights=rrf_weights,
     )
 
+    # 相对阈值过滤：CE 分数低于 top1 一定比例的视为噪声丢弃。
+    # 动机：CE_TOP_K 硬取前 N 条会把无关 chunk 一起塞进 context（实测 bge-reranker 下
+    # 正解 0.699 vs 噪声 0.0007，差 1000 倍，但 top5 仍保留噪声）。保底保留 top1。
+    ce_results = output["cross_encoder"]
+    if ce_results:
+        top1 = ce_results[0].score
+        if top1 > 0:
+            kept = [r for r in ce_results if r.score >= CE_RELATIVE_THRESHOLD * top1]
+        else:
+            kept = ce_results[:1]
+        ce_results = kept or ce_results[:1]
+
     chunks = [
         {
             "rank": i + 1,
@@ -157,7 +231,7 @@ def retrieve(state: AgentState) -> dict:
             "headings": r.chunk.metadata.get("heading_breadcrumb", ""),
             "chunk_id": r.chunk.chunk_id,
         }
-        for i, r in enumerate(output["cross_encoder"])
+        for i, r in enumerate(ce_results)
     ]
 
     best_score = chunks[0]["score"] if chunks else 0.0
@@ -253,7 +327,7 @@ def rewrite_query(state: AgentState) -> dict:
 
 改写查询:"""
 
-    rewritten = _call_llm(prompt)
+    rewritten, _llm_error = _call_llm(prompt)
 
     # fallback: LLM 不可用时，规则式追加关键词
     if not rewritten:
@@ -311,6 +385,9 @@ def generate_answer(state: AgentState) -> dict:
             f"内容: {ch['content']}"
         )
     context = "\n\n".join(context_parts)
+    # 编号上限必须跟随实际证据条数：相对阈值过滤后 chunks 可能不足 ANSWER_TOP_K 条，
+    # 若 prompt 仍写死 1..ANSWER_TOP_K，模型会引用不存在的编号 → 越界被 validator 拒。
+    n_evidence = len(chunks[:ANSWER_TOP_K])
 
     system = "你是一个知识检索助手。只基于证据回答，不要编造。必须只输出 JSON，不要 Markdown。"
 
@@ -325,18 +402,21 @@ def generate_answer(state: AgentState) -> dict:
 ## 要求
 
 请输出 JSON：{{"status":"answered|insufficient_evidence", "answer":"...", "used_source_ids":[1,2], "reason":"..."}}。
-仅当证据足够时使用 answered，并在 used_source_ids 中填写实际引用的编号；否则使用 insufficient_evidence。控制在 300 字以内。"""
+仅当证据足够时使用 answered，并在 used_source_ids 中填写实际引用的编号；否则使用 insufficient_evidence。控制在 300 字以内。
+注意：used_source_ids 必须是数字数组（如 [1,2]），不要写成字符串（如 ["1","2"]）；本轮共有 {n_evidence} 条证据，编号只能用 1 到 {n_evidence}。"""
 
-    raw_answer = _call_llm(prompt, system=system)
+    raw_answer, llm_error = _call_llm(prompt, system=system, json_mode=True)
     if raw_answer:
         validated = AnswerValidator(len(chunks[:ANSWER_TOP_K]), MIN_EVIDENCE_COUNT).validate(raw_answer)
     else:
         # LLM 不可用：回落到 BM25 原文拼接，让用户至少看到检索到的证据内容。
+        # reason 用真实错误类型（timeout/connection_error/service_error），
+        # 便于区分"服务没起"和"模型加载超时"。
         validated = {
             "status": AnswerStatus.GENERATION_UNAVAILABLE.value,
             "answer": _bm25_fallback(chunks[:ANSWER_TOP_K]),
             "used_source_ids": [],
-            "reason": RefusalReason.CONNECTION_ERROR.value,
+            "reason": llm_error or RefusalReason.SERVICE_ERROR.value,
         }
 
     log_msg = f"[generate] attempt={attempt} chunks_used={min(ANSWER_TOP_K, len(chunks))} status={validated['status']}"
