@@ -429,7 +429,9 @@ if __name__ == "__main__":
     # 1. 加载文档
     chunks = process_directory()
     if not chunks:
-        print("docs/ 目录下无文档，请先放置测试文件")
+        from config import DOCS_DIR
+
+        print(f"语料目录下无文档: {DOCS_DIR}")
         raise SystemExit(1)
 
     # 2. 初始化两路检索器

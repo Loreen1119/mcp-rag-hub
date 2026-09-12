@@ -1,6 +1,11 @@
-# docs/ — mcp-rag-hub 知识库数据源
+# docs/ — 项目自身的文档（人读）
 
-> 这里放技术参考文档，会被 RAG 管线加载和索引。个人踩坑笔记在 [`journal/`](../journal/README.md)，系统学习资料在 [`docs_knowledge/`](../docs_knowledge/README.md)。
+> ⚠️ **这里已经不再是 RAG 的知识库语料。**
+> 知识库语料已迁到 [`corpora/`](../corpora/README.md)（当前默认 `corpora/fastapi-zh`，真实第三方文档），
+> 代码通过 `config.DOCS_DIR` 读取，可用环境变量 `MCP_RAG_CORPUS` 切换。
+> 本目录只放项目自己的技术参考与速查笔记，供人阅读，不参与索引。
+>
+> 个人踩坑笔记在 [`journal/`](../journal/README.md)，系统学习资料在 [`docs_knowledge/`](../docs_knowledge/README.md)。
 
 ## 你关心什么？
 

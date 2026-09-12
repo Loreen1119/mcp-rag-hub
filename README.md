@@ -8,7 +8,7 @@
   <em>输入一条查询，界面同时展示关键词、语义、融合、精排四个阶段的检索结果</em>
 </div>
 
-全链路自研（非调现成 RAG 框架）：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 36 条评测。
+全链路自研（非调现成 RAG 框架）：文档解析 → BM25+向量混合召回 → RRF 融合 → Cross-Encoder 精排 → LangGraph 代理编排 → FastMCP 工具封装，配 18 条可答 + 10 条拒答 + 3 条多证据共三套验收集。
 
 ## 功能
 
@@ -16,7 +16,7 @@
 - **Streamlit 交互** — 四标签页逐阶段展示 BM25/向量/RRF/CE 检索结果，输入一条查询即可看到每路召回与最终排序
 - **LangGraph 代理** — 五节点状态机，条件路由，查询改写与自我纠错
 - **MCP 工具** — FastMCP 封装四个工具接口，可接入 Claude Desktop 等任何 MCP 客户端
-- **完整评测** — 36 条 Golden Test Set，MRR/Hit@K/Precision@K/Recall@K + 自实现 LLM-as-Judge + 消融实验
+- **完整评测** — 18 条 Golden Test Set（E/S/M/G 四类分层），MRR/Hit@K/Precision@K/Recall@K + 消融实验 + 自实现 LLM-as-Judge；另有 10 条拒答集与 3 条多证据集用于端到端验收
 - **知识图谱检索**（可选实验功能，默认关闭）— LLM 三元组抽取 + 有向图构建，用 `ENABLE_KG` 开关启用
 
 **四阶段检索界面实拍**：
@@ -29,7 +29,7 @@
 
 ## 快速开始
 
-**前提**：Python 3.11+。知识库文件放在 `docs/` 目录（内置少量示例文档），首次运行会自动解析并构建索引。
+**前提**：Python 3.11+。知识库语料放在 `corpora/<语料名>/` 目录（默认 `corpora/fastapi-zh`，仓库内置一份真实的 FastAPI 中文文档，122 个文件 / 677KB），首次运行会自动解析并构建索引。切换语料用环境变量 `MCP_RAG_CORPUS`（每份语料使用独立的 Chroma 集合，互不覆盖；详见 [corpora/README.md](corpora/README.md)）。
 
 ```bash
 # 1. 创建虚拟环境（Windows）
@@ -102,12 +102,16 @@ mcp-rag-hub/
 │       ├── agent_eval.py      # Agent 改写评测
 │       └── experiments.py     # 消融实验与数据分析
 │
-├── data/
-│   ├── test_queries_all.json  # 全部 36 条（E01-E08, S01-S08, M01-M08, G01-G12）
-│   ├── train_queries.json     # 训练集 18 条（按类别难度平衡分配）
-│   └── test_queries.json      # 测试集 18 条（与 train 互补，不参与调参）
+├── corpora/                   # 知识库语料（每份语料一个子目录，见 corpora/README.md）
+│   └── fastapi-zh/            # 当前生效语料：FastAPI 中文文档 122 篇 / 1445 chunk
 │
-├── docs/                      # 知识库数据源
+├── data/
+│   ├── test_queries.json          # 可答 Golden Test Set 18 条（E/S/M/G 四类分层）
+│   ├── unanswerable_queries.json  # 拒答集 10 条（near_miss / out_of_domain / missing_*）
+│   ├── multi_evidence_queries.json# 多证据集 3 条（每条需跨 2 篇文档才能答全）
+│   └── knowledge_triples.jsonl    # KG 三元组缓存（可选实验功能 ENABLE_KG）
+│
+├── docs/                      # 项目自身文档（人读的，不参与索引）
 ├── journal/                   # 踩坑日志与学习笔记
 ├── docs_knowledge/            # 项目文档与章节笔记
 ├── experiments/               # 实验结果 JSON
@@ -118,8 +122,8 @@ mcp-rag-hub/
 
 ## 关键数据
 
-> 基于 36 条四类分层 Golden Test Set（exact_match / semantic / mixed / graph），train/test 严格分离，test 集不参与调参。
-> 以下为 2026-08-04 清理知识库（过程笔记迁出 docs/）并重写测试集后的**最终基线**，实验过程详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
+> 基于 18 条四类分层 Golden Test Set（exact_match / semantic / mixed / graph），每条 `golden_answer` 都能在 `golden_chunk_sources` 指定的文件正文里回查到原文依据（`python scripts/validate_golden.py` 校验，当前 0 问题）。
+> 以下为 2026-09-12 语料迁移至 `corpora/fastapi-zh` 后的**当前基线**。语料更换后旧基线（基于项目自身 `docs/`）已失效，实验过程详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
 
 ### Test 集（18 条）各阶段指标
 
@@ -143,15 +147,16 @@ mcp-rag-hub/
 | 层次 | 技术 |
 |------|------|
 | 语言 | Python 3.11+ |
-| Embedding | sentence-transformers/all-MiniLM-L6-v2（384 维） |
-| Cross-Encoder | cross-encoder/ms-marco-MiniLM-L-6-v2 |
+| Embedding | BAAI/bge-small-zh-v1.5（512 维，中文优化） |
+| Cross-Encoder | BAAI/bge-reranker-base（中文优化） |
 | 向量库 | ChromaDB（HNSW 索引, cosine 距离） |
 | 关键词检索 | rank-bm25 + jieba 分词 |
 | 图检索 | NetworkX 实体共现图 + 子图遍历 |
 | 融合 | RRF（Reciprocal Rank Fusion, k=60） |
 | 代理 | LangGraph（声明式状态机, 条件路由） |
-| LLM | Ollama + qwen2.5:7b |
-| 评测 | 自实现 LLM-as-Judge（Faithfulness / Answer Relevancy / Context Recall，Ollama qwen2.5:7b 评分） |
+| LLM（生成） | Ollama + qwen2.5:3b（纯 CPU 推理；7b 在本机开发环境会 OOM） |
+| LLM（裁判） | Ollama + qwen2.5:7b（`JUDGE_MODEL`，仅跑评测时加载） |
+| 评测 | 自实现 LLM-as-Judge（Faithfulness / Answer Relevancy / Context Recall） |
 | MCP | FastMCP 2.0（stdio 传输） |
 | UI | Streamlit |
 

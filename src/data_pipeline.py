@@ -28,12 +28,19 @@ SUPPORTED_SUFFIXES = {".pdf", ".md", ".markdown", ".txt", ".py"}
 
 
 def iter_supported_docs(dir_path: str | Path) -> list[Path]:
-    """返回目录下所有受支持文档（与 process_directory 的 iterdir 平扫一致）。"""
+    """递归返回目录下所有受支持文档（跳过点开头的隐藏文件/目录）。
+
+    必须递归：真实语料通常是分层目录（如 FastAPI 中文档的
+    tutorial/ advanced/ how-to/ deployment/），平扫会漏掉绝大部分文件。
+    corpus_hash 复用本函数，扫描口径变化时 hash 自动同步。
+    """
     dir_path = Path(dir_path)
     return sorted(
         p
-        for p in dir_path.iterdir()
-        if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES
+        for p in dir_path.rglob("*")
+        if p.is_file()
+        and p.suffix.lower() in SUPPORTED_SUFFIXES
+        and not any(part.startswith(".") for part in p.relative_to(dir_path).parts)
     )
 
 
@@ -531,14 +538,28 @@ def process_document(
     file_path: str | Path,
     chunk_size: int = CHUNK_SIZE,
     overlap: int = CHUNK_OVERLAP,
+    rel_root: str | Path | None = None,
 ) -> list[Chunk]:
-    """加载文档 → 切片 → 附加元数据 → 返回 List[Chunk]。"""
+    """加载文档 → 切片 → 附加元数据 → 返回 List[Chunk]。
+
+    rel_root: 语料根目录。传了就把 metadata["source"] 记成相对该根的路径
+    （如 "tutorial/first-steps.md"），否则只记文件名。分层语料必须传——
+    否则 11 个 index.md 会共用同一个 source 和同一个 chunk_id。
+    """
     path = Path(file_path)
     full_text = load_document(path)
 
     if not full_text:
         logger.warning("文档内容为空，无切片产出: %s", path.name)
         return []
+
+    # source 既进 metadata（给人看/评测匹配），也参与 chunk_id 生成（必须唯一）
+    source = path.name
+    if rel_root is not None:
+        try:
+            source = Path(path).resolve().relative_to(Path(rel_root).resolve()).as_posix()
+        except ValueError:
+            source = path.name
 
     suffix = path.suffix.lower()
 
@@ -567,7 +588,7 @@ def process_document(
     results: list[Chunk] = []
     for idx, rc in enumerate(raw_chunks):
         meta: dict = {
-            "source": path.name,
+            "source": source,
             "chunk_index": idx,
             "token_count": count_tokens(rc["text"]),
             "source_type": source_type,
@@ -581,7 +602,7 @@ def process_document(
         chunk = Chunk(
             content=rc["text"],
             metadata=meta,
-            chunk_id=make_chunk_id(path.name, idx),
+            chunk_id=make_chunk_id(source, idx),
         )
         results.append(chunk)
 
@@ -601,14 +622,17 @@ def process_directory(
     chunk_size: int = CHUNK_SIZE,
     overlap: int = CHUNK_OVERLAP,
 ) -> list[Chunk]:
-    """批量处理目录下所有支持的文档。"""
+    """批量处理目录下所有支持的文档（递归子目录）。
+
+    metadata["source"] 记为相对 dir_path 的路径，保证分层语料下 source 唯一。
+    """
     dir_path = Path(dir_path)
     if not dir_path.exists():
         raise FileNotFoundError(f"目录不存在: {dir_path}")
 
     all_chunks: list[Chunk] = []
     for file_path in iter_supported_docs(dir_path):
-        chunks = process_document(file_path, chunk_size, overlap)
+        chunks = process_document(file_path, chunk_size, overlap, rel_root=dir_path)
         all_chunks.extend(chunks)
 
     logger.info(
@@ -624,18 +648,20 @@ def process_directory(
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(message)s")
 
-    samples = list(Path("docs").glob("sample_*"))
-    if not samples:
-        print("docs/ 目录下无测试文档，请先放置 .txt / .md / .pdf 文件")
+    # 演示：拿语料目录里按文件名排序的第一个文档跑一遍切片
+    docs = iter_supported_docs(DOCS_DIR)
+    if not docs:
+        print(f"语料目录下无文档: {DOCS_DIR}")
+        print("请先放入 .md / .markdown / .txt / .pdf / .py 文件，或用 MCP_RAG_CORPUS 切换语料")
         raise SystemExit(1)
 
-    for sample in sorted(samples):
+    for sample in docs[:1]:
         print(f"\n{'='*60}")
-        print(f"  源文件: {sample.name}")
+        print(f"  源文件: {sample.relative_to(DOCS_DIR).as_posix()}")
         print(f"  配置  : chunk_size={CHUNK_SIZE} tokens  overlap={CHUNK_OVERLAP} tokens")
         print(f"{'='*60}\n")
 
-        chunks = process_document(sample)
+        chunks = process_document(sample, rel_root=DOCS_DIR)
 
         for c in chunks:
             print(

@@ -467,7 +467,9 @@ if __name__ == "__main__":
 
     chunks = process_directory()
     if not chunks:
-        print("docs/ 目录下无文档，请先放置测试文件")
+        from config import DOCS_DIR
+
+        print(f"语料目录下无文档: {DOCS_DIR}")
         raise SystemExit(1)
 
     gr = GraphRetriever(chunks)
