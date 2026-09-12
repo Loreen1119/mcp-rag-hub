@@ -55,6 +55,6 @@ docs_knowledge/
 ```
 
 > ⚠️ 正文中的模型名与指标基线以 `config.py` 与 [ch09](./chapters/ch09-消融实验与数据分析.md) 为准。
-> 项目在 2026-09-12 把语料从项目自身 `docs/` 换成了 `corpora/fastapi-zh`，
-> 部分早期文档（`技术视角详解.md`、`面试背诵稿.md`、`resume-项目一.md` 及 ch02/03/05/06/08/10）
-> 仍含旧语料数字（如 `all-MiniLM-L6-v2`、`ms-marco`、"3 Chunk"、"36 条"），**尚未逐篇对齐**。
+> 项目在 2026-09-12 把语料从项目自身 `docs/` 换成了 `corpora/fastapi-zh`。
+> **已对齐**：`README.md`（仓库根）、`面试背诵稿.md`、`resume-项目一.md`、`开发过程中遇到的问题.md`、ch09。
+> **仍未对齐**：`技术视角详解.md`、`项目详解.md` 及 ch02/03/05/06/08/10 —— 这些正文里仍有旧模型名（`all-MiniLM-L6-v2`、`ms-marco-MiniLM`）和旧口径（"36 条"、train/test 拆分、CE 阈值 3.0、"3 Chunk" 语料），引用前需先核对 `config.py`。
