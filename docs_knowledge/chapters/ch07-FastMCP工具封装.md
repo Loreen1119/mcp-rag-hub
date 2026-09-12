@@ -54,21 +54,42 @@ def my_tool(param: str, count: int = 5) -> list[dict]:
 
 MCP Server 是长驻进程。RAG 管线加载模型、建索引代价高（SentenceTransformer 冷加载约 3 秒），如果放在模块 `import` 阶段执行，Server 启动时就会卡顿。客户端连接时要等待 Server 就绪，启动慢会触发连接超时导致握手失败。
 
-因此必须**懒加载**——在第一次 Tool 调用时才初始化，而不是 import 时就跑：
+因此采用**懒加载**——在第一次 Tool 调用时才初始化，而不是 import 时就跑。当前实现还把初始化委托给全项目共享的 `src.pipeline.get_pipeline()`：
 
 ```python
-_initialized: bool = False
+_ctx = None
 
 def _ensure_pipeline():
-    global _initialized
-    if _initialized:
-        return
-    # 首次调用：加载模型 + 建索引
-    ...
-    _initialized = True
+    global _ctx
+    if _ctx is None:
+        _ctx = get_pipeline()  # 内部由 threading.Lock 保护
+    return _ctx
 ```
 
 程序启动时秒开完成轻量级握手，直到 Agent 第一次真正调用工具时才装载重型资产。
+
+### 5. 两层 `_ctx` 不是重复初始化
+
+`src/mcp_server.py` 也有一个 `_ctx`，`src.pipeline.py` 内部同样有 `_ctx`，但两者职责不同：
+
+- MCP 层 `_ctx`：MCP 适配层的本地引用，方便四个 Tool 复用 `PipelineContext`；
+- pipeline 层 `_ctx`：进程内的权威单例。Agent、Streamlit、评测和 MCP 都通过 `get_pipeline()` 从这里获取同一批 BM25、Vector、Graph 和 Fusion 组件。
+
+锁必须放在 `get_pipeline()` 内部，而不是只放 MCP 层。因为 Agent、前端和评测代码会绕过 `mcp_server.py` 直接调用 `get_pipeline()`；只有在共享资源的所有入口汇合处加锁，才能防止任何入口发生并发重复初始化。
+
+`get_pipeline()` 使用双重检查：外层检查让已经初始化后的请求不必每次拿锁；进入锁后再次检查，防止等待锁的请求在前一个请求完成构建后又重复构建一次。
+
+```python
+if _ctx is not None and _ctx_signature == sig:
+    return _ctx
+
+with _build_lock:
+    if _ctx is not None and _ctx_signature == sig:
+        return _ctx
+    # 初始化并保存 PipelineContext
+```
+
+**面试表述**："MCP 层 `_ctx` 是适配层缓存，`src.pipeline` 的 `_ctx` 才是全项目共享的权威单例。锁放在 `get_pipeline()` 内部，因为它是 MCP、Agent、前端和评测的共同入口；双重检查兼顾初始化后的低锁开销和并发首次调用不重复构建。"
 
 **追问应对**：「为什么不在 `if __name__ == "__main__"` 里初始化？」— MCP Server 在 Client 连接时是作为子进程启动的，模块 import 阶段不做重操作可以加快启动速度。而且懒加载保证了无论用哪种 transport（stdio/sse），管线只在真正需要时才构建。
 
@@ -106,11 +127,13 @@ def search_knowledge(
     top_k: Annotated[int, "返回的结果数量，默认 5"] = 5,
 ) -> list[dict]:
     """执行完整检索管线：BM25 + 向量 → RRF 融合 → Cross-Encoder 精排。"""
-    _ensure_pipeline()        # 懒加载拦截
+    ctx = _ensure_pipeline()  # 懒加载；实际初始化由 src.pipeline 统一负责
 
-    bm25_results = _bm25.search(query)
-    vector_results = _vector.search(query)
-    output = _pipeline.run(bm25_results, vector_results, query, ce_top_k=top_k)
+    bm25_results = ctx.bm25.search(query)
+    vector_results = ctx.vector.search(query)
+    graph_results = ctx.graph.search(query) if ctx.graph else None
+    rrf_weights = [1.0, 1.0, KG_RRF_WEIGHT] if ctx.graph else None
+    output = ctx.pipeline.run(bm25_results, vector_results, query, ce_top_k=top_k, graph_results=graph_results, rrf_weights=rrf_weights)
 
     # 直接 inline 构造返回 dict，控制字段和截断长度
     return [
@@ -153,9 +176,9 @@ def list_documents() -> list[dict]:
 
 
 @mcp.tool(description="根据 chunk_id 获取切片的完整内容和元数据。")
-def get_chunk(chunk_id: Annotated[str, "切片唯一标识符 (8 位 hex)"]) -> dict | None:
-    _ensure_pipeline()
-    for ch in _chunks:
+def get_chunk(chunk_id: Annotated[str, "切片唯一标识符 (16 位 hex)"]) -> dict | None:
+    ctx = _ensure_pipeline()
+    for ch in ctx.chunks:
         if ch.chunk_id == chunk_id:
             return {"chunk_id": ch.chunk_id, "content": ch.content, "metadata": ch.metadata}
     return None
@@ -163,8 +186,8 @@ def get_chunk(chunk_id: Annotated[str, "切片唯一标识符 (8 位 hex)"]) -> 
 
 @mcp.tool(description="返回知识库中已索引的切片总数。")
 def get_chunk_count() -> int:
-    _ensure_pipeline()
-    return len(_chunks)
+    ctx = _ensure_pipeline()
+    return len(ctx.chunks)
 ```
 
 这四个工具就是微服务积木——大模型 Router 想要数数就调 count，想查原文就调 get_chunk，工具职责单一、参数干净。
@@ -181,7 +204,7 @@ def get_chunk_count() -> int:
 
 **第一是工具的细粒度设计**。我没有搞一个包揽所有功能的巨无霸接口，而是拆成了 `search_knowledge`、`get_chunk_count` 等 4 个极简小工具。这就好比给下游的大模型 Router 提供了精准的微服务积木——想要数数就调 count，想要检索就调 search。参数极度干净，从物理层面掐断了由于返回体过大、字段冗余导致大模型产生幻觉的可能。
 
-**第二是管线懒加载机制**。因为我们的 RAG 管线要加载 SentenceTransformer 模型和 ChromaDB 索引，属于重型操作。MCP Server 在 Client 连接时作为子进程瞬间拉起，如果我把加载逻辑放在 `import` 阶段，启动时就会卡顿，可能导致客户端连接超时。我通过全局状态锁实现了懒加载，让服务启动时秒开完成握手，Agent 第一次真正按下检索键时才在后台装载模型。
+**第二是管线懒加载机制**。因为我们的 RAG 管线要加载 SentenceTransformer 模型和 ChromaDB 索引，属于重型操作。MCP Server 在 Client 连接时作为子进程拉起，如果把加载逻辑放在 `import` 阶段，启动时就会卡顿，可能导致客户端连接超时。因此服务启动时只创建 FastMCP 对象，第一次 Tool 调用时通过 `src.pipeline.get_pipeline()` 装载模型和索引。`get_pipeline()` 内部使用双重检查和 `threading.Lock`，保证并发首次调用只构建一次；后续 MCP、Agent、前端和评测入口都复用同一进程内上下文。
 
 最终，这个 MCP Server 与我之前写的 Streamlit 前端形成了完美的关注点分离——Streamlit 是面向人类肉眼的'前端精装房'，MCP 是面向 AI Agent 脑子的'结构化裸接口'。同一套核心 RAG 管线，多端解耦复用。"
 
@@ -189,7 +212,7 @@ def get_chunk_count() -> int:
 
 **面试官**："你的工具返回数据结构是怎么设计的？"
 
-**回答**："返回纯 Python dict，而非内部的 Chunk 对象。因为 MCP 传输层是做 JSON 序列化的——Chunk 对象里包含 SentenceTransformer 的 embedding 向量（384 维浮点数组），塞进 JSON 会导致返回体爆炸。我手工控制字段：`content[:500]` 截断正文、保留 `rrf_score` 和 `ce_score` 双分并存供 Debug 回溯。将来换底层数据结构，Tool 的返回 Schema 不变，Client 完全不受影响。"
+**回答**："返回纯 Python dict，而非内部的 Chunk 对象，便于 MCP 传输层稳定地做 JSON 序列化并控制公开字段。当前返回 `content[:500]`、来源、标题、排名、`rrf_score`、`ce_score` 和 `chunk_id`；截断正文可以控制返回体和下游上下文大小，同时保留足够内容供 Agent 判断。工具内部仍保留完整 Chunk，`get_chunk` 可按 16 位确定性 ID 获取完整内容。"
 
 ---
 
