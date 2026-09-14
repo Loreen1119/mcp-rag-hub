@@ -134,8 +134,11 @@ def _render_answer(answer_data, chunks):
 
 
 st.title("企业知识库问答 Agent")
-st.caption("混合检索 + 证据门控 + 可追溯引用")
-query = st.text_input("输入查询", placeholder="例如：RRF 如何工作？")
+st.caption("混合检索 → RRF 融合 → 精排重排序 · 答案带 [n] 引用编号 · 证据不足会明确拒答")
+# 占位符用当前语料（FastAPI 中文文档）里确实能答的问题 ——
+# 之前写的是「RRF 如何工作？」，那是本项目自己的技术概念，在 FastAPI 文档里没有答案，
+# 照着提示问会直接吃一个拒答，演示时第一印象就错了。
+query = st.text_input("输入查询", placeholder="例如：如何让某段耗时的处理在响应返回之后再执行？")
 
 if query:
     with st.spinner("正在检索并生成回答..."):
