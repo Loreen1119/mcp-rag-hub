@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "note": "Dedicated test cases for multi-source citation coverage, NOT part of 36-case benchmark",
+    "expected_use": "Verify that LLM-generated answers can cite multiple sources [1][2] when necessary",
+    "id_prefix": "ME",
+    "id_conflict_note": "Renamed from M01-M03 to ME01-ME03 to avoid collision with original M01-M08 in answerable set"
+  },
+  "queries": [
+    {
+      "query_id": "ME01",
+      "original_id": "ME01",
+      "query": "解释 RRF 融合和 Cross-Encoder 精排如何协同工作来改进检索效果",
+      "coverage_in_top3": true,
+      "required_sources_status": [
+        {
+          "description": "RRF 融合的原理与实现",
+          "keywords": [
+            "RRF",
+            "rank fusion",
+            "BM25",
+            "vector",
+            "分数归一化"
+          ],
+          "covered_in_top3": true,
+          "covered_in_top5": true
+        },
+        {
+          "description": "Cross-Encoder 精排的作用与局限",
+          "keywords": [
+            "Cross-Encoder",
+            "重排序",
+            "ms-marco",
+            "MiniLM",
+            "Top-K"
+          ],
+          "covered_in_top3": true,
+          "covered_in_top5": true
+        }
+      ],
+      "top3_source_docs": [
+        "sample_rag_paper.md",
+        "sample_notes.txt",
+        "rag-intro.md"
+      ],
+      "top5_source_docs": [
+        "sample_rag_paper.md",
+        "sample_notes.txt",
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md"
+      ],
+      "reasoning": "完整答案需要同时说明 RRF 如何融合多路召回、Cross-Encoder 如何在融合基础上进行精排"
+    },
+    {
+      "query_id": "ME02",
+      "original_id": "ME02",
+      "query": "为什么这个项目同时采用 BM25 和向量检索，而不是只用其中一种？",
+      "coverage_in_top3": true,
+      "required_sources_status": [
+        {
+          "description": "BM25 关键词检索的优势与局限",
+          "keywords": [
+            "BM25",
+            "精确匹配",
+            "词频",
+            "jieba",
+            "分词"
+          ],
+          "covered_in_top3": true,
+          "covered_in_top5": true
+        },
+        {
+          "description": "向量语义检索的优势与互补性",
+          "keywords": [
+            "embedding",
+            "向量",
+            "语义",
+            "ChromaDB",
+            "相似度"
+          ],
+          "covered_in_top3": true,
+          "covered_in_top5": true
+        }
+      ],
+      "top3_source_docs": [
+        "sample_rag_paper.md",
+        "sample_rag_paper.md",
+        "sample_notes.txt"
+      ],
+      "top5_source_docs": [
+        "sample_rag_paper.md",
+        "sample_rag_paper.md",
+        "sample_notes.txt",
+        "ast-chunking-plan.md",
+        "rag-intro.md"
+      ],
+      "reasoning": "需要对比两种方法的优劣，说明为什么混合检索优于单一方法"
+    },
+    {
+      "query_id": "ME03",
+      "original_id": "ME03",
+      "query": "LangGraph Agent 的状态机设计如何利用检索结果来改写查询和生成答案？",
+      "coverage_in_top3": false,
+      "required_sources_status": [
+        {
+          "description": "LangGraph 状态机的五节点设计与条件路由",
+          "keywords": [
+            "LangGraph",
+            "state machine",
+            "analyze",
+            "retrieve",
+            "check_results"
+          ],
+          "covered_in_top3": true,
+          "covered_in_top5": true
+        },
+        {
+          "description": "查询改写和答案生成的具体逻辑",
+          "keywords": [
+            "rewrite_query",
+            "generate_answer",
+            "Ollama",
+            "LLM"
+          ],
+          "covered_in_top3": false,
+          "covered_in_top5": false
+        }
+      ],
+      "top3_source_docs": [
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "sample_notes.txt"
+      ],
+      "top5_source_docs": [
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "sample_notes.txt",
+        "ast-chunking-plan.md",
+        "sample_rag_paper.md"
+      ],
+      "reasoning": "需要同时理解状态机的整体架构和每个关键节点的业务逻辑"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "description": "参数敏感性网格扫描",
+  "sweeps": [
+    {
+      "chunk_size": 256,
+      "overlap": 64,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 1.0,
+      "hit@5": 1.0,
+      "precision@5": 0.7867,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 256,
+      "overlap": 128,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 0.9667,
+      "hit@5": 1.0,
+      "precision@5": 0.7333,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 512,
+      "overlap": 64,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 1.0,
+      "hit@5": 1.0,
+      "precision@5": 0.7333,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 512,
+      "overlap": 128,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 1.0,
+      "hit@5": 1.0,
+      "precision@5": 0.7333,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 512,
+      "overlap": 256,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 0.9667,
+      "hit@5": 1.0,
+      "precision@5": 0.7333,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 1024,
+      "overlap": 64,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 0.7,
+      "hit@5": 1.0,
+      "precision@5": 0.6,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 1024,
+      "overlap": 128,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 0.7,
+      "hit@5": 1.0,
+      "precision@5": 0.6,
+      "recall@5": 1.0
+    },
+    {
+      "chunk_size": 1024,
+      "overlap": 256,
+      "rrf_k": 60,
+      "ce_top_k": 5,
+      "mrr": 0.7,
+      "hit@5": 1.0,
+      "precision@5": 0.6,
+      "recall@5": 1.0
+    }
+  ],
+  "best_config": {
+    "chunk_size": 256,
+    "overlap": 64,
+    "mrr": 1.0
+  }
+}

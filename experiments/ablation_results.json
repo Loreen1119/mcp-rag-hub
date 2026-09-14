@@ -1,0 +1,75 @@
+{
+  "description": "模块隔离消融: 各配置独立运行，非累积",
+  "results": {
+    "bm25_only": {
+      "mrr": 0.9333,
+      "hit@5": 0.9333,
+      "precision@5": 0.7611,
+      "recall@5": 0.9333,
+      "delta_mrr": 0.0,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": 0.0,
+      "delta_recall@5": 0.0
+    },
+    "vector_only": {
+      "mrr": 0.9667,
+      "hit@5": 1.0,
+      "precision@5": 0.76,
+      "recall@5": 1.0,
+      "delta_mrr": 0.0334,
+      "delta_hit@5": 0.0667,
+      "delta_precision@5": -0.0011,
+      "delta_recall@5": 0.0667
+    },
+    "graph_only": {
+      "mrr": 0.9556,
+      "hit@5": 1.0,
+      "precision@5": 0.8933,
+      "recall@5": 1.0,
+      "delta_mrr": -0.0111,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": 0.1333,
+      "delta_recall@5": 0.0
+    },
+    "concat_naive": {
+      "mrr": 0.9667,
+      "hit@5": 1.0,
+      "precision@5": 0.8267,
+      "recall@5": 1.0,
+      "delta_mrr": 0.0111,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": -0.0666,
+      "delta_recall@5": 0.0
+    },
+    "rrf_fusion": {
+      "mrr": 0.9222,
+      "hit@5": 1.0,
+      "precision@5": 0.8133,
+      "recall@5": 1.0,
+      "delta_mrr": -0.0445,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": -0.0134,
+      "delta_recall@5": 0.0
+    },
+    "full_pipeline": {
+      "mrr": 1.0,
+      "hit@5": 1.0,
+      "precision@5": 0.7867,
+      "recall@5": 1.0,
+      "delta_mrr": 0.0778,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": -0.0266,
+      "delta_recall@5": 0.0
+    },
+    "triple_fusion": {
+      "mrr": 1.0,
+      "hit@5": 1.0,
+      "precision@5": 0.7867,
+      "recall@5": 1.0,
+      "delta_mrr": 0.0,
+      "delta_hit@5": 0.0,
+      "delta_precision@5": 0.0,
+      "delta_recall@5": 0.0
+    }
+  }
+}

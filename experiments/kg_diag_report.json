@@ -1,0 +1,912 @@
+{
+  "summary": {
+    "exact_match": {
+      "count": 4,
+      "mrr@5": 0.75,
+      "hit@5": 0.75
+    },
+    "semantic": {
+      "count": 4,
+      "mrr@5": 0.0,
+      "hit@5": 0.0
+    },
+    "mixed": {
+      "count": 4,
+      "mrr@5": 0.125,
+      "hit@5": 0.25
+    },
+    "graph": {
+      "count": 6,
+      "mrr@5": 0.125,
+      "hit@5": 0.3333333333333333
+    }
+  },
+  "overall": {
+    "count": 18,
+    "mrr@5": 0.2361111111111111,
+    "hit@5": 0.3333333333333333
+  },
+  "cases": [
+    {
+      "id": "E02",
+      "category": "exact_match",
+      "query": "Cross-Encoder 重排序",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "Cross",
+        "Encoder",
+        "排序"
+      ],
+      "matched_nodes": [
+        "Cross-Encoder",
+        "Cross-Encoder 重排序",
+        "Cross-Encoder 重排",
+        "多路排序结果",
+        "Cross-Encoder 精排",
+        "Cross-Encoder重排序模型",
+        "重排序"
+      ],
+      "top_k_sources": [
+        "sample_notes.txt",
+        "rag-intro.md",
+        "rag-intro.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "2026-07-31-dify-rag-tuning.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        1.0,
+        0.5,
+        0.5
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "E04",
+      "category": "exact_match",
+      "query": "Faithfulness 忠实度指标",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "Faithfulness",
+        "忠实度",
+        "指标"
+      ],
+      "matched_nodes": [
+        "Faithfulness"
+      ],
+      "top_k_sources": [
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0
+      ],
+      "hit_rank": 1,
+      "num_results": 1
+    },
+    {
+      "id": "E06",
+      "category": "exact_match",
+      "query": "BGE-M3 和 sentence-transformers 嵌入模型",
+      "golden_sources": [
+        "sample_notes.txt"
+      ],
+      "query_entities": [
+        "BGE",
+        "M3",
+        "Sentence",
+        "Transformers",
+        "嵌入",
+        "模型"
+      ],
+      "matched_nodes": [
+        "BGE",
+        "M3-embed",
+        "模型",
+        "Sentence-transformers的模型",
+        "Sentence-transformers",
+        "BGE-M3",
+        "Sentence-BERT",
+        "嵌入模型"
+      ],
+      "top_k_sources": [
+        "sample_notes.txt",
+        "sample_notes.txt",
+        "embedding-guide.md",
+        "embedding-guide.md",
+        "embedding-guide.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.75,
+        0.5,
+        0.5
+      ],
+      "hit_rank": 1,
+      "num_results": 5
+    },
+    {
+      "id": "E08",
+      "category": "exact_match",
+      "query": "PyMuPDF 和 Python-Markdown 文档解析工具",
+      "golden_sources": [
+        "sample_notes.txt"
+      ],
+      "query_entities": [
+        "PyMuPDF",
+        "Python",
+        "Markdown",
+        "文档",
+        "解析",
+        "工具"
+      ],
+      "matched_nodes": [
+        "Python代码",
+        "DuckDuckGo搜索工具",
+        "验证 Agent 的工具调用逻辑",
+        "Python 函数/类",
+        "默认搜索工具",
+        "Python-Markdown",
+        "文档",
+        "检索工具",
+        "Python源码",
+        "Python 源码",
+        "搜索工具",
+        "Python 代码",
+        "PyMuPDF",
+        "工具调用",
+        "Python -m src.data_pipeline",
+        "免费/默认搜索工具",
+        "Agent 工具调用",
+        "Markdown",
+        "Python代码文件",
+        "RAG调优的第一工具",
+        "稳定的工具API key",
+        "Python代码切成无意义碎片",
+        "Python 代码文件被通用滑窗切散的问题",
+        "Python函数/类",
+        "文档解析",
+        "WebSearch搜索工具",
+        "本地工具",
+        "Python AST"
+      ],
+      "top_k_sources": [
+        "sample_notes.txt",
+        "sample_notes.txt",
+        "2026-07-31-dify-rag-tuning.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "2026-07-31-dify-rag-tuning.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hit_rank": 1,
+      "num_results": 5
+    },
+    {
+      "id": "S02",
+      "category": "semantic",
+      "query": "关键词搜索和语义搜索怎么配合使用？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "搜索",
+        "语义",
+        "关键词",
+        "配合",
+        "怎么"
+      ],
+      "matched_nodes": [
+        "DuckDuckGo搜索工具",
+        "关键词分层",
+        "精确关键词匹配",
+        "BM25关键词检索",
+        "关键词分层prompt",
+        "默认搜索工具",
+        "Low-level 关键词匹配实体节点",
+        "关系关键词",
+        "带稳定 API key 的搜索服务",
+        "关键词分层设计",
+        "关键词抽取 prompt",
+        "搜索工具",
+        "概括性关键词",
+        "免费/默认搜索工具",
+        "两类关键词",
+        "关系关键词匹配",
+        "Low-level关键词",
+        "High-level 关键词匹配 relationship_keywords",
+        "WebSearch搜索工具",
+        "BM25关键词检索与向量语义检索",
+        "语义",
+        "High-level关键词"
+      ],
+      "top_k_sources": [
+        "2026-07-31-dify-rag-tuning.md",
+        "lightrag-takeaways.md",
+        "lightrag-takeaways.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "lightrag-takeaways.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        1.0,
+        0.6667,
+        0.6667
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "S04",
+      "category": "semantic",
+      "query": "文档太长模型处理不了怎么办？",
+      "golden_sources": [
+        "sample_notes.txt",
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "文档",
+        "模型",
+        "怎么办",
+        "不了",
+        "处理"
+      ],
+      "matched_nodes": [
+        "模型",
+        "PDF处理逻辑",
+        "TXT处理逻辑",
+        "处理逻辑",
+        "文档",
+        "现有 .md / .pdf / .txt 处理逻辑",
+        "不递归处理子目录",
+        "Markdown处理逻辑"
+      ],
+      "top_k_sources": [
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md",
+        "rag-intro.md",
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.6667,
+        0.3333,
+        0.3333,
+        0.3333
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "S06",
+      "category": "semantic",
+      "query": "中文企业知识库应该选哪个 Embedding 模型？",
+      "golden_sources": [
+        "embedding_guide.md"
+      ],
+      "query_entities": [
+        "Embedding",
+        "知识库",
+        "中文",
+        "模型",
+        "哪个",
+        "应该",
+        "企业"
+      ],
+      "matched_nodes": [
+        "Embedding",
+        "开源最强中文能力",
+        "模型",
+        "中文能力",
+        "知识库",
+        "中文场景",
+        "企业知识库",
+        "中文友好",
+        "MTEB中文榜单领先"
+      ],
+      "top_k_sources": [
+        "embedding-guide.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "embedding-guide.md",
+        "rag-intro.md",
+        "lightrag-takeaways.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.6667,
+        0.6667,
+        0.3333,
+        0.3333
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "S08",
+      "category": "semantic",
+      "query": "怎么做到在切片时不把一段完整的意思拦腰截断？",
+      "golden_sources": [
+        "chunking_strategies.md",
+        "sample_notes.txt"
+      ],
+      "query_entities": [
+        "拦腰截断",
+        "切片",
+        "做到",
+        "完整",
+        "一段",
+        "意思",
+        "怎么"
+      ],
+      "matched_nodes": [
+        "完整属性",
+        "语义切片",
+        "切片策略",
+        "语义完整性",
+        "完整函数/类/方法源码",
+        "文档切片",
+        "完整语义单元",
+        "回答完整性",
+        "自适应切片策略",
+        "滑窗切片策略",
+        "完整代码块",
+        "源码行切片",
+        "重叠切片",
+        "文档切片粒度",
+        "检索精度和上下文完整性兼得"
+      ],
+      "top_k_sources": [
+        "chunking-strategies.md",
+        "chunking-strategies.md",
+        "sample_rag_paper.md",
+        "sample_rag_paper.md",
+        "lightrag-takeaways.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.5
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "M02",
+      "category": "mixed",
+      "query": "企业搭建知识库检索系统需要考虑哪些技术？",
+      "golden_sources": [
+        "sample_notes.txt",
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "检索系统",
+        "知识库",
+        "搭建",
+        "哪些",
+        "考虑",
+        "技术",
+        "需要",
+        "企业"
+      ],
+      "matched_nodes": [
+        "检索",
+        "高性能RAG智能知识检索系统",
+        "RAG技术",
+        "知识库",
+        "系统",
+        "企业知识库"
+      ],
+      "top_k_sources": [
+        "2026-07-31-dify-rag-tuning.md",
+        "sample_rag_paper.md",
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md",
+        "chunking-strategies.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "hit_rank": 2,
+      "num_results": 5
+    },
+    {
+      "id": "M04",
+      "category": "mixed",
+      "query": "传统关键词检索和现代语义检索各自的优缺点",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "检索",
+        "优缺点",
+        "语义",
+        "关键词",
+        "各自",
+        "现代",
+        "传统"
+      ],
+      "matched_nodes": [
+        "关键词分层",
+        "精确关键词匹配",
+        "BM25关键词检索",
+        "关键词分层prompt",
+        "Low-level 关键词匹配实体节点",
+        "传统检索专有名词匹配不准",
+        "关系关键词",
+        "传统 RAG",
+        "关键词分层设计",
+        "关键词抽取 prompt",
+        "现代 RAG",
+        "检索",
+        "概括性关键词",
+        "两类关键词",
+        "关系关键词匹配",
+        "Low-level关键词",
+        "High-level 关键词匹配 relationship_keywords",
+        "BM25关键词检索与向量语义检索",
+        "语义",
+        "High-level关键词"
+      ],
+      "top_k_sources": [
+        "lightrag-takeaways.md",
+        "lightrag-takeaways.md",
+        "lightrag-takeaways.md",
+        "lightrag-takeaways.md",
+        "ast-chunking-plan.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.6667,
+        0.6667,
+        0.3333
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "M06",
+      "category": "mixed",
+      "query": "RAG 的检索和生成两个环节如何配合？存在哪些配合上的挑战？",
+      "golden_sources": [
+        "rag_intro.md"
+      ],
+      "query_entities": [
+        "配合",
+        "RAG",
+        "检索",
+        "哪些",
+        "环节",
+        "生成",
+        "挑战",
+        "如何",
+        "存在",
+        "两个"
+      ],
+      "matched_nodes": [
+        "检索",
+        "RAG",
+        "生成",
+        "文件存在性"
+      ],
+      "top_k_sources": [
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md",
+        "chunking-strategies.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "sample_rag_paper.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "M08",
+      "category": "mixed",
+      "query": "如何从零搭建一套企业级 RAG 知识检索系统？",
+      "golden_sources": [
+        "sample_notes.txt",
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "企业级",
+        "RAG",
+        "检索系统",
+        "搭建",
+        "一套",
+        "知识",
+        "如何"
+      ],
+      "matched_nodes": [
+        "检索",
+        "RAG",
+        "Chatbot关联知识库",
+        "知识库问答",
+        "高性能RAG智能知识检索系统",
+        "知识库",
+        "内部知识",
+        "系统",
+        "一套逻辑",
+        "企业知识库",
+        "Dify知识库",
+        "该知识库上效果与成本平衡较好",
+        "知识图谱"
+      ],
+      "top_k_sources": [
+        "2026-07-31-dify-rag-tuning.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md",
+        "chunking-strategies.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "G02",
+      "category": "graph",
+      "query": "RAG 的幻觉问题和向量数据库、Embedding 模型有什么关系？",
+      "golden_sources": [
+        "rag_intro.md",
+        "sample_rag_paper.md",
+        "embedding_guide.md"
+      ],
+      "query_entities": [
+        "RAG",
+        "Embedding",
+        "向量",
+        "数据库",
+        "幻觉",
+        "模型",
+        "关系",
+        "问题",
+        "什么"
+      ],
+      "matched_nodes": [
+        "对比/总结问题",
+        "代码被通用滑窗切散问题",
+        "RAG",
+        "Embedding",
+        "向量数据库",
+        "模型",
+        "关系",
+        "Python 代码文件被通用滑窗切散的问题",
+        "子问题拆分",
+        "对比性问题",
+        "事实性问题",
+        "主题、意图、问题类型",
+        "幻觉问题",
+        "多跳推理问题",
+        "向量",
+        "混合问题"
+      ],
+      "top_k_sources": [
+        "lightrag-takeaways.md",
+        "sample_rag_paper.md",
+        "rag-intro.md",
+        "lightrag-takeaways.md",
+        "lightrag-takeaways.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "hit_rank": 2,
+      "num_results": 5
+    },
+    {
+      "id": "G03",
+      "category": "graph",
+      "query": "混合检索、RRF、Cross-Encoder 和 Faithfulness 评测之间有什么联系？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "RRF",
+        "Cross",
+        "Encoder",
+        "Faithfulness",
+        "检索",
+        "评测",
+        "混合",
+        "联系",
+        "之间",
+        "什么"
+      ],
+      "matched_nodes": [
+        "Cross-Encoder",
+        "Cross-Encoder 重排序",
+        "检索",
+        "Cross-Encoder 重排",
+        "混合架构",
+        "评测体系",
+        "混合召回方案",
+        "混合检索",
+        "RAG 评测与实现项目",
+        "原生混合检索",
+        "Faithfulness",
+        "Cross-Encoder 精排",
+        "Cross-Encoder重排序模型",
+        "混合召回",
+        "混合策略",
+        "RRF",
+        "混合问题"
+      ],
+      "top_k_sources": [
+        "2026-07-31-dify-rag-tuning.md",
+        "sample_notes.txt",
+        "rag-intro.md",
+        "sample_rag_paper.md",
+        "rag-intro.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.7273,
+        0.6364,
+        0.4545,
+        0.4545
+      ],
+      "hit_rank": 4,
+      "num_results": 5
+    },
+    {
+      "id": "G05",
+      "category": "graph",
+      "query": "滑窗切片、重叠切片和语义切片各自解决什么问题？之间如何互补？",
+      "golden_sources": [
+        "chunking_strategies.md",
+        "sample_notes.txt",
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "切片",
+        "滑窗",
+        "语义",
+        "互补",
+        "重叠",
+        "各自",
+        "解决",
+        "如何",
+        "之间",
+        "问题",
+        "什么"
+      ],
+      "matched_nodes": [
+        "对比/总结问题",
+        "标题面包屑 + 滑窗",
+        "子问题拆分",
+        "对比性问题",
+        "文档切片",
+        "多跳推理问题",
+        "混合问题",
+        "通用滑窗",
+        "语义切片",
+        "源码行切片",
+        "代码被通用滑窗切散问题",
+        ".pdf/.txt → 通用滑窗兜底",
+        "切片策略",
+        "事实性问题",
+        "通用滑窗分块",
+        "重叠切片",
+        "文档切片粒度",
+        "重叠",
+        "Markdown保持标题面包屑+滑窗",
+        ".md → 标题面包屑 + 滑窗",
+        "Python 代码文件被通用滑窗切散的问题",
+        "主题、意图、问题类型",
+        "自适应切片策略",
+        "滑窗切片策略",
+        "幻觉问题",
+        "语义",
+        "Token级滑窗"
+      ],
+      "top_k_sources": [
+        "lightrag-takeaways.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "chunking-strategies.md",
+        "ast-chunking-plan.md",
+        "rag-intro.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.6667,
+        0.6667,
+        0.6667
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "G06",
+      "category": "graph",
+      "query": "Embedding 模型、余弦相似度、Dense 和 Sparse 向量在检索链路中各自扮演什么角色？",
+      "golden_sources": [
+        "rag_intro.md",
+        "embedding_guide.md"
+      ],
+      "query_entities": [
+        "Embedding",
+        "Dense",
+        "Sparse",
+        "链路",
+        "余弦",
+        "检索",
+        "向量",
+        "扮演",
+        "角色",
+        "模型",
+        "相似",
+        "各自",
+        "什么"
+      ],
+      "matched_nodes": [
+        "检索",
+        "Embedding",
+        "模型",
+        "Sparse + Dense 双路召回",
+        "BM25 + Dense + RRF 融合",
+        "向量相似度",
+        "Sparse 和 Dense 双路召回",
+        "向量"
+      ],
+      "top_k_sources": [
+        "2026-07-31-dify-rag-tuning.md",
+        "rag-intro.md",
+        "rag-intro.md",
+        "rag-intro.md",
+        "ast-chunking-plan.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        1.0,
+        0.6,
+        0.6,
+        0.4
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "G08",
+      "category": "graph",
+      "query": "RRF 融合和 Cross-Encoder 重排两个阶段的输入输出分别是什么？它们为什么不能合并成一个阶段？",
+      "golden_sources": [
+        "sample_rag_paper.md"
+      ],
+      "query_entities": [
+        "RRF",
+        "Cross",
+        "Encoder",
+        "阶段",
+        "输入输出",
+        "重排",
+        "融合",
+        "合并",
+        "为什么",
+        "它们",
+        "分别",
+        "两个",
+        "不能",
+        "什么"
+      ],
+      "matched_nodes": [
+        "Cross-Encoder",
+        "Cross-Encoder 重排序",
+        "Cross-Encoder 重排",
+        "融合",
+        "多路召回 + RRF + 重排",
+        "Cross-Encoder 精排",
+        "Cross-Encoder重排序模型",
+        "重排序",
+        "RRF"
+      ],
+      "top_k_sources": [
+        "sample_notes.txt",
+        "2026-07-31-dify-rag-tuning.md",
+        "rag-intro.md",
+        "2026-07-31-dify-rag-tuning.md",
+        "rag-intro.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.6667,
+        0.6667,
+        0.6667,
+        0.6667
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    },
+    {
+      "id": "G12",
+      "category": "graph",
+      "query": "RAG 能在多大程度上缓解大模型幻觉？幻觉问题的来源和检索质量之间有什么关系？",
+      "golden_sources": [
+        "rag_intro.md"
+      ],
+      "query_entities": [
+        "幻觉",
+        "RAG",
+        "检索",
+        "大程度",
+        "模型",
+        "缓解",
+        "质量",
+        "来源",
+        "关系",
+        "之间",
+        "问题",
+        "什么"
+      ],
+      "matched_nodes": [
+        "对比/总结问题",
+        "检索",
+        "代码被通用滑窗切散问题",
+        "RAG",
+        "模型",
+        "关系",
+        "Python 代码文件被通用滑窗切散的问题",
+        "子问题拆分",
+        "对比性问题",
+        "事实性问题",
+        "主题、意图、问题类型",
+        "幻觉问题",
+        "多跳推理问题",
+        "RAG检索质量差",
+        "混合问题"
+      ],
+      "top_k_sources": [
+        "lightrag-takeaways.md",
+        "sample_rag_paper.md",
+        "rag-intro.md",
+        "ast-chunking-plan.md",
+        "ast-chunking-plan.md"
+      ],
+      "top_k_scores": [
+        1.0,
+        0.6667,
+        0.6667,
+        0.3333,
+        0.3333
+      ],
+      "hit_rank": null,
+      "num_results": 5
+    }
+  ]
+}

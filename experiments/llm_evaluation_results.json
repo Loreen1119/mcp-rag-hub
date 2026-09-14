@@ -1,0 +1,95 @@
+{
+  "summary": {
+    "model": "qwen2.5:3b",
+    "total_cases": 3,
+    "overall": {
+      "faithfulness": {
+        "mean": 0.6,
+        "min": 0.1,
+        "max": 1.0
+      },
+      "answer_relevancy": {
+        "mean": 0.5,
+        "min": 0.1,
+        "max": 0.7
+      },
+      "context_recall": {
+        "mean": 0.5,
+        "min": 0.1,
+        "max": 0.7
+      }
+    },
+    "by_category": {
+      "exact_match": {
+        "faithfulness": 0.6,
+        "answer_relevancy": 0.5,
+        "context_recall": 0.5
+      }
+    }
+  },
+  "details": [
+    {
+      "id": "E02",
+      "query": "Cross-Encoder 重排序",
+      "category": "exact_match",
+      "answer": "根据提供的文档内容，Cross-Encoder 重排序是用于提升 RAG 系统 Top-K 命中率的一种方法。它在牺牲少量延迟的代价下，通过联合编码查询与候选文档来显著提高检索结果的相关性。这个过程通常作为基于 Ragas 框架的 Faithfulness、Relevancy 和 ContextRecall 三维评估体系的一部分，为 RAG 系统提供了可量化的迭代优化闭环。",
+      "context": "[来源1: sample_rag_paper.md] ### 3.重排序与评估\n\nCross-Encoder重排序模型通过联合编码查询与候选文档，能够在牺牲少量延迟的代价下显著提升Top-K命中率。基于Ragas框架的Faithfulness（忠实度）、Relevancy（相关性）和ContextRecall（上下文召回率）三维评估体系，为RAG系统提供了可量化的迭代优化闭环。## 总结\n\nRAG技术正处于快速发展期，其在企业知识库、客服系统、代码助手等场景中的应用前景广阔。未来，Agent化、多模态RAG以及自适应切片策略将是该领域的重要发展方向。\n\n[来源2: rag-intro.md] - **稠密检索（Dense）**：如 BGE-M3 向量检索，捕捉语义相关性。- **混合检索（Hybrid）**：Sparse + Dense 双路召回，通过 RRF 融合结果。**Generator 负责\"理解并回答\"**，表现受上下文窗口大小、指令遵循能力、对齐信息的能力影响。如果检索返回了无关片段，模型可能被误导——因此现代 RAG 会引入 **Cross-Encoder 重排序** 对检索结果二次筛选。mcp-rag-hub 已实现：BM25 + 向量 + 实体共现图三路召回 → RRF 融合 → Cross-Encoder 重排。## Naive RAG 的局限\n\n基础 RAG 的\"检索 → 拼接 → 生成\"流程存在明显短板：\n\n1.\n\n[来源3: embedding-guide.md] ## Dense vs Sparse\n\n### Sparse（稀疏向量，如 BM25）\n\n- 基于词频（TF）+ 逆文档频率（IDF），对精确关键词匹配极强\n- 可解释、计算快，但无法捕捉语义关联（\"糖尿病\"≠\"高血糖\"）\n\n### Dense（稠密向量，如 BGE、Sentence-BERT）\n\n- 低维稠密向量（768/1024 维），神经网络学习得到\n- 语义理解能力强，跨语言相近表达可匹配\n- 对精确术语匹配相对弱\n\n**实践共识**：混合策略——Sparse + Dense 双路召回，RRF 融合，Cross-Encoder 重排序。",
+      "golden_answer": "Cross-Encoder 通过联合编码查询与候选文档，能在牺牲少量延迟的代价下显著提升 Top-K 命中率。",
+      "gen_time_ms": 43806.8,
+      "faithfulness": {
+        "score": 1.0,
+        "reason": "全部有据可查"
+      },
+      "answer_relevancy": {
+        "score": 0.7,
+        "reason": "答案讨论了Cross-Encoder重排序在RAG系统中的应用和优势，但没有直接回答用户关于'Cross-Encoder 重排序'的问题，而是扩展到了相关背景知识和技术框架。"
+      },
+      "context_recall": {
+        "score": 0.7,
+        "reason": "缺失了关于稠密检索和混合检索的具体描述"
+      }
+    },
+    {
+      "id": "E04",
+      "query": "Faithfulness 忠实度指标",
+      "category": "exact_match",
+      "answer": "根据文档内容，Faithfulness（忠实度）是基于Ragas框架的重排序模型中用于评估的一个三维评估体系之一。但是具体的定义或计算方式在提供的文档中没有详细说明。",
+      "context": "[来源1: sample_rag_paper.md] ### 3.重排序与评估\n\nCross-Encoder重排序模型通过联合编码查询与候选文档，能够在牺牲少量延迟的代价下显著提升Top-K命中率。基于Ragas框架的Faithfulness（忠实度）、Relevancy（相关性）和ContextRecall（上下文召回率）三维评估体系，为RAG系统提供了可量化的迭代优化闭环。## 总结\n\nRAG技术正处于快速发展期，其在企业知识库、客服系统、代码助手等场景中的应用前景广阔。未来，Agent化、多模态RAG以及自适应切片策略将是该领域的重要发展方向。",
+      "golden_answer": "Faithfulness（忠实度）是 RAG 评测的核心指标之一，用于衡量生成内容是否忠于检索到的原文。",
+      "gen_time_ms": 14583.7,
+      "faithfulness": {
+        "score": 0.1,
+        "reason": "大部分信息来自上下文，但 'Faithfulness的具体定义或计算方式' 是推论性的表述"
+      },
+      "answer_relevancy": {
+        "score": 0.1,
+        "reason": "生成的答案提到了Faithfulness的相关背景信息和一个三维评估体系，但没有具体解释Faithfulness的定义或计算方式，与用户关于Faithfulness的具体指标的详细问题无关。"
+      },
+      "context_recall": {
+        "score": 0.1,
+        "reason": "缺失了Faithfulness和Relevancy两个关键指标"
+      }
+    },
+    {
+      "id": "E06",
+      "query": "BGE-M3 嵌入模型",
+      "category": "exact_match",
+      "answer": "BGE-M3 是一个嵌入模型，其维度为1024，支持中文和英文语言。它在MTEB中中文领域表现领先，并且是开源的，可以用于商用。",
+      "context": "[来源1: sample_notes.txt] 技术栈规划：\n- 文档解析：PyMuPDF + Python-Markdown\n- 向量数据库：ChromaDB\n- 嵌入模型：sentence-transformers (BGE-M3)\n- 评估框架：Ragas\n- 接口封装：FastMCP\n\n数据管线设计要点：\n1.滑窗切片 (512/128) — 这个参数组合经过了大量实验验证，512字符大约对应300-400个中文token，能够完整容纳一个中等复杂度的语义单元；128字符的重叠区则确保了跨Chunk的实体关系不会因为机械切割而丢失。2.Metadata增强 — 每个Chunk携带源文件、位置和时标信息，这样在最终生成阶段可以追溯到原始文档的精确位置，也便于做引用标注。3.\n\n[来源2: embedding-guide.md] ## 主流模型对比\n\n| 模型 | 维度 | 语言 | 特点 |\n|------|------|------|------|\n| **BGE-M3** | 1024 | 中英 | MTEB 中文领先，开源可商用。mcp-rag-hub 当前选型 |\n| m3-embed (Cohere) | 1024 | 100+ 语言 | 同时输出稀疏+稠密向量，原生混合检索 |\n| text-embedding-3 (OpenAI) | 1536（可压缩至256） | 多语言 | GPT 生态无缝集成，闭源商用 |\n| GTE (BAAI) | 768/1024 | 中英 | 多任务统一表示 |\n| Jina Embeddings | 1024 | 多语言 | 开源、中文友好 |\n| Instruct\n\n[来源3: sample_notes.txt] MetaFetch-RAG 企业级知识检索系统 — 项目启动笔记\n\n项目目标：针对私有知识库传统检索专有名词匹配不准、语义召回缺失等问题，搭建高性能RAG智能知识检索系统。技术栈规划：\n- 文档解析：PyMuPDF + Python-Markdown\n- 向量数据库：ChromaDB\n- 嵌入模型：sentence-transformers (BGE-M3)\n- 评估框架：Ragas\n- 接口封装：FastMCP\n\n数据管线设计要点：\n1.",
+      "golden_answer": "BGE-M3 是 1024 维中英双语嵌入模型，MTEB 中文任务领先，开源可商用，mcp-rag-hub 当前选型。",
+      "gen_time_ms": 32711.5,
+      "faithfulness": {
+        "score": 0.7,
+        "reason": "大部分信息来自上下文，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+      },
+      "answer_relevancy": {
+        "score": 0.7,
+        "reason": "回答包含了关于BGE-M3的信息，但偏离了用户具体询问的问题，没有明确说明嵌入模型的具体维度和在MTEB中的表现情况。"
+      },
+      "context_recall": {
+        "score": 0.7,
+        "reason": "缺失了数据管线设计要点的具体内容"
+      }
+    }
+  ]
+}

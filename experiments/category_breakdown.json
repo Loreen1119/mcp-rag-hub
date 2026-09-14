@@ -1,0 +1,155 @@
+{
+  "description": "分 query 类别的模块增益矩阵（含 GraphRAG）",
+  "categories": {
+    "exact_match": {
+      "bm25_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.7633,
+        "recall@5": 1.0
+      },
+      "vector_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.76,
+        "recall@5": 1.0
+      },
+      "graph_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.92,
+        "recall@5": 1.0
+      },
+      "full_pipeline": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.64,
+        "recall@5": 1.0
+      },
+      "triple_fusion": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.64,
+        "recall@5": 1.0
+      },
+      "bm25_to_full_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": -0.1233,
+        "recall@5": 0.0
+      },
+      "vector_to_full_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": -0.12,
+        "recall@5": 0.0
+      },
+      "full_to_triple_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    "mixed": {
+      "bm25_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.88,
+        "recall@5": 1.0
+      },
+      "vector_only": {
+        "mrr": 0.9,
+        "hit@5": 1.0,
+        "precision@5": 0.8,
+        "recall@5": 1.0
+      },
+      "graph_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.88,
+        "recall@5": 1.0
+      },
+      "full_pipeline": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.84,
+        "recall@5": 1.0
+      },
+      "triple_fusion": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.84,
+        "recall@5": 1.0
+      },
+      "bm25_to_full_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": -0.04,
+        "recall@5": 0.0
+      },
+      "vector_to_full_gain": {
+        "mrr": 0.1,
+        "hit@5": 0.0,
+        "precision@5": 0.04,
+        "recall@5": 0.0
+      },
+      "full_to_triple_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    "semantic": {
+      "bm25_only": {
+        "mrr": 0.8,
+        "hit@5": 0.8,
+        "precision@5": 0.64,
+        "recall@5": 0.8
+      },
+      "vector_only": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.72,
+        "recall@5": 1.0
+      },
+      "graph_only": {
+        "mrr": 0.8667,
+        "hit@5": 1.0,
+        "precision@5": 0.88,
+        "recall@5": 1.0
+      },
+      "full_pipeline": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.88,
+        "recall@5": 1.0
+      },
+      "triple_fusion": {
+        "mrr": 1.0,
+        "hit@5": 1.0,
+        "precision@5": 0.88,
+        "recall@5": 1.0
+      },
+      "bm25_to_full_gain": {
+        "mrr": 0.2,
+        "hit@5": 0.2,
+        "precision@5": 0.24,
+        "recall@5": 0.2
+      },
+      "vector_to_full_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": 0.16,
+        "recall@5": 0.0
+      },
+      "full_to_triple_gain": {
+        "mrr": 0.0,
+        "hit@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    }
+  }
+}

@@ -7,10 +7,11 @@ __pycache__/
 chroma_db/
 chroma_db.old/
 
-# 实验数据（大文件/中间产物不提交，README 引用的关键证据文件保留）
-experiments/*
-!experiments/latency_profile.json
-!experiments/kg_diag_report_control.json
+# 实验产物：全部纳管（总体积约 170KB）
+# 2026-09-14 修正：此前这里是 `experiments/*` 全忽略 + 两条 `!` 例外，结果
+# `llm_evaluation_results.json` 这类**关键证据**不在版本控制里 —— 一旦被
+# `llm_eval.py --sample/--quick` 覆盖就无任何恢复通道（该文件确实差点丢过）。
+# 评测数字就是证据链，没有理由忽略；如需排除临时大文件，单独加 ignore 规则。
 
 # 备份文件
 *.bak
