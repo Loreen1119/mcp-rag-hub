@@ -1,0 +1,25 @@
+# ============================================================
+# 行尾约定
+#
+# 背景：本机 git 是 autocrlf=true，检出时会把文本文件转成 CRLF。
+# 这对 Dockerfile 是**致命的** —— `RUN apt-get update \` 这种反斜杠续行
+# 在 CRLF 下会失效（反斜杠后面跟的是 \r 而不是换行），报一堆
+# "unknown instruction" 或干脆把两行并成一行执行。
+# 所以在 Windows 上做容器化，必须把 Dockerfile 的行尾钉成 LF。
+# ============================================================
+
+# 容器相关：必须 LF
+Dockerfile            text eol=lf
+*.dockerfile          text eol=lf
+docker-compose*.yml   text eol=lf
+
+# 其它 linux 侧配置/脚本
+*.sh                  text eol=lf
+.gitattributes        text eol=lf
+
+# 二进制资源不要做行尾转换
+*.png                 binary
+*.jpg                 binary
+*.jpeg                binary
+*.gif                 binary
+*.pdf                 binary

@@ -48,7 +48,20 @@ streamlit run app.py
 
 > 也可跳过界面，直接作为 MCP 服务使用（见下文）。Embedding 模型首次运行会自动下载到本地缓存，之后可设 `HF_HUB_OFFLINE=1` 离线启动。
 >
-> 纯检索演示无需 Ollama；仅 **LangGraph 代理 / LLM 评测（LLM-as-Judge）** 需要本机安装 Ollama 并拉取 `qwen2.5:7b`。
+> 纯检索演示无需 Ollama；仅 **LangGraph 代理 / LLM 评测（LLM-as-Judge）** 需要本机安装 Ollama。
+> 模型分工：**生成用 `qwen2.5:3b`**（纯 CPU 可跑的窄任务模型）、**评测裁判用 `qwen2.5:7b`**（3b 当裁判无区分度）。
+> 7b 需约 5.6 GB 物理可用内存，本机开发环境全开时加载不了，属正常现象。
+
+### 方式二：Docker（一条命令，不依赖本机 Python 环境）
+
+```powershell
+$env:HF_CACHE = "$env:USERPROFILE\.cache\huggingface"   # 指向宿主已缓存的模型；不设会直接报错
+docker compose up --build                               # 浏览器打开 http://localhost:8501
+```
+
+模型不烧进镜像（国内直连 huggingface.co 不稳），而是挂载宿主已有缓存；Ollama 仍在宿主运行，
+容器经 `host.docker.internal` 访问。**前置条件、验证命令、已知限制**见
+[`docs/docker-deployment.md`](docs/docker-deployment.md)。
 
 ## 接入 MCP 客户端（Claude Desktop / Cursor 等）
 
@@ -112,6 +125,9 @@ mcp-rag-hub/
 │   └── knowledge_triples.jsonl    # KG 三元组缓存（可选实验功能 ENABLE_KG）
 │
 ├── docs/                      # 项目自身文档（人读的，不参与索引）
+│   └── docker-deployment.md   # Docker 部署指南（前置条件 / 验证 / 已知限制）
+├── Dockerfile                 # 单容器镜像（CPU 版 torch + 挂载宿主模型缓存）
+├── docker-compose.yml         # 一条命令拉起，含卷挂载与健康检查
 ├── journal/                   # 踩坑日志与学习笔记
 ├── docs_knowledge/            # 项目文档与章节笔记
 ├── experiments/               # 实验结果 JSON
