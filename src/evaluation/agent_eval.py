@@ -292,21 +292,43 @@ class AgentEvaluator:
 
         Ground truth: rewrite_mrr > original_mrr → 改写有效。
         用 F1 衡量每个阈值在二分类任务上的表现。
+
+        扫描区间按本次实测的 CE 分数分布自适应，不硬编码。
+        原因：阈值量纲随 Cross-Encoder 模型变 ——
+          - ms-marco-MiniLM 输出无界 logits（历史扫描区间 1.0~6.0）
+          - bge-reranker-base 经 sigmoid 输出 [0,1]（实测正解 ~0.7、噪声 ~0.001）
+        写死区间会在换模型后静默失效（扫的全是无效范围）。
         """
         if not self.results:
             logger.warning("请先运行 evaluate() 再校准阈值")
             return {}
 
+        scores = [
+            c["ce_score_original"]
+            for c in self.results
+            if c.get("ce_score_original") is not None
+        ]
+        if not scores:
+            logger.warning("没有可用的 CE 分数，跳过阈值校准")
+            return {}
+
+        # 以实测分数的 min/max 为边界等距取 20 个点：覆盖「全不改写」到「几乎全改写」
+        lo, hi = min(scores), max(scores)
+        if hi - lo < 1e-6:      # 分数全部相同 → 区间退化，给一个最小跨度兜底
+            lo, hi = max(0.0, lo - 0.5), hi + 0.5
+        step = (hi - lo) / 20
+
         if verbose:
             print("\n" + "=" * 60)
             print("  CE 阈值校准")
             print("=" * 60)
+            print(f"  扫描区间: {lo:.4f} ~ {hi:.4f} (步长 {step:.4f}，按实测分数自适应)")
 
         best_threshold = CE_THRESHOLD
         best_f1 = 0.0
         sweep_results: list[dict] = []
 
-        for threshold in self._sweep_range(1.0, 6.0, 0.5):
+        for threshold in self._sweep_range(lo, hi, step):
             tp = fp = tn = fn = 0
 
             for case in self.results:
@@ -370,10 +392,10 @@ class AgentEvaluator:
             print(f"  建议: {result['recommendation']}")
             print(f"  置信度: {result['confidence']}")
             print(f"\n  阈值扫描明细:")
-            print(f"  {'阈值':>6s}  {'TP':>4s}  {'FP':>4s}  {'TN':>4s}  {'FN':>4s}  {'P':>6s}  {'R':>6s}  {'F1':>6s}")
+            print(f"  {'阈值':>8s}  {'TP':>4s}  {'FP':>4s}  {'TN':>4s}  {'FN':>4s}  {'P':>6s}  {'R':>6s}  {'F1':>6s}")
             for s in sweep_results:
                 print(
-                    f"  {s['threshold']:>6.1f}"
+                    f"  {s['threshold']:>8.4f}"
                     f"  {s['tp']:>4d}  {s['fp']:>4d}  {s['tn']:>4d}  {s['fn']:>4d}"
                     f"  {s['precision']:>6.4f}  {s['recall']:>6.4f}  {s['f1']:>6.4f}"
                 )
@@ -395,8 +417,9 @@ class AgentEvaluator:
     def _sweep_range(start: float, end: float, step: float):
         vals = []
         v = start
-        while v <= end + 0.001:
-            vals.append(round(v, 2))
+        while v <= end + 1e-6:
+            # 4 位精度：CE 分数在 [0,1] 量纲下密集（步长可能 < 0.01），2 位会把扫描点挤成重复值
+            vals.append(round(v, 4))
             v += step
         return vals
 
