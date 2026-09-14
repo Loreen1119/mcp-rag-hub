@@ -1,0 +1,540 @@
+{
+  "meta": {
+    "generated_at": "2026-09-15 01:16:06",
+    "corpus": "fastapi-zh",
+    "llm_model": "qwen2.5:3b",
+    "judge_model": null,
+    "answer_top_k": 3,
+    "elapsed_seconds": 867.4
+  },
+  "refusal": {
+    "summary": {
+      "total": 10,
+      "valid": 10,
+      "skipped": 0,
+      "correct_refusal": 9,
+      "false_acceptance": 1,
+      "refusal_rate": 0.9,
+      "false_acceptance_rate": 0.1,
+      "status_distribution": {
+        "insufficient_evidence": 9,
+        "answered": 1
+      },
+      "by_category": {
+        "out_of_domain": {
+          "total": 2,
+          "correct_refusal": 2,
+          "false_acceptance": 0,
+          "refusal_rate": 1.0
+        },
+        "near_miss": {
+          "total": 5,
+          "correct_refusal": 5,
+          "false_acceptance": 0,
+          "refusal_rate": 1.0
+        },
+        "missing_feature": {
+          "total": 1,
+          "correct_refusal": 0,
+          "false_acceptance": 1,
+          "refusal_rate": 0.0
+        },
+        "missing_detail": {
+          "total": 2,
+          "correct_refusal": 2,
+          "false_acceptance": 0,
+          "refusal_rate": 1.0
+        }
+      },
+      "false_acceptance_cases": [
+        "U08"
+      ],
+      "judged": false
+    },
+    "details": [
+      {
+        "query_id": "U01",
+        "query": "FastAPI 背后的公司去年营收是多少？",
+        "category": "out_of_domain",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "文档中没有提供 FastAPI 框架所属公司的年度营业收入信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "deployment/manually.md",
+          "index.md"
+        ],
+        "retrieved_sources": [
+          "deployment/manually.md",
+          "index.md"
+        ],
+        "answer": "",
+        "attempt": 2,
+        "rewritten_queries": [
+          "FastAPI 这一框架所属公司的年度营业收入为多少？"
+        ],
+        "elapsed_ms": 87680.1,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U02",
+        "query": "知识库里有哪些维护者的个人简历和联系方式？",
+        "category": "near_miss",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": null,
+        "used_source_ids": [
+          1
+        ],
+        "cited_sources": [
+          "tutorial/metadata.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/metadata.md"
+        ],
+        "answer": "阿里云知识库中未提供运维人员的个人信息及其联系信息的相关内容。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "阿里云知识库中包含哪些运维人员的个人信息及其联系信息？"
+        ],
+        "elapsed_ms": 65405.9,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U03",
+        "query": "Spring Boot 的自动配置（AutoConfiguration）是怎么实现的？",
+        "category": "out_of_domain",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": null,
+        "used_source_ids": [
+          1
+        ],
+        "cited_sources": [
+          "python-types.md"
+        ],
+        "retrieved_sources": [
+          "python-types.md"
+        ],
+        "answer": "没有找到关于Spring Boot自动配置机制的具体实现方式的信息在提供的文档中。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "Spring Boot 自动配置机制的具体实现方式是什么？"
+        ],
+        "elapsed_ms": 66068.2,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U04",
+        "query": "Vue 3 的 Composition API 里 ref 和 reactive 有什么区别？",
+        "category": "near_miss",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "文档内容主要涉及前端应用、OpenAPI回调和FastAPI路径操作，未提及Vue 3中的composition api相关知识。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tutorial/frontend.md",
+          "advanced/openapi-callbacks.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/frontend.md",
+          "advanced/openapi-callbacks.md",
+          "tutorial/first-steps.md"
+        ],
+        "answer": "没有找到关于Vue 3中Composition API的ref和reactive异同的相关信息。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "Vue 3 中 Composition API 下的 ref 和 reactive 有何异同？"
+        ],
+        "elapsed_ms": 90466.5,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U05",
+        "query": "Django ORM 中 ForeignKey 的 on_delete 参数有哪些可选值？",
+        "category": "near_miss",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "文档内容主要关于Python类型提示简介、依赖项和响应模型，未提到Django ORM中的Foreign Key模型的onDelete参数的具体取值。",
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "python-types.md",
+          "tutorial/dependencies/index.md",
+          "tutorial/response-model.md"
+        ],
+        "retrieved_sources": [
+          "python-types.md",
+          "tutorial/dependencies/index.md",
+          "tutorial/response-model.md"
+        ],
+        "answer": "Django ORM 中 Foreign Key 模型的onDelete参数具体有哪些取值的信息没有在提供的文档中找到。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "Django ORM 中 Foreign Key 模型的 onDelete参数具体有哪些取值？"
+        ],
+        "elapsed_ms": 87199.1,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U06",
+        "query": "Flask 里 Blueprint 的 url_prefix 参数应该怎么配置？",
+        "category": "near_miss",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tutorial/query-params-str-validations.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/query-params-str-validations.md",
+          "tutorial/query-params-str-validations.md"
+        ],
+        "answer": "在给定的文档中没有提到如何设置 Flask 框架中的 Blueprint 组件的 url_prefix 参数的方法。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "在 Flask 框架中，Blueprint组件的url_prefix参数应如何设置？"
+        ],
+        "elapsed_ms": 78393.5,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U07",
+        "query": "把一个已有的 Django 项目迁移到 FastAPI，模型层和视图层分别要怎么改写？",
+        "category": "near_miss",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "tutorial/security/oauth2-jwt.md",
+          "tutorial/index.md",
+          "python-types.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/security/oauth2-jwt.md",
+          "tutorial/index.md",
+          "python-types.md"
+        ],
+        "answer": "证据中没有提到如何将一个已有的 Django 项目迁移到 FastAPI 的详细步骤。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 54160.6,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U08",
+        "query": "FastAPI 内置的图形化管理后台（Admin UI）要怎么开启？",
+        "category": "missing_feature",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于使用 `fastapi dev` 命令和 PyCharm 调试 FastAPI 的信息，但没有涉及如何开启内置的图形化管理后台的问题。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "fastapi-cli.md",
+          "tutorial/debugging.md"
+        ],
+        "retrieved_sources": [
+          "fastapi-cli.md",
+          "tutorial/debugging.md",
+          "deployment/fastapicloud.md"
+        ],
+        "answer": "按照你所选云服务商的指南部署 FastAPI 应用即可，包括按需自行部署到你自己的服务器。用户询问关于如何开启内置的图形化管理后台（Admin UI），但未在文档中找到相关答案。文档提及了使用 `fastapi dev` 命令运行开发环境，以及如何通过 PyCharm 调试 FastAPI 代码等内容，但没有提到如何开启图形化管理后台。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 49993.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "U09",
+        "query": "本系统在生产环境承诺的 SLA 和可用性指标是多少？",
+        "category": "missing_detail",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "没有找到关于服务级别协议和可用性的信息",
+        "used_source_ids": [
+          3
+        ],
+        "cited_sources": [
+          "index.md"
+        ],
+        "retrieved_sources": [
+          "advanced/middleware.md",
+          "advanced/middleware.md",
+          "index.md"
+        ],
+        "answer": "数据中心服务级别协议及可用性标准是什么？",
+        "attempt": 2,
+        "rewritten_queries": [
+          "数据中心服务级别协议及可用性标准是什么？"
+        ],
+        "elapsed_ms": 67673.0,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "U10",
+        "query": "这个知识库目前一共收录了多少篇文档，上一次更新是什么时候？",
+        "category": "missing_detail",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "没有提供关于知识库中文档数量和最后更新时间的信息。",
+        "used_source_ids": [
+          1
+        ],
+        "cited_sources": [
+          "index.md"
+        ],
+        "retrieved_sources": [
+          "index.md"
+        ],
+        "answer": "当前知识库文档数量未知，最后一次更新时间无法确定。",
+        "attempt": 2,
+        "rewritten_queries": [
+          "这个知识库当前总共包含多少篇文档？上次更新是在哪一时刻？"
+        ],
+        "elapsed_ms": 67453.6,
+        "verdict": "correct_refusal"
+      }
+    ]
+  },
+  "multi": {
+    "summary": {
+      "total": 3,
+      "answered": 2,
+      "answer_rate": 0.6667,
+      "cross_doc_cited_rate": 0.0,
+      "mean_citation_coverage": 0.1667,
+      "mean_keyword_coverage_answer": 0.5,
+      "mean_keyword_coverage_context": 0.8333,
+      "status_distribution": {
+        "invalid_output": 1,
+        "answered": 2
+      }
+    },
+    "details": [
+      {
+        "query_id": "ME01",
+        "query": "如何在应用启动时建立数据库连接、并在应用关闭时把它释放掉？",
+        "expected_status": "answered",
+        "status": "invalid_output",
+        "reason": "invalid_json",
+        "used_source_ids": [],
+        "cited_sources": [],
+        "golden_chunk_sources": [
+          "advanced/events.md",
+          "tutorial/sql-databases.md"
+        ],
+        "retrieved_sources": [
+          "advanced/events.md",
+          "tutorial/sql-databases.md",
+          "advanced/events.md"
+        ],
+        "answer": "",
+        "citation_coverage": 0.0,
+        "retrieval_coverage": 1.0,
+        "cross_doc_cited": false,
+        "keyword_coverage_answer": 0.0,
+        "keyword_coverage_context": 1.0,
+        "per_requirement": [
+          {
+            "description": "应用生命周期（Lifespan）：启动/关闭钩子怎么写",
+            "keywords": [
+              "lifespan",
+              "yield",
+              "启动",
+              "关闭",
+              "上下文管理器"
+            ],
+            "hit_in_answer": false,
+            "hit_in_context": true,
+            "matched_in_answer": [],
+            "matched_in_context": [
+              "lifespan",
+              "yield",
+              "启动",
+              "关闭"
+            ]
+          },
+          {
+            "description": "数据库会话的创建与依赖注入用法",
+            "keywords": [
+              "SQLModel",
+              "Session",
+              "engine",
+              "依赖项",
+              "yield"
+            ],
+            "hit_in_answer": false,
+            "hit_in_context": true,
+            "matched_in_answer": [],
+            "matched_in_context": [
+              "Session",
+              "engine",
+              "依赖项",
+              "yield"
+            ]
+          }
+        ],
+        "attempt": 1,
+        "elapsed_ms": 51844.2
+      },
+      {
+        "query_id": "ME02",
+        "query": "如何用依赖注入配合 OAuth2 密码流，做一个只有登录用户才能访问的接口？",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档提供了关于如何在 FastAPI 中使用 OAuth2 密码流和依赖注入的详细信息。",
+        "used_source_ids": [
+          1,
+          3
+        ],
+        "cited_sources": [
+          "tutorial/security/get-current-user.md"
+        ],
+        "golden_chunk_sources": [
+          "tutorial/security/oauth2-jwt.md",
+          "tutorial/dependencies/index.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/security/get-current-user.md",
+          "advanced/security/oauth2-scopes.md",
+          "tutorial/security/get-current-user.md"
+        ],
+        "answer": "如何使用依赖注入配合 OAuth2 密码流创建一个只有登录用户才能访问的接口？开发者可以使用任何模型或数据来满足安全需求（本例中是 Pydantic 的 User 模型）。**FastAPI** 通过依赖注入系统帮助处理。",
+        "citation_coverage": 0.0,
+        "retrieval_coverage": 0.0,
+        "cross_doc_cited": false,
+        "keyword_coverage_answer": 0.5,
+        "keyword_coverage_context": 1.0,
+        "per_requirement": [
+          {
+            "description": "OAuth2 密码流与 JWT 令牌的签发与校验",
+            "keywords": [
+              "JWT",
+              "token",
+              "get_current_user",
+              "密码哈希"
+            ],
+            "hit_in_answer": false,
+            "hit_in_context": true,
+            "matched_in_answer": [],
+            "matched_in_context": [
+              "token",
+              "get_current_user"
+            ]
+          },
+          {
+            "description": "依赖注入：把鉴权逻辑抽成可复用依赖（含子依赖）",
+            "keywords": [
+              "Depends",
+              "依赖",
+              "子依赖",
+              "路径操作函数"
+            ],
+            "hit_in_answer": true,
+            "hit_in_context": true,
+            "matched_in_answer": [
+              "依赖"
+            ],
+            "matched_in_context": [
+              "Depends",
+              "依赖",
+              "子依赖"
+            ]
+          }
+        ],
+        "attempt": 1,
+        "elapsed_ms": 49394.8
+      },
+      {
+        "query_id": "ME03",
+        "query": "如何接收客户端上传的文件，并在响应返回之后用后台任务记录一条处理日志？",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tutorial/background-tasks.md"
+        ],
+        "golden_chunk_sources": [
+          "tutorial/request-files.md",
+          "tutorial/background-tasks.md"
+        ],
+        "retrieved_sources": [
+          "tutorial/background-tasks.md",
+          "tutorial/background-tasks.md",
+          "tutorial/background-tasks.md"
+        ],
+        "answer": "请在路径操作函数中使用 BackgroundTasks 类型的参数，并定义一个接受文件作为参数的任务函数来记录日志。示例代码如教程中的代码所示：首先导入 BackgroundTasks 并在路径操作函数中使用类型声明 BackgroundTasks 定义一个参数，在任务函数中创建并执行该后台任务，以便客户端上传的文件可以在响应返回之后被处理和记录一条处理日志。",
+        "citation_coverage": 0.5,
+        "retrieval_coverage": 0.5,
+        "cross_doc_cited": false,
+        "keyword_coverage_answer": 1.0,
+        "keyword_coverage_context": 0.5,
+        "per_requirement": [
+          {
+            "description": "接收上传文件：File 与 UploadFile",
+            "keywords": [
+              "UploadFile",
+              "File",
+              "表单",
+              "python-multipart",
+              "上传"
+            ],
+            "hit_in_answer": true,
+            "hit_in_context": false,
+            "matched_in_answer": [
+              "上传"
+            ],
+            "matched_in_context": []
+          },
+          {
+            "description": "后台任务：在响应返回之后执行",
+            "keywords": [
+              "BackgroundTasks",
+              "后台任务",
+              "响应"
+            ],
+            "hit_in_answer": true,
+            "hit_in_context": true,
+            "matched_in_answer": [
+              "BackgroundTasks",
+              "后台任务",
+              "响应"
+            ],
+            "matched_in_context": [
+              "BackgroundTasks",
+              "后台任务",
+              "响应"
+            ]
+          }
+        ],
+        "attempt": 1,
+        "elapsed_ms": 51551.4
+      }
+    ]
+  }
+}
