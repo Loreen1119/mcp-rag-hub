@@ -60,15 +60,37 @@ $env:MCP_RAG_CORPUS = "vue-zh"; docker compose up
 # ① 配置语法 + 变量校验（不需要守护进程，秒出）
 docker compose config
 
-# ② 跑起来之后：健康检查是否通过
+# ② 构建前先确认"能不能拉到基础镜像"（国内 Docker Hub 直连不通，靠 daemon.json 里的镜像源）
+docker pull python:3.11-slim
+
+# ③ 构建
+docker compose build
+#    想用国内 PyPI 加速：
+#    docker compose build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+
+# ④ 跑起来之后：健康检查是否通过
 docker compose ps                    # STATUS 里应出现 (healthy)
 
-# ③ 容器里能不能真的读到模型（不该有任何联网行为）
+# ⑤ 容器里能不能真的读到模型（不该有任何联网行为）
 docker compose exec rag-hub python -c "import os; print(os.environ['HF_HUB_OFFLINE']); from sentence_transformers import SentenceTransformer; SentenceTransformer('BAAI/bge-small-zh-v1.5'); print('model ok')"
 
-# ④ 容器能不能连到宿主 Ollama
+# ⑥ 容器能不能连到宿主 Ollama
 docker compose exec rag-hub curl -s http://host.docker.internal:11434/api/tags
 ```
+
+### 本机网络实况（2026-09-14 预检）
+
+| 目标 | 结果 | 说明 |
+|---|---|---|
+| `registry-1.docker.io`（Docker Hub） | **直连超时** | 国内常态。靠 `~/.docker/daemon.json` 里的 `registry-mirrors` 兜底 |
+| `docker.m.daocloud.io` | 401 | 正常（registry 要求 token，Docker 会自动取） |
+| `docker.1panel.live` | **200，能取到 `python:3.11-slim` 的 manifest** | 当前可用 |
+| `hub.rat.dev` | 302 | 可达 |
+| `download.pytorch.org/whl/cpu` | 200 / 0.9s | 可达，不需要镜像 |
+| `pypi.org` / `files.pythonhosted.org` | 200 | 可达，但 wheel 下载偏慢 → 可用清华镜像加速 |
+| `pypi.tuna.tsinghua.edu.cn` | 200 / 0.5s | 可用 |
+
+> 镜像源会失效，别当永久事实。构建前先跑上面第 ② 步探一下，比直接 build 失败再看日志快得多。
 
 ---
 

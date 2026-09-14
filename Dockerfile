@@ -37,9 +37,15 @@ RUN apt-get update \
 
 # 先装依赖，利用 Docker 层缓存（改代码不必重装依赖）
 COPY requirements.txt ./
-# 先单独用 CPU 专用源满足 torch，后面的 sentence-transformers 就不会再拉 CUDA 版
+
+# PyPI 源可覆盖（本机实测：官方 PyPI 可达但 wheel 下载偏慢，清华镜像快一倍）
+#   国内加速：docker compose build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG PIP_INDEX_URL=https://pypi.org/simple
+
+# torch 必须走 CPU 专用源：直接从 PyPI 装的话，Linux 上会拉 2GB+ 的 CUDA 依赖。
+# 先满足 torch，后面 sentence-transformers 就不会再去装它（实测本机该源 200 / 0.9s）。
 RUN pip install --index-url https://download.pytorch.org/whl/cpu torch \
- && pip install -r requirements.txt
+ && pip install --index-url "$PIP_INDEX_URL" -r requirements.txt
 
 # 再拷代码与语料（corpora/ 一并烧进镜像，让镜像自带可演示的知识库）
 COPY . .
