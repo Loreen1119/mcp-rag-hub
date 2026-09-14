@@ -7,7 +7,7 @@
 在传统 Web 开发（Vue/React）中，页面更新是组件级局部刷新。Streamlit 则采用完全不同的"脚本全刷新执行模型"：
 
 - **核心机制**：网页上发生任何用户交互（输入框打字、点击按钮、切换 Tab），Streamlit 都会将整个 Python 脚本从第 1 行到最后一行彻底重新执行一遍。
-- **RAG 场景的真实代价**：如果不做拦截防护，用户每次切换 Tab 浏览日志，系统都会重新加载 `all-MiniLM-L6-v2` 模型（~90MB）、重新扫描本地文档目录、重新执行滑窗切片与索引构建。每次交互延迟轻松达到数秒，CPU 空转。
+- **RAG 场景的真实代价**：如果不做拦截防护，用户每次切换 Tab 浏览日志，系统都会重新加载 `bge-small-zh-v1.5` 模型（~95MB）、重新扫描本地文档目录、重新执行滑窗切片与索引构建。每次交互延迟轻松达到数秒，CPU 空转。
 - **全局变量失效**：由于每次交互脚本从头重跑，Python 全局变量在每次刷新时都会被重置，无法用来跨交互常驻大模型对象。
 
 ### 2. `@st.cache_resource` 的"免死金牌"机制
@@ -30,9 +30,15 @@
 | **底层原理** | 将返回值通过 `pickle` 序列化为二进制字节流存储，使用时反序列化解压 | 不序列化，直接保持对象的内存引用 |
 | **RAG 场景适用性** | 不适用：`SentenceTransformer` 和 ChromaDB client 底层包含 C++ 指针和网络连接，**在数学上无法被 pickle 序列化**，错用会直接抛序列化崩溃异常 | 必须使用：锁死活对象的内存全局引用 |
 
-### 3. 四 Tab 联动：算法全链路透明的"白盒调试看板"
+### 3. 两 Tab 顶层结构 + 四阶段调试看板
 
-相比于普通 RAG 系统只有一个黑盒对话框，本项目利用 Streamlit 的 `st.tabs` 组件，将 FusionPipeline 暴露的 Dict 复合中间结果（各阶段的融合与重排序列）完整呈现在四个并列 Tab 中：
+界面顶层是两个 Tab：**「问答模式」**和**「调试模式」**。
+
+- **问答模式**（默认）：直接提问，拿答案——带 `[1][2][3]` 引用编号的自然语言答案，下方是证据卡片，被答案真正引用过的卡片会打上「已引用」标记。
+- **调试模式**：把 FusionPipeline 暴露的 Dict 复合中间结果（各阶段的融合与重排序列）完整呈现，**其内部再按四个检索阶段分页**：
+
+> 早期版本顶层就是四个 Tab（纯调试面板），后来才加了问答模式。所以看到"四个标签页"的旧描述，
+> 指的是**调试模式下**的四个阶段分页，不是顶层结构。
 
 - **Tab 1（BM25 稀疏召回）**：展示基于词频统计捞出的精准关键词匹配结果
 - **Tab 2（Vector 稠密召回）**：展示基于语义向量相似度召回的语义相关但字面不同的内容
@@ -45,7 +51,7 @@
 
 实现四 Tab 诊断的核心功臣是 `_render_results` 函数：
 
-- **异构数据多态兼容**：不同检索阶段返回的分数维度完全不同（BM25 是词频加权分、Vector 是余弦相似度、RRF 是倒数排名和、Cross-Encoder 是 Logit 分）。该函数通过 `source_label` 参数动态路由渲染策略，一套代码兼容四种完全不同的算法层展示。
+- **异构数据多态兼容**：不同检索阶段返回的分数维度完全不同（BM25 是词频加权分、Vector 是余弦相似度、RRF 是倒数排名和、Cross-Encoder 是 sigmoid 后的 [0,1] 分——早期用 `ms-marco` 时是无界 Logit 分）。该函数通过 `source_label` 参数动态路由渲染策略，一套代码兼容四种完全不同的算法层展示。
 - **RRF 精度微调的数学原因**：在渲染 RRF 分数时，代码刻意将格式化精度拓展至**小数点后六位（`.6f`）**。这是因为引入平滑常数 k=60 后，顶端文档的 RRF 分差被极度压缩（例如 `0.032258` vs `0.022643`）。若用 `.4f`，微弱的排名逆袭差距将被四舍五入抹平，`.6f` 高精度才能清晰呈现双路共识引发的名次变化。
 - **非等宽栅格布局**：`st.columns([0.05, 0.15, 0.8])` 手写三列非等宽水平栅格——左侧 5% 锁死排名序号，中间 15% 用 `st.metric` 指标卡片大字号突出核心得分，右侧 80% 黄金区域渲染标题面包屑和正文快照。
 
@@ -59,7 +65,8 @@
 
 - **Streamlit 执行模型**：每次交互重新执行整个脚本，`@st.cache_resource` 拦截重复计算
 - **cache_resource vs cache_data**：resource 缓存不可序列化对象（模型、DB 连接），data 缓存可序列化数据（dict、DataFrame）。`SentenceTransformer` 含 C++ 指针，无法 pickle，必须用 resource
-- **四 Tab 设计**：BM25 → Vector → RRF → Cross-Encoder，全链路白盒可观测
+- **顶层两 Tab**：问答模式（生成答案 + 证据卡片）/ 调试模式（四个检索阶段分页，全链路白盒可观测）
+- **问答模式的三态提示**：「知识库信息不足」（正确拒答）/「生成服务暂不可用 + 原文拼接」（降级）/「回答处理出错」（技术故障）——**必须分开，否则用户分不清是能力问题还是服务坏了**
 - **`_render_results`**：多态渲染引擎，`.6f` 高精度保留 RRF 名次逆袭细节
 - **和 Gradio 区别**：Streamlit 更接近写 Python 脚本，Gradio 更接近搭 ML 模型 demo
 
@@ -86,26 +93,30 @@ def load_pipeline():
 
 **追问应对**："为什么不用 `@st.cache_data`？"— `cache_data` 底层用 pickle 序列化返回值。`SentenceTransformer` 和 ChromaDB client 内部含 C++ 指针引用和网络连接，无法被 pickle 序列化，强行使用会直接抛异常。`cache_resource` 不序列化，直接保持对象引用。
 
-### ② 四阶段检索与分轨展示
+### ② 四阶段检索与分轨展示（调试模式内）
 
 ```python
-if query:
-    bm25_results = bm25.search(query)
-    vector_results = vector.search(query)
-    output = pipeline.run(bm25_results, vector_results, query)
+# 顶层：问答模式 / 调试模式 两个 Tab
+answer_tab, debug_tab = st.tabs(["问答模式", "调试模式"])
 
-    # 四 Tab 并排对比
-    tab1, tab2, tab3, tab4 = st.tabs([
+with debug_tab:
+    if query:
+        bm25_results = bm25.search(query)
+        vector_results = vector.search(query)
+        output = pipeline.run(bm25_results, vector_results, query)
+
+        # 调试模式内按四个阶段分页
+        tab1, tab2, tab3, tab4 = st.tabs([
         f"BM25 关键词 ({len(bm25_results)})",
         f"向量语义 ({len(vector_results)})",
         f"RRF 融合 ({len(output['rrf'])})",
         f"Cross-Encoder 精排 ({len(output['cross_encoder'])})",
     ])
 
-    with tab1: _render_results(bm25_results, "bm25")
-    with tab2: _render_results(vector_results, "vector")
-    with tab3: _render_results(output["rrf"], "rrf")
-    with tab4: _render_results(output["cross_encoder"], "cross_encoder")
+        with tab1: _render_results(bm25_results, "bm25")
+        with tab2: _render_results(vector_results, "vector")
+        with tab3: _render_results(output["rrf"], "rrf")
+        with tab4: _render_results(output["cross_encoder"], "cross_encoder")
 
     # 最终答案区
     if output["cross_encoder"]:
@@ -172,13 +183,15 @@ def _render_results(results, source_label):
 
 我用 `@st.cache_resource` 对整个管线的加载和索引构建做了内存级拦截。这里有一个关键选型：为什么不用 `@st.cache_data`？因为 `cache_data` 底层依赖 pickle 序列化，而大模型对象和 ChromaDB client 包含 C++ 指针和网络连接，在工程上**无法被 pickle 序列化**——强行使用会直接崩溃。`cache_resource` 不序列化，直接保持内存引用，将后续交互延迟打到 0 毫秒。
 
-前端呈现上，通过四 Tab 联动将 Pipeline 暴露的 RRF 融合列表和 Cross-Encoder 重排列表等中间结果完整展示，打造了一个从召回、融合到精排的全链路可视化日志流。"
+前端呈现上，顶层是**问答模式 / 调试模式**两个 Tab：问答模式直接给带引用编号的答案和证据卡片；调试模式里再按四个检索阶段分页，把 Pipeline 暴露的 RRF 融合列表和 Cross-Encoder 重排列表等中间结果完整展示，打造了一个从召回、融合到精排的全链路可视化日志流。
+
+另外问答模式里有个我认为很重要的设计：**三种'没给出答案'的情况分开提示**——「知识库信息不足」（这是正确的拒答，说明系统知道自己不知道）、「生成服务暂不可用 + 原文拼接」（服务挂了，但不让人空手而归）、「回答处理出错」（技术故障）。早期版本笼统显示一句'没找到答案'，把技术故障伪装成了业务判断，排查方向被带偏过很久。"
 
 ---
 
 **面试官**："你具体是怎么做渲染的？"
 
-**回答**："`_render_results` 是一个**接收多态数据源标签 `source_label` 的通用排版引擎**。四阶段返回的分数维度完全不同——BM25 是词频分、Vector 是余弦相似度、RRF 是倒数排名和、Cross-Encoder 是 Logit 分——通过 source_label 动态路由，一套代码兼容四种数据结构。
+**回答**："`_render_results` 是一个**接收多态数据源标签 `source_label` 的通用排版引擎**。四阶段返回的分数维度完全不同——BM25 是词频分、Vector 是余弦相似度、RRF 是倒数排名和、Cross-Encoder 是 sigmoid 后的 [0,1] 分——通过 source_label 动态路由，一套代码兼容四种数据结构。
 
 布局上，我用 `st.columns([0.05, 0.15, 0.8])` 手写了非等宽水平栅格：左侧 5% 极窄区展示排名，中间 15% 用 `st.metric` 大字号突出核心分数，右侧 80% 渲染标题面包屑和 300 字正文快照。
 

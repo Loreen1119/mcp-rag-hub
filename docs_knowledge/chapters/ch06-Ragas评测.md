@@ -8,10 +8,11 @@ RAG 系统是管道结构，改任何一个模块（换模型、调参数）都�
 
 评测闭环：**改代码 → 跑全量评测 → 看指标变化 → 防负向退化**。
 
-本项目评测分两层：
-- **检索层评测**（`evaluate.py`）：MRR / Hit@K / Precision@K / Recall@K，测"找没找到"
-- **生成层评测**（`llm_evaluate.py`）：Faithfulness / Answer Relevancy / Context Recall，测"答没答好"
-- **改写评测**（`agent_evaluate.py`）：改写效果 A/B 对比 + 语义保真度 + CE 阈值校准，测"改写有没有让检索变好"
+本项目评测分四层（脚本都在 `src/evaluation/` 子包下）：
+- **检索层评测**（`retrieval_eval.py`）：MRR / Hit@K / Precision@K / Recall@K，测"找没找到"
+- **生成层评测**（`llm_eval.py`）：Faithfulness / Answer Relevancy / Context Recall，测"答没答好"
+- **改写评测**（`agent_eval.py`）：改写效果 A/B 对比 + 语义保真度 + CE 阈值校准，测"改写有没有让检索变好"
+- **端到端验收**（`acceptance_eval.py`）：拒答集（`--refusal`）、多证据集（`--multi`）、裁判（`--judge`），测"该不该答 / 引用全不全"
 
 ### 2. 检索层评测：四个硬指标
 
@@ -28,15 +29,22 @@ RAG 系统是管道结构，改任何一个模块（换模型、调参数）都�
 
 ### 3. GoldenTestSet 分层设计
 
-15 组 Query，三类各 5 组，故意不对称地覆盖各检索器强弱项：
+现在 **18 条**，四类，故意不对称地覆盖各检索器强弱项（语料 = FastAPI 中文文档 122 篇 / 1445 chunk）：
 
-| 类别 | 测什么 | 例子 | 预期谁赢 |
-|------|--------|------|----------|
-| exact_match (E01~E05) | 专有名词精确匹配 | "BM25 算法"、"RRF 融合" | BM25 优势 |
-| semantic (S01~S05) | 语义相似但字面不同 | "怎么评价检索系统好坏"（字面没"评测"） | Vector 优势 |
-| mixed (M01~M05) | 多模块协同综合 | "如何提高检索准确率"（需综合多段落） | 看 RRF+CE 效果 |
+| 类别 | 条数 | 测什么 | 例子 | 预期谁赢 |
+|------|------|--------|------|----------|
+| exact_match (E) | 4 | 专有名词精确匹配 | "路径操作装饰器" | BM25 优势 |
+| semantic (S) | 4 | 语义相似但字面不同 | "应用启动只想执行一次初始化、关闭时收尾，该用什么机制？"（→lifespan，字面全无） | Vector 优势 |
+| mixed (M) | 4 | 多模块协同综合 | "FastAPI 应用怎么做测试？" | 看 RRF+CE 效果 |
+| graph (G) | 6 | 需要把多个概念串起来 | "SQLModel 与 SQLAlchemy、Pydantic 是什么关系？" | 看全链路 |
 
-每个 test case 含三个字段：`golden_chunk_sources`（检索评测用）、`golden_answer`（LLM 生成评测用）、`notes`（标注预期行为）。
+每个 test case 含四个字段：`query`、`golden_chunk_sources`（检索评测用）、`golden_answer`（生成评测用）、`notes`（标注预期行为）。
+**每条 `golden_answer` 都能在 `golden_chunk_sources` 指定的文件正文里回查到原文**，由 `scripts/validate_golden.py` 自动校验。
+
+另外两套验收集：**10 条拒答集**（测"该不该说不知道"）+ **3 条多证据集**（测跨文档引用覆盖率）。
+
+> **不做 train/test 拆分**。拆分原本是给「用 CE 分数卡阈值自动拒答」调参用的，那方案被自己的数据证伪后
+> 拆分就失去了意义，2026-09-12 起收敛为单一 golden set。
 
 ### 4. 为什么自己实现而不是用 Ragas 库
 
@@ -46,21 +54,28 @@ Ragas 在 Windows Anaconda 环境下出现 SSL 证书冲突（`aiohttp` → `ssl
 
 **面试时怎么说**：「Ragas 在 Windows 有环境兼容问题，但我理解每个指标的计算原理后自己实现了核心评测模块。MRR、Hit@K、Precision@K 的计算就是取排名和数命中，不需要依赖外部库。Faithfulness 等需要 LLM，我通过 Ollama 接入 qwen2.5:7b 做了完整的 LLM-as-Judge 三维评测。」
 
-### 5. 检索层基线结果（3 Chunk 小语料）
+### 5. 检索层基线结果（18 条，语料 1445 Chunk，2026-09-12）
 
 | Stage | MRR | Hit@5 | Prec@5 | Recall@5 |
 |-------|-----|-------|--------|----------|
-| BM25 | 0.90 | 0.93 | 0.71 | 0.93 |
-| Vector | 0.97 | 1.00 | 0.73 | 1.00 |
-| RRF | 0.93 | 1.00 | 0.73 | 1.00 |
-| **CE** | **1.00** | **1.00** | **0.73** | **1.00** |
+| BM25 | 0.5469 | 0.8889 | 0.4333 | 0.8889 |
+| Vector | 0.7246 | 0.8333 | 0.3889 | 0.8333 |
+| RRF | 0.7833 | 0.9444 | 0.5000 | 0.9444 |
+| **CE（全管线）** | **0.7889** | **1.0000** | **0.5444** | **1.0000** |
 
 三个关键发现：
-- **S03 是最佳证据——"降级与修复"全链路**：语义查询 "怎么评价检索系统"（字面全无"评测"二字）→ BM25 MRR=0（彻底盲视，张嘴吃零蛋）→ Vector MRR=1.0（语义理解一剑封喉）→ **RRF MRR=0.5（负优化退化！因为 BM25 捞回的"系统"字面噪声被 RRF 无脑融合，真答案被挤到第二名）** → CE MRR=1.0（精排模型逐字通读，识破噪声伪装，将真答案重新顶回 #1）。这一条 query 的四阶段数据，直接证明了"双路粗筛 + 后置精排"管线中 Cross-Encoder 不是锦上添花，而是**对抗 RRF 退化的最后纠错器**
-- **Prec@5 恒定为 0.73**：小语料天花板。总共就 3 个相关 Chunk，Top-5 最多命中 3 个，但总有文档只有 1 个 Chunk 被召回
-- **CE 在多个 query 上修补了 RRF 退化**：RRF 不是银弹，小语料下可能负优化，Cross-Encoder 是最后的纠错器
 
-> 免责：这些数字是 3 Chunk 小语料下的天花板效应。真实场景绝对值会低很多，但**各阶段相对变化趋势一致**——面试时诚实说明这是"验证逻辑正确性"的基线即可。
+- **两路的失败集合几乎不重叠**（这是"混合召回"最硬的证据）：向量把 S04 从 MRR 0.000 拉到 1.000，
+  BM25 则在 Vector 掉到 0.000 的 S02 / S06 上仍有召回。不是感觉上需要两路，是数据上两路的盲区互补。
+- **S06 是"CE 不可省"的最佳证据**：S06（配置放代码外、运行时读取 → settings）的轨迹是
+  BM25 0.2000 → Vector **0.0000** → RRF **0.1000（融合后 Hit@5 反而掉到 0，真答案被挤掉）** → CE 0.2000（救回）。
+  **RRF 不是银弹，它会引入退化；Cross-Encoder 是对抗这种退化的最后纠错器。**
+- **CE 的价值在 Hit@5，不在 MRR**：Hit@5 补到 100%，但 MRR 只 +0.006——因为它**有得有失**：
+  救回 E02（0.33→1.00）、S04（0.50→1.00），也把 G08 / M04 从 1.0 弄到 0.25。
+  精排的定位是"兜底 + 排序"，不是"提分"。
+
+> **别再引用旧稿里的 BM25 0.90 / CE 1.00 那张表**——那是 3 Chunk 小语料下的天花板效应（总共就 3 个相关 chunk，
+> 各配置轻松满分，等于没测出区分度）。**旧表的问题是它证明不了任何事**，新表才有真实的失败案例可以讲。
 
 ### 6. 生成层评测：LLM-as-Judge 三维打分
 
@@ -78,34 +93,38 @@ Ragas 在 Windows Anaconda 环境下出现 SSL 证书冲突（`aiohttp` → `ssl
 
 | 轮次 | 模型 | 结果 | 教训 |
 |------|------|------|------|
-| 第一轮 | qwen2.5:3b | Faithfulness/Relevancy/Recall 全部 0.7，无区分度 | 3B 太小，做评判不准，只会打安全分 |
-| 第二轮 | qwen2.5:7b | Faithfulness 0.95 / Relevancy 0.86 / Recall 0.79，有真实方差 | 7B 具备足够评判能力 |
+| 第一轮 | qwen2.5:3b | 三项指标全部 0.7，无区分度；后来还出现过自相矛盾的判词（同一句里说"大部分信息来自上下文"却按"大量编造"档打 0.10 分） | 3B 太小，**做裁判**不准，只会打安全分 |
+| 第二轮 | qwen2.5:7b | 有真实方差，Faithfulness 从 0.23 拉到 0.95 | 7B 才具备评判能力 |
 
-**面试时怎么说**：「评测 LLM 的选择本身就是一条工程经验——3B 模型太小，只会给安全分。用 7B 之后打分才有了区分度，Faithfulness 从 0.23 直接拉到了 0.95。」
+**结论（已写进架构）**：生成用 **3b**、裁判用 **7b**（`config.JUDGE_MODEL`）。
+生成是"给 3 条证据做抽取归纳 + 标引用 + 输出 JSON"的窄任务，3b 够用且 CPU 可跑；
+裁判要"逐句比对答案与上下文并按档打分"，3b 做不到。**这两件事的模型需求不同，不该共用一个。**
 
-#### 全量 15 条 7B 评测结果（v1 最终版）
+> ⚠️ **上表的 0.95 / 0.86 / 0.79 是历史数字，绑定的是旧语料 + 旧 15 条评测集，不要照着讲。**
+> 换语料后评测集全换，旧数字自动失效。
 
-| 指标 | Mean | Min | Max | 解读 |
-|------|:----:|:---:|:---:|------|
-| Faithfulness | **0.9533** | 0.7 | 1.0 | 系统几乎不编造，RAG 防幻觉目标达成 |
-| Answer Relevancy | **0.86** | 0.7 | 1.0 | 回答基本扣题，mixed 类查询最高（0.98） |
-| Context Recall | 0.7933 | 0.7 | 1.0 | 检索语料中确实缺少公式等细节 |
+#### ⚠️ 当前生成层评测的真实状态（2026-09-14）
 
-| 类别 | Faith | Relev | Recall | 解读 |
-|------|:-----:|:-----:|:------:|------|
-| exact_match | **1.0** | 0.76 | 0.76 | 字面匹配忠实度满分 |
-| mixed | 0.9 | **0.98** | 0.74 | 综合分析题扣题度最高 |
-| semantic | 0.96 | 0.84 | **0.88** | 语义类召回最完整 |
+| 项 | 状态 |
+|---|---|
+| `experiments/llm_evaluation_results.json` | 只有一次**旧语料、3 条、3b 自评**的快跑：F 0.60 / AR 0.50 / CR 0.50，单条生成 14.6~43.8 秒 |
+| 新语料（`corpora/fastapi-zh`）× 18 条 × 7b 裁判 | **还没跑** |
 
-> v1 是现阶段最优结果。后续曾尝试收紧生成 Prompt（200 字/禁止推论），反而导致 E01 Faithfulness 暴跌至 0.0——生成过于简短偏离原文内容。最终结论：**300 字/允许自然关联技术说明** 是当前 7B + 3 Chunk 小语料下的最佳平衡点。
+也就是说：**项目目前只有"检索准"的完整证据（18 条四阶段指标），还没有一条可信的"回答质量好"的证据。**
+面试时被问到生成质量，正确说法是"检索侧我有 18 条分层数据；生成侧的自实现 Judge 已就位、
+3b 端到端能出真答案，但 18 条 × 7b 裁判的完整评测正在跑"——**而不是报一个跑不出来的 0.95**。
 
-#### Context Recall 偏低的关键发现
+#### Context Recall 这个指标要会解释
 
-Context Recall 稳定在 0.7~0.8，不是检索失败，而是语料覆盖不足——BM25 公式推导、RRF 数学公式、Cross-Encoder 自注意力机制细节、MCP 接口封装等知识点在检索语料中确实不存在。**这是一个值得在面试中主动展示的工程洞察**：评测不仅告诉你"好"，还告诉你"缺什么"。
+Context Recall 稳定偏低（历史 0.7~0.8）**不一定是检索失败，可能是语料覆盖不足**——
+参考答案里有些细节在知识库里根本不存在。**这是一个值得在面试中主动展示的工程洞察**：
+评测的价值不仅是打分，更是告诉你"知识库缺什么"。
 
-#### 平均生成耗时
+#### 生成耗时（实测，纯 CPU）
 
-全量 15 条，每条 4 次 LLM 调用（1 次生成 + 3 次评分），平均每条 **233 秒（~4 分钟）**，7B 在纯 CPU 上总计约 1 小时。
+- 3b 生成单条：**14.6 ~ 43.8 秒**（比早期估的 15~25 秒慢，现场演示要留足时间）
+- 7b 裁判更慢，且需 5.0~5.5 GB 内存 —— 跑之前先关掉占内存的应用
+- 所以 `LLM_TIMEOUT_SECONDS` 从 20 提到 **120**，否则纯 CPU 推理必然超时
 
 ### 7. 逐条增量写入：一个工程踩坑
 
@@ -117,9 +136,9 @@ Context Recall 稳定在 0.7~0.8，不是检索失败，而是语料覆盖不足
 
 ## 关键实现与代码走读
 
-> 以下代码节选自实际 `src/evaluate.py`，注释为讲解用。
+> 以下代码节选自实际 `src/evaluation/retrieval_eval.py` 与 `src/evaluation/metrics.py`，注释为讲解用。
 
-### ① 四个核心指标：来自 `src/metrics.py`
+### ① 四个核心指标：来自 `src/evaluation/metrics.py`
 
 ```python
 def mrr(results, golden_sources, k=10):
@@ -158,7 +177,7 @@ def recall_at_k(results, golden_sources, k=10):
     return len(unique_sources) / total_golden
 ```
 
-四个函数来自共享模块 `src/metrics.py`——`evaluate.py` 和 `experiments.py` 之前各自复制粘贴了这些函数，重构后统一引用 metrics.py，消除了重复代码。
+四个函数来自共享模块 `src/evaluation/metrics.py`——`retrieval_eval.py` 和 `experiments.py` 之前各自复制粘贴了这些函数，重构后统一引用 metrics.py，消除了重复代码。
 
 ### ② 四阶段全量评测主循环
 
@@ -195,9 +214,11 @@ def ablation_analysis(summary):
             prev = val
 ```
 
-BM25 → +Vector → +RRF → +CE 逐级累进，每个模块的净贡献一目了然。比如 S03 语义查询：BM25 MRR=0 → Vector +1.0 → RRF -0.5 → CE +0.5。**数字会说话**。
+BM25 → +Vector → +RRF → +CE 逐级累进，每个模块的净贡献一目了然。比如 S04（中间件）语义查询：
+BM25 MRR=0.0000 → Vector 1.0000 → RRF 0.5000 → CE 1.0000。
+再看 S06：BM25 0.2000 → Vector 0.0000 → RRF 0.1000（**负贡献**）→ CE 0.2000（救回）。**数字会说话。**
 
-### ④ `is_relevant` 判定逻辑（from `src/metrics.py`）
+### ④ `is_relevant` 判定逻辑（from `src/evaluation/metrics.py`）
 
 ```python
 def is_relevant(result, golden_sources):
@@ -206,11 +227,13 @@ def is_relevant(result, golden_sources):
     return source in golden_sources
 ```
 
-基于文件级 source 匹配——简单但有效。3 Chunk 小语料下每个文档就是一块，文件级判定足够。大语料下可升级为 Chunk 级 ID 匹配。
+基于文件级 source 匹配——简单但有效。当前语料 1445 个 chunk、122 个源文件，文件级判定仍然够用（一个文件可能被拆成多个 chunk，所以 Recall 的分子按 unique source 去重计数，避免 >1.0 的 bug）。更细的粒度可升级为 Chunk 级 ID 匹配。
+
+注意：`source` 现在是**相对语料根的路径**而非文件名（`CHUNK_ID_RULE_VERSION=3`）——嵌套语料里有 11 个 `index.md`，按文件名做 source 会撞 ID。
 
 ### ⑤ 改写评测：A/B 对比 + 语义保真度 + CE 阈值校准
 
-`agent_evaluate.py` 是 v2 新增的评测模块，补上了原始评测体系最大的盲区——Agent 在做 `rewrite_query`，但 `evaluate.py` 只测原始 query。
+`src/evaluation/agent_eval.py` 补上了原始评测体系最大的盲区——Agent 在做 `rewrite_query`，但 `retrieval_eval.py` 只测原始 query。
 
 `AgentEvaluator` 类的核心逻辑：
 
@@ -230,7 +253,15 @@ class AgentEvaluator:
 
 **语义保真度检查**：用 LLM-as-Judge 判断改写后的 query 是否保留了原始信息需求。关键区分——评"信息需求"而非"字面相似"。"怎么报销"→"差旅费报销审批流程"是好的改写（字面不同但意图一致）。
 
-**CE 阈值校准**：Agent 用 `CE top-1 分数 < 阈值` 决定是否触发改写。原阈值 3.0 是拍脑袋的经验值。`calibrate_threshold()` 扫 1.0~6.0，用"改写是否实际提升了 MRR"作为 ground truth，找 F1 最高的阈值。输出含 confidence 字段，15 组小样本下标记为 "low"，建议积累更多数据后确认。
+**CE 阈值校准**：Agent 用 `CE top-1 分数 < 阈值` 决定是否触发改写。当前阈值 **0.3**（`config.CE_THRESHOLD`）——
+注意**量纲跟着 Cross-Encoder 模型走**：`bge-reranker-base` 经 sigmoid 输出 [0,1]；
+早期英文 `ms-marco-MiniLM` 输出无界 logits，对应经验值是 3.0。换模型不改阈值 = 判定恒定偏一侧。
+
+`calibrate_threshold()` 用"改写是否实际提升了 MRR"作为 ground truth，扫阈值找 F1 最优点，输出含 confidence 字段（小样本下标记 "low"）。
+
+> **踩过的坑（已修）**：校准原本硬编码扫描区间 `1.0~6.0`（旧 logits 量纲）。换 bge-reranker 后忘了改，
+> 后果是所有 [0,1] 分数恒小于 1.0 → 每个阈值都判定"全部需要改写" → F1 恒定不变，**校准静默空跑且不报错**。
+> 现在改为**按本次实测分数的 min/max 自适应扫描**，换任何模型都不会再失效。
 
 ---
 
@@ -238,17 +269,23 @@ class AgentEvaluator:
 
 **面试官**："你怎么评测你们的 RAG 系统？"
 
-**回答**："评测分三层。**检索层**用 MRR、Hit@K、Precision@K、Recall@K 四个硬指标，测'找没找到'。关键不需要第三方库——MRR 就是取第一个相关结果的排名取倒数，Hit@K 就是数命中，四个公式都在共享模块 `src/metrics.py` 里。我用 15 组分层 GoldenTestSet 跑四阶段消融，同一把裁判尺子量四个阶段的输出，保证对比公平。
+**回答**："评测分四层。**检索层**用 MRR、Hit@K、Precision@K、Recall@K 四个硬指标，测'找没找到'。关键不需要第三方库——MRR 就是取第一个相关结果的排名取倒数，Hit@K 就是数命中，四个公式都在共享模块 `src/evaluation/metrics.py` 里。我用 **18 条四类分层**的 GoldenTestSet 跑四阶段消融，同一把裁判尺子量四个阶段的输出，保证对比公平。语料是真实的 FastAPI 中文文档，122 篇、1445 个切片。
 
-我手里最硬核的证据是 S03 这条语义查询。用户问'怎么评价检索系统'——字面一个'评测'都没有。BM25 直接 MRR=0，完全盲视。Vector 语义理解一剑封喉，MRR=1.0 满分。但到了 RRF 融合阶段，因为 BM25 捞回的'系统'字面噪声被无脑融合，真答案被挤到第二——**MRR 直接退化到 0.5**。最后 Cross-Encoder 逐字通读，识破噪声伪装，把 MRR 逆势修复回 1.0。
+检索侧的完整数据：BM25 MRR 0.5469 / Hit@5 88.9%，Vector 0.7246 / 83.3%，RRF 融合 0.7833 / 94.4%，加 CE 后 0.7889 / **100%**。
 
-这条数据直接证明了'双路粗筛 + 后置精排'管线中，Cross-Encoder 不是锦上添花，而是对抗 RRF 退化的最后纠错器。
+我最硬的两条证据是 S04 和 S06。S04 问'请求前后插入通用逻辑'（答案是中间件），字面一个字都没提到——BM25 MRR=0.0000 完全盲视，Vector 满分 1.0000。**但反过来也有**：S02、S06 这两条是 Vector 掉到 0.0000，BM25 还能捞到——所以我说的'互补'是数据上的失败集合不重叠，不是套话。
 
-**生成层**用 LLM-as-Judge 做三维打分：Faithfulness 测幻觉、Answer Relevancy 测跑题、Context Recall 测检索遗漏。这里有一条经验——我最初用 qwen2.5 的 3B 版本，结果三个指标全部打 0.7，完全没有区分度。换到 7B 之后打分才真实可用，Faithfulness 跑到了 0.95。
+S06 更能说明精排的价值：它 BM25 0.2 → Vector 0.0 → **RRF 0.1，融合之后反而更差了**，最后只有 Cross-Encoder 把它救回来。所以 CE 在我的管线里不是锦上添花，是对抗融合退化的最后纠错器。不过我也如实讲：CE 的 MRR 净收益只有 +0.006，它真正的贡献是 Hit@5 从 94.4% 补到 100%——**它是兜底和排序，不是提分**。
 
-**改写评测层**是 v2 新增的——我做了改写效果 A/B 对比，对每组 test case 分别跑原始 query 和改写 query 的检索，对比 MRR 的 delta 来判断改写是否让检索变好了。同时用 LLM-as-Judge 检查改写后的查询有没有偏离原始意图。CE 触发阈值也从拍脑袋的 3.0 变成了有校准实验支撑的数值。
+**生成层**用自实现的 LLM-as-Judge 做三维打分：Faithfulness 测幻觉、Answer Relevancy 测跑题、Context Recall 测检索遗漏。这里有一条实打实的经验——**生成和裁判的模型需求不同，不能共用一个**：3B 当裁判时三项指标全打 0.7 毫无区分度，还出现过自相矛盾的判词；换 7B 才有真实方差。所以我的架构是生成用 3b（窄任务、CPU 可跑）、裁判用 7b。
 
-评测的核心价值不仅是打分，更是告诉你'缺什么'。Context Recall 稳定在 0.7~0.8，不是因为检索烂，而是检索语料里确实没有 BM25 公式推导这些细节——评测帮你定位知识库的盲区。"
+生成侧我要**如实说明进度**：18 条 × 7B 裁判的完整评测还在跑，现在文件里只有旧语料 3 条、3b 自评的小样本结果。**检索质量的证据是完整的，回答质量的证据我不想拿没跑完的数字充数。**
+
+**改写评测层**——我做了改写效果 A/B 对比，对每组 test case 分别跑原始和改写 query 的检索，对比 MRR delta 判断改写是否真的变好；同时用 LLM-as-Judge 检查改写有没有偏离原始意图（评'信息需求'而非'字面相似'）。CE 触发阈值也从拍脑袋的值变成了有校准实验支撑的 0.3。
+
+**端到端验收层**——除了可答集，我还有 10 条拒答集（测'该不该说不知道'）和 3 条多证据集（测跨文档引用覆盖率）。因为一个只会答、不会说'不知道'的 RAG，在生产上是不能用的。
+
+评测的核心价值不仅是打分，更是告诉你'缺什么'。Context Recall 偏低不一定是检索烂，可能是知识库里根本没有那部分内容——评测帮你定位知识库的盲区。"
 
 ---
 
@@ -262,12 +299,16 @@ class AgentEvaluator:
 
 ## 产出文件
 
-- `src/metrics.py` — 共享指标函数（mrr/hit_at_k/precision_at_k/recall_at_k/is_relevant/load_test_cases）
-- `src/evaluate.py` — 自实现检索评测（四指标 + 消融分析，引用 metrics.py）
-- `src/llm_evaluate.py` — LLM-as-Judge 生成评测（Faithfulness/Relevancy/ContextRecall）
-- `src/agent_evaluate.py` — 改写评测（A/B 效果对比 + 语义保真度 + CE 阈值校准）
-- `test_queries.json` — 15 组 GoldenTestSet（三类分层，含 golden_answer）
-- `experiments/llm_evaluation_results.json` — 全量 15 条 7B 评测结果
+- `src/evaluation/metrics.py` — 共享指标函数（mrr/hit_at_k/precision_at_k/recall_at_k/is_relevant/load_test_cases）
+- `src/evaluation/retrieval_eval.py` — 自实现检索评测（四指标 + 消融分析，引用 metrics.py）
+- `src/evaluation/llm_eval.py` — LLM-as-Judge 生成评测（Faithfulness/Relevancy/ContextRecall）
+- `src/evaluation/agent_eval.py` — 改写评测（A/B 效果对比 + 语义保真度 + CE 阈值校准）
+- `src/evaluation/acceptance_eval.py` — 端到端验收（拒答集 / 多证据集 / 裁判）
+- `src/evaluation/experiments.py` — 消融 + 分类别 + 参数扫描 + 延迟剖析 + 单 query 深挖
+- `data/test_queries.json` — 18 条 GoldenTestSet（四类分层，含 golden_answer）
+- `data/unanswerable_queries.json` — 10 条拒答集
+- `data/multi_evidence_queries.json` — 3 条多证据集
+- `experiments/llm_evaluation_results.json` — ⚠️ 仍是旧语料 3 条 / 3b 自评，**新语料 × 18 条 × 7b 裁判待跑**
 - `experiments/agent_evaluation_results.json` — 改写评测结果（改写效果 + 阈值校准）
 
 ## 相关章节

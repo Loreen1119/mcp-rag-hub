@@ -33,7 +33,7 @@
 | [ch02](./chapters/ch02-文档加载与切片管线.md) | PDF/Markdown/TXT 文档加载、Token 级滑动窗口切块、编码自检测 |
 | [ch03](./chapters/ch03-双路召回.md) | BM25 关键词检索 + ChromaDB 向量语义检索双路召回 |
 | [ch04](./chapters/ch04-RRF融合与重排序.md) | RRF 倒数排名融合、Cross-Encoder 精排、两阶段排序策略 |
-| [ch05](./chapters/ch05-Streamlit前端.md) | Streamlit 交互界面、四标签页结果展示、session_state 状态管理 |
+| [ch05](./chapters/ch05-Streamlit前端.md) | Streamlit 交互界面、两 Tab（问答/调试）+ 四阶段调试看板、session_state 状态管理 |
 | [ch06](./chapters/ch06-Ragas评测.md) | 三层评测体系：检索层 MRR/Hit@K + 生成层 Ragas + 改写层 A/B 对比 |
 | [ch07](./chapters/ch07-FastMCP工具封装.md) | MCP 协议、FastMCP 工具封装、MCP Inspector 调试 |
 | [ch08](./chapters/ch08-LangGraph-Agent编排.md) | LangGraph 状态机、五节点 Agent 编排、条件路由与查询改写 |
@@ -56,5 +56,8 @@ docs_knowledge/
 
 > ⚠️ 正文中的模型名与指标基线以 `config.py` 与 [ch09](./chapters/ch09-消融实验与数据分析.md) 为准。
 > 项目在 2026-09-12 把语料从项目自身 `docs/` 换成了 `corpora/fastapi-zh`。
-> **已对齐**：`README.md`（仓库根）、`面试背诵稿.md`、`resume-项目一.md`、`开发过程中遇到的问题.md`、ch09、`项目详解.md`（2026-09-14，评测口径 + 界面章节全篇）。
-> **仍未对齐**：`技术视角详解.md` 及 ch02/03/05/06/08/10 —— 这些正文里仍有旧模型名（`all-MiniLM-L6-v2`、`ms-marco-MiniLM`）和旧口径（"36 条"、train/test 拆分、CE 阈值 3.0、"3 Chunk" 语料），引用前需先核对 `config.py`。
+> **已对齐**：`README.md`（仓库根）、`面试背诵稿.md`、`resume-项目一.md`、`开发过程中遇到的问题.md`、ch09、`项目详解.md`（2026-09-14，评测口径 + 界面章节全篇）、`技术视角详解.md`（2026-09-14 全篇重写：模型名、切块参数、CE 阈值量纲、三套验收集、18 条基线、延迟待重测标注、消融 7 配置、自实现 Judge 现状）。
+> **已全部对齐**（2026-09-14）：ch02 / ch03 / ch05 / ch06 / ch08 / ch10 六篇章节笔记已同步到当前模型与口径
+> —— 模型名（`bge-small-zh-v1.5` 512 维 / `bge-reranker-base`）、切块 256/38、CE 阈值 0.3 及其量纲陷阱、
+> 18 条四类验收集（+10 拒答 / +3 多证据）、09-12 新基线、延迟与 0.95 两个"待重测/历史"标注、
+> 顶层两 Tab 界面。**保留了旧模型名的位置都是在解释"为什么换掉它"，是刻意保留的。**

@@ -51,7 +51,13 @@ START → analyze_query → retrieve → check_results
 
 **关键设计决策**：
 - **max_attempts=2**：防止改写循环无限执行（实际生产中改写质量边际递减）
-- **CE 阈值=3.0**：ms-marco-MiniLM 的经验值，低于 3 通常不相关
+- **CE 阈值=0.3**：注意**阈值量纲跟着 Cross-Encoder 模型走**——
+  当前 `bge-reranker-base` 经 sigmoid 输出 [0,1]，0.3 是"不太相关"的分界；
+  早期用英文 `ms-marco-MiniLM-L-6-v2` 时输出是无界 logits，对应的经验值是 **3.0**。
+  换模型不改阈值 → 判定永远偏向一侧，这是个很隐蔽的坑。
+- **这个阈值只决定"要不要改写重试"，不决定"要不要拒答"**：
+  曾用 CE 分数做过拒答门控，实测被证伪（能答与不能答的分数分布严重重叠）；
+  现在拒答完全交给生成阶段的 LLM 判断。面试被问"阈值怎么定的"，要把这条讲清楚。
 - **operator.add 累加**：改写后的检索结果不会覆盖原始结果，而是合并——第一次检索可能也含有用信息
 
 ### 4. 查询改写（Query Rewriting）
@@ -65,7 +71,8 @@ START → analyze_query → retrieve → check_results
 | "RRF" | "RRF Reciprocal Rank Fusion 排名融合算法" | 扩展缩写 |
 | "怎么评价检索好不好" | "信息检索系统评测指标 MRR Hit@K Precision@K" | 补充专业术语 |
 
-**Fallback 设计**：LLM 不可用时（Ollama 未安装），使用规则式改写：将原 query 的关键词 + 同义表达拼接。
+**Fallback 设计**：LLM 不可用时（Ollama 服务未启动 / 超时 / 7b OOM），使用规则式改写：将原 query 的关键词 + 同义表达拼接。
+> 注意：Ollama **不自启**，要手动 `ollama serve`；模型已装（3b / 7b），"未安装"不是常见故障原因。
 
 ### 5. RAG Agent vs 纯 RAG 管线的区别
 
@@ -73,7 +80,7 @@ START → analyze_query → retrieve → check_results
 |---|---|---|
 | 流程 | 固定：检索 → 融合 → 重排 | 动态：检索 → 检查 → 可能改写 → 再检索 |
 | 输入 | 假设 query 是良好的 | 接受口语化、模糊的 query |
-| LLM 角色 | 仅用于重排序 (Cross-Encoder) | 也用于查询改写 + 答案生成 |
+| LLM 角色 | 不调 LLM（重排序用的是 Cross-Encoder，判别式小模型，不是 LLM） | 查询改写 + 答案生成 |
 | 容错 | 一次检索，不行就返回低分结果 | 多次尝试，自动改写 query |
 | 可观测性 | 看分数 | search_log 记录每一步决策 |
 
@@ -87,6 +94,7 @@ START → analyze_query → retrieve → check_results
 - **查询改写**：RAG Agent 最核心的智能——把不专业的查询转成可检索的技术术语
 - **Ollama fallback**：LLM 不可用时降级为规则式改写 + 检索拼接，保证系统可用
 - **max_attempts**：循环边界，防止无限改写
+- **CE 阈值 0.3（不是 3.0）**：量纲跟着模型走，bge-reranker 输出 [0,1]；且**只用于改写门控、不用于拒答**
 
 ## 产出文件
 
@@ -121,13 +129,22 @@ retrieved_chunks: Annotated[list[dict], operator.add]
 ### ③ LLM Fallback 降级
 
 ```python
-def _call_llm(prompt, system=""):
+def _call_llm(prompt, system="", json_mode=False):
     try:
         import ollama
-        response = ollama.chat(model="qwen2.5:7b", messages=messages)
-        return response["message"]["content"]
-    except Exception:
-        return ""  # 调用方做 fallback
+        # 生成用 3b（纯 CPU 可跑）；裁判才用 7b（跑评测时另开，见 config.JUDGE_MODEL）
+        response = ollama.chat(
+            model=LLM_MODEL,                 # qwen2.5:3b
+            messages=messages,
+            options={"temperature": 0.0},
+            format="json" if json_mode else "",
+        )
+        return response["message"]["content"], ""
+    except Exception as exc:
+        return "", _classify_llm_error(exc)  # 调用方按错误类型做 fallback
 ```
 
-**追问应对**：「Ollama 不可用时代理还能工作吗？」— 能。查询改写降级为规则式拼接，答案生成降级为检索 Top-3 的原文拼贴。虽然质量不如 LLM 模式，但系统骨架不依赖外部服务。这在生产环境非常重要——LLM 是 best-effort 的增强，不是硬依赖。
+**追问应对**：
+- 「Ollama 不可用时代理还能工作吗？」— 能。查询改写降级为规则式拼接，答案生成降级为检索 Top-3 的原文拼贴。虽然质量不如 LLM 模式，但系统骨架不依赖外部服务。这在生产环境非常重要——LLM 是 best-effort 的增强，不是硬依赖。
+- 「为什么生成用 3b 不用 7b？」— 本机 Intel UHD 集显、无 CUDA，只能纯 CPU 推理：7b 权重 4.36GB、加载需 5.0~5.5GB 必然 OOM，且 2~4 tok/s 下 300 字要 50~100 秒；3b 权重 1.8GB、8~15 tok/s、15~25 秒出答案。而这个生成任务是"给 3 条证据做抽取归纳 + 标引用 + 输出 JSON"的窄任务，3b 够用。**但裁判必须用 7b**——3b 当裁判会给出自相矛盾的判词。
+- 「超时怎么设？」— `LLM_TIMEOUT_SECONDS=120`（原 20s 对纯 CPU 推理必然超时），且只针对连接失败/超时重试 1 次，JSON 解析失败不重试。
