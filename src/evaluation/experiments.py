@@ -635,6 +635,31 @@ def _save_json(data: dict, filename: str) -> None:
 # ============================================================
 
 
+# ============================================================
+# 报告结论的判定工具（C10，2026-09-15）
+# ============================================================
+# 背景：报告里的结论段此前是**写死的文案**，不随数据变化 ——
+# 于是出现了"实测 ΔMRR=0，报告却写'图检索提供了增量价值'"这种自相矛盾，
+# 拿去讲会被追问穿。改为：**只在数据支持时才下结论**，否则如实说明。
+#
+# 为什么要有阈值：MRR 是浮点数，两个配置偶然差 0.0001 不构成"更好"。
+# 取 0.001 作为"可忽略"的边界（低于它一律按持平处理）。
+_MIN_MEANINGFUL_GAIN = 0.001
+
+
+def _delta_phrase(gain: float, winner: str, loser: str) -> str:
+    """按实测差值给出**中性**描述，不预设谁更好。
+
+    gain > 0 表示 winner 领先。返回"X 更高"/"两者基本持平"，
+    避免在数据不支持时写出"XX 的优势"这类断言。
+    """
+    if gain > _MIN_MEANINGFUL_GAIN:
+        return f"{winner} 更高（{gain:+.4f}）"
+    if gain < -_MIN_MEANINGFUL_GAIN:
+        return f"{loser} 更高（{gain:+.4f}）"
+    return "两者基本持平"
+
+
 def generate_report(
     ablation: dict | None = None,
     category: dict | None = None,
@@ -675,9 +700,21 @@ def generate_report(
         lines.append(f"**Full (双路) → Triple (三路+GraphRAG) MRR 提升: {triple_mrr - full_mrr:+.4f}**")
         lines.append(f"**GraphRAG 独立 MRR: {graph_mrr:.4f}** (vs BM25={bm25_mrr:.4f}, Vector={vector_mrr:.4f})")
 
-        if triple_mrr >= full_mrr:
+        # C10：原为 `if triple_mrr >= full_mrr:` + 固定文案"提供了增量价值"。
+        # `>=` 在 Δ=0 时同样成立 → "零增量"时报告照样宣称"提供了增量"。
+        # 改为按实测 delta 分三档，别在数据不支持时下结论。
+        triple_gain = triple_mrr - full_mrr
+        if triple_gain > _MIN_MEANINGFUL_GAIN:
             lines.append(f"\n[OK] 三路混合检索（+GraphRAG）MRR={triple_mrr:.4f}，"
-                         f"图检索为双路召回提供了增量价值。")
+                         f"相对双路 {triple_gain:+.4f}，图检索带来了增量。")
+        elif triple_gain < -_MIN_MEANINGFUL_GAIN:
+            lines.append(f"\n[WARN] 三路混合检索（+GraphRAG）MRR={triple_mrr:.4f}，"
+                         f"相对双路 {triple_gain:+.4f}，**图检索反而拉低了效果**。"
+                         f"不构成收益，保持 ENABLE_KG 关闭。")
+        else:
+            lines.append(f"\n[WARN] 三路混合检索（+GraphRAG）MRR={triple_mrr:.4f}，"
+                         f"相对双路 {triple_gain:+.4f}，**未观察到增量**。"
+                         f"图检索在此语料上不构成收益，ENABLE_KG 默认关闭是合理的。")
 
     # --- 分类分析 ---
     if category and "categories" in category:
@@ -704,14 +741,30 @@ def generate_report(
             s_bm25 = semantic.get("bm25_only", {}).get("mrr", 0)
             s_vec = semantic.get("vector_only", {}).get("mrr", 0)
 
-            lines.append(f"\n**BM25 在 exact_match 上的优势**: "
-                         f"BM25={e_bm25:.4f} vs Vector={e_vec:.4f}")
-            lines.append(f"**Vector 在 semantic 上的优势**: "
-                         f"Vector={s_vec:.4f} vs BM25={s_bm25:.4f}")
+            # C10：原文是"**BM25 在 exact_match 上的优势**"这类**预设断言**（根本没检查
+            # 它是否真更大），且结论只验证了 semantic 一半、exact 那半没查。
+            # 改为：两半都按实测判断，表述中性，验证不通过时如实说明。
+            exact_gain = e_bm25 - e_vec
+            sem_gain = s_vec - s_bm25
+            lines.append(f"\n**exact_match 类**: BM25={e_bm25:.4f} vs Vector={e_vec:.4f}"
+                         f" → {_delta_phrase(exact_gain, 'BM25', 'Vector')}")
+            lines.append(f"**semantic 类**: Vector={s_vec:.4f} vs BM25={s_bm25:.4f}"
+                         f" → {_delta_phrase(sem_gain, 'Vector', 'BM25')}")
 
-            if s_bm25 < s_vec:
-                lines.append("\n[OK] 验证结论：BM25 对专有名词精确匹配更好，"
-                             "向量检索对语义相似查询更优。两者互补，混合召回是正确架构。")
+            bm25_wins_exact = exact_gain > _MIN_MEANINGFUL_GAIN
+            vector_wins_semantic = sem_gain > _MIN_MEANINGFUL_GAIN
+            if bm25_wins_exact and vector_wins_semantic:
+                lines.append("\n[OK] 两路互补得到验证：BM25 在精确匹配类更高，"
+                             "向量检索在语义类更高 —— 混合召回是正确架构。")
+            elif vector_wins_semantic:
+                lines.append("\n[WARN] 向量检索在语义类更高（符合预期），"
+                             "但 BM25 未在精确匹配类占优 —— 两路互补只验证了一半。")
+            elif bm25_wins_exact:
+                lines.append("\n[WARN] BM25 在精确匹配类更高（符合预期），"
+                             "但向量检索未在语义类占优 —— 两路互补只验证了一半。")
+            else:
+                lines.append("\n[WARN] 两路互补**未从数据得到支持**："
+                             "BM25 未在精确匹配类占优，向量检索也未在语义类占优。")
 
     # --- 延迟 ---
     if latency and "timings" in latency:
