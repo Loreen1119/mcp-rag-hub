@@ -26,10 +26,11 @@ journal/
 ├── A组验收结果-2026-09-15.md               # ★ 首轮端到端验收：生成率/拒答率/引用覆盖 + 两条异常根因
 ├── 2026-07-31-dify-rag-tuning.md          # Dify 实战踩坑日志
 ├── 2026-08-04-kg-ablation-notes.md        # KG 路消融实验
-├── kg_diag.py / kg_diag_control.py        # 诊断脚本：KG 路对照实验
-└── phase0_answerability_analysis_v1.py    # 历史：Phase 0 分析脚本 v1（已被
-                                           #   src/evaluation/phase0_answerability_analysis_v2.py 取代，
-                                           #   保留是为了记录"CE 阈值门控"这条被证伪的路线）
+└── scripts/                              # 诊断 / 历史分析脚本（保留原始生成脚本）
+    ├── kg_diag.py / kg_diag_control.py        # 诊断脚本：KG 路对照实验
+    └── phase0_answerability_analysis_v1.py    # 历史：Phase 0 分析脚本 v1（已被
+                                               #   src/evaluation/phase0_answerability_analysis_v2.py 取代，
+                                               #   保留是为了记录"CE 阈值门控"这条被证伪的路线）
 ```
 
 知识库语料在 [`corpora/`](../corpora/README.md)，项目自身文档在 [`docs/`](../docs/README.md)，

@@ -9,11 +9,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from statistics import mean
 from typing import Any
+
+# 让脚本从任意 cwd 都能 import 项目根模块（config / src）
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from config import CE_TOP_K, EXPERIMENTS_DIR, KG_RRF_WEIGHT, PROJECT_ROOT
 from src.pipeline import get_pipeline

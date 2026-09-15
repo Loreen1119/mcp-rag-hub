@@ -8,8 +8,12 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+# 让脚本从任意 cwd 都能 import 项目根模块（config / src）
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from config import DOCS_DIR, KG_TRIPLES_FILE, TEST_QUERIES_FILE
 from src.data_pipeline import process_directory
@@ -18,11 +22,12 @@ from src.kg_retriever import KGRetriever, _extract_query_entities, _find_matched
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s | %(message)s")
 
 # 对照实验使用的“干净”文档集合
+# ⚠️ sample_rag_paper.md 已迁到 docs/samples/，故这里的 source 是相对 DOCS_DIR 的路径
 CLEAN_DOCS = {
     "rag-intro.md",
     "embedding-guide.md",
     "chunking-strategies.md",
-    "sample_rag_paper.md",
+    "samples/sample_rag_paper.md",
 }
 
 CONTROL_TRIPLES_FILE = KG_TRIPLES_FILE.with_suffix(".control.jsonl")

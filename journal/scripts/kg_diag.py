@@ -9,8 +9,12 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+# 让脚本从任意 cwd 都能 import 项目根模块（config / src）
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from config import DOCS_DIR, TEST_QUERIES_FILE
 from src.data_pipeline import process_directory

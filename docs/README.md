@@ -17,8 +17,8 @@
 | AST 分块方案怎么实现的 | [ast-chunking-plan.md](./ast-chunking-plan.md) — **已实现** |
 | LightRAG 源码笔记 + **为什么没做图检索** | [lightrag-takeaways.md](./lightrag-takeaways.md) — ⚠️ 该方向已由实测否决，但源码分析仍可参考 |
 | 怎么用 Docker 跑起来 | [docker-deployment.md](./docker-deployment.md) — 前置条件与已知限制 |
-| RAG 技术综述（示例/模板） | [sample_rag_paper.md](./sample_rag_paper.md) |
-| 项目技术栈早期草稿 | [sample_notes.txt](./sample_notes.txt) |
+| RAG 技术综述（示例/模板） | [samples/sample_rag_paper.md](./samples/sample_rag_paper.md) |
+| 项目技术栈早期草稿 | [samples/sample_notes.txt](./samples/sample_notes.txt) |
 
 ## 文件清单
 
@@ -31,8 +31,9 @@ docs/
 ├── ast-chunking-plan.md       # AST 分块方案（已实现）
 ├── lightrag-takeaways.md      # LightRAG 源码笔记（原在 journal/，2026-09-15 归档到此）
 ├── docker-deployment.md       # Docker 部署说明
-├── sample_rag_paper.md        # RAG 技术综述（示例/模板）
-└── sample_notes.txt           # 项目技术栈早期草稿
+└── samples/                   # 示例 / 早期草稿（非活文档，不参与叙事）
+    ├── sample_rag_paper.md    # RAG 技术综述（示例/模板）
+    └── sample_notes.txt       # 项目技术栈早期草稿
 ```
 
 > **关于 `lightrag-takeaways.md`**：它原本在 `journal/`（2026-08-04 从本目录迁出，理由是当时
