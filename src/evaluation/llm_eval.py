@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import sys
 import time
 from pathlib import Path
@@ -100,7 +101,10 @@ def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str
                 "model": model or LLM_MODEL,
                 "messages": messages,
                 "stream": False,
-                "options": {"temperature": 0.0, "num_predict": 512},
+                # C8（2026-09-15 修）：原为 512 —— 对 3b 够用，但 7b 的 reason 明显更长，
+                # 输出会被截断 → JSON 不合法 → _parse_score 静默返回 0 分（不报错）。
+                # 实测 18 条里中招 1 条（S02 真实分 0.9 被记成 0.0）。提到 1536 留足余量。
+                "options": {"temperature": 0.0, "num_predict": 1536},
             },
             timeout=300,
         )
@@ -214,6 +218,15 @@ def _parse_score(raw: str) -> tuple[float, str]:
         reason = data.get("reason", "")
         return max(0.0, min(1.0, score)), reason
     except (json.JSONDecodeError, ValueError, KeyError):
+        # C8（2026-09-15 修）：输出超长被截断时会走到这里（拿到的不是完整 JSON）。
+        # "score" 字段写在 reason 之前，通常已完整输出 → 尽量抢救真实分数，
+        # 避免"静默记 0 分"这种会污染均值的失败方式。
+        m = re.search(r'"score"\s*:\s*([0-9]*\.?[0-9]+)', raw)
+        if m:
+            try:
+                return max(0.0, min(1.0, float(m.group(1)))), f"[截断输出恢复] {raw[:100]}"
+            except ValueError:
+                pass
         return 0.0, f"解析失败: {raw[:100]}"
 
 

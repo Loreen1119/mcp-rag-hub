@@ -167,7 +167,10 @@ class VectorRetriever:
         self._by_id: dict[str, Chunk] = {c.chunk_id: c for c in chunks}
 
         if rebuild:
-            self._rebuild_collection(collection_name, chunks, schema_version)
+            # C9（2026-09-15 修）：此前漏了赋值 —— 调用后没把返回的 collection 存回 self，
+            # 紧接着的 logger 访问 self.collection.name 必然 AttributeError，
+            # 导致 experiments.py 全部 6 处实验（ablation/category/sweep/quick/latency/deepdive）跑不了。
+            self.collection = self._rebuild_collection(collection_name, chunks, schema_version)
         else:
             self.collection = self._get_or_build_collection(
                 collection_name, chunks, schema_version
