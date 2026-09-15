@@ -2,30 +2,30 @@
   "description": "各阶段平均延迟 (ms)",
   "timings": {
     "bm25_search_ms": {
-      "mean_ms": 0.38,
-      "min_ms": 0.23,
-      "max_ms": 0.66
+      "mean_ms": 5.23,
+      "min_ms": 0.95,
+      "max_ms": 8.98
     },
     "vector_search_ms": {
-      "mean_ms": 21.14,
-      "min_ms": 17.0,
-      "max_ms": 26.05
+      "mean_ms": 18.25,
+      "min_ms": 13.4,
+      "max_ms": 24.41
     },
     "graph_search_ms": {
-      "mean_ms": 0.85,
-      "min_ms": 0.27,
-      "max_ms": 1.79
+      "mean_ms": 7.08,
+      "min_ms": 0.22,
+      "max_ms": 12.06
     },
     "rrf_fusion_ms": {
-      "mean_ms": 0.06,
-      "min_ms": 0.03,
-      "max_ms": 0.08
+      "mean_ms": 0.18,
+      "min_ms": 0.12,
+      "max_ms": 0.26
     },
     "ce_rerank_ms": {
-      "mean_ms": 373.0,
-      "min_ms": 343.57,
-      "max_ms": 434.84
+      "mean_ms": 12763.11,
+      "min_ms": 8554.6,
+      "max_ms": 16038.94
     }
   },
-  "total_mean_ms": 395.43
+  "total_mean_ms": 12793.85
 }

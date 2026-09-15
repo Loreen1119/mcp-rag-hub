@@ -1,11 +1,11 @@
 # experiments/ — 实验产物
 
-> ⚠️ **先记住一句话**：除文末标了 **2026-09-15** 的两条外，**本目录其余产物都出自"旧语料"**
-> （项目自身的 `docs/`，已于 2026-09-12 换成 `corpora/fastapi-zh`）。引用任何数字前先看"语料归属"列。
+> ⚠️ **先记住一句话**：**引用任何数字前，先看下面的"语料归属"列。** 标"旧"的不可引用。
 >
-> ✅ **2026-09-15 起，本目录第一次有了能代表系统当前状态的产物** ——
-> `llm_evaluation_results.json`（18 条可答）与 `acceptance_eval_results.json`（拒答 10 + 多证据 3）。
-> 结论汇总见 [`journal/A组验收结果-2026-09-15.md`](../journal/A组验收结果-2026-09-15.md)。
+> ✅ **2026-09-15 起，本目录产物已基本全部更新到当前语料**（`corpora/fastapi-zh`）——
+> 包括 `experiments.py --quick` 产出的消融 / 分类表现 / 参数扫描 / 延迟 / 深度追踪五类，
+> 以及生成侧的两份评测（18 条可答 + 拒答 10 + 多证据 3）。
+> 完整结论见 [`journal/A组验收结果-2026-09-15.md`](../journal/A组验收结果-2026-09-15.md)。
 
 ## 为什么需要这份说明
 
@@ -20,12 +20,12 @@
 
 | 文件 | 生成时间 | 生成脚本 | 语料 | 能不能引用 |
 |---|---|---|---|---|
-| `query_deep_dive.json` | 2026-07-01 | `experiments.py` | 旧 | ❌ 仅存档 |
-| `ablation_results.json` | 2026-07-27 | `experiments.py` | 旧 | ❌ 仅存档 |
-| `category_breakdown.json` | 2026-07-27 | `experiments.py` | 旧 | ❌ 仅存档 |
-| `latency_profile.json` | 2026-07-27 | `experiments.py` | 旧 | ❌ **不可用**（旧语料仅 3 chunk + 英文 CE `ms-marco-MiniLM`，与现状不可比） |
-| `parameter_sweep.json` | 2026-07-27 | `experiments.py` | 旧 | ❌ 仅存档 |
-| `report.md` | 2026-07-27 | `experiments.py` | 旧 | ❌ 仅存档 |
+| `query_deep_dive.json` | **2026-09-15** | `experiments.py` | **新** | ✅ 可用 |
+| `ablation_results.json` | **2026-09-15** | `experiments.py` | **新** | ✅ **可用**（7 配置模块消融） |
+| `category_breakdown.json` | **2026-09-15** | `experiments.py` | **新** | ✅ 可用（分类别表现） |
+| `latency_profile.json` | **2026-09-15** | `experiments.py` | **新** | ✅ **可用**（全链路 12.8s，CE 占 99.8%） |
+| `parameter_sweep.json` | **2026-09-15** | `experiments.py` | **新** | ✅ 可用 |
+| `report.md` | **2026-09-15** | `experiments.py` | **新** | ⚠️ 可用，但**内含一句硬编码结论与数据矛盾**（见下 C10） |
 | `kg_diag_report.json` | 2026-08-04 | `journal/kg_diag.py` | 旧 | ❌ 仅存档（KG 路诊断） |
 | `kg_diag_report_control.json` | 2026-08-04 | `journal/kg_diag_control.py` | 旧 | ❌ 仅存档（对照组） |
 | `answerability_score_analysis.json` | 2026-09-11 | `phase0_answerability_analysis_v2.py` | 旧 | ✅ 结论可用（见下） |

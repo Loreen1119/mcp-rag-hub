@@ -2,89 +2,81 @@
   "description": "参数敏感性网格扫描",
   "sweeps": [
     {
-      "chunk_size": 256,
-      "overlap": 64,
-      "rrf_k": 60,
+      "rrf_k": 30,
+      "ce_top_k": 3,
+      "mrr": 0.75,
+      "hit@5": 0.8333,
+      "precision@5": 0.5556,
+      "recall@5": 0.8333
+    },
+    {
+      "rrf_k": 30,
       "ce_top_k": 5,
-      "mrr": 1.0,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.7867,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     },
     {
-      "chunk_size": 256,
-      "overlap": 128,
-      "rrf_k": 60,
-      "ce_top_k": 5,
-      "mrr": 0.9667,
+      "rrf_k": 30,
+      "ce_top_k": 10,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.7333,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     },
     {
-      "chunk_size": 512,
-      "overlap": 64,
+      "rrf_k": 60,
+      "ce_top_k": 3,
+      "mrr": 0.75,
+      "hit@5": 0.8333,
+      "precision@5": 0.5556,
+      "recall@5": 0.8333
+    },
+    {
       "rrf_k": 60,
       "ce_top_k": 5,
-      "mrr": 1.0,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.7333,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     },
     {
-      "chunk_size": 512,
-      "overlap": 128,
       "rrf_k": 60,
-      "ce_top_k": 5,
-      "mrr": 1.0,
+      "ce_top_k": 10,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.7333,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     },
     {
-      "chunk_size": 512,
-      "overlap": 256,
-      "rrf_k": 60,
+      "rrf_k": 120,
+      "ce_top_k": 3,
+      "mrr": 0.75,
+      "hit@5": 0.8333,
+      "precision@5": 0.5556,
+      "recall@5": 0.8333
+    },
+    {
+      "rrf_k": 120,
       "ce_top_k": 5,
-      "mrr": 0.9667,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.7333,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     },
     {
-      "chunk_size": 1024,
-      "overlap": 64,
-      "rrf_k": 60,
-      "ce_top_k": 5,
-      "mrr": 0.7,
+      "rrf_k": 120,
+      "ce_top_k": 10,
+      "mrr": 0.7889,
       "hit@5": 1.0,
-      "precision@5": 0.6,
-      "recall@5": 1.0
-    },
-    {
-      "chunk_size": 1024,
-      "overlap": 128,
-      "rrf_k": 60,
-      "ce_top_k": 5,
-      "mrr": 0.7,
-      "hit@5": 1.0,
-      "precision@5": 0.6,
-      "recall@5": 1.0
-    },
-    {
-      "chunk_size": 1024,
-      "overlap": 256,
-      "rrf_k": 60,
-      "ce_top_k": 5,
-      "mrr": 0.7,
-      "hit@5": 1.0,
-      "precision@5": 0.6,
+      "precision@5": 0.5444,
       "recall@5": 1.0
     }
   ],
   "best_config": {
-    "chunk_size": 256,
-    "overlap": 64,
-    "mrr": 1.0
+    "rrf_k": 30,
+    "ce_top_k": 5,
+    "mrr": 0.7889
   }
 }

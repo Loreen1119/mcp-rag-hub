@@ -3,45 +3,45 @@
   "categories": {
     "exact_match": {
       "bm25_only": {
-        "mrr": 1.0,
+        "mrr": 0.8,
         "hit@5": 1.0,
-        "precision@5": 0.7633,
+        "precision@5": 0.75,
         "recall@5": 1.0
       },
       "vector_only": {
-        "mrr": 1.0,
+        "mrr": 0.8,
         "hit@5": 1.0,
-        "precision@5": 0.76,
+        "precision@5": 0.6,
         "recall@5": 1.0
       },
       "graph_only": {
-        "mrr": 1.0,
-        "hit@5": 1.0,
-        "precision@5": 0.92,
-        "recall@5": 1.0
+        "mrr": 0.0312,
+        "hit@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
       },
       "full_pipeline": {
         "mrr": 1.0,
         "hit@5": 1.0,
-        "precision@5": 0.64,
+        "precision@5": 0.75,
         "recall@5": 1.0
       },
       "triple_fusion": {
         "mrr": 1.0,
         "hit@5": 1.0,
-        "precision@5": 0.64,
+        "precision@5": 0.75,
         "recall@5": 1.0
       },
       "bm25_to_full_gain": {
-        "mrr": 0.0,
+        "mrr": 0.2,
         "hit@5": 0.0,
-        "precision@5": -0.1233,
+        "precision@5": 0.0,
         "recall@5": 0.0
       },
       "vector_to_full_gain": {
-        "mrr": 0.0,
+        "mrr": 0.2,
         "hit@5": 0.0,
-        "precision@5": -0.12,
+        "precision@5": 0.15,
         "recall@5": 0.0
       },
       "full_to_triple_gain": {
@@ -51,47 +51,97 @@
         "recall@5": 0.0
       }
     },
-    "mixed": {
+    "graph": {
       "bm25_only": {
-        "mrr": 1.0,
+        "mrr": 0.7083,
         "hit@5": 1.0,
-        "precision@5": 0.88,
+        "precision@5": 0.4667,
         "recall@5": 1.0
       },
       "vector_only": {
-        "mrr": 0.9,
-        "hit@5": 1.0,
-        "precision@5": 0.8,
-        "recall@5": 1.0
+        "mrr": 0.8571,
+        "hit@5": 0.8333,
+        "precision@5": 0.4333,
+        "recall@5": 0.8333
       },
       "graph_only": {
-        "mrr": 1.0,
-        "hit@5": 1.0,
-        "precision@5": 0.88,
-        "recall@5": 1.0
+        "mrr": 0.0833,
+        "hit@5": 0.1667,
+        "precision@5": 0.0333,
+        "recall@5": 0.1667
       },
       "full_pipeline": {
-        "mrr": 1.0,
+        "mrr": 0.7917,
         "hit@5": 1.0,
-        "precision@5": 0.84,
+        "precision@5": 0.6,
         "recall@5": 1.0
       },
       "triple_fusion": {
-        "mrr": 1.0,
+        "mrr": 0.7917,
         "hit@5": 1.0,
-        "precision@5": 0.84,
+        "precision@5": 0.5667,
         "recall@5": 1.0
       },
       "bm25_to_full_gain": {
-        "mrr": 0.0,
+        "mrr": 0.0834,
         "hit@5": 0.0,
-        "precision@5": -0.04,
+        "precision@5": 0.1333,
         "recall@5": 0.0
       },
       "vector_to_full_gain": {
-        "mrr": 0.1,
+        "mrr": -0.0654,
+        "hit@5": 0.1667,
+        "precision@5": 0.1667,
+        "recall@5": 0.1667
+      },
+      "full_to_triple_gain": {
+        "mrr": 0.0,
         "hit@5": 0.0,
-        "precision@5": 0.04,
+        "precision@5": -0.0333,
+        "recall@5": 0.0
+      }
+    },
+    "mixed": {
+      "bm25_only": {
+        "mrr": 0.3611,
+        "hit@5": 0.75,
+        "precision@5": 0.25,
+        "recall@5": 0.75
+      },
+      "vector_only": {
+        "mrr": 0.675,
+        "hit@5": 1.0,
+        "precision@5": 0.3,
+        "recall@5": 1.0
+      },
+      "graph_only": {
+        "mrr": 0.25,
+        "hit@5": 0.25,
+        "precision@5": 0.05,
+        "recall@5": 0.25
+      },
+      "full_pipeline": {
+        "mrr": 0.8125,
+        "hit@5": 1.0,
+        "precision@5": 0.35,
+        "recall@5": 1.0
+      },
+      "triple_fusion": {
+        "mrr": 0.8125,
+        "hit@5": 1.0,
+        "precision@5": 0.35,
+        "recall@5": 1.0
+      },
+      "bm25_to_full_gain": {
+        "mrr": 0.4514,
+        "hit@5": 0.25,
+        "precision@5": 0.1,
+        "recall@5": 0.25
+      },
+      "vector_to_full_gain": {
+        "mrr": 0.1375,
+        "hit@5": 0.0,
+        "precision@5": 0.05,
         "recall@5": 0.0
       },
       "full_to_triple_gain": {
@@ -103,46 +153,46 @@
     },
     "semantic": {
       "bm25_only": {
-        "mrr": 0.8,
-        "hit@5": 0.8,
-        "precision@5": 0.64,
-        "recall@5": 0.8
+        "mrr": 0.2375,
+        "hit@5": 0.75,
+        "precision@5": 0.25,
+        "recall@5": 0.75
       },
       "vector_only": {
-        "mrr": 1.0,
-        "hit@5": 1.0,
-        "precision@5": 0.72,
-        "recall@5": 1.0
+        "mrr": 0.5,
+        "hit@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 0.5
       },
       "graph_only": {
-        "mrr": 0.8667,
-        "hit@5": 1.0,
-        "precision@5": 0.88,
-        "recall@5": 1.0
+        "mrr": 0.025,
+        "hit@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
       },
       "full_pipeline": {
-        "mrr": 1.0,
+        "mrr": 0.55,
         "hit@5": 1.0,
-        "precision@5": 0.88,
+        "precision@5": 0.45,
         "recall@5": 1.0
       },
       "triple_fusion": {
-        "mrr": 1.0,
+        "mrr": 0.55,
         "hit@5": 1.0,
-        "precision@5": 0.88,
+        "precision@5": 0.45,
         "recall@5": 1.0
       },
       "bm25_to_full_gain": {
-        "mrr": 0.2,
-        "hit@5": 0.2,
-        "precision@5": 0.24,
-        "recall@5": 0.2
+        "mrr": 0.3125,
+        "hit@5": 0.25,
+        "precision@5": 0.2,
+        "recall@5": 0.25
       },
       "vector_to_full_gain": {
-        "mrr": 0.0,
-        "hit@5": 0.0,
-        "precision@5": 0.16,
-        "recall@5": 0.0
+        "mrr": 0.05,
+        "hit@5": 0.5,
+        "precision@5": 0.25,
+        "recall@5": 0.5
       },
       "full_to_triple_gain": {
         "mrr": 0.0,
