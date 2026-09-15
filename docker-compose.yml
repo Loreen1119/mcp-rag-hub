@@ -33,9 +33,9 @@ services:
     environment:
       # 语料选择：fastapi-zh（默认）/ vue-zh。两份语料都已烧进镜像。
       MCP_RAG_CORPUS: ${MCP_RAG_CORPUS:-fastapi-zh}
-      # Ollama 在宿主上跑，不在容器里。ollama SDK 会读这个变量。
-      # ⚠️ 但 src/evaluation/llm_eval.py 与 agent_eval.py 是**硬编码** 127.0.0.1:11434 的，
-      #    所以容器内跑评测连不上宿主 Ollama —— 评测请在宿主直接跑（见 docs/docker-deployment.md）。
+      # Ollama 在宿主上跑，不在容器里。ollama SDK 和评测脚本都读这个变量。
+      # （2026-09-15 清单 C7：此前评测脚本硬编码 127.0.0.1:11434，容器内跑评测连不上宿主；
+      #   现已统一为运行时读 OLLAMA_HOST，评测也能在容器里跑了。）
       OLLAMA_HOST: http://host.docker.internal:11434
       HF_HUB_OFFLINE: "1"
       TRANSFORMERS_OFFLINE: "1"

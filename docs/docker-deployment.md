@@ -106,15 +106,21 @@ docker compose exec rag-hub curl -s http://host.docker.internal:11434/api/tags
   若本机代理不稳，可能中途失败，重试即可（Docker 层缓存会保留已完成的部分）。
 - **体积**：预计 1.5~2.5 GB（torch CPU 约 200MB，`ragas` + `datasets` + `transformers` 占大头）。
 
-### 2. `llm_eval.py` / `agent_eval.py` 在容器内**跑不了评测**
+### 2. ~~`llm_eval.py` / `agent_eval.py` 在容器内跑不了评测~~ ✅ 已修（2026-09-15，清单 C7）
 
-这两个脚本把 Ollama 地址**硬编码**成 `http://127.0.0.1:11434/api/chat`
-（`src/evaluation/llm_eval.py:98`、`agent_eval.py:61`），在容器里 `127.0.0.1` 指的是容器自己，
-不是宿主。而 `agent.py` 走的是 ollama SDK，会读 `OLLAMA_HOST`，所以**问答链路在容器里是通的**，
-只有评测脚本不通。
+**原问题**：这两个脚本把 Ollama 地址**硬编码**成 `http://127.0.0.1:11434/api/chat`
+（`llm_eval.py:98`、`agent_eval.py:61`），在容器里 `127.0.0.1` 指的是容器自己、不是宿主。
+而 `agent.py` 走 ollama SDK、本来就读 `OLLAMA_HOST`，所以只有评测脚本不通。
 
-→ 现阶段：**评测在宿主直接跑**（各脚本都已就绪）。
-→ 要修的话：把这两处改成读 `OLLAMA_HOST` 环境变量（约 4 行），已在未完成清单里记为可选项。
+**修法**（比原计划的"两处各加 4 行"更彻底）：
+- `llm_eval._ollama_chat_url()` 运行时读 `OLLAMA_HOST`（默认 `http://127.0.0.1:11434`），
+  兼容 `host.docker.internal:11434` 这种省略 scheme 的官方写法；每次调用重新读，便于测试 monkeypatch。
+- `agent_eval.py` 的**重复实现直接删掉**，改为 `from src.evaluation.llm_eval import _call_ollama`，
+  与 `acceptance_eval.py` 一致 —— 评测链路现在只有**一份** Ollama 调用实现。
+  > 这步不只是"少写代码"：复制的那份已经漂移了（`num_predict` 一个 1536、一个 256，`timeout` 300 / 120），
+  > C8 修输出截断时只改了 `llm_eval`，`agent_eval` 仍是 256 —— **同一逻辑两处维护必漏一处**，这是实例证据。
+
+→ 现在**容器内可以直接跑评测**，无需再回宿主。
 
 ### 3. MCP 服务不适合当常驻 compose service
 
@@ -155,7 +161,7 @@ MCP 用的是 **stdio 传输** —— 由客户端（Claude Desktop / Cursor）�
 
 | 隐含假设 | 容器里的现实 | 处置 |
 |---|---|---|
-| "Ollama 就在本机 127.0.0.1:11434" | 容器里的 127.0.0.1 是容器自己 | `agent.py` 走 SDK 读 `OLLAMA_HOST`，容器里能用；两个评测脚本硬编码，不通（见限制 2） |
+| "Ollama 就在本机 127.0.0.1:11434" | 容器里的 127.0.0.1 是容器自己 | 评测脚本原先硬编码 → **C7 已修**：统一读 `OLLAMA_HOST`（见限制 2） |
 | "Streamlit 起来就能访问" | 默认只绑 127.0.0.1，容器外访问不到 | CMD 里显式 `--server.address=0.0.0.0` |
 
 这两条比 Dockerfile 本身更适合拿去讲 —— 它们说明的是**"能在我机器上跑"和"能交付"之间的距离**。

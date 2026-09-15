@@ -3,6 +3,12 @@ __pycache__/
 *.pyc
 *.pyo
 
+# pytest 临时目录
+# 跑测试建议加 `--basetemp=.pytest_tmp`：默认的 %TEMP% 目录在清理时会触发
+# 本机沙箱的删除保护（pytest 因此报非零退出，看着像测试失败，其实是环境噪音）。
+.pytest_tmp/
+.pytest_cache/
+
 # ChromaDB 向量数据（几百MB，不提交）
 chroma_db/
 chroma_db.old/

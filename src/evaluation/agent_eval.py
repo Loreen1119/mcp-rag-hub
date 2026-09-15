@@ -32,46 +32,20 @@ from config import (
     CE_THRESHOLD,
     BM25_TOP_K,
     EXPERIMENTS_DIR,
-    LLM_MODEL,
-    JUDGE_MODEL,
+    JUDGE_MODEL,   # 裁判模型由本文件显式传入；生成模型由 llm_eval._call_ollama 内部取
 )
 from src.evaluation.metrics import load_test_cases, mrr, hit_at_k, precision_at_k, recall_at_k
+# Ollama 调用统一走 llm_eval 的那一份实现（C7，2026-09-15）：
+# 此前本文件复制了一份，导致同一逻辑两处维护、改一处漏一处
+#   —— C8 修 num_predict 截断时只改了 llm_eval，本文件仍是 256，等于埋了个同源的坑。
+# 复用后本文件自动继承 llm_eval 的 OLLAMA_HOST 支持、1536 输出上限与失败日志。
+from src.evaluation.llm_eval import _call_ollama
 from src.pipeline import get_pipeline
 from src.fusion import reciprocal_rank_fusion
 
 logger = logging.getLogger(__name__)
 
 EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
-
-# ============================================================
-# LLM 调用
-# ============================================================
-
-
-def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str:
-    try:
-        import requests
-
-        messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-
-        r = requests.post(
-            "http://127.0.0.1:11434/api/chat",
-            json={
-                "model": model or LLM_MODEL,
-                "messages": messages,
-                "stream": False,
-                "options": {"temperature": 0.0, "num_predict": 256},
-            },
-            timeout=120,
-        )
-        if r.status_code == 200:
-            return r.json()["message"]["content"]
-        return ""
-    except Exception:
-        return ""
 
 
 # ============================================================

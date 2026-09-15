@@ -1,4 +1,4 @@
-"""
+r"""
 LLM-as-Judge 生成评测 — 基于 Ollama 的三维 LLM 裁判打分。
 
 三个 Ragas 标准指标：
@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -82,10 +83,31 @@ def _ensure_pipeline():
 # ============================================================
 
 
+def _ollama_chat_url() -> str:
+    """Ollama /api/chat 地址，**运行时**读环境变量（不缓存）。
+
+    为什么要读 OLLAMA_HOST：容器化后 `127.0.0.1` 指容器自己，连不到宿主上的 Ollama。
+    docker-compose.yml 已经把 OLLAMA_HOST 设成 `http://host.docker.internal:11434`，
+    脚本读同一个变量才能一致（运行时链路 `agent.py` 走 ollama SDK，SDK 本来就认这个变量，
+    所以此前只有评测脚本不通）。
+
+    兼容两种写法：`host.docker.internal:11434`（Ollama 官方允许省略 scheme）和完整 URL。
+    每次调用都重新读 —— 这样测试里 monkeypatch 环境变量能立刻生效。
+    """
+    host = os.environ.get("OLLAMA_HOST", "").strip() or "http://127.0.0.1:11434"
+    if not host.startswith(("http://", "https://")):
+        host = "http://" + host
+    return host.rstrip("/") + "/api/chat"
+
+
 def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str:
     """通过 HTTP 直接调用 Ollama API（绕过 SDK 版本兼容问题）。
 
     model 为 None 时用生成模型 LLM_MODEL；裁判调用需显式传 JUDGE_MODEL。
+    服务地址读 OLLAMA_HOST（默认 http://127.0.0.1:11434）。
+
+    这是评测链路**唯一**的 Ollama 调用入口 —— `agent_eval.py` 与 `acceptance_eval.py`
+    都从这里 import，避免同一段逻辑多处实现后改一处漏一处。
     """
     try:
         import requests
@@ -96,7 +118,7 @@ def _call_ollama(prompt: str, system: str = "", model: str | None = None) -> str
         messages.append({"role": "user", "content": prompt})
 
         r = requests.post(
-            "http://127.0.0.1:11434/api/chat",
+            _ollama_chat_url(),
             json={
                 "model": model or LLM_MODEL,
                 "messages": messages,
