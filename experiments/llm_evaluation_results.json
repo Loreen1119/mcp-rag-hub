@@ -1,45 +1,45 @@
 {
   "summary": {
     "model": "qwen2.5:3b",
-    "judge_model": "qwen2.5:3b",
+    "judge_model": "qwen2.5:7b",
     "total_cases": 18,
     "overall": {
       "faithfulness": {
-        "mean": 0.7,
-        "min": 0.4,
+        "mean": 0.8056,
+        "min": 0.0,
         "max": 1.0
       },
       "answer_relevancy": {
-        "mean": 0.6722,
-        "min": 0.1,
-        "max": 0.9
+        "mean": 0.7944,
+        "min": 0.4,
+        "max": 1.0
       },
       "context_recall": {
-        "mean": 0.4778,
+        "mean": 0.6,
         "min": 0.0,
         "max": 1.0
       }
     },
     "by_category": {
       "exact_match": {
-        "faithfulness": 0.775,
-        "answer_relevancy": 0.55,
+        "faithfulness": 0.95,
+        "answer_relevancy": 0.775,
         "context_recall": 0.775
       },
       "graph": {
-        "faithfulness": 0.65,
-        "answer_relevancy": 0.75,
-        "context_recall": 0.55
+        "faithfulness": 0.8333,
+        "answer_relevancy": 0.8333,
+        "context_recall": 0.6833
       },
       "mixed": {
-        "faithfulness": 0.7,
-        "answer_relevancy": 0.65,
-        "context_recall": 0.4
+        "faithfulness": 0.85,
+        "answer_relevancy": 0.825,
+        "context_recall": 0.625
       },
       "semantic": {
-        "faithfulness": 0.7,
-        "answer_relevancy": 0.7,
-        "context_recall": 0.15
+        "faithfulness": 0.575,
+        "answer_relevancy": 0.725,
+        "context_recall": 0.275
       }
     }
   },
@@ -51,18 +51,18 @@
       "answer": "路径操作装饰器是FastAPI中定义路由和HTTP方法的一种方式，它们位于函数上方并告诉FastAPI该函数对应于特定的路径和HTTP方法。例如，`@app.get(\"/\")`表示该函数处理所有指向\"/\"的GET请求。文档还提到可以使用其他的操作如`@app.post()`、`@app.put()`等来定义不同的HTTP方法。此外，路径操作装饰器支持可选参数 `dependencies`，用于添加依赖项，这些依赖项在执行或解析时不会传递给路径操作函数。",
       "context": "[来源1: tutorial/first-steps.md] * `DELETE`：删除数据。因此，在 OpenAPI 中，每一个 HTTP 方法都被称为「操作」。我们也打算称呼它们为「操作」。#### 定义一个*路径操作装饰器* { #define-a-path-operation-decorator }\n\n{* ../../docs_src/first_steps/tutorial001_py310.py hl[6] *}\n\n`@app.get(\"/\")` 告诉 **FastAPI** 在它下方的函数负责处理如下访问请求：\n\n* 请求路径为 `/`\n* 使用 <dfn title=\"一种 HTTP GET 方法\"><code>get</code> 操作</dfn>\n\n/// note | `@decorator` 信息\n\n`@something` 语法在 Python 中被称为「装饰器」。像一顶漂亮的装饰帽一样，将它放在一个函数的上方（我猜测这个术语的命名就是这么来的）。\n\n[来源2: tutorial/first-steps.md] 像一顶漂亮的装饰帽一样，将它放在一个函数的上方（我猜测这个术语的命名就是这么来的）。装饰器接收位于其下方的函数并且用它完成一些工作。在我们的例子中，这个装饰器告诉 **FastAPI** 位于其下方的函数对应着**路径** `/` 加上 `get` **操作**。它是一个「**路径操作装饰器**」。///\n\n你也可以使用其他的操作：\n\n* `@app.post()`\n* `@app.put()`\n* `@app.delete()`\n\n以及更少见的：\n\n* `@app.options()`\n* `@app.head()`\n* `@app.patch()`\n* `@app.trace()`\n\n/// tip | 提示\n\n你可以随意使用任何一个操作（HTTP方法）。**FastAPI** 没有强制要求操作有任何特定的含义。\n\n[来源3: tutorial/dependencies/dependencies-in-path-operation-decorators.md] ## 在*路径操作装饰器*中添加 `dependencies` 参数 { #add-dependencies-to-the-path-operation-decorat",
       "golden_answer": "`@app.get(\"/\")` 就是路径操作装饰器：`@something` 语法在 Python 中被称为「装饰器」，它接收位于其下方的函数并告诉 FastAPI 该函数对应着路径 `/` 加上 `get` 操作。",
-      "gen_time_ms": 61505.9,
+      "gen_time_ms": 68742.5,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 1.0,
+        "reason": "全部有据可查"
       },
       "answer_relevancy": {
-        "score": 0.7,
-        "reason": "答案讨论了路径操作装饰器的基本概念和用法，但没有直接回答用户关于“路径操作装饰器”的具体问题，只是提供了相关的信息"
+        "score": 0.9,
+        "reason": "回答基本扣题，详细解释了路径操作装饰器的功能和使用方法，但稍微扩展了一些FastAPI的相关知识"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了关于其他操作和依赖项的具体描述"
+        "reason": "缺失了 '装饰器接收位于其下方的函数并且用它完成一些工作' 这个关键信息"
       }
     },
     {
@@ -72,14 +72,14 @@
       "answer": "根据提供的文档内容，`CORSMiddleware` 中的 `allow_origins` 参数允许跨域请求的源列表。你可以使用一个字符串组成的列表来指定这些源，或者使用 `'*'` 来允许任何源。\n\n默认情况下，这个参数是较为保守的设置，所以你需要显式地启用特定的源、方法或者 headers，以便浏览器能够在跨域上下文中使用它们。",
       "context": "[来源1: tutorial/cors.md] {* ../../docs_src/cors/tutorial001_py310.py hl[2,6:11,13:19] *}\n\n默认情况下，这个 `CORSMiddleware` 实现所使用的默认参数较为保守，所以你需要显式地启用特定的源、方法或者 headers，以便浏览器能够在跨域上下文中使用它们。支持以下参数：\n\n* `allow_origins` - 一个允许跨域请求的源列表。例如 `['https://example.org', 'https://www.example.org']`。你可以使用 `['*']` 允许任何源。* `allow_origin_regex` - 一个正则表达式字符串，匹配的源允许跨域请求。例如 `'https://.*\\.example\\.org'`。* `allow_methods` - 一个允许跨域请求的 HTTP 方法列表。默认为 `['GET']`。你可以使用 `['*']` 来允许所有标准方法。\n\n[来源2: tutorial/cors.md] * 创建一个允许的源列表（由字符串组成）。* 将其作为「中间件」添加到你的 **FastAPI** 应用中。你也可以指定后端是否允许：\n\n* 凭证（Authorization 请求头、Cookies 等）。* 特定的 HTTP 方法（`POST`，`PUT`）或者使用通配符 `\"*\"` 允许所有方法。* 特定的 HTTP 请求头或者使用通配符 `\"*\"` 允许所有请求头。{* ../../docs_src/cors/tutorial001_py310.py hl[2,6:11,13:19] *}\n\n默认情况下，这个 `CORSMiddleware` 实现所使用的默认参数较为保守，所以你需要显式地启用特定的源、方法或者 headers，以便浏览器能够在跨域上下文中使用它们。\n\n[来源3: tutorial/cors.md] * `allow_headers` - 一个允许跨域请求的 HTTP 请求头列表。默认为 `[]`。你可以使用 `['*']` 允许所有的请求头。`Accept`、`Accept-Language`、`Content-Language` 以及 `Content-Type` 这几个请求头在[简单 CORS 请求]",
       "golden_answer": "`allow_origins` 是一个允许跨域请求的源列表，例如 `['https://example.org', 'https://www.example.org']`；也可以使用 `['*']` 允许任何源。",
-      "gen_time_ms": 45260.3,
+      "gen_time_ms": 52663.4,
       "faithfulness": {
         "score": 1.0,
         "reason": "全部有据可查"
       },
       "answer_relevancy": {
-        "score": 0.7,
-        "reason": "回答了关于 `CORSMiddleware` 中 `allow_origins` 参数的基本信息和默认设置，但没有详细解释如何使用这个参数来允许特定的源或方法。"
+        "score": 0.8,
+        "reason": "回答基本扣题，解释了 allow_origins 参数的功能和用法，但额外提供了默认设置的信息，略显冗余"
       },
       "context_recall": {
         "score": 1.0,
@@ -93,18 +93,18 @@
       "answer": "依赖注入是一种系统，它能够管理应用程序中的各种依赖关系，并在需要时提供这些依赖。常见的术语包括资源、提供方、服务、可注入和组件等。FastAPI 插件可以使用这种依赖注入系统来构建集成和“插件”。虽然不需要创建传统意义上的“插件”，但通过依赖项，你可以轻松地将多种功能与你的 API 函数集成起来。依赖注入系统能够处理复杂的层级式依赖关系，并在需要时提供相应的结果。",
       "context": "[来源1: tutorial/dependencies/index.md] 最终会构建出一个依赖项的层级树，**依赖注入**系统会处理所有这些依赖（及其子依赖），并在每一步提供（注入）相应的结果。\n\n[来源2: tutorial/dependencies/index.md] “依赖注入”的其他常见术语包括：\n\n* 资源（resources）\n* 提供方（providers）\n* 服务（services）\n* 可注入（injectables）\n* 组件（components）\n\n## **FastAPI** 插件 { #fastapi-plug-ins }\n\n可以使用**依赖注入**系统构建集成和“插件”。但实际上，根本**不需要创建“插件”**，因为通过依赖项可以声明无限多的集成与交互，使其可用于*路径操作函数*。依赖项可以用非常简单直观的方式创建，你只需导入所需的 Python 包，用*字面意义上的*几行代码就能把它们与你的 API 函数集成起来。在接下来的章节中，你会看到关于关系型数据库、NoSQL 数据库、安全等方面的示例。\n\n[来源3: tutorial/dependencies/index.md] ## 简单而强大 { #simple-and-powerful }\n\n虽然**层级式依赖注入系统**的定义与使用非常简单，但它依然非常强大。你可以定义依赖其他依赖项的依赖项。最终会构建出一个依赖项的层级树，**依赖注入**系统会处理所有这些依赖（及其子依赖），并在每一步提供（注入）相应的结果。",
       "golden_answer": "「依赖注入」指的是：你的代码（路径操作函数）声明其运行所需并要使用的东西——「依赖」；然后由系统（在 FastAPI 中即 FastAPI 本身）负责执行所有必要的逻辑，为你的代码提供这些所需的依赖，也就是「注入」依赖。",
-      "gen_time_ms": 33255.5,
+      "gen_time_ms": 38579.1,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，但在 'FastAPI 插件可以使用这种依赖注入系统来构建集成和“插件”' 这一句存在轻微的推论性表述"
+        "score": 0.9,
+        "reason": "仅有'虽然不需要创建传统意义上的“插件”'这一句有轻微推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.1,
-        "reason": "答案偏离了用户关于依赖注入的基本定义和解释，转而讨论FastAPI插件和依赖项的使用场景，没有直接回应依赖注入是什么的问题"
+        "score": 0.7,
+        "reason": "回答基本扣题，解释了依赖注入的概念及其应用，但包含了与问题无关的扩展内容"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了关于 '层级式依赖注入系统' 的详细描述"
+        "reason": "缺少'依赖注入系统负责执行所有必要的逻辑'这一关键信息"
       }
     },
     {
@@ -114,18 +114,18 @@
       "answer": "HTTPException 是 FastAPI 中的一个类，它继承自 Starlette 的 HTTPException 类。FastAPI 版本的 HTTPException 在 detail 字段中接受任意可转换为 JSON 的数据，而 Starlette 版本的 HTTPException 只接受字符串。这意味着在代码中触发 HTTPException 时，可以像平常一样操作。然而，在注册异常处理器时，应该使用来自 Starlette 的 HTTPException，这样当 Starlette 内部代码、扩展或插件触发 Starlette HTTPException 时，你的处理器能够捕获并处理它。HTTPException 可以用于向客户端返回 HTTP 错误响应。",
       "context": "[来源1: tutorial/handling-errors.md] ### 导入 `HTTPException` { #import-httpexception }\n\n{* ../../docs_src/handling_errors/tutorial001_py310.py hl[1] *}\n\n### 在代码中触发 `HTTPException` { #raise-an-httpexception-in-your-code }\n\n`HTTPException` 是额外包含了和 API 有关数据的常规 Python 异常。因为是 Python 异常，所以不能 `return`，只能 `raise`。这也意味着，如果你在*路径操作函数*里调用的某个工具函数内部触发了 `HTTPException`，那么*路径操作函数*中后续的代码将不会继续执行，请求会立刻终止，并把 `HTTPException` 的 HTTP 错误发送给客户端。在介绍依赖项与安全的章节中，你可以更直观地看到用 `raise` 异常代替 `return` 值的优势。\n\n[来源2: tutorial/handling-errors.md] **FastAPI** 的 `HTTPException` 错误类继承自 Starlette 的 `HTTPException` 错误类。它们之间的唯一区别是，**FastAPI** 的 `HTTPException` 在 `detail` 字段中接受任意可转换为 JSON 的数据，而 Starlette 的 `HTTPException` 只接受字符串。因此，你可以继续像平常一样在代码中触发 **FastAPI** 的 `HTTPException`。但注册异常处理器时，应该注册到来自 Starlette 的 `HTTPException`。这样做是为了，当 Starlette 的内部代码、扩展或插件触发 Starlette `HTTPException` 时，你的处理器能够捕获并处理它。\n\n[来源3: tutorial/handling-errors.md] 而 400 范围内的状态码表示客户端发生了错误。大家都知道**「404 Not Found」**错误，还有调侃这个错误的笑话吧？## 使用 `HTTPException` { #use-httpexcept",
       "golden_answer": "`HTTPException` 是额外包含了和 API 有关数据的常规 Python 异常。向客户端返回 HTTP 错误响应可以使用它；如果在路径操作函数调用的工具函数内部触发，那么路径操作函数中后续代码不会继续执行，请求会立刻终止，并把 HTTP 错误发送给客户端。",
-      "gen_time_ms": 48040.1,
+      "gen_time_ms": 50501.1,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.9,
+        "reason": "仅有'然而，在注册异常处理器时，应该使用来自 Starlette 的 HTTPException'这句存在轻微推论"
       },
       "answer_relevancy": {
         "score": 0.7,
-        "reason": "答案主要围绕 HTTPException 的定义和使用展开，并提到了 FastAPI 和 Starlette 的差异，但没有直接回应用户关于 HTTPException 的具体问题。"
+        "reason": "回答提供了关于HTTPException的详细信息，但包含了额外的FastAPI和Starlette框架的具体细节，偏离了用户可能仅想了解HTTPException的基本概念。"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了关于 FastAPI 和 Starlette `HTTPException` 区别和注册异常处理器的信息"
+        "reason": "缺少了'400范围内的状态码表示客户端发生了错误'这一关键信息点"
       }
     },
     {
@@ -135,18 +135,18 @@
       "answer": "在这种情况下，可以使用 FastAPI 的事件处理器（events）来定义在应用启动前和关闭时需要执行的逻辑。具体来说，可以通过定义 `\"startup\"` 和 `\"shutdown\"` 事件处理器函数来实现。\n\n- 在 `\"startup\"` 事件处理器中，你可以执行一些初始化操作，比如设置初始值、连接数据库等。\n- 在 `\"shutdown\"` 事件处理器中，你可以在应用关闭前做收尾工作，例如清理资源、关闭数据库连接等。\n\n通过这种方式，可以确保在应用启动时只执行一次初始化逻辑，并且在应用关闭时进行必要的收尾处理。FastAPI 支持定义多个事件处理器函数，如 `\"startup\"` 和 `\"shutdown\"`，只有当所有这些事件处理器都运行完毕后，应用程序才会开始接收请求。",
       "context": "[来源1: deployment/concepts.md] 但在大多数情况下，你只想执行这些步骤**一次**。因此，在启动应用程序之前，你将需要一个**单个进程**来执行这些**前面的步骤**。而且你必须确保它是运行前面步骤的单个进程，*即使*之后你为应用程序本身启动**多个进程**（多个 worker）。如果这些步骤由**多个进程**运行，它们会通过**并行**运行来**重复**工作，并且如果这些步骤像数据库迁移一样需要小心处理，它们可能会导致彼此之间发生冲突。当然，也有一些情况，多次运行前面的步骤也没有问题，这样的话就好办多了。\n\n[来源2: advanced/events.md] ///\n\n有一种替代方法可以定义在**启动**和**关闭**期间执行的逻辑。你可以定义在应用启动前或应用关闭时需要执行的事件处理器（函数）。事件函数既可以声明为异步函数（`async def`），也可以声明为普通函数（`def`）。### `startup` 事件 { #startup-event }\n\n使用事件 `\"startup\"` 声明一个在应用启动前运行的函数：\n\n{* ../../docs_src/events/tutorial001_py310.py hl[8] *}\n\n本例中，`startup` 事件处理器函数为项目“数据库”（只是一个 `dict`）提供了一些初始值。**FastAPI** 支持多个事件处理器函数。只有所有 `startup` 事件处理器运行完毕，**FastAPI** 应用才开始接收请求。\n\n[来源3: advanced/events.md] 这个函数执行 I/O（输入/输出）操作，需要“等待”内容写进磁盘。但 `open()` 不使用 `async` 和 `await`。因此，声明事件处理函数要使用 `def`，而不是 `async def`。///\n\n### `startup` 和 `shutdown` 一起使用 { #startup-and-shutdown-together }\n\n启动和关闭的逻辑很可能是连接在一起的，你可能希望启动某个东西然后结束它，获取一个资源然后释放它等等。在不共享逻辑或变量的不同函数中处理这些逻辑比较困难，因为你需要在全局变量中存储值或使用类似的方式。因此，推荐使用上面所述的 `lifespan`。",
       "golden_answer": "使用 FastAPI 应用的 `lifespan` 参数配合一个「上下文管理器」来定义启动和关闭逻辑：用一个带 `yield` 的异步函数 `lifespan()`，`yield` 之前的代码在应用开始处理请求之前执行（启动期间），`yield` 之后的代码在应用完成处理请求后、关闭之前执行，可用来释放内存或 GPU 等资源。",
-      "gen_time_ms": 44094.4,
+      "gen_time_ms": 49832.3,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.0,
+        "reason": "解析失败: {\"score\": 0.9, \"reason\": \"仅有一处轻微的推论性表述：'FastAPI 支持定义多个事件处理器函数，如 `\"startup\"` 和 `\"shutdown\"` ，只有当所有这些事"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案紧密围绕用户问题，详细解释了如何使用 FastAPI 的事件处理器来实现应用启动和关闭时的初始化与收尾逻辑"
+        "score": 0.8,
+        "reason": "回答基本扣题，但提供了额外的FastAPI框架信息，虽然与问题相关但不是必须的内容"
       },
       "context_recall": {
-        "score": 0.0,
-        "reason": "完全不包含关于 `lifespan` 参数和上下文管理器的信息"
+        "score": 0.4,
+        "reason": "缺少关于使用lifespan参数定义启动和关闭逻辑的关键信息"
       }
     },
     {
@@ -156,18 +156,18 @@
       "answer": "你可以使用中间件来实现这个需求。FastAPI 中间件允许你在每个特定的路径操作处理每个请求之前运行代码，并且在返回每个响应之前运行代码。\n\n具体来说，在 FastAPI 应用中添加一个中间件，该中间件会在每个请求到达具体的接口之前执行你定义的逻辑，然后传递给应用程序的其他部分（某个路径操作）进行处理。之后，它会获取由某个路径操作产生的响应，并在返回之前执行你定义的逻辑。\n\n你可以通过创建一个函数来实现这个中间件，该函数接收你的应用的每一个请求，对这个请求做一些事情或者执行任何需要的代码，然后将这个请求传递给应用程序的其他部分（某个路径操作）处理。之后它获取由某个路径操作产生的响应，并对该响应做一些事情或者执行任何需要的代码，最后返回这个响应。\n\n例如，你可以使用 FastAPI 提供的 `Request` 和 `Response` 类来访问和修改请求和响应对象。这样你就可以在请求进入具体接口之前、以及响应返回之前插入自己写的通用逻辑了。",
       "context": "[来源1: tutorial/middleware.md] ///\n\n### 在 `response` 之前与之后 { #before-and-after-the-response }\n\n你可以在任何*路径操作*接收 `request` 之前，添加要与该 `request` 一起运行的代码。也可以在生成 `response` 之后、返回之前添加代码。\n\n[来源2: tutorial/middleware.md] # 中间件 { #middleware }\n\n你可以向 **FastAPI** 应用添加中间件。“中间件”是一个函数，它会在每个特定的*路径操作*处理每个**请求**之前运行，也会在返回每个**响应**之前运行。* 它接收你的应用的每一个**请求**。* 然后它可以对这个**请求**做一些事情或者执行任何需要的代码。* 然后它将这个**请求**传递给应用程序的其他部分（某个*路径操作*）处理。* 之后它获取应用程序生成的**响应**（由某个*路径操作*产生）。* 它可以对该**响应**做一些事情或者执行任何需要的代码。* 然后它返回这个**响应**。\n\n[来源3: advanced/custom-response.md] 你可以直接返回一个 `RedirectResponse`：\n\n{* ../../docs_src/custom_response/tutorial006_py310.py hl[2,9] *}\n\n---\n\n或者你可以把它用于 `response_class` 参数：\n\n{* ../../docs_src/custom_response/tutorial006b_py310.py hl[2,7,9] *}\n\n如果你这么做，那么你可以在 *路径操作* 函数中直接返回 URL。在这种情况下，将使用 `RedirectResponse` 的默认 `status_code`，即 `307`。---\n\n你也可以将 `status_code` 参数和 `response_class` 参数结合使用：\n\n{* ../../docs_src/custom_response/tutorial006c_py310.py hl[2,7,9] *}\n\n### `StreamingResponse` { #streamingresponse }\n\n采用异步生成器或普通",
       "golden_answer": "通过「中间件」实现。中间件是一个函数，它会在每个特定的路径操作处理每个请求之前运行，也会在返回每个响应之前运行：先接收应用的每一个请求并对其执行代码，再把请求传递给后续的路径操作处理，之后获取路径操作产生的响应并对其执行代码，最后返回该响应。",
-      "gen_time_ms": 53909.1,
+      "gen_time_ms": 59146.8,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.9,
+        "reason": "有一处轻微的推论性表述：'FastAPI 提供了 Request 和 Response 类来访问和修改请求和响应对象' 是合理的推断，但未在原文中明确提及"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案紧密围绕用户问题，提供了关于如何使用 FastAPI 中间件来在请求进入具体接口之前和响应返回之前插入通用逻辑的具体指导"
+        "score": 1.0,
+        "reason": "回答详细解释了如何使用中间件来实现用户需求，并提供了具体的FastAPI示例，完全扣题"
       },
       "context_recall": {
-        "score": 0.4,
-        "reason": "缺失了如何使用中间件的具体实现细节和 `StreamingResponse` 的相关信息"
+        "score": 0.7,
+        "reason": "次要信息点缺失：未提及中间件在请求和响应处理的具体步骤顺序"
       }
     },
     {
@@ -177,18 +177,18 @@
       "answer": "根据提供的文档内容，要将配置项放在代码之外并在运行时读取进来，同时确保类型正确，可以参考以下步骤：\n\n1. 在 `pyproject.toml` 文件中配置应用的位置：\n   ```toml\n   [tool.fastapi]\n   entrypoint = \"main:app\"\n   ```\n2. 这样一来，FastAPI 就会按如下方式导入应用：\n   ```python\n   from main import app\n   ```\n\n3. 如果你的代码结构是这样的：\n   ```\n   .\n   └── pyproject.toml\n   └── main.py\n   ```\n   \n4. 在 `main.py` 中，你可以直接使用配置项来启动 FastAPI 应用。例如：\n\n```python\nfrom fastapi import FastAPI\n\n# 从 pyproject.toml 配置文件中读取应用的位置\nimport toml\nwith open('pyproject.toml', 'r') as f:\n    config = toml.load(f)\nentrypoint = config['tool']['fastapi']['entrypoint']\n\napp = FastAPI()\n\nif __name__ == \"__main__\":\n    # 使用配置项启动 FastAPI 应用\n    import subprocess\n    subprocess.run(entrypoint, shell=True)\n```\n\n这样，你就可以在代码之外读取 `pyproject.toml` 文件中的配置，并确保类型正确。",
       "context": "[来源1: fastapi-cli.md] 但你也可以显式配置要使用的应用。## 在 `pyproject.toml` 中配置应用的 `entrypoint` { #configure-the-app-entrypoint-in-pyproject-toml }\n\n你可以在 `pyproject.toml` 文件中配置应用的位置，例如：\n\n```toml\n[tool.fastapi]\nentrypoint = \"main:app\"\n```\n\n这个 `entrypoint` 会告诉 `fastapi` 命令按如下方式导入应用：\n\n```python\nfrom main import app\n```\n\n如果你的代码结构如下：\n\n```\n.\n\n[来源2: python-types.md] 然后，你试试程序员的老朋友——编辑器的自动补全。你输入函数的第一个参数 `first_name`，再输入一个点（`.`），然后按下 `Ctrl+Space` 触发补全。但很遗憾，没有什么有用的提示：\n\n<img src=\"/img/python-types/image01.png\">\n\n### 添加类型 { #add-types }\n\n我们来改前一个版本的一行代码。我们会把这个片段，也就是函数参数，从：\n\n```Python\n    first_name, last_name\n```\n\n改成：\n\n```Python\n    first_name: str, last_name: str\n```\n\n就是这样。这些就是“类型提示”：\n\n{* ../../docs_src/python_types/tutorial002_py310.py hl[1] *}\n\n这和声明默认值不同，比如：\n\n```Python\n    first_name=\"john\", last_name=\"doe\"\n```\n\n这是两码事。我们用的是冒号（`:`），不是等号（`=`）。而且添加类型提示通常不会改变代码本来的行为。\n\n[来源3: python-types.md] 在同样的位置，你用 `Ctrl+Space` 触发自动补全，就能看到：\n\n<img src=\"/img/python-types/image02.png\">\n\n这样，你可以滚动查看选项，直到找到那个“看着眼熟”的：\n\n<img src=\"/img/pyt",
       "golden_answer": "用「环境变量」：它是存在于 Python 代码之外、操作系统中的值，可由应用和其他程序读取。注意环境变量只能处理文本字符串，因此从环境变量读到的任何值都是 `str` 类型，到其他类型的转换和验证必须在代码里完成——Pydantic 提供的 Settings 管理工具正是用来处理这类设置的。",
-      "gen_time_ms": 57024.7,
+      "gen_time_ms": 63704.7,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "最后一段有轻微推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.1,
-        "reason": "答案主要描述了如何使用 pyproject.toml 配置 FastAPI 的 entrypoint，但没有直接回答如何将配置项放在代码之外并在运行时读取进来，并保证类型正确的问题。"
+        "score": 0.4,
+        "reason": "回答偏离了主要问题，提供了与问题无关的FastAPI配置信息"
       },
       "context_recall": {
-        "score": 0.1,
-        "reason": "完全不包含关于环境变量和 Pydantic 的信息"
+        "score": 0.0,
+        "reason": "上下文完全未提及环境变量相关的信息"
       }
     },
     {
@@ -198,18 +198,18 @@
       "answer": "根据提供的文档内容，如果接口想直接返回一段网页而不是 JSON，可以考虑使用 `PlainTextResponse` 类型的响应来替代 JSON 响应。具体来说，在文档中提到，FastAPI 提供了与 Starlette 相同的 `fastapi.responses` 作为便捷方式，并且大多数可用的响应都直接来自 Starlette。\n\n例如，如果需要为特定类型的错误返回纯文本响应而不是 JSON，可以使用以下代码：\n\n```python\nfrom fastapi import FastAPI, PlainTextResponse\n\napp = FastAPI()\n\n@app.exception_handler(RequestValidationError)\nasync def validation_exception_handler(request, exc: RequestValidationError):\n    return PlainTextResponse(str(exc), status_code=400)\n```\n\n这段代码中，`validation_exception_handler` 函数处理 `RequestValidationError` 异常，并返回一个纯文本响应。这样可以避免直接返回 JSON，而是返回一段网页内容。\n\n需要注意的是，文档中的示例是针对特定错误类型的处理，如果需要为所有错误类型都返回纯文本响应，则可能需要在应用的全局级别进行设置。",
       "context": "[来源1: tutorial/server-sent-events.md] 由于此时函数不是 async，正确的返回类型应为 `Iterable[Item]`：\n\n{* ../../docs_src/server_sent_events/tutorial001_py310.py ln[28:31] hl[29] *}\n\n### 无返回类型 { #no-return-type }\n\n你也可以省略返回类型。FastAPI 将使用 [`jsonable_encoder`](./encoder.md) 转换数据并发送。{* ../../docs_src/server_sent_events/tutorial001_py310.py ln[34:37] hl[35] *}\n\n## `ServerSentEvent` { #serversentevent }\n\n如果你需要设置 `event`、`id`、`retry` 或 `comment` 等 SSE 字段，你可以 yield `ServerSentEvent` 对象，而不是直接返回数据。从 `fastapi.sse` 导入 `ServerSentEvent`：\n\n{* ../../docs_src/server_sent_events/tutorial002_py310.py hl[4,26] *}\n\n`data` 字段始终会被编码为 JSON。你可以传入任何可被序列化为 JSON 的值，包括 Pydantic 模型。\n\n[来源2: advanced/custom-response.md] 你可以创建一个 `CustomORJSONResponse`。你需要做的主要事情是实现一个 `Response.render(content)` 方法，并返回 `bytes`：\n\n{* ../../docs_src/custom_response/tutorial009c_py310.py hl[9:14,17] *}\n\n现在，不再是返回：\n\n```json\n{\"message\": \"Hello World\"}\n```\n\n...这个响应将返回：\n\n```json\n{\n  \"message\": \"Hello World\"\n}\n```\n\n当然，你很可能会找到比格式化 JSON 更好的方式来利用这一点。😉\n\n### `orjson` 或响应模型",
       "golden_answer": "使用 `HTMLResponse` 从 FastAPI 直接返回 HTML 响应：先导入 `HTMLResponse`，再把它作为路径操作的 `response_class` 参数传入。",
-      "gen_time_ms": 60304.3,
+      "gen_time_ms": 64285.7,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "最后一句话涉及生成答案中的推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案直接针对用户问题进行了详细解释，并提供了具体的代码示例来实现接口返回一段网页而不是 JSON 的需求。"
+        "score": 0.7,
+        "reason": "回答基本扣题，但提供了过多的具体代码示例和额外说明，偏离了用户主要关心的如何直接返回网页内容的核心诉求。"
       },
       "context_recall": {
-        "score": 0.1,
-        "reason": "没有提到 HTMLResponse 或者任何关于如何使用 FastAPI 直接返回 HTML 响应的信息"
+        "score": 0.0,
+        "reason": "上下文完全不包含参考答案中的任何信息"
       }
     },
     {
@@ -219,18 +219,18 @@
       "answer": "在 FastAPI 中，**请求体**指的是客户端向 API 发送的数据部分，通常通过 HTTP 方法如 `POST`、`PUT`、`DELETE` 或 `PATCH` 来发送。而 **响应体** 是指 API 向客户端返回的数据部分。\n\n使用 Pydantic 模型来声明请求体能充分利用其功能和优点。API 会根据模型的定义从正确的位置获取数据，同时识别路径参数、查询参数以及请求体。对于响应体，FastAPI 默认采用 JSON 格式发送数据，但也可以通过设置适当的内容类型（如 `application/jsonl`）来使用自定义格式。",
       "context": "[来源1: tutorial/body.md] # 请求体 { #request-body }\n\n当你需要从客户端（比如浏览器）向你的 API 发送数据时，会把它作为**请求体**发送。**请求体**是客户端发送给你的 API 的数据。**响应体**是你的 API 发送给客户端的数据。你的 API 几乎总是需要发送**响应体**。但客户端不一定总是要发送**请求体**，有时它们只请求某个路径，可能带一些查询参数，但不会发送请求体。使用 [Pydantic](https://pydantic.dev/docs/) 模型来声明**请求体**，能充分利用它的功能和优点。/// note | 注意\n\n发送数据应使用以下之一：`POST`（最常见）、`PUT`、`DELETE` 或 `PATCH`。\n\n[来源2: tutorial/body.md] {* ../../docs_src/body/tutorial003_py310.py hl[15:16] *}\n\n\n## 请求体 + 路径 + 查询参数 { #request-body-path-query-parameters }\n\n也可以同时声明**请求体**、**路径**和**查询**参数。**FastAPI** 会分别识别它们，并从正确的位置获取数据。{* ../../docs_src/body/tutorial004_py310.py hl[16] *}\n\n函数参数按如下规则进行识别：\n\n* 如果该参数也在**路径**中声明了，它就是路径参数。* 如果该参数是（`int`、`float`、`str`、`bool` 等）**单一类型**，它会被当作**查询**参数。* 如果该参数的类型声明为 **Pydantic 模型**，它会被当作请求**体**。/// note | 注意\n\nFastAPI 会根据默认值 `= None` 知道 `q` 的值不是必填的。\n\n[来源3: tutorial/stream-json-lines.md] 响应的内容类型是 `application/jsonl`（而不是 `application/json`），响应体类似这样：\n\n```json\n{\"name\": \"Plumbus\", \"description\": \"A multi-purpose household device.\"}\n{\"na",
       "golden_answer": "请求体是客户端发送给你的 API 的数据，响应体是你的 API 发送给客户端的数据。API 几乎总是需要发送响应体，但客户端不一定总是发送请求体——它可能只请求某个路径、带上一些查询参数而不发送请求体。请求体用 Pydantic 模型来声明。",
-      "gen_time_ms": 50830.2,
+      "gen_time_ms": 55478.0,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.9,
+        "reason": "有一处轻微的推论性表述：关于响应体默认采用JSON格式发送数据"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案基本扣题，解释了请求体和响应体的概念，并提及如何在 FastAPI 中使用 Pydantic 模型来定义它们。"
+        "score": 0.8,
+        "reason": "回答基本扣题，详细解释了请求体和响应体的含义，并且稍微扩展了一些关于如何使用的相关信息，但有些内容与核心问题关联性不强。"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了关于客户端不一定总是发送请求体的信息"
+        "reason": "缺少关于客户端不一定总是发送请求体的描述"
       }
     },
     {
@@ -240,18 +240,18 @@
       "answer": "根据提供的文档内容，如果你想要一个路径操作在更新成功时返回200（成功）的状态码，并且当新的条目不存在时返回201（创建）的状态码，你可以通过直接返回一个Response对象来实现。具体来说，你可以使用`JSONResponse`类，并设置其status_code属性为所需的值。\n\n例如：\n\n```python\nfrom fastapi.responses import JSONResponse\n\n# 假设你想有一个路径操作能够更新条目，\n# 并且更新成功时返回200（成功）的状态码。\n# 同时，当这些条目不存在时，会自动创建并返回201（创建）的状态码。\n\ndef update_entry(request):\n    # 更新逻辑\n    if entry_exists:\n        return JSONResponse(content={\"message\": \"Entry updated successfully\"}, status_code=200)\n    else:\n        return JSONResponse(content={\"message\": \"New entry created successfully\"}, status_code=201)\n```\n\n这里，如果条目已经存在，则返回200状态码；如果不存在则返回201状态码。使用`JSONResponse`类来包装你的响应内容，并通过设置status_code属性来指定HTTP状态码。",
       "context": "[来源1: advanced/additional-status-codes.md] 但是你也希望它能够接受新的条目。并且当这些条目不存在时，会自动创建并返回 201 「创建」的 HTTP 状态码。要实现它，导入 `JSONResponse`，然后在其中直接返回你的内容，并将 `status_code` 设置为你要的值。{* ../../docs_src/additional_status_codes/tutorial001_an_py310.py hl[4,25] *}\n\n/// warning | 警告\n\n当你直接返回一个像上面例子中的 `Response` 对象时，它会直接返回。它不会用模型等进行序列化。确保其中有你想要的数据，且返回的值为合法的 JSON（如果你使用 `JSONResponse` 的话）。///\n\n/// note | 技术细节\n\n你也可以使用 `from starlette.responses import JSONResponse`。\n\n[来源2: advanced/additional-status-codes.md] # 额外的状态码 { #additional-status-codes }\n\n**FastAPI** 默认使用 `JSONResponse` 返回一个响应，将你的 *路径操作* 中的返回内容放到该 `JSONResponse` 中。**FastAPI** 会自动使用默认的状态码或者使用你在 *路径操作* 中设置的状态码。## 额外的状态码 { #additional-status-codes_1 }\n\n如果你想要返回主要状态码之外的状态码，你可以通过直接返回一个 `Response` 来实现，比如 `JSONResponse`，然后直接设置额外的状态码。例如，假设你想有一个 *路径操作* 能够更新条目，并且更新成功时返回 200 「成功」 的 HTTP 状态码。但是你也希望它能够接受新的条目。并且当这些条目不存在时，会自动创建并返回 201 「创建」的 HTTP 状态码。\n\n[来源3: advanced/custom-response.md] 这是获得最佳性能的理想方式。///\n\n### `RedirectResponse` { #redirectresponse }\n\n返回 HTTP 重定向。默认情况下使用 307 状",
       "golden_answer": "在路径操作中使用 `status_code` 参数声明响应状态码。注意 `status_code` 是（`get`、`post` 等）装饰器方法中的参数，不是路径操作函数的参数；它接收表示 HTTP 状态码的数字，也可以接收 `IntEnum` 类型（如 Python 的 `http.HTTPStatus`），并会在响应中返回该状态码、在 OpenAPI schema 中记录该状态码。",
-      "gen_time_ms": 46801.9,
+      "gen_time_ms": 52092.8,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.9,
+        "reason": "所有陈述都能在上下文中找到依据，仅有一处轻微的推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.7,
-        "reason": "答案主要围绕如何在FastAPI中使用JSONResponse来返回特定的HTTP状态码进行解释和示例，但没有直接回答用户关于指定某个接口返回HTTP状态码的问题。"
+        "score": 1.0,
+        "reason": "回答详细且直接针对如何指定接口返回特定的HTTP状态码的问题"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "只有部分内容与路径操作和 status_code 参数相关的信息被覆盖，缺少关于如何使用 `status_code` 参数的具体实现细节"
+        "reason": "缺少关于如何使用 `status_code` 参数的具体说明"
       }
     },
     {
@@ -261,18 +261,18 @@
       "answer": "根据提供的文档内容，如果你需要在响应返回后执行一段耗时的操作，可以使用 `yield` 关键字来创建一个异步函数，并在该函数中进行操作。例如，在 `events.md` 文档中提到的代码示例：\n\n```python\nasync def lifespan(app):\n    # 在这里加载模型等耗时操作\n    yield\n\n在这里执行这些耗时操作，而不需要等待它们完成就可以返回响应。\n```\n\n这段代码中的 `yield` 关键字允许在异步函数中进行非阻塞的操作。这意味着你可以立即返回一个响应（例如 HTTP 202 Accepted），然后在后台执行加载模型等耗时任务。\n\n总结来说，在文档示例中，通过使用 `yield` 创建的异步函数可以在响应发送之前完成这些耗时操作。这使得客户端可以立即接收响应，并且不会因为等待这些耗时操作而被阻塞。",
       "context": "[来源1: tutorial/background-tasks.md] # 后台任务 { #background-tasks }\n\n你可以定义在返回响应后运行的后台任务。这对需要在请求之后执行的操作很有用，但客户端不必在接收响应之前等待操作完成。包括这些例子：\n\n* 执行操作后发送的电子邮件通知：\n    * 由于连接到电子邮件服务器并发送电子邮件往往很“慢”（几秒钟），你可以立即返回响应并在后台发送电子邮件通知。* 处理数据：\n    * 例如，假设你收到的文件必须经过一个缓慢的过程，你可以返回一个\"Accepted\"(HTTP 202)响应并在后台处理它。\n\n[来源2: advanced/advanced-dependencies.md] 这也意味着，如果你返回的是 `StreamingResponse`，那么该带 `yield` 的依赖项的退出代码会在开始发送响应前就已经执行完毕。例如，如果你在带 `yield` 的依赖项中持有一个数据库会话，那么 `StreamingResponse` 在流式发送数据时将无法使用该会话，因为会话已经在 `yield` 之后的退出代码里被关闭了。在 0.118.0 中，这一行为被回退为：让 `yield` 之后的退出代码在响应发送之后再执行。/// note | 注意\n\n如你在下文所见，这与 0.106.0 之前的行为非常相似，但对若干边界情况做了改进和修复。\n\n[来源3: advanced/events.md] 我们使用 `yield` 创建了一个异步函数 `lifespan()` 像这样：\n\n{* ../../docs_src/events/tutorial003_py310.py hl[16,19] *}\n\n在这里，我们在 `yield` 之前将（虚拟的）模型函数放入机器学习模型的字典中，以此模拟加载模型的耗时**启动**操作。这段代码将在应用程序**开始处理请求之前**执行，即**启动**期间。然后，在 `yield` 之后，我们卸载模型。这段代码将会在应用程序**完成处理请求后**执行，即在**关闭**之前。这可以释放诸如内存或 GPU 之类的资源。/// tip | 提示\n\n**关闭**事件会在你**停止**应用时发生。可能你需要启动一个新版本，或者你只是厌倦了运行它。",
       "golden_answer": "使用 `BackgroundTasks`：先在路径操作函数中用 `BackgroundTasks` 类型声明一个参数，FastAPI 会创建一个该类型的对象并作为参数传入；再创建要作为后台任务运行的函数，并在路径操作函数里用 `.add_task()` 方法把任务函数传进后台任务对象，任务会在返回响应之后运行。它也适用于依赖注入系统，可在多个级别声明该参数，所有后台任务会被合并在一起随后在后台运行。",
-      "gen_time_ms": 46129.3,
+      "gen_time_ms": 51146.6,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "最后一句话有轻微推论，原文未明确说明客户端不会因等待耗时操作而被阻塞"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案直接针对用户问题，解释了如何在异步函数中使用 `yield` 关键字来执行耗时操作并在响应返回后继续执行这些操作"
+        "score": 0.8,
+        "reason": "回答基本扣题，但增加了额外的解释和示例代码，略超出核心需求"
       },
       "context_recall": {
-        "score": 0.1,
-        "reason": "完全不包含关于使用 BackgroundTasks 的相关信息"
+        "score": 0.7,
+        "reason": "缺少关于如何使用BackgroundTasks类的具体示例和说明"
       }
     },
     {
@@ -282,18 +282,18 @@
       "answer": "要为 FastAPI 应用编写测试，可以参考以下步骤：\n\n1. 在 `main.py` 文件中添加必要的路径操作，并确保它们需要一个 `X-Token` 头。\n2. 创建一个新的测试文件，例如 `test_main.py`，用于编写测试用例。这个文件可以在 `app/test_main.py` 中找到。\n3. 使用 `httpx` 或 `requests` 库来模拟客户端请求并传递信息给路径操作。可以通过搜索如何使用这些库来实现这一点。\n4. 测试客户端调用（例如 `client.get('/items')`）时，可以点击上方的可点击链接以跳转到匹配的路径操作。\n\n通过遵循上述步骤，你可以为 FastAPI 应用编写有效的测试用例。",
       "context": "[来源1: tutorial/testing.md] ├── app\n│   ├── __init__.py\n│   ├── main.py\n│   └── test_main.py\n```\n\n假设现在包含**FastAPI** app的文件 `main.py` 有些其他**路径操作**。有个 `GET` 操作可能返回一个错误。有个 `POST` 操作可能返回多个错误。两个*路径操作* 都需要一个`X-Token` 头。{* ../../docs_src/app_testing/app_b_an_py310/main.py *}\n\n### 扩展后的测试文件 { #extended-testing-file }\n\n然后你可以使用扩展后的测试更新`test_main.py`：\n\n{* ../../docs_src/app_testing/app_b_an_py310/test_main.py *}\n\n\n每当你需要客户端在请求中传递信息，但你不知道如何传递时，你可以通过搜索（谷歌）如何用 `httpx` 做，或者是用 `requests` 做，毕竟HTTPX的设计是基于Requests的设计的。接着只需在测试中同样操作。\n\n[来源2: index.md] 按照你的云厂商的指南部署 FastAPI 应用即可。🤓\n\n## 性能 { #performance }\n\n独立机构 TechEmpower 的基准测试显示，运行在 Uvicorn 下的 **FastAPI** 应用是 [最快的 Python 框架之一](https://www.techempower.com/benchmarks/#section=test&runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&hw=ph&test=query&l=zijzen-7)，仅次于 Starlette 和 Uvicorn 本身（FastAPI 内部使用它们）。(*)\n\n想了解更多，请参阅 [基准测试](https://fastapi.tiangolo.com/zh/benchmarks/) 章节。## 依赖项 { #dependencies }\n\nFastAPI 依赖 Pydantic 和 Starlette。\n\n[来源3: editor-support.md] - **CodeLens 导航**",
       "golden_answer": "使用 `TestClient`（来自 Starlette）：先安装 `httpx`，导入 `TestClient`，传入你的 FastAPI 应用创建一个 `TestClient` 对象，然后像使用 `httpx` 那样使用它发送请求。注意测试函数是普通的 `def`，不是 `async def`；也可以写成 `from starlette.testclient import TestClient`。",
-      "gen_time_ms": 50668.3,
+      "gen_time_ms": 56105.6,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 0.9,
+        "reason": "最后一句话有轻微推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.1,
-        "reason": "答非所问，没有具体解释如何使用 FastAPI 和测试框架进行实际的单元测试和集成测试"
+        "score": 0.7,
+        "reason": "回答基本扣题，但有少量扩展性内容，如跳转链接和点击操作的描述与实际测试无关"
       },
       "context_recall": {
-        "score": 0.1,
-        "reason": "大部分关键信息缺失"
+        "score": 0.4,
+        "reason": "缺少TestClient的使用方法和导入方式"
       }
     },
     {
@@ -303,18 +303,18 @@
       "answer": "JWT（JSON Web Token）是一种开放标准（RFC 7519），用于在网络应用环境间安全地将信息作为 JSON 对象传递。在FastAPI中，生成和校验JWT通常需要安装`PyJWT`库。\n\n为了使用FastAPI生成和校验JWT，你需要先安装`PyJWT`库。可以通过运行以下命令来安装：\n\n```console\n$ pip install PyJWT\n```\n\n此外，FastAPI本身不需要复杂机制来集成外部包，因此你无需额外配置即可直接在项目中使用它。",
       "context": "[来源1: tutorial/security/oauth2-jwt.md] ---\n\n**FastAPI** 不会在任何数据库、数据模型或工具上做妥协。它给予你完全的灵活性，选择最适合你项目的方案。而且你可以直接使用许多维护良好、广泛使用的包，比如 `pwdlib` 和 `PyJWT`，因为 **FastAPI** 不需要复杂机制来集成外部包。同时它也为你提供尽可能简化流程的工具，而不牺牲灵活性、健壮性或安全性。你可以以相对简单的方式使用和实现像 OAuth2 这样的安全、标准协议。\n\n[来源2: tutorial/index.md] 在编辑器中使用 FastAPI 会真正地展现出它的优势：只需要编写很少的代码，所有的类型检查，代码补全等等。---\n\n## 安装 FastAPI { #install-fastapi }\n\n第一步是设置你的项目并添加 FastAPI。安装 [`uv`](https://docs.astral.sh/uv/getting-started/installation/)，然后创建一个项目并添加 FastAPI：\n\n<div class=\"termy\">\n\n```console\n$ uv init awesome-project --bare\n$ cd awesome-project\n$ uv add \"fastapi[standard]\"\n\n---> 100%\n```\n\n</div>\n\n`uv add` 会在 `.venv` 中创建项目的虚拟环境，将 FastAPI 添加到 `pyproject.toml`，并创建 `uv.lock`，以便稍后可以安装相同的包版本。/// details | 这些命令的作用\n\n* `uv init`：创建一个新的 Python 项目。* `awesome-project`：在一个使用此名称的新目录中创建项目。\n\n[来源3: tutorial/first-steps.md] /// tip | 提示\n\nFastAPI 有一个[官方 VS Code 扩展](https://marketplace.visualstudio.com/items?itemName=FastAPILabs.fastapi-vscode)（以及 Cursor），它提供了很多功能，包括路径操作浏览器、路径操作搜索、测试中的 CodeLe",
       "golden_answer": "JWT 意为「JSON Web Tokens」。在 FastAPI 中结合密码哈希使用 JWT 令牌可以让应用真正安全起来；要在 Python 中生成和校验 JWT 令牌，需要安装 `PyJWT`。",
-      "gen_time_ms": 40055.5,
+      "gen_time_ms": 45911.2,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "最后一句话有轻微推论，原文未明确说明FastAPI不需要复杂机制来集成外部包"
       },
       "answer_relevancy": {
         "score": 0.9,
-        "reason": "答案主要围绕用户问题展开，详细解释了JWT是什么以及如何在FastAPI中生成和校验JWT，并提供了安装PyJWT库的命令"
+        "reason": "回答基本扣题，详细解释了JWT的定义并在FastAPI中的应用，但有轻微扩展性内容"
       },
       "context_recall": {
-        "score": 0.1,
-        "reason": "缺失了关于 JWT 和 PyJWT 的详细信息"
+        "score": 0.4,
+        "reason": "缺失了关于 JWT 和 PyJWT 的具体使用和结合密码哈希的相关信息"
       }
     },
     {
@@ -324,18 +324,18 @@
       "answer": "在 OAuth2 的密码流（Password 流程）中，前端需要将 `username` 和 `password` 发送到客户端用来发送请求获取令牌的 URL。\n\n为了实现这个功能，可以使用 `OAuth2PasswordBearer` 类。创建该类实例时，需要传入 `tokenUrl` 参数，该参数包含客户端用来发送 `username` 和 `password` 以获取令牌的 URL。\n\n文档中提到的例子是通过相对路径来指定 `tokenUrl` 的，例如 `./token` 或 `https://example.com/token`。使用相对路径确保了 API 在不同环境下（如使用代理）时依然可以正常工作。",
       "context": "[来源1: tutorial/security/simple-oauth2.md] # OAuth2 实现简单的 Password 和 Bearer 验证 { #simple-oauth2-with-password-and-bearer }\n\n本章添加上一章示例中欠缺的部分，实现完整的安全流。## 获取 `username` 和 `password` { #get-the-username-and-password }\n\n首先，使用 **FastAPI** 安全工具获取 `username` 和 `password`。OAuth2 规范要求使用“密码流”（也就是我们正在使用的流程）时，客户端或用户必须以表单数据形式发送 `username` 和 `password` 字段。并且，这两个字段必须命名为 `username` 和 `password`，不能使用 `user-name` 或 `email` 等其它名称。不过也不用担心，前端仍可以显示终端用户所需的名称。数据库模型也可以使用所需的名称。\n\n[来源2: tutorial/security/first-steps.md] 本示例将使用 **OAuth2** 的 **Password** 流程并配合 **Bearer** 令牌，通过 `OAuth2PasswordBearer` 类来实现。/// note | 注意\n\n“Bearer” 令牌并非唯一选项。但它非常适合我们的用例。对于大多数用例，它也可能是最佳选择，除非你是 OAuth2 专家，并明确知道为何其他方案更适合你的需求。在那种情况下，**FastAPI** 同样提供了相应的构建工具。///\n\n创建 `OAuth2PasswordBearer` 类实例时，需要传入 `tokenUrl` 参数。该参数包含客户端（运行在用户浏览器中的前端）用来发送 `username` 和 `password` 以获取令牌的 URL。\n\n[来源3: tutorial/security/first-steps.md] ///\n\n创建 `OAuth2PasswordBearer` 类实例时，需要传入 `tokenUrl` 参数。该参数包含客户端（运行在用户浏览器中的前端）用来发送 `username` 和 `password` 以获取令牌的 URL。{* ../../docs_s",
       "golden_answer": "OAuth2 使用「表单数据」来发送 `username` 和 `password`；前端（运行在用户浏览器中）把 `username` 和 `password` 发送到 API 中的特定 URL，该 URL 通过 `tokenUrl=\"token\"` 声明。示例使用 OAuth2 的 Password 流程并配合 Bearer 令牌，通过 `OAuth2PasswordBearer` 类实现。",
-      "gen_time_ms": 48214.2,
+      "gen_time_ms": 55480.7,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 1.0,
+        "reason": "全部有据可查"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案主要围绕用户问题展开，并提供了具体的实现细节和类的使用方法"
+        "score": 0.8,
+        "reason": "回答基本扣题，但增加了关于相对路径的信息，与核心问题相关性不高"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了如何使用相对 URL 声明 tokenUrl 的详细说明"
+        "reason": "缺少'使用表单数据发送username和password时字段名称必须为username和password'"
       }
     },
     {
@@ -345,18 +345,18 @@
       "answer": "SQLModel 与 SQLAlchemy 和 Pydantic 的关系是，SQLModel 基于 SQLAlchemy 和 Pydantic 构建，并且由 FastAPI 的同一作者制作，旨在完美匹配需要使用 SQL 数据库的 FastAPI 应用程序。\n\n关于如何定义一张表，文档中没有直接说明。但是，从提供的信息可以推断出，通过在类上添加 `table=True` 可以告诉 SQLModel 这是一个表模型，并且它应该表示 SQL 数据库中的一个表。此外，使用 `Field(primary_key=True)` 可以为 `id` 属性定义主键。",
       "context": "[来源1: tutorial/sql-databases.md] **SQLModel** 基于 [SQLAlchemy](https://www.sqlalchemy.org/) 和 Pydantic 构建。它由 **FastAPI** 的同一作者制作，旨在完美匹配需要使用**SQL 数据库**的 FastAPI 应用程序。\n\n[来源2: tutorial/sql-databases.md] # SQL（关系型）数据库 { #sql-relational-databases }\n\n**FastAPI** 并不要求你使用 SQL（关系型）数据库。你可以使用你想用的**任何数据库**。这里，我们来看一个使用 [SQLModel](https://sqlmodel.tiangolo.com/) 的示例。**SQLModel** 基于 [SQLAlchemy](https://www.sqlalchemy.org/) 和 Pydantic 构建。它由 **FastAPI** 的同一作者制作，旨在完美匹配需要使用**SQL 数据库**的 FastAPI 应用程序。\n\n[来源3: tutorial/sql-databases.md] 稍后我们将通过下面的**多个模型**提高其安全性和多功能性。🤓\n\n### 创建模型 { #create-models }\n\n导入 `SQLModel` 并创建一个数据库模型：\n\n{* ../../docs_src/sql_databases/tutorial001_an_py310.py ln[1:11] hl[7:11] *}\n\n`Hero` 类与 Pydantic 模型非常相似（实际上，从底层来看，它*确实就是一个 Pydantic 模型*）。有一些区别：\n\n* `table=True` 会告诉 SQLModel 这是一个*表模型*，它应该表示 SQL 数据库中的一个**表**，而不仅仅是一个*数据模型*（就像其他常规的 Pydantic 类一样）。* `Field(primary_key=True)` 会告诉 SQLModel `id` 是 SQL 数据库中的**主键**（你可以在 SQLModel 文档中了解更多关于 SQL 主键的信息）。",
       "golden_answer": "SQLModel 基于 SQLAlchemy 和 Pydantic 构建，由 FastAPI 的同一作者制作，旨在完美匹配需要使用 SQL 数据库的 FastAPI 应用；因为基于 SQLAlchemy，可用任何被 SQLAlchemy 支持的数据库（生产环境常用 PostgreSQL）。定义表模型时，`table=True` 告诉 SQLModel 这是一个表模型（表示 SQL 数据库中的一张表，而不只是普通数据模型），`Field(primary_key=True)` 声明 `id` 是数据库中的主键。",
-      "gen_time_ms": 39873.0,
+      "gen_time_ms": 43877.6,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "所有陈述都能在上下文中找到依据或合理推断"
       },
       "answer_relevancy": {
-        "score": 0.7,
-        "reason": "答案部分回应了用户关于SQLModel与 SQLAlchemy 和 Pydantic的关系的问题，并提供了如何在SQLModel中定义表的一些信息，但没有直接回答用户关于“怎么定义一张表”的问题"
+        "score": 0.8,
+        "reason": "回答基本扣题，解释了SQLModel与SQLAlchemy和Pydantic的关系，并提供了如何定义一张表的方法，但额外提到了文档中没有直接说明这一点，略显冗余"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了关于 SQLModel 可以使用任何被 SQLAlchemy 支持的数据库的信息"
+        "reason": "次要信息点缺失：未提及任何被 SQLAlchemy 支持的数据库（如 PostgreSQL）"
       }
     },
     {
@@ -366,18 +366,18 @@
       "answer": "根据提供的文档内容，容器和容器镜像的主要区别在于它们的状态和功能：\n\n1. 容器镜像是一个静态版本的文件和元数据集合，它包含了所有需要运行容器所需的内容，如文件、环境变量以及默认命令/程序等。而容器镜像本身并不在运行状态。\n\n2. 而容器则是从容器镜像中启动并运行的实际实例。容器拥有各自隔离的运行进程（通常只有一个）、文件系统和网络，可以创建或修改文件、环境变量等，并且这些更改只存在于该容器中，不会持久化到底层的容器镜像中。\n\n3. 容器镜像是静态的，而容器是动态的，它只有在有进程在运行时才处于运行状态。当容器中没有任何进程在运行时，容器就会停止。\n\n总结来说，容器镜像是一个静态文件和元数据集合，用于创建容器；而容器是从容器镜像启动并运行的实际实例，具有独立的运行环境。",
       "context": "[来源1: deployment/docker.md] 而**容器**本身（相对**容器镜像**）就是该镜像的实际运行实例，可类比为**进程**。事实上，容器只有在有**进程在运行**时才处于运行状态（通常只有一个进程）。当容器中没有任何进程在运行时，容器就会停止。## 容器镜像 { #container-images }\n\nDocker 一直是创建和管理**容器镜像**与**容器**的主要工具之一。还有一个公共的 [Docker Hub](https://hub.docker.com/)，其中为许多工具、环境、数据库和应用提供了预制的**官方容器镜像**。例如，有官方的 [Python 镜像](https://hub.docker.com/_/python)。\n\n[来源2: deployment/docker.md] 与存放静态内容的“**容器镜像**”相对，“**容器**”通常指一个正在运行的实例，即正在被**执行**的东西。当**容器**启动并运行（从**容器镜像**启动）后，它可以创建或修改文件、环境变量等。这些更改只存在于该容器中，不会持久化到底层的容器镜像中（不会写回磁盘）。容器镜像可类比为**程序**文件及其内容，例如 `python` 和某个文件 `main.py`。而**容器**本身（相对**容器镜像**）就是该镜像的实际运行实例，可类比为**进程**。事实上，容器只有在有**进程在运行**时才处于运行状态（通常只有一个进程）。当容器中没有任何进程在运行时，容器就会停止。\n\n[来源3: deployment/docker.md] 容器还拥有各自**隔离**的运行进程（通常只有一个）、文件系统和网络，简化了部署、安全、开发等。## 什么是容器镜像 { #what-is-a-container-image }\n\n**容器**是从**容器镜像**运行的。容器镜像是容器中所有文件、环境变量以及应该运行的默认命令/程序的一个**静态**版本。这里的**静态**指容器**镜像**本身并不在运行，仅仅是被打包的文件和元数据。与存放静态内容的“**容器镜像**”相对，“**容器**”通常指一个正在运行的实例，即正在被**执行**的东西。",
       "golden_answer": "容器是从容器镜像运行的。容器镜像是容器中所有文件、环境变量以及应该运行的默认命令/程序的一个静态版本——它本身并不在运行，仅仅是被打包的文件和元数据。容器则通常指一个正在运行的实例。容器启动运行后对文件、环境变量等的修改只存在于该容器中，不会持久化回底层的容器镜像。",
-      "gen_time_ms": 40932.0,
+      "gen_time_ms": 39051.4,
       "faithfulness": {
-        "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "score": 1.0,
+        "reason": "全部有据可查"
       },
       "answer_relevancy": {
-        "score": 0.7,
-        "reason": "答案主要解释了容器和容器镜像的区别，但没有直接回答用户关于两者区别的具体问题，而是进行了较为详细的描述。"
+        "score": 1.0,
+        "reason": "回答详细解释了容器和容器镜像的区别，并且紧扣问题核心"
       },
       "context_recall": {
-        "score": 0.7,
-        "reason": "缺失了关于容器和进程之间关系的信息"
+        "score": 0.9,
+        "reason": "次要信息点'容器只有在有进程在运行时才处于运行状态（通常只有一个进程）。当容器中没有任何进程在运行时，容器就会停止。'缺失"
       }
     },
     {
@@ -387,18 +387,18 @@
       "answer": "直接返回 `Response` 可以让你有更大的灵活性和可扩展性，因为你不需要使用 Pydantic 模型进行数据转换或序列化。然而，这也带来了更多的责任，你需要确保返回的数据是正确的、格式正确且可以被序列化。\n\n在文档中查看时，输入模型和输出模型都会有自己的 JSON Schema，并且这两个模型都会用于交互式 API 文档。这意味着即使你直接返回 `Response` 而不是使用响应模型或返回类型，API 文档仍然会包含这些模型的详细信息。\n\n声明 JSON 媒体类型时的区别在于，当你直接返回 `Response` 时，它不会自动应用 Pydantic 的序列化过程和工具支持。这意味着你可能需要手动指定媒体类型（例如，使用 `Response[Dict[str, Any], media_type=\"application/json\"]`），以确保 API 文档正确地显示为 JSON 格式。",
       "context": "[来源1: advanced/response-directly.md] 当使用 `response_model` 或返回类型时，FastAPI 不会使用 `jsonable_encoder` 来转换数据（那样会更慢），也不会使用 `JSONResponse` 类。相反，它会采用使用该响应模型（或返回类型）由 Pydantic 生成的 JSON 字节，并直接返回一个具有正确 JSON 媒体类型（`application/json`）的 `Response`。## 说明 { #notes }\n\n当你直接返回 `Response` 时，它的数据既没有校验，又不会进行转换（序列化），也不会自动生成文档。但是你仍可以参考 [OpenAPI 中的额外响应](additional-responses.md) 给响应编写文档。在后续的章节中你可以了解到如何使用/声明这些自定义的 `Response` 的同时还保留自动化的数据转换和文档等。\n\n[来源2: advanced/response-directly.md] /// tip | 提示\n\n通常使用 [响应模型](../tutorial/response-model.md) 会比直接返回 `JSONResponse` 拥有更好的性能，因为它会在 Rust 中使用 Pydantic 序列化数据。///\n\n## 返回 `Response` { #return-a-response }\n\n你可以返回一个 `Response` 或其任意子类。/// note | 注意\n\n`JSONResponse` 本身是一个 `Response` 的子类。///\n\n当你返回一个 `Response` 时，**FastAPI** 会直接传递它。**FastAPI** 不会用 Pydantic 模型做任何数据转换，不会将响应内容转换成任何类型，等等。这种特性给你极大的可扩展性。你可以返回任何数据类型，重写任何数据声明或者校验，等等。这也带来了很大的责任。你必须确保你返回的数据是正确的、格式正确、可被序列化，等等。\n\n[来源3: tutorial/response-model.md] 这样，你就能兼得两方面的优势：带有**工具支持**的类型注解和**数据过滤**。## 在文档中查看 { #see-it-in-the-docs }\n\n当你查看自动文档时，你会",
       "golden_answer": "如果直接返回一个 `Response`（或其任意子类，比如 `JSONResponse`），返回的数据不会自动转换（即使你声明了 `response_model`），也不会自动生成文档——例如生成的 OpenAPI 中 HTTP 头 `Content-Type` 里的特定「媒体类型」不会被包含。如果在 `response_class` 中声明的是一个 JSON 媒体类型（`application/json`）的类，比如 `JSONResponse`，那么返回的数据会使用你在路径操作装饰器中声明的任意 Pydantic `response_model` 自动转换和过滤。",
-      "gen_time_ms": 49820.3,
+      "gen_time_ms": 49751.1,
       "faithfulness": {
-        "score": 0.4,
-        "reason": "上下文中没有直接提到生成答案中的最后一句话 '声明 JSON 媒体类型时的区别在于，当你直接返回 Response 时，它不会自动应用 Pydantic 的序列化过程和工具支持。这意味着你可能需要手动指定媒体类型'"
+        "score": 0.9,
+        "reason": "有一处轻微的推论性表述：关于声明 JSON 媒体类型时的区别"
       },
       "answer_relevancy": {
-        "score": 0.4,
-        "reason": "答案部分讨论了直接返回 Response 的副作用和区别，但偏离了用户问题的核心，即直接返回 Response 会有什么副作用？声明 JSON 媒体类型时又有什么区别？"
+        "score": 0.7,
+        "reason": "回答基本扣题，但扩展了关于灵活性和责任的内容，偏离了主要问题的核心。"
       },
       "context_recall": {
-        "score": 0.4,
-        "reason": "缺失了如何使用 `response_class` 声明 JSON 媒体类型（如 `JSONResponse`）以及它与 `response_model` 的关系等关键信息"
+        "score": 0.7,
+        "reason": "缺少关于返回 Response 不会自动生成文档以及 Content-Type 的具体说明"
       }
     },
     {
@@ -408,18 +408,18 @@
       "answer": "在 FastAPI 中使用 WebSockets 并不需要额外安装其他依赖，因为 WebSockets 是 Starlette 库的一部分，默认情况下已经包含在 FastAPI 的标准包中。不过，如果你想要使用一些额外的特性（如 CORS、Cookie Sessions 等），你需要通过 `fastapi[standard]` 来安装这些特性。\n\n所以，对于基本的 WebSocket 使用，你只需要安装 FastAPI 和 WebSockets 即可。如果需要更多特性，则可以考虑安装带有标准依赖的 FastAPI。",
       "context": "[来源1: advanced/websockets.md] # WebSockets { #websockets }\n\n您可以在 **FastAPI** 中使用 [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)。## 安装 `websockets` { #install-websockets }\n\n将 `websockets`（一个让使用“WebSocket”协议更容易的 Python 库）添加到你的项目中：\n\n<div class=\"termy\">\n\n```console\n$ uv add websockets\n\n---> 100%\n```\n\n</div>\n\n## WebSockets 客户端 { #websockets-client }\n\n### 在生产环境中 { #in-production }\n\n在您的生产系统中，您可能使用现代框架（如 React、Vue.js 或 Angular）创建了一个前端。要使用 WebSockets 与后端进行通信，您可能会使用前端的工具。或者，您可能有一个原生移动应用程序，直接使用原生代码与 WebSocket 后端通信。或者，您可能有其他与 WebSocket 终端通信的方式。\n\n[来源2: index.md] * 许多额外特性（归功于 Starlette），例如：\n    * **WebSockets**\n    * 基于 HTTPX 和 `pytest` 的极其简单的测试\n    * **CORS**\n    * **Cookie Sessions**\n    * ...以及更多。### 部署你的应用（可选） { #deploy-your-app-optional }\n\n你可以选择用一条命令将 FastAPI 应用部署到 [FastAPI Cloud](https://fastapicloud.com)。🚀\n\n<div class=\"termy\">\n\n```console\n$ uv run fastapi deploy\n\nDeploying to FastAPI Cloud...✅ Deployment successful!🐔 Ready the chicken!Your app is ready at https:",
       "golden_answer": "需要把 `websockets` 添加到项目中——它是一个让使用「WebSocket」协议更容易的 Python 库，文档示例用的命令是 `uv add websockets`。",
-      "gen_time_ms": 48003.4,
+      "gen_time_ms": 46636.0,
       "faithfulness": {
         "score": 0.7,
-        "reason": "大部分有依据，有一处轻微的推论性表述（上下文暗示了但没有明确说）"
+        "reason": "有轻微推论性表述"
       },
       "answer_relevancy": {
-        "score": 0.9,
-        "reason": "答案主要围绕在 FastAPI 中使用 WebSockets 不需要额外安装其他依赖，并且提供了关于如何通过 `fastapi[standard]` 安装更多特性的信息，直接回应了用户的问题并扩展了一些相关知识。"
+        "score": 0.8,
+        "reason": "回答基本扣题，但额外提供了关于标准依赖和扩展特性的信息"
       },
       "context_recall": {
         "score": 0.7,
-        "reason": "缺失了如何使用 `websockets` 库的具体示例和文档链接"
+        "reason": "缺少关于 `websockets` 库的具体说明"
       }
     }
   ]

@@ -1,0 +1,50 @@
+{
+  "note": "本文件由 fix_scores.py 生成：把因 num_predict=512 截断而静默记 0 分的条目恢复为真实分。原始产物见 experiments/llm_evaluation_results.json。",
+  "meta": {
+    "source": "llm_evaluation_results.json",
+    "generator_model": "qwen2.5:3b",
+    "judge_model": "qwen2.5:7b",
+    "total_cases": 18,
+    "truncated_entries": 1,
+    "recovered": {
+      "faithfulness": {
+        "S02": 0.9
+      },
+      "answer_relevancy": {},
+      "context_recall": {}
+    }
+  },
+  "metrics_original": {
+    "faithfulness": {
+      "mean": 0.8055555555555556
+    },
+    "answer_relevancy": {
+      "mean": 0.7944444444444446
+    },
+    "context_recall": {
+      "mean": 0.6
+    }
+  },
+  "metrics_recovered": {
+    "faithfulness": {
+      "mean": 0.8555555555555555,
+      "min": 0.7,
+      "max": 1.0,
+      "fixed_entries": {
+        "S02": 0.9
+      }
+    },
+    "answer_relevancy": {
+      "mean": 0.7944444444444446,
+      "min": 0.4,
+      "max": 1.0,
+      "fixed_entries": {}
+    },
+    "context_recall": {
+      "mean": 0.6,
+      "min": 0.0,
+      "max": 1.0,
+      "fixed_entries": {}
+    }
+  }
+}
