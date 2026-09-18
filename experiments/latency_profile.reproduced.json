@@ -1,34 +1,35 @@
 {
-  "description": "各阶段平均延迟 (ms) — 由临时脚本复现（原 experiments.py 因 retrievers.py rebuild 漏赋值不可用）",
+  "description": "各阶段平均延迟 (ms)",
+  "note": "由 scripts/reproduce_latency.py 产出（experiments.py 因 retrievers.py 的 rebuild 漏赋值不可用，待修项 C9）",
   "corpus": "fastapi-zh",
   "n_queries": 18,
   "timings": {
     "bm25_search_ms": {
-      "mean_ms": 7.08,
-      "min_ms": 1.14,
-      "max_ms": 13.59
+      "mean_ms": 5.64,
+      "min_ms": 0.77,
+      "max_ms": 9.99
     },
     "vector_search_ms": {
-      "mean_ms": 37.51,
-      "min_ms": 30.58,
-      "max_ms": 53.01
+      "mean_ms": 1140.52,
+      "min_ms": 19.7,
+      "max_ms": 20051.53
     },
     "graph_search_ms": {
-      "mean_ms": 11.13,
-      "min_ms": 0.26,
-      "max_ms": 17.6
+      "mean_ms": 8.46,
+      "min_ms": 0.25,
+      "max_ms": 16.0
     },
     "rrf_fusion_ms": {
-      "mean_ms": 0.26,
-      "min_ms": 0.2,
-      "max_ms": 0.43
+      "mean_ms": 0.21,
+      "min_ms": 0.15,
+      "max_ms": 0.37
     },
     "ce_rerank_ms": {
-      "mean_ms": 33973.76,
-      "min_ms": 22506.91,
-      "max_ms": 42137.25
+      "mean_ms": 7302.38,
+      "min_ms": 5987.47,
+      "max_ms": 12184.0
     }
   },
-  "total_mean_ms": 34029.74,
-  "ce_share_pct": 99.8
+  "total_mean_ms": 8457.21,
+  "ce_share_pct": 86.3
 }
