@@ -48,6 +48,12 @@ data/knowledge_triples.jsonl.meta
 cl100k_base.tiktoken
 project.tgz
 
+# 部署 / 面试手册（含公网 IP 与服务器信息，仅本机自用）
+# 2026-09-18 决定：这两份自己看即可，不入公开仓库。
+# ⚠️ 若以后要入库，必须先把公网 IP 换成占位符 —— 否则等于公开演示机入口。
+docs_knowledge/DEPLOYMENT.md
+docs_knowledge/INTERVIEW_RAG.md
+
 # 环境
 .env
 .venv/
