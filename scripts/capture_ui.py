@@ -8,7 +8,9 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 BASE = "http://localhost:8510"
-OUT = Path("screenshots")
+# 输出固定到**项目根目录**的 screenshots/，不随 cwd 变化
+# （本脚本 2026-09-18 从根目录移入 scripts/，原先的相对路径会改成写到 scripts/screenshots/）
+OUT = Path(__file__).resolve().parents[1] / "screenshots"
 OUT.mkdir(exist_ok=True)
 QUERY = "RAG 混合检索策略"
 

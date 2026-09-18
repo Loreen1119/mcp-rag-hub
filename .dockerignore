@@ -30,7 +30,7 @@ screenshots/            # 6 张 PNG，README 用，运行不需要
 .idea/
 *.log
 .env
-capture_ui.py           # 依赖本机跑起来的界面来截图，容器内用不上
+scripts/capture_ui.py    # 依赖本机跑起来的界面来截图，容器内用不上
 
 # --- 文档（运行不需要；但 corpora/ 必须留，它是知识库本体）---
 docs/

@@ -42,6 +42,12 @@ data/knowledge_triples.jsonl.meta
 # 运行日志
 *.log
 
+# 部署产物（本地生成、用于上传服务器；体积大且可重生，不进库）
+# cl100k_base.tiktoken：tiktoken 词表，本机有代理才能下回来 → **不要删**，部署时要 scp
+# project.tgz：打包产物，按 DEPLOYMENT.md 的 tar 命令可随时重生成
+cl100k_base.tiktoken
+project.tgz
+
 # 环境
 .env
 .venv/
