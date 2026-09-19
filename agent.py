@@ -20,8 +20,11 @@ LangGraph Agent — RAG 智能检索问答编排。
 
 from __future__ import annotations
 
+import json
 import logging
 import sys
+import urllib.error
+import urllib.request
 from typing import Annotated, TypedDict
 
 import operator
@@ -33,7 +36,11 @@ from config import (
     CE_TOP_K,
     CE_RELATIVE_THRESHOLD,
     CE_THRESHOLD,
+    DEEPSEEK_API_KEY,
+    DEEPSEEK_BASE_URL,
+    DEEPSEEK_MODEL,
     KG_RRF_WEIGHT,
+    LLM_BACKEND,
     LLM_MAX_RETRIES,
     LLM_MODEL,
     LLM_TIMEOUT_SECONDS,
@@ -125,6 +132,11 @@ def _call_llm(prompt: str, system: str = "", json_mode: bool = False) -> tuple[s
     调用方需自行兜底：generate_answer 会回落到 _bm25_fallback，
     rewrite_query 会规则式改写。
     """
+    # 后端开关：优先走 DeepSeek 云端推理（2G 服务器零内存压力）；
+    # 本地已装 Ollama 且 LLM_BACKEND="ollama" 时走原本地路径。
+    if LLM_BACKEND == "deepseek":
+        return _call_deepseek(prompt, system, json_mode)
+
     try:
         import ollama
     except ImportError:
@@ -160,6 +172,49 @@ def _call_llm(prompt: str, system: str = "", json_mode: bool = False) -> tuple[s
                 break  # 服务端明确报错，重试无意义
 
     return "", last_error
+
+
+def _call_deepseek(prompt: str, system: str = "", json_mode: bool = False) -> tuple[str, str]:
+    """调用 DeepSeek 云端 Chat API（OpenAI 兼容协议）生成文本，返回 (content, error_reason)。
+
+    用于 2G 轻量服务器：避免本地加载 qwen2.5:3b（~2.5GB）挤爆内存。
+    使用标准库 urllib 发请求，不依赖额外 SDK。
+    """
+    if not DEEPSEEK_API_KEY:
+        logger.warning("[llm] 未配置 DEEPSEEK_API_KEY，跳过生成")
+        return "", RefusalReason.SERVICE_ERROR.value
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    payload: dict = {"model": DEEPSEEK_MODEL, "messages": messages, "temperature": 0.0}
+    if json_mode:
+        payload["response_format"] = {"type": "json_object"}
+
+    data = json.dumps(payload).encode("utf-8")
+    url = DEEPSEEK_BASE_URL.rstrip("/") + "/chat/completions"
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={
+            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=LLM_TIMEOUT_SECONDS) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+        content = (body.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+        return content, ""
+    except urllib.error.HTTPError as exc:
+        logger.warning("[llm] DeepSeek HTTP 错误: %s", exc)
+        return "", _classify_llm_error(exc)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[llm] DeepSeek 调用失败 (%s): %s", type(exc).__name__, exc)
+        return "", _classify_llm_error(exc)
 
 
 # ============================================================

@@ -87,6 +87,16 @@ BM25_TOP_K = 20            # BM25 召回数量
 VECTOR_TOP_K = 20          # ChromaDB 向量召回数量
 RRF_K = 60                 # RRF 平滑常数
 CE_TOP_K = 5               # Cross-Encoder 最终返回数量
+# RRF 融合后、送 CE 前的候选截断数。设计意图（reranker docstring）：Bi-Encoder 粗筛 Top-20
+# → CE 精排 Top-5；代码此前未落地该截断层，导致 fused 全集（~55）全量送入 CE。截断在
+# rerank() 内部统一生效，所有调用方受益，且不影响 output["rrf"] 全集返回。
+CE_CANDIDATE_K = 30        # RRF 融合后送 CE 前的候选截断数（设计意图：Bi-Encoder 粗筛 Top-20 → CE 精排 Top-5）
+# Reranker 总开关（环境变量驱动）：默认 **True** —— 本机、4G+ 服务器等常规环境都应启用 CE 精排，
+# 与 README 的四阶段界面、截图、验收数字口径一致。只有内存受限的部署才关掉它。
+#   关掉方式：MCP_RAG_ENABLE_RERANKER=false（服务器写在 start_app.sh，容器写进 compose environment）
+#   关掉后 run() 直接把 RRF 前 ce_top_k 条当结果，Cross-Encoder 连懒加载都不会触发
+#   注：评测脚本直接调 pipeline.reranker.rerank()、绕过本开关，跑 CE 评测无需开启
+ENABLE_RERANKER = os.environ.get("MCP_RAG_ENABLE_RERANKER", "true").lower() in ("1", "true", "yes")
 # bge-reranker-base 经 sigmoid 输出 0~1（0.5 为判定中点），与英文 ms-marco 的 logits
 # 量纲完全不同，故阈值从 3.0 调到 0.3。此阈值仅用于「是否触发查询改写」的质量门控。
 CE_THRESHOLD = 0.3
@@ -128,6 +138,9 @@ KG_TRIPLES_META_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl.meta"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
 DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1"
 DEEPSEEK_MODEL = "deepseek-chat"
+# LLM 后端开关：默认 "deepseek"（云端推理，对 2G 轻量服务器零内存压力，演示稳）；
+# 本地已装 Ollama 时可改回 "ollama" 走本地 qwen2.5:3b。命令行可经环境变量 MCP_RAG_LLM_BACKEND 覆盖。
+LLM_BACKEND = os.environ.get("MCP_RAG_LLM_BACKEND", "deepseek")
 
 # ============================================================
 # KG Retriever 参数

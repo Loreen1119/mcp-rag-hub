@@ -8,12 +8,13 @@ Cross-Encoder: query+doc 拼接送入模型做全注意力计算，比 Bi-Encode
 from __future__ import annotations
 
 import logging
+import threading
 from collections import defaultdict
 from typing import List
 
 from sentence_transformers import CrossEncoder
 
-from config import RRF_K, CROSS_ENCODER_MODEL, CE_TOP_K, BM25_TOP_K, VECTOR_TOP_K
+from config import RRF_K, CROSS_ENCODER_MODEL, CE_TOP_K, BM25_TOP_K, VECTOR_TOP_K, CE_CANDIDATE_K, ENABLE_RERANKER
 from src.models import Chunk, RetrievalResult
 
 logger = logging.getLogger(__name__)
@@ -104,6 +105,7 @@ class CrossEncoderReranker:
         query: str,
         candidates: List[RetrievalResult],
         top_k: int = CE_TOP_K,
+        candidate_cap: int = CE_CANDIDATE_K,
     ) -> List[RetrievalResult]:
         """对候选列表做 Cross-Encoder 精排。
 
@@ -117,6 +119,13 @@ class CrossEncoderReranker:
         """
         if not candidates:
             return []
+
+        # RRF 融合后先截断候选再送 CE：CE 是 query+doc 全注意力，pairs 成本随候选数
+        # 线性增长；RRF 已把高相关排在最前，截断到 candidate_cap 对最终 top-5 精度基本
+        # 无损，却能显著压低首查延迟（此前 fused 全集 ~55 全量打分）。
+        # 这正是 docstring「Bi-Encoder 粗筛 Top-20 → CE 精排 Top-5」设计意图的本代码落地。
+        if candidate_cap and len(candidates) > candidate_cap:
+            candidates = candidates[:candidate_cap]
 
         # 构造 query-doc pairs
         pairs = [(query, r.chunk.content) for r in candidates]
@@ -153,10 +162,26 @@ class FusionPipeline:
     """完整的检索融合管线：RRF → Cross-Encoder。
 
     将第 3 章的两路检索结果串联为一条端到端链路。
+
+    reranker 默认**懒加载**：CrossEncoder（bge-reranker-base，~1.1GB）体积大，
+    若在启动时（与 Bi-Encoder / Streamlit 同时）加载，会让 2GB 内存的轻量服务器
+    在构建向量索引时因内存压力疯狂 swap，进度条长时间卡在 0/46。改为首次
+    run()（即首个查询）时才加载，启动只保留轻量的 Bi-Encoder，构建索引内存充足。
     """
 
     def __init__(self, reranker: CrossEncoderReranker | None = None):
-        self.reranker = reranker or CrossEncoderReranker()
+        # reranker=None → 首次 run() 时再懒加载，避免启动时占满内存
+        self._reranker = reranker
+        self._reranker_lock = threading.Lock()
+
+    @property
+    def reranker(self) -> CrossEncoderReranker:
+        """线程安全地懒加载 Cross-Encoder（首次访问时才占 1.1GB 内存）。"""
+        if self._reranker is None:
+            with self._reranker_lock:
+                if self._reranker is None:
+                    self._reranker = CrossEncoderReranker()
+        return self._reranker
 
     def run(
         self,
@@ -192,8 +217,11 @@ class FusionPipeline:
             rankings.append(graph_results)
         fused = reciprocal_rank_fusion(rankings, k=rrf_k, weights=rrf_weights)
 
-        # 阶段 2: Cross-Encoder 重排
-        reranked = self.reranker.rerank(query, fused, top_k=ce_top_k)
+        # 阶段 2: Cross-Encoder 重排（可开关：2G 轻量服务器关掉以省 1.1GB 模型占用）
+        if ENABLE_RERANKER:
+            reranked = self.reranker.rerank(query, fused, top_k=ce_top_k)
+        else:
+            reranked = fused[:ce_top_k]
 
         return {"rrf": fused, "cross_encoder": reranked}
 
