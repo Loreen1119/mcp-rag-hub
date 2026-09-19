@@ -24,9 +24,11 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s | %(message)s")
 # 对照实验使用的“干净”文档集合
 # ⚠️ sample_rag_paper.md 已迁到 docs/samples/，故这里的 source 是相对 DOCS_DIR 的路径
 CLEAN_DOCS = {
-    "rag-intro.md",
-    "embedding-guide.md",
-    "chunking-strategies.md",
+    # ⚠️ 必须写「相对 DOCS_DIR 的路径」而非裸文件名：process_directory 递归且 source 记相对路径，
+    #    2026-09-19 这几个文件移入 docs/reference/ 后，source 变成 reference/xxx.md。
+    "reference/RAG核心概念.md",
+    "reference/Embedding选型指南.md",
+    "reference/切片策略.md",
     "samples/sample_rag_paper.md",
 }
 

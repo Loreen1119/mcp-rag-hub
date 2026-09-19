@@ -34,5 +34,5 @@ scripts/capture_ui.py    # 依赖本机跑起来的界面来截图，容器内�
 
 # --- 文档（运行不需要；但 corpora/ 必须留，它是知识库本体）---
 docs/
-docs_knowledge/
+career/
 journal/

@@ -7,7 +7,7 @@
 当天执行 `git rm data/train_queries.json data/test_queries_all.json`（方案 A：删掉为已废弃的 CE 阈值方案服务的 train/test 拆分）后，
 **整个 `data/` 目录被文件系统层静默清空**——10 个文件全不见，git 完全不知情。
 
-排查与恢复全过程见 [`docs_knowledge/开发过程中遇到的问题.md`](../../docs_knowledge/开发过程中遇到的问题.md) 第 29、30 条。
+排查与恢复全过程见 [`docs/开发过程中遇到的问题.md`](../../docs/开发过程中遇到的问题.md) 第 29、30 条。
 
 ## 这里的文件是什么
 

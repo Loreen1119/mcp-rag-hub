@@ -1,6 +1,6 @@
 # RAG 核心概念速览
 
-> 面向 mcp-rag-hub 项目的关键知识索引。更系统的入门学习请移步 [docs_knowledge/](../docs_knowledge/README.md)。
+> 面向 mcp-rag-hub 项目的关键知识索引。更系统的入门学习请移步 [项目技术文档导读](../README.md)。
 
 ## Retriever 与 Generator 的配合
 

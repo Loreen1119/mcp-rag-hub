@@ -126,7 +126,7 @@ RAGAS_LLM = "ollama/qwen2.5:7b"   # 评测用 LLM（本地 Ollama 模型）
 # 单一 Golden Test Set（18 条，四类分层：exact_match / semantic / mixed / graph）。
 # 历史说明：曾存在 train/test 拆分（train_queries.json + test_queries_all.json），
 # 那是 Phase 0「用 CE 分数做拒答门控」调参用的。该方案已被证伪并删除
-# （见 MEMORY.md「设计决策」与 docs_knowledge/开发过程中遇到的问题.md），
+# （见 MEMORY.md「设计决策」与 docs/开发过程中遇到的问题.md），
 # 拆分随之失去意义 —— 不存在需要留出训练集不看的调参流程，故收敛为单一测试集。
 TEST_QUERIES_FILE = PROJECT_ROOT / "data" / "test_queries.json"
 KG_TRIPLES_FILE = PROJECT_ROOT / "data" / "knowledge_triples.jsonl"

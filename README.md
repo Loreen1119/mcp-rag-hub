@@ -61,7 +61,7 @@ docker compose up --build                               # 浏览器打开 http:/
 
 模型不烧进镜像（国内直连 huggingface.co 不稳），而是挂载宿主已有缓存；Ollama 仍在宿主运行，
 容器经 `host.docker.internal` 访问。**前置条件、验证命令、已知限制**见
-[`docs/docker-deployment.md`](docs/docker-deployment.md)。
+[`docs/reference/Docker部署说明.md`](docs/reference/Docker部署说明.md)。
 
 ## 接入 MCP 客户端（Claude Desktop / Cursor 等）
 
@@ -124,14 +124,16 @@ mcp-rag-hub/
 │   ├── multi_evidence_queries.json# 多证据集 3 条（每条需跨 2 篇文档才能答全）
 │   └── knowledge_triples.jsonl    # KG 三元组缓存（可选实验功能 ENABLE_KG）
 │
-├── docs/                      # 项目自身文档（人读的，不参与索引）
-│   └── docker-deployment.md   # Docker 部署指南（前置条件 / 验证 / 已知限制）
-├── Dockerfile                 # 单容器镜像（CPU 版 torch + 挂载宿主模型缓存）
+├── docs/                      # 项目文档（人读，不参与索引）
+│   ├── 项目详解.md / 技术视角详解.md / 开发过程中遇到的问题.md
+│   ├── chapters/              #   ch01～ch10 逐层实现笔记
+│   └── reference/             #   外围知识参考（RAG核心概念 / Embedding选型指南 /
+│                              #     切片策略 / AST分块方案 / Docker部署说明）
+├── journal/                   # 过程笔记（踩坑日志 / 实验记录 / 进度清单，强时间序）
+├── Dockerfile                 # 单容器镜像（CPU 版 torch + 构建期从 ModelScope 烧入模型）
 ├── docker-compose.yml         # 一条命令拉起，含卷挂载与健康检查
-├── journal/                   # 踩坑日志与学习笔记
-├── docs_knowledge/            # 项目文档与章节笔记
-├── experiments/               # 实验结果 JSON
-└── chroma_db/                 # ChromaDB 持久化向量库
+├── experiments/               # 实验结果 JSON + 评测隔离向量库
+└── chroma_db/                 # ChromaDB 持久化向量库（主）
 ```
 
 </details>
@@ -139,7 +141,7 @@ mcp-rag-hub/
 ## 关键数据
 
 > 基于 18 条四类分层 Golden Test Set（exact_match / semantic / mixed / graph），每条 `golden_answer` 都能在 `golden_chunk_sources` 指定的文件正文里回查到原文依据（`python scripts/validate_golden.py` 校验，当前 0 问题）。
-> 以下为 2026-09-12 语料迁移至 `corpora/fastapi-zh` 后的**当前基线**。语料更换后旧基线（基于项目自身 `docs/`）已失效，实验过程详见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)。
+> 以下为 2026-09-12 语料迁移至 `corpora/fastapi-zh` 后的**当前基线**。语料更换后旧基线（基于项目自身 `docs/`）已失效，实验过程详见 [KG 消融实验笔记](journal/KG消融实验-2026-08-04.md)。
 
 ### 检索侧：Test 集（18 条）各阶段指标
 
@@ -163,9 +165,9 @@ mcp-rag-hub/
   `cross-encoder/ms-marco-MiniLM-L-6-v2` 的产物，两个变量同时变了。
   ⚠️ 另发现：文档所称"CE 限制在 Top-20 候选内"**与代码不符** —— `rerank` 的 `top_k`
   只控制**输出条数**，`pairs` 是对**全部候选**做前向（`src/fusion.py:122-123`）。
-  优化方向：RRF 之后先截断再送 CE —— 已于 2026-09-18 落地（`CE_CANDIDATE_K=30`，`src/fusion.py` 的 `rerank()` 在 pairs 构造前截断候选），复测 CE 从 12.8s 降至 7.3s（降约 43%），top-5 精度零回归。详见 [A 组验收结果](journal/A组验收结果-2026-09-15.md) §6
+  优化方向：RRF 之后先截断再送 CE —— 已于 2026-09-18 落地（`CE_CANDIDATE_K=30`，`src/fusion.py` 的 `rerank()` 在 pairs 构造前截断候选），复测 CE 从 12.8s 降至 7.3s（降约 43%），top-5 精度零回归。详见 [A 组验收结果](journal/端到端验收结果-2026-09-15.md) §6
 
-> 详细归因与单条 case 追踪见 [ch09 消融实验与数据分析](docs_knowledge/chapters/ch09-消融实验与数据分析.md)。
+> 详细归因与单条 case 追踪见 [ch09 消融实验与数据分析](docs/chapters/ch09-消融实验与数据分析.md)。
 
 ### 生成侧：端到端验收（2026-09-15）
 
@@ -181,9 +183,9 @@ mcp-rag-hub/
 > 三维分数**以 7b 裁判版为准** —— 同一批答案用 3b 当裁判会打安全分
 > （18 条里 13 条 Faithfulness 都是整 0.70，无区分度）。
 > 完整结果、两个评测坑（3b 裁判无区分度 / `num_predict=512` 截断导致静默 0 分）与面试口径，
-> 见 [A 组验收结果](journal/A组验收结果-2026-09-15.md)。
+> 见 [A 组验收结果](journal/端到端验收结果-2026-09-15.md)。
 
-**知识图谱检索（可选实验）**：用 LLM 抽取实体三元组、构建有向知识图谱，作为混合检索的一路补充。`ENABLE_KG` 开关控制。当前在**小规模、同主题语料**上未带来检索提升（独立评估见 [KG 消融实验笔记](journal/2026-08-04-kg-ablation-notes.md)），因此默认关闭——它展示的是「多路召回设计」的扩展能力，而非当前主推的检索路线。
+**知识图谱检索（可选实验）**：用 LLM 抽取实体三元组、构建有向知识图谱，作为混合检索的一路补充。`ENABLE_KG` 开关控制。当前在**小规模、同主题语料**上未带来检索提升（独立评估见 [KG 消融实验笔记](journal/KG消融实验-2026-08-04.md)），因此默认关闭——它展示的是「多路召回设计」的扩展能力，而非当前主推的检索路线。
 
 ## 技术栈
 
@@ -207,6 +209,6 @@ mcp-rag-hub/
 
 | 我 想... | 读这篇 |
 |---------|--------|
-| 了解这个项目做了什么、怎么用的 | [docs_knowledge/项目详解.md](docs_knowledge/项目详解.md) |
-| 深入技术细节和架构决策 | [docs_knowledge/技术视角详解.md](docs_knowledge/技术视角详解.md) |
-| 系统学习每一层的实现笔记 | [docs_knowledge/chapters/](docs_knowledge/chapters/) |
+| 了解这个项目做了什么、怎么用的 | [docs/项目详解.md](docs/项目详解.md) |
+| 深入技术细节和架构决策 | [docs/技术视角详解.md](docs/技术视角详解.md) |
+| 系统学习每一层的实现笔记 | [docs/chapters/](docs/chapters/) |

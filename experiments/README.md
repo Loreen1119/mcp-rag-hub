@@ -5,7 +5,7 @@
 > ✅ **2026-09-15 起，本目录产物已基本全部更新到当前语料**（`corpora/fastapi-zh`）——
 > 包括 `experiments.py --quick` 产出的消融 / 分类表现 / 参数扫描 / 延迟 / 深度追踪五类，
 > 以及生成侧的两份评测（18 条可答 + 拒答 10 + 多证据 3）。
-> 完整结论见 [`journal/A组验收结果-2026-09-15.md`](../journal/A组验收结果-2026-09-15.md)。
+> 完整结论见 [`journal/端到端验收结果-2026-09-15.md`](../journal/端到端验收结果-2026-09-15.md)。
 
 ## 为什么需要这份说明
 
@@ -59,8 +59,8 @@
 | 想找什么 | 去哪看 |
 |---|---|
 | 检索四级指标（BM25 / 向量 / RRF / CE） | 仓库根 `README.md` 的指标表、`journal/ROADMAP.md` |
-| 消融分析与"被数据推翻的设计" | `docs_knowledge/chapters/ch09-消融实验与数据分析.md` |
-| 拒答率 / 误答率 / 引用覆盖率 / 生成率 | `acceptance_eval_results.json`、`llm_evaluation_results.json`；结论汇总见 `journal/A组验收结果-2026-09-15.md` |
+| 消融分析与"被数据推翻的设计" | `docs/chapters/ch09-消融实验与数据分析.md` |
+| 拒答率 / 误答率 / 引用覆盖率 / 生成率 | `acceptance_eval_results.json`、`llm_evaluation_results.json`；结论汇总见 `journal/端到端验收结果-2026-09-15.md` |
 
 ## 怎么重新生成（对应未完成清单的 A 组）
 

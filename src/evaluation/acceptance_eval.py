@@ -22,7 +22,7 @@
     python -m src.evaluation.acceptance_eval --judge      # 额外给"该拒却答了"的用例打忠实度分
     python -m src.evaluation.acceptance_eval --dry-run    # 只加载验收集自检，不碰模型
 
-前置：**Ollama 必须在跑**（见 `journal/P0-演练手册.md`）。脚本会先做连通性自检，
+前置：**Ollama 必须在跑**（见 `journal/端到端验收演练手册-2026-09-13.md`）。脚本会先做连通性自检，
 不通就直接退出 —— 否则会跑出一堆 `generation_unavailable`，看起来像"系统很爱拒答"，
 其实是服务没起，属于会误导人的假数字。
 
@@ -92,7 +92,7 @@ def _preflight() -> bool:
         print('    2) 模型是否存在：  & "D:\\1software\\ollama\\ollama-windows-amd64\\ollama.exe" list')
         print("    3) OLLAMA_MODELS： 不要覆盖，应继承用户级变量 D:\\1software\\ollama_models")
         print("    4) 内存是否够：    3b 需 ≳2.5GB、7b 需 ≳6GB 物理可用")
-        print("\n  排查手册：journal/P0-演练手册.md")
+        print("\n  排查手册：journal/端到端验收演练手册-2026-09-13.md")
         return False
     print(f"OK（{resp.strip()[:20]}）")
     return True

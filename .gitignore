@@ -44,15 +44,16 @@ data/knowledge_triples.jsonl.meta
 
 # 部署产物（本地生成、用于上传服务器；体积大且可重生，不进库）
 # cl100k_base.tiktoken：tiktoken 词表，本机有代理才能下回来 → **不要删**，部署时要 scp
-# project.tgz：打包产物，按 DEPLOYMENT.md 的 tar 命令可随时重生成
+# project.tgz：打包产物，按部署手册（career/服务器部署手册.md）里的 tar 命令可随时重生成
 cl100k_base.tiktoken
 project.tgz
 
-# 部署 / 面试手册（含公网 IP 与服务器信息，仅本机自用）
-# 2026-09-18 决定：这两份自己看即可，不入公开仓库。
-# ⚠️ 若以后要入库，必须先把公网 IP 换成占位符 —— 否则等于公开演示机入口。
-docs_knowledge/DEPLOYMENT.md
-docs_knowledge/INTERVIEW_RAG.md
+# 求职材料（简历 / 面试稿 / 部署手册）—— 本地维护，整目录不入库
+# 2026-09-18 决定「只自己看」；2026-09-19 收严为整目录排除（含个人信息 + 服务器信息）。
+# ⚠️ 本目录下的文件在本地照常读写，只是不进版本控制。
+# ⚠️ 若将来要把部署手册作为「部署可复现」的证据公开，必须先把公网 IP 换成占位符再取消 ignore ——
+#    git 历史不可逆，一旦提交，之后任何一次 push 都会带出去，事后删不干净。
+career/
 
 # 环境
 .env
