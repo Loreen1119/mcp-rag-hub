@@ -1,0 +1,55 @@
+{
+  "query": "RAG 混合检索策略 信息检索 search retrieval",
+  "attempt": 2,
+  "rewritten_queries": [
+    "RAG 混合检索策略 信息检索 search retrieval"
+  ],
+  "n_chunks": 5,
+  "chunks": [
+    {
+      "rank": 1,
+      "src": "tutorial/query-params.md",
+      "score": 0.0628,
+      "cid": "7cd40810b8d08961"
+    },
+    {
+      "rank": 2,
+      "src": "async.md",
+      "score": 0.0545,
+      "cid": "b6d92ac41de02c17"
+    },
+    {
+      "rank": 3,
+      "src": "tutorial/body-multiple-params.md",
+      "score": 0.0253,
+      "cid": "f63c6a3617386008"
+    },
+    {
+      "rank": 4,
+      "src": "deployment/concepts.md",
+      "score": 0.022,
+      "cid": "28c0b2c0d16d5d96"
+    },
+    {
+      "rank": 5,
+      "src": "tutorial/path-params.md",
+      "score": 0.0198,
+      "cid": "47bdf090210b0be5"
+    }
+  ],
+  "answer": {
+    "status": "generation_unavailable",
+    "answer": "（回答生成服务暂不可用，以下为检索到的原始证据，供参考）\n\n[1] tutorial/query-params.md · 查询参数 { #query-parameters } > 多个路径和查询参数 { #multiple-path-and-query-parameters }\n## 多个路径和查询参数 { #multiple-path-and-query-parameters }\n\n**FastAPI** 可以识别同时声明的多个路径参数和查询参数。而且声明查询参数的顺序并不重要。FastAPI 通过参数名进行检测：\n\n{* ../../docs_src/query_params/tutorial004_py310.py hl[6,8] *}\n\n## 必选查询参数 { #required-query-parameters }\n\n为不是路径参数的参数声明默认值（至此，仅有查询参数），该参数就不是必选的了。如果只想把参数设为可选，但又不想指定参数的值，则要把默认值设为 `None`。如果要把查询参数设置为必选，就不要声明默认值：\n\n{* ../../docs_src/query_params/tutorial005_py310.py hl[6:7] *}\n\n这里的查询参数 `needy` 是类型为 `str` 的必选查询参数。\n\n[2] async.md · 并发 async / await { #concurrency-and-async-await } > 赶时间吗？ { #in-a-hurry }\n///\n\n---\n\n如果你正在使用一个第三方库和某些组件（比如：数据库、API、文件系统等）进行通信，而该第三方库不支持使用 `await`（目前大多数数据库库都是这样），这种情况你可以像平常那样使用 `def` 声明一个路径操作函数，就像这样：\n\n```Python hl_lines=\"2\"\n@app.get('/')\ndef results():\n    results = some_library()\n    return results\n```\n\n---\n\n如果你的应用程序（以某种方式）不需要与其他任何东西通信而等待其响应，请使用 `async def`，即使函数内部不需要使用 `await`。---\n\n如果你不清楚，使用 `def` 就好。---\n\n**注意**：你可以根据需要在路径操作函数中混合使用 `def` 和 `async def`，并使用最适合你的方式去定义每个函数。FastAPI 将为它们做正确的事情。\n\n[3] tutorial/body-multiple-params.md · 请求体 - 多个参数 { #body-multiple-parameters }\n# 请求体 - 多个参数 { #body-multiple-parameters }\n\n既然我们已经知道了如何使用 `Path` 和 `Query`，下面让我们来了解一下请求体声明的更高级用法。## 混合使用 `Path`、`Query` 和请求体参数 { #mix-path-query-and-body-parameters }\n\n首先，毫无疑问地，你可以随意地混合使用 `Path`、`Query` 和请求体参数声明，**FastAPI** 会知道该如何处理。你还可以通过将默认值设置为 `None` 来将请求体参数声明为可选参数：\n\n{* ../../docs_src/body_multiple_params/tutorial001_an_py310.py hl[18:20] *}\n\n/// note | 注意\n\n请注意，在这种情况下，将从请求体获取的 `item` 是可选的。因为它的默认值为 `None`。",
+    "used_source_ids": [],
+    "reason": "service_error"
+  },
+  "search_log": [
+    "[analyze] 原始查询: 'RAG 混合检索策略'",
+    "[retrieve #1] 查询: 'RAG 混合检索策略' | Top-K=5 best_score=0.0088",
+    "[check] attempt=1/2 best_ce=0.0088 quality=insufficient",
+    "[rewrite #1] 'RAG 混合检索策略' → 'RAG 混合检索策略 信息检索 search retrieval'",
+    "[retrieve #2] 查询: 'RAG 混合检索策略 信息检索 search retrieval' | Top-K=5 best_score=0.0628",
+    "[check] attempt=2/2 best_ce=0.0628 quality=insufficient",
+    "[generate] attempt=2 chunks_used=3 status=generation_unavailable"
+  ]
+}
