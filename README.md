@@ -205,10 +205,8 @@ mcp-rag-hub/
 | MCP | FastMCP 2.0（stdio 传输） |
 | UI | Streamlit |
 
-## 文档导航
+## 深入文档
 
-| 我 想... | 读这篇 |
-|---------|--------|
-| 了解这个项目做了什么、怎么用的 | [docs/项目详解.md](docs/项目详解.md) |
-| 深入技术细节和架构决策 | [docs/技术视角详解.md](docs/技术视角详解.md) |
-| 系统学习每一层的实现笔记 | [docs/chapters/](docs/chapters/) |
+[`docs/`](docs/README.md) 下有 [项目详解](docs/项目详解.md)（面向非技术读者）·
+[技术视角详解](docs/技术视角详解.md)（架构与关键数据）·
+[chapters/](docs/chapters/)（ch01～ch10 逐层实现笔记，含每一步的取舍与被数据推翻的结论）。
