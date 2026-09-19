@@ -4,15 +4,17 @@
 # 设计要点（每条都是踩过或差点踩到的坑，不是模板抄来的）：
 #   1. 只装 CPU 版 torch：直接从 PyPI 装 torch 在 Linux 上会拉 2GB+ 的 CUDA 依赖，
 #      本项目无 GPU（Intel 集显），必须走 download.pytorch.org/whl/cpu。
-#   2. 模型不烧进镜像，而是挂载宿主已有的 HuggingFace 缓存（~/.cache/huggingface）：
-#      国内直连 huggingface.co 不稳定，构建期下载几乎必然失败；宿主已缓存全部模型。
+#   2. 模型在构建期从 ModelScope 下载并塞进镜像内的 HuggingFace 缓存：
+#      服务器连不上 HuggingFace 原站，改用 ModelScope（已实测可达）；HF_HUB_OFFLINE=1 离线加载。
 #   3. HF_HUB_OFFLINE=1 必须开：否则 transformers 启动时会尝试联网查更新，
 #      实测在墙内会卡住约 10 分钟（详见 docs_knowledge/开发过程中遇到的问题.md）。
 #   4. Streamlit 必须绑 0.0.0.0：默认只监听 127.0.0.1，容器外访问不到（经典坑）。
-#   5. OLLAMA_HOST 指向宿主：Ollama 跑在宿主而非容器内。
-#      注意 ollama SDK 读 OLLAMA_HOST，但 src/evaluation/{llm_eval,agent_eval}.py 里
-#      是**硬编码** 127.0.0.1:11434 的 —— 容器内跑评测会连不上宿主 Ollama，
-#      评测请在宿主直接跑，或用 docker-compose 的 network_mode: host 变通。
+#   5. OLLAMA_HOST 指向宿主：Ollama 跑在宿主而非容器内，不装进镜像。
+#      （旧问题已修：src/evaluation/{llm_eval,agent_eval}.py 曾硬编码 127.0.0.1:11434，
+#       容器内跑评测连不上宿主 Ollama；2026-09-15 起统一由 llm_eval._ollama_chat_url()
+#       在**运行时**读 OLLAMA_HOST，容器内可直接跑评测，不再需要 network_mode: host 变通。）
+#      另注：config.LLM_BACKEND 默认 "deepseek"（云端，零本地内存），
+#      只有设 MCP_RAG_LLM_BACKEND=ollama 时才走本地 Ollama 这条路。
 # ============================================================
 
 FROM python:3.11-slim
@@ -38,14 +40,21 @@ RUN apt-get update \
 # 先装依赖，利用 Docker 层缓存（改代码不必重装依赖）
 COPY requirements.txt ./
 
-# PyPI 源可覆盖（本机实测：官方 PyPI 可达但 wheel 下载偏慢，清华镜像快一倍）
-#   国内加速：docker compose build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-ARG PIP_INDEX_URL=https://pypi.org/simple
+# 国内源：服务器连不上 pytorch.org / 官方 PyPI，统一走清华镜像（已实测可达）。
+# 注：清华 PyPI 上的 torch 是含 CUDA 的版本（约 2GB+），比 pytorch.org 的纯 CPU 版大，
+# 但 CPU 推理功能完全一致。要更小镜像可改回 pytorch.org/whl/cpu（需服务器能连外网）。
+ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
-# torch 必须走 CPU 专用源：直接从 PyPI 装的话，Linux 上会拉 2GB+ 的 CUDA 依赖。
-# 先满足 torch，后面 sentence-transformers 就不会再去装它（实测本机该源 200 / 0.9s）。
-RUN pip install --index-url https://download.pytorch.org/whl/cpu torch \
+# 先装 torch（清华 PyPI 镜像），后面 -r requirements.txt 就不会再拉它。
+RUN pip install --index-url "$PIP_INDEX_URL" torch \
  && pip install --index-url "$PIP_INDEX_URL" -r requirements.txt
+
+# 模型：服务器连不上 HuggingFace 原站，改用 ModelScope 下载并放入镜像内 HF 缓存，
+# 容器以 HF_HUB_OFFLINE=1 离线加载（见下方 ENV）。放在 COPY . . 之前以复用缓存层。
+RUN pip install --index-url "$PIP_INDEX_URL" modelscope \
+ && python -c "from modelscope.hub.snapshot_download import snapshot_download; snapshot_download('BAAI/bge-small-zh-v1.5', local_dir='/root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/snapshots/local'); snapshot_download('BAAI/bge-reranker-base', local_dir='/root/.cache/huggingface/hub/models--BAAI--bge-reranker-base/snapshots/local')"
+RUN printf 'local' > /root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/refs/main \
+ && printf 'local' > /root/.cache/huggingface/hub/models--BAAI--bge-reranker-base/refs/main
 
 # 再拷代码与语料（corpora/ 一并烧进镜像，让镜像自带可演示的知识库）
 COPY . .
