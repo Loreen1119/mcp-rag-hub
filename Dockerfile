@@ -7,7 +7,7 @@
 #   2. 模型在构建期从 ModelScope 下载并塞进镜像内的 HuggingFace 缓存：
 #      服务器连不上 HuggingFace 原站，改用 ModelScope（已实测可达）；HF_HUB_OFFLINE=1 离线加载。
 #   3. HF_HUB_OFFLINE=1 必须开：否则 transformers 启动时会尝试联网查更新，
-#      实测在墙内会卡住约 10 分钟（详见 docs_knowledge/开发过程中遇到的问题.md）。
+#      实测在墙内会卡住约 10 分钟（详见 docs/开发过程中遇到的问题.md）。
 #   4. Streamlit 必须绑 0.0.0.0：默认只监听 127.0.0.1，容器外访问不到（经典坑）。
 #   5. OLLAMA_HOST 指向宿主：Ollama 跑在宿主而非容器内，不装进镜像。
 #      （旧问题已修：src/evaluation/{llm_eval,agent_eval}.py 曾硬编码 127.0.0.1:11434，
@@ -53,7 +53,13 @@ RUN pip install --index-url "$PIP_INDEX_URL" torch \
 # 容器以 HF_HUB_OFFLINE=1 离线加载（见下方 ENV）。放在 COPY . . 之前以复用缓存层。
 RUN pip install --index-url "$PIP_INDEX_URL" modelscope \
  && python -c "from modelscope.hub.snapshot_download import snapshot_download; snapshot_download('BAAI/bge-small-zh-v1.5', local_dir='/root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/snapshots/local'); snapshot_download('BAAI/bge-reranker-base', local_dir='/root/.cache/huggingface/hub/models--BAAI--bge-reranker-base/snapshots/local')"
-RUN printf 'local' > /root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/refs/main \
+# ModelScope 的 snapshot_download 只建 snapshots/local，**不会创建 refs/ 目录** ——
+# 必须先 mkdir，否则重定向写 refs/main 会报 "Directory nonexistent" 而中断构建。
+# （服务器部署脚本 dl_models.py 里带了 os.makedirs(ref, exist_ok=True)，Dockerfile 此前漏了
+#   这一步；2026-09-19 首次真正执行 docker build 时暴露。）
+RUN mkdir -p /root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/refs \
+ && mkdir -p /root/.cache/huggingface/hub/models--BAAI--bge-reranker-base/refs \
+ && printf 'local' > /root/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/refs/main \
  && printf 'local' > /root/.cache/huggingface/hub/models--BAAI--bge-reranker-base/refs/main
 
 # 再拷代码与语料（corpora/ 一并烧进镜像，让镜像自带可演示的知识库）
