@@ -27,6 +27,14 @@
 | **RRF 融合** | **Cross-Encoder 精排** |
 | <img src="screenshots/ui-tab-RRF.png" width="330" alt="RRF 融合阶段截图"/> | <img src="screenshots/ui-tab-Cross-Encoder.png" width="330" alt="Cross-Encoder 精排阶段截图"/> |
 
+**三种"没有给出答案"的界面表现**（2026-09-20 实拍）—— 把**技术故障**与**业务判断**分开显示，
+避免"服务坏了"被看成"知识库没有"，把排查方向带偏：
+
+| 知识库里确实没有 → **拒答** | LLM 服务连不上 → **降级**（仍给证据） |
+|:---:|:---:|
+| <img src="screenshots/ui-refusal.png" width="330" alt="拒答态：知识库信息不足，未生成答案"/> | <img src="screenshots/ui-degraded.png" width="330" alt="降级态：回答生成服务暂不可用，但照常展示检索证据"/> |
+| 黄色告警 + 拒答原因，证据卡片带 `CE Score`（本例 0.0296） | 红色告警 + 故障原因，**照常展示检索到的原文证据** |
+
 ## 快速开始
 
 **前提**：Python 3.11+。知识库语料放在 `corpora/<语料名>/` 目录（默认 `corpora/fastapi-zh`，仓库内置一份真实的 FastAPI 中文文档，122 个文件 / 930K），首次运行会自动解析并构建索引。切换语料用环境变量 `MCP_RAG_CORPUS`（每份语料使用独立的 Chroma 集合，互不覆盖；详见 [corpora/README.md](corpora/README.md)）。
