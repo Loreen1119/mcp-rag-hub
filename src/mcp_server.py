@@ -15,9 +15,20 @@ FastMCP 工具封装 — 将 RAG 检索管线暴露为 MCP Server。
 from __future__ import annotations
 
 import logging
-from typing import List, Annotated
+import sys
+from pathlib import Path
+from typing import Annotated, List
 
 from fastmcp import FastMCP
+
+# 让「按文件路径启动」也能 import 到仓库根 —— MCP 客户端的配置里普遍这么写
+# （见 README 的 claude_desktop_config 示例）。否则 sys.path[0] 会是 src/，
+# 下面 `from config import ...` 直接 ModuleNotFoundError。
+# 用 `python -m src.mcp_server` 启动时 __package__ == "src"，这段自动跳过。
+if __package__ in (None, ""):
+    _ROOT = str(Path(__file__).resolve().parents[1])
+    if _ROOT not in sys.path:
+        sys.path.insert(0, _ROOT)
 
 from config import CE_TOP_K, KG_RRF_WEIGHT, ENABLE_KG
 from src.pipeline import get_pipeline
