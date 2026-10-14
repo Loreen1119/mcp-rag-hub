@@ -1,0 +1,18 @@
+{
+ "version": "1.0",
+ "frozen_at": "2026-10-14",
+ "total_main": 375,
+ "total_version_probe": 31,
+ "freeze_scope": [
+  "query",
+  "golden_slugs",
+  "source",
+  "unanswerable"
+ ],
+ "deferred": [
+  "failure_mode.primary",
+  "failure_mode.secondary",
+  "is_true_multi(部分)"
+ ],
+ "note": "主集375+版本混淆独立集31=406。failure_mode分层：设计决定3类已标，实验决定3类W2标。"
+}

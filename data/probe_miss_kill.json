@@ -1,0 +1,142 @@
+[
+ {
+  "query": "TiDB 是不是不支持在线加索引？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "sql-statement-add-index"
+  ]
+ },
+ {
+  "query": "TiDB 有没有办法设置 TTL 自动清理过期数据，还是说根本不支持？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "time-to-live"
+  ]
+ },
+ {
+  "query": "TiDB 是不是不能做全量备份？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "br-snapshot-guide"
+  ]
+ },
+ {
+  "query": "TiDB 的查询计划缓存功能是不是已经废弃了？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "sql-prepared-plan-cache"
+  ]
+ },
+ {
+  "query": "TiDB 好像不支持分区表裁剪吧？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "partitioned-table"
+  ]
+ },
+ {
+  "query": "TiDB 是不是没有类似 EXPLAIN 的功能？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "explain-overview"
+  ]
+ },
+ {
+  "query": "TiDB 的 FLASHBACK 恢复功能是不是只支持老版本？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "sql-statement-flashback-table"
+  ]
+ },
+ {
+  "query": "TiDB 是不是不能给表加多个 TiFlash 副本？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "create-tiflash-replicas"
+  ]
+ },
+ {
+  "query": "TiDB 的统计信息是不是只能手动收集，不能自动？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "statistics"
+  ]
+ },
+ {
+  "query": "TiDB 是不是不支持在 TiKV 上做计算下推？",
+  "type": "检索误杀",
+  "golden_slugs": [
+   "expressions-pushed-down"
+  ]
+ },
+ {
+  "query": "TiDB 有没有 AUTO_RANDOM 这种不太常见的主键类型？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "auto-random"
+  ]
+ },
+ {
+  "query": "TiDB 支持 SAVEPOINT 这种少见的事务特性吗？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-savepoint"
+  ]
+ },
+ {
+  "query": "TiDB 有没有缓存表（CACHE TABLE）这种功能，好像很少人用？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "cached-tables"
+  ]
+ },
+ {
+  "query": "TiDB 支持 WITH RECURSIVE 递归查询吗，这个好像比较冷门？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-with"
+  ]
+ },
+ {
+  "query": "TiDB 有没有扩展统计信息这种高级功能？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "extended-statistics"
+  ]
+ },
+ {
+  "query": "TiDB 支持 SELECT INTO 导出查询结果吗？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-select-into"
+  ]
+ },
+ {
+  "query": "TiDB 有没有 FLASHBACK CLUSTER 这种整集群回退的功能？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-flashback-cluster"
+  ]
+ },
+ {
+  "query": "TiDB 支持 SEQUENCE 序列对象吗？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-create-sequence"
+  ]
+ },
+ {
+  "query": "TiDB 有没有 QUERY WATCH 这种拦截慢查询的功能？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-query-watch"
+  ]
+ },
+ {
+  "query": "TiDB 支持 RECOVER TABLE 恢复被 drop 的表吗？",
+  "type": "生成误杀",
+  "golden_slugs": [
+   "sql-statement-recover-table"
+  ]
+ }
+]

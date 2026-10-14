@@ -1,0 +1,242 @@
+[
+ {
+  "query": "TiDB 的 tidb_vector_index 参数怎么配置？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么开启自动分库分表（sharding）功能？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 支持存储过程吗，怎么写一个存储过程？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的物化视图怎么创建，多久刷新一次？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么配置全表二级索引自动同步？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 有没有内置的查询结果缓存淘汰策略参数？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么开启列式存储的自动合并功能？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 支持触发器（trigger）吗，怎么创建？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的外键约束是怎么实现的？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么设置表级别的数据加密密钥？",
+  "type": "伪功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB Binlog 怎么部署和使用？",
+  "type": "废弃功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 Pump 和 Drainer 怎么配置？",
+  "type": "废弃功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 老版本的分区表全局索引怎么用？",
+  "type": "废弃功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 old-value 缓存功能怎么开启？",
+  "type": "废弃功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 TiSpark 怎么集成 Spark 做分析？",
+  "type": "废弃功能",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 内部 kvproto 的 coprocessor 接口怎么调用？",
+  "type": "内部API",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 PD 内部 etcd 存储结构是什么样的？",
+  "type": "内部API",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么直接访问 TiKV 的 raw key-value 存储层？",
+  "type": "内部API",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 内部的分布式事务两阶段提交的代码入口在哪？",
+  "type": "内部API",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 placement driver 内部调度算法源码怎么读？",
+  "type": "内部API",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 HNSW 向量索引怎么建，参数怎么调？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么实现基于 RAG 的知识库检索？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的图数据库查询（像 Neo4j 的 Cypher）怎么写？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么实现全文检索的倒排索引？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 支持时序数据的降采样和保留策略吗？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么对接 Hadoop 生态做离线分析？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 支持地理空间查询的 PostGIS 扩展吗？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么实现消息队列的订阅推送？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的机器学习模型推理接口怎么调用？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么实现文档数据库的 JSON 全文检索？",
+  "type": "跨领域伪装",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "Python 的 GIL 是什么？",
+  "type": "领域外基线",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "Kubernetes 的 Pod 和 Deployment 有什么区别？",
+  "type": "领域外基线",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "Redis 的 RDB 和 AOF 持久化有什么区别？",
+  "type": "领域外基线",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "Docker 的镜像和容器有什么区别？",
+  "type": "领域外基线",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "HTTP 和 HTTPS 的区别是什么？",
+  "type": "领域外基线",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的 audit log 审计日志怎么配置？",
+  "type": "语料未覆盖",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么对接 LDAP 做统一认证？",
+  "type": "语料未覆盖",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的资源组（resource group）怎么和 K8s 集成？",
+  "type": "语料未覆盖",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 的列存引擎支持 update 吗？",
+  "type": "语料未覆盖",
+  "golden_slugs": [],
+  "unanswerable": true
+ },
+ {
+  "query": "TiDB 怎么做跨地域的异步容灾？",
+  "type": "语料未覆盖",
+  "golden_slugs": [],
+  "unanswerable": true
+ }
+]
