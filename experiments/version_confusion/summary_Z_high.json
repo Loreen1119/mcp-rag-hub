@@ -1,0 +1,73 @@
+{
+  "stages": {
+    "bm25": {
+      "all31": {
+        "n": 31,
+        "twin_in_top5_Z": 0.3226,
+        "twin_outranks_correct": 0.1935,
+        "correct_in_top5": 0.3871,
+        "top1_is_twin": 0.1613
+      },
+      "high28": {
+        "n": 28,
+        "twin_in_top5_Z": 0.2857,
+        "twin_outranks_correct": 0.1786,
+        "correct_in_top5": 0.3571,
+        "top1_is_twin": 0.1429
+      }
+    },
+    "vector": {
+      "all31": {
+        "n": 31,
+        "twin_in_top5_Z": 0.2581,
+        "twin_outranks_correct": 0.129,
+        "correct_in_top5": 0.3548,
+        "top1_is_twin": 0.0645
+      },
+      "high28": {
+        "n": 28,
+        "twin_in_top5_Z": 0.1786,
+        "twin_outranks_correct": 0.1071,
+        "correct_in_top5": 0.2857,
+        "top1_is_twin": 0.0714
+      }
+    },
+    "rrf": {
+      "all31": {
+        "n": 31,
+        "twin_in_top5_Z": 0.2581,
+        "twin_outranks_correct": 0.1935,
+        "correct_in_top5": 0.4516,
+        "top1_is_twin": 0.129
+      },
+      "high28": {
+        "n": 28,
+        "twin_in_top5_Z": 0.25,
+        "twin_outranks_correct": 0.1786,
+        "correct_in_top5": 0.4286,
+        "top1_is_twin": 0.1071
+      }
+    },
+    "ce": {
+      "all31": {
+        "n": 31,
+        "twin_in_top5_Z": 0.2581,
+        "twin_outranks_correct": 0.0968,
+        "correct_in_top5": 0.4194,
+        "top1_is_twin": 0.0645
+      },
+      "high28": {
+        "n": 28,
+        "twin_in_top5_Z": 0.2143,
+        "twin_outranks_correct": 0.1071,
+        "correct_in_top5": 0.3929,
+        "top1_is_twin": 0.0714
+      }
+    }
+  },
+  "low_diff_ids": [
+    "ver_22",
+    "ver_24",
+    "ver_30"
+  ]
+}

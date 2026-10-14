@@ -1,0 +1,418 @@
+{
+  "generated_at": "2026-10-14T20:50:31",
+  "ce_scope": "all",
+  "index": {
+    "corpus": "tidb",
+    "embedding_model": "BAAI/bge-small-zh-v1.5",
+    "collection": "kb__tidb__bge-small-zh-v1.5__v2"
+  },
+  "eval_set": {
+    "file": "data\\eval_set.jsonl",
+    "retrieval_records": 375,
+    "ce_records": 375
+  },
+  "criteria": {
+    "hit": "检索结果 slug（metadata.source 文件名 stem）∈ golden_slugs",
+    "hit@5": "top-5 内至少一个 golden slug 命中；不可答类不计入",
+    "ce_candidate_k": 30,
+    "ce_threshold_default": 0.3,
+    "ce_scope": "subset=分层抽 200 条；all=全部有 golden 样本。档 4/5 的分母随该值变化。",
+    "hit_recompute": "汇总时按当前 golden 从落盘排名重算命中，不使用记录中的 hit 标志"
+  },
+  "stages": {
+    "1_bm25": {
+      "evaluated": 335,
+      "hit@5": 0.3045,
+      "hit@20": 0.4657,
+      "hit@50": 0.5582,
+      "mrr@10": 0.1849,
+      "by_source": {
+        "asktug": {
+          "n": 148,
+          "hit@5": 0.1014,
+          "hit@20": 0.2095
+        },
+        "doc_fact": {
+          "n": 167,
+          "hit@5": 0.4431,
+          "hit@20": 0.6527
+        },
+        "miss_kill": {
+          "n": 20,
+          "hit@5": 0.65,
+          "hit@20": 0.8
+        }
+      }
+    },
+    "2_vector": {
+      "evaluated": 335,
+      "hit@5": 0.2627,
+      "hit@20": 0.4478,
+      "hit@50": 0.5493,
+      "mrr@10": 0.1615,
+      "by_source": {
+        "asktug": {
+          "n": 148,
+          "hit@5": 0.0676,
+          "hit@20": 0.1622
+        },
+        "doc_fact": {
+          "n": 167,
+          "hit@5": 0.4311,
+          "hit@20": 0.6886
+        },
+        "miss_kill": {
+          "n": 20,
+          "hit@5": 0.3,
+          "hit@20": 0.55
+        }
+      }
+    },
+    "3_rrf": {
+      "evaluated": 335,
+      "hit@5": 0.3254,
+      "hit@20": 0.4896,
+      "hit@50": 0.5433,
+      "mrr@10": 0.2078,
+      "by_source": {
+        "asktug": {
+          "n": 148,
+          "hit@5": 0.0946,
+          "hit@20": 0.2027
+        },
+        "doc_fact": {
+          "n": 167,
+          "hit@5": 0.503,
+          "hit@20": 0.7126
+        },
+        "miss_kill": {
+          "n": 20,
+          "hit@5": 0.55,
+          "hit@20": 0.75
+        }
+      }
+    },
+    "4_ce": {
+      "subset_size": 335,
+      "evaluated": 335,
+      "hit@5": 0.3254,
+      "mrr@10": 0.1917,
+      "mrr_note": "新跑的记录：mrr@10 在**全部候选**（<=CE_CANDIDATE）上算，与其它档可比。⚠️ 旧记录（本改造之前）只拿 top-5 算，其实等于 MRR@5，数值偏低、与其它档不可比。",
+      "by_source": {
+        "asktug": {
+          "n": 148,
+          "hit@5": 0.0946
+        },
+        "doc_fact": {
+          "n": 167,
+          "hit@5": 0.5269
+        },
+        "miss_kill": {
+          "n": 20,
+          "hit@5": 0.35
+        }
+      },
+      "ce_scored_total": 375,
+      "ce_scored_miss_kill": 20,
+      "ce_scored_unanswerable": 40,
+      "ce_top1_score_distribution": {
+        "miss_kill": {
+          "n": 20,
+          "min": 0.978,
+          "p10": 0.9949,
+          "median": 0.9991,
+          "max": 0.9999,
+          "share_ge_0.99": 0.95
+        },
+        "unanswerable": {
+          "n": 40,
+          "min": 0.0009,
+          "p10": 0.9443,
+          "median": 0.9964,
+          "max": 0.9999,
+          "share_ge_0.99": 0.65
+        },
+        "answerable_asktug_doc_fact": {
+          "n": 335,
+          "min": 0.9533,
+          "p10": 0.9944,
+          "median": 0.9991,
+          "max": 1.0,
+          "share_ge_0.99": 0.9582
+        }
+      }
+    },
+    "5_reject_sweep": [
+      {
+        "threshold": 0.3,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.4,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.5,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.6,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.7,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.9,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.1,
+        "reject_correct_n": "4/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.95,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.15,
+        "reject_correct_n": "6/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.97,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.175,
+        "reject_correct_n": "7/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 334
+      },
+      {
+        "threshold": 0.98,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.25,
+        "reject_correct_n": "10/40",
+        "net_hit_rate": 0.3194,
+        "net_hit_n": "107/335",
+        "answered_n": 330
+      },
+      {
+        "threshold": 0.99,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.35,
+        "reject_correct_n": "14/40",
+        "net_hit_rate": 0.3015,
+        "net_hit_n": "101/335",
+        "answered_n": 321
+      },
+      {
+        "threshold": 0.995,
+        "reject_false_kill_rate": 0.15,
+        "reject_false_kill_n": "3/20",
+        "reject_correct_rate": 0.475,
+        "reject_correct_n": "19/40",
+        "net_hit_rate": 0.2687,
+        "net_hit_n": "90/335",
+        "answered_n": 294
+      },
+      {
+        "threshold": 0.999,
+        "reject_false_kill_rate": 0.45,
+        "reject_false_kill_n": "9/20",
+        "reject_correct_rate": 0.725,
+        "reject_correct_n": "29/40",
+        "net_hit_rate": 0.1642,
+        "net_hit_n": "55/335",
+        "answered_n": 184
+      }
+    ],
+    "5_reject_sweep_note": {
+      "A_default": {
+        "threshold": 0.3,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3254,
+        "net_hit_n": "109/335",
+        "answered_n": 335
+      },
+      "candidates": [
+        {
+          "threshold": 0.3,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.025,
+          "reject_correct_n": "1/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.4,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.025,
+          "reject_correct_n": "1/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.5,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.6,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.7,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.9,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.1,
+          "reject_correct_n": "4/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.95,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.15,
+          "reject_correct_n": "6/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.97,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.175,
+          "reject_correct_n": "7/40",
+          "net_hit_rate": 0.3254,
+          "net_hit_n": "109/335",
+          "answered_n": 334
+        },
+        {
+          "threshold": 0.98,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.25,
+          "reject_correct_n": "10/40",
+          "net_hit_rate": 0.3194,
+          "net_hit_n": "107/335",
+          "answered_n": 330
+        },
+        {
+          "threshold": 0.99,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.35,
+          "reject_correct_n": "14/40",
+          "net_hit_rate": 0.3015,
+          "net_hit_n": "101/335",
+          "answered_n": 321
+        },
+        {
+          "threshold": 0.995,
+          "reject_false_kill_rate": 0.15,
+          "reject_false_kill_n": "3/20",
+          "reject_correct_rate": 0.475,
+          "reject_correct_n": "19/40",
+          "net_hit_rate": 0.2687,
+          "net_hit_n": "90/335",
+          "answered_n": 294
+        },
+        {
+          "threshold": 0.999,
+          "reject_false_kill_rate": 0.45,
+          "reject_false_kill_n": "9/20",
+          "reject_correct_rate": 0.725,
+          "reject_correct_n": "29/40",
+          "net_hit_rate": 0.1642,
+          "net_hit_n": "55/335",
+          "answered_n": 184
+        }
+      ]
+    }
+  },
+  "twin_hit_top5_counts": {
+    "bm25": 50,
+    "vector": 40,
+    "rrf": 47
+  },
+  "unanswerable_retrieval": {
+    "n": 40,
+    "bm25_nonempty": 40,
+    "vector_nonempty": 40
+  },
+  "miss_hints": {
+    "file": "experiments/baseline_ladder/miss_hints.jsonl",
+    "n": 226,
+    "召回缺失": 114,
+    "排序压制": 112
+  }
+}

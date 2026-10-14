@@ -1,0 +1,213 @@
+{
+  "generated_at": "2026-10-14T18:20:06",
+  "index": {
+    "corpus": "tidb",
+    "embedding_model": "BAAI/bge-small-zh-v1.5",
+    "collection": "kb__tidb__bge-small-zh-v1.5__v2"
+  },
+  "eval_set": {
+    "file": "data\\eval_set_version.jsonl",
+    "n": 31
+  },
+  "criteria": {
+    "correct": "src 以 docs-cn/ 开头且 stem == golden_slug",
+    "twin": "src 以 docs-cn-v8.4/ 开头且 stem == golden_slug",
+    "Z_primary": "版本混淆干扰率 = top-5 内出现旧版本页(twin)的探针占比",
+    "Z_harmful": "twin_outranks_correct = 旧版页压过正确版页（或正确版未进 top-5 而旧版进了）",
+    "ce_candidate_k": 30
+  },
+  "stages": {
+    "bm25": {
+      "n": 31,
+      "correct_in_top5": 0.3871,
+      "twin_in_top5": 0.3226,
+      "any_golden_slug_in_top5": 0.4194,
+      "twin_outranks_correct": 0.1935,
+      "top1_is_twin": 0.1613,
+      "avg_twin_share_top5": 0.1161,
+      "mrr_correct": 0.2129,
+      "harmful_ids": [
+        "ver_2",
+        "ver_9",
+        "ver_11",
+        "ver_13",
+        "ver_23",
+        "ver_24"
+      ]
+    },
+    "vector": {
+      "n": 31,
+      "correct_in_top5": 0.3548,
+      "twin_in_top5": 0.2581,
+      "any_golden_slug_in_top5": 0.4194,
+      "twin_outranks_correct": 0.129,
+      "top1_is_twin": 0.0645,
+      "avg_twin_share_top5": 0.1419,
+      "mrr_correct": 0.199,
+      "harmful_ids": [
+        "ver_2",
+        "ver_7",
+        "ver_9",
+        "ver_30"
+      ]
+    },
+    "rrf": {
+      "n": 31,
+      "correct_in_top5": 0.4516,
+      "twin_in_top5": 0.2581,
+      "any_golden_slug_in_top5": 0.4839,
+      "twin_outranks_correct": 0.1935,
+      "top1_is_twin": 0.129,
+      "avg_twin_share_top5": 0.1419,
+      "mrr_correct": 0.2703,
+      "harmful_ids": [
+        "ver_2",
+        "ver_9",
+        "ver_11",
+        "ver_13",
+        "ver_23",
+        "ver_24"
+      ]
+    },
+    "ce": {
+      "n": 31,
+      "correct_in_top5": 0.4194,
+      "twin_in_top5": 0.2581,
+      "any_golden_slug_in_top5": 0.4839,
+      "twin_outranks_correct": 0.0968,
+      "top1_is_twin": 0.0645,
+      "avg_twin_share_top5": 0.1355,
+      "mrr_correct": 0.2941,
+      "harmful_ids": [
+        "ver_9",
+        "ver_21",
+        "ver_23"
+      ]
+    }
+  },
+  "by_head_tail": {
+    "bm25": {
+      "head9(精准差异点)": {
+        "n": 9,
+        "correct_in_top5": 0.5556,
+        "twin_in_top5": 0.4444,
+        "any_golden_slug_in_top5": 0.6667,
+        "twin_outranks_correct": 0.2222,
+        "top1_is_twin": 0.1111,
+        "avg_twin_share_top5": 0.1333,
+        "mrr_correct": 0.3429,
+        "harmful_ids": [
+          "ver_2",
+          "ver_9"
+        ]
+      },
+      "tail22(泛query)": {
+        "n": 22,
+        "correct_in_top5": 0.3182,
+        "twin_in_top5": 0.2727,
+        "any_golden_slug_in_top5": 0.3182,
+        "twin_outranks_correct": 0.1818,
+        "top1_is_twin": 0.1818,
+        "avg_twin_share_top5": 0.1091,
+        "mrr_correct": 0.1597,
+        "harmful_ids": [
+          "ver_11",
+          "ver_13",
+          "ver_23",
+          "ver_24"
+        ]
+      }
+    },
+    "vector": {
+      "head9(精准差异点)": {
+        "n": 9,
+        "correct_in_top5": 0.3333,
+        "twin_in_top5": 0.3333,
+        "any_golden_slug_in_top5": 0.5556,
+        "twin_outranks_correct": 0.3333,
+        "top1_is_twin": 0.2222,
+        "avg_twin_share_top5": 0.2222,
+        "mrr_correct": 0.2259,
+        "harmful_ids": [
+          "ver_2",
+          "ver_7",
+          "ver_9"
+        ]
+      },
+      "tail22(泛query)": {
+        "n": 22,
+        "correct_in_top5": 0.3636,
+        "twin_in_top5": 0.2273,
+        "any_golden_slug_in_top5": 0.3636,
+        "twin_outranks_correct": 0.0455,
+        "top1_is_twin": 0.0,
+        "avg_twin_share_top5": 0.1091,
+        "mrr_correct": 0.1881,
+        "harmful_ids": [
+          "ver_30"
+        ]
+      }
+    },
+    "rrf": {
+      "head9(精准差异点)": {
+        "n": 9,
+        "correct_in_top5": 0.5556,
+        "twin_in_top5": 0.3333,
+        "any_golden_slug_in_top5": 0.6667,
+        "twin_outranks_correct": 0.2222,
+        "top1_is_twin": 0.1111,
+        "avg_twin_share_top5": 0.1556,
+        "mrr_correct": 0.3969,
+        "harmful_ids": [
+          "ver_2",
+          "ver_9"
+        ]
+      },
+      "tail22(泛query)": {
+        "n": 22,
+        "correct_in_top5": 0.4091,
+        "twin_in_top5": 0.2273,
+        "any_golden_slug_in_top5": 0.4091,
+        "twin_outranks_correct": 0.1818,
+        "top1_is_twin": 0.1364,
+        "avg_twin_share_top5": 0.1364,
+        "mrr_correct": 0.2185,
+        "harmful_ids": [
+          "ver_11",
+          "ver_13",
+          "ver_23",
+          "ver_24"
+        ]
+      }
+    },
+    "ce": {
+      "head9(精准差异点)": {
+        "n": 9,
+        "correct_in_top5": 0.6667,
+        "twin_in_top5": 0.2222,
+        "any_golden_slug_in_top5": 0.7778,
+        "twin_outranks_correct": 0.1111,
+        "top1_is_twin": 0.1111,
+        "avg_twin_share_top5": 0.1333,
+        "mrr_correct": 0.5278,
+        "harmful_ids": [
+          "ver_9"
+        ]
+      },
+      "tail22(泛query)": {
+        "n": 22,
+        "correct_in_top5": 0.3182,
+        "twin_in_top5": 0.2727,
+        "any_golden_slug_in_top5": 0.3636,
+        "twin_outranks_correct": 0.0909,
+        "top1_is_twin": 0.0455,
+        "avg_twin_share_top5": 0.1364,
+        "mrr_correct": 0.1985,
+        "harmful_ids": [
+          "ver_21",
+          "ver_23"
+        ]
+      }
+    }
+  }
+}
