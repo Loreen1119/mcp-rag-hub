@@ -1,0 +1,122 @@
+[
+ {
+  "slug": "backup-and-restore-overview",
+  "query": "TiDB 备份恢复有哪几种方式，各适合什么场景？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "br-snapshot-guide",
+  "query": "TiDB BR 快照备份怎么操作，备份到哪里？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[16/27/111]问 BR 具体，此为快照备份操作"
+ },
+ {
+  "slug": "br-pitr-guide",
+  "query": "TiDB BR 日志备份（PITR）是什么，能恢复到任意时间点吗？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[16/27]问增量备份，此为 PITR 机制"
+ },
+ {
+  "slug": "br-snapshot-architecture",
+  "query": "TiDB BR 快照备份的底层是怎么工作的？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[111]问从 leader 读，此为架构"
+ },
+ {
+  "slug": "br-log-architecture",
+  "query": "TiDB BR 日志备份的架构和快照备份有什么不同？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dumpling-overview",
+  "query": "Dumpling 和 mysqldump 有什么区别，为什么推荐 Dumpling？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[70/93/123]问 dumpling 具体，此为选型"
+ },
+ {
+  "slug": "tidb-lightning-overview",
+  "query": "TiDB Lightning 有哪几种导入模式，各适合什么场景？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[3/29]问导入，此为 lightning 模式"
+ },
+ {
+  "slug": "upgrade-tidb-using-tiup",
+  "query": "TiDB 用 TiUP 升级的完整流程和注意事项是什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[47/148]问升级，此为升级流程"
+ },
+ {
+  "slug": "tiup-component-cluster-deploy",
+  "query": "TiDB 用 TiUP 部署集群，拓扑文件怎么配置？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiup-component-cluster-scale-out",
+  "query": "TiDB 用 TiUP 扩容节点，怎么操作？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[125]问扩容，此为扩容操作"
+ },
+ {
+  "slug": "tiup-component-cluster-scale-in",
+  "query": "TiDB 用 TiUP 缩容节点，下线流程是什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[92]问下线慢，此为缩容流程"
+ },
+ {
+  "slug": "ddl-introduction",
+  "query": "TiDB 在线 DDL 的原理是什么，为什么能不锁表？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[144/155]问 DDL 流程，此为原理"
+ },
+ {
+  "slug": "haproxy-best-practices",
+  "query": "TiDB 前面用 HAProxy 做负载均衡，怎么配置健康检查？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[38/149]问负载均衡，此为 HAProxy 配置"
+ },
+ {
+  "slug": "high-concurrency-best-practices",
+  "query": "TiDB 高并发写入场景有哪些优化建议？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[35]问写入不均，此为高并发最佳实践"
+ },
+ {
+  "slug": "index-management-best-practices",
+  "query": "TiDB 怎么发现并清理未使用的索引？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "multi-column-index-best-practices",
+  "query": "TiDB 多列索引的设计原则是什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "uuid",
+  "query": "TiDB 用 UUID 做主键有什么问题，怎么解决？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tidb-partitioned-tables-best-practices",
+  "query": "TiDB 分区表的最佳实践有哪些？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "three-dc-local-read",
+  "query": "TiDB 三数据中心部署时怎么实现就近读？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dr-solution-introduction",
+  "query": "TiDB 的容灾方案有哪几种，怎么选？",
+  "overlap": "不重叠",
+  "note": ""
+ }
+]

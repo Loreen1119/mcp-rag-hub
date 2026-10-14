@@ -1,0 +1,2866 @@
+{
+ "sql": [
+  [
+   "aggregate-group-by-functions",
+   "GROUP BY 聚合函数"
+  ],
+  [
+   "bit-functions-and-operators",
+   "位函数和操作符"
+  ],
+  [
+   "cast-functions-and-operators",
+   "Cast 函数和操作符"
+  ],
+  [
+   "control-flow-functions",
+   "控制流程函数"
+  ],
+  [
+   "date-and-time-functions",
+   "日期和时间函数"
+  ],
+  [
+   "encryption-and-compression-functions",
+   "加密和压缩函数"
+  ],
+  [
+   "expressions-pushed-down",
+   "下推到 TiKV 的表达式列表"
+  ],
+  [
+   "functions-and-operators-overview",
+   "函数和操作符概述"
+  ],
+  [
+   "group-by-modifier",
+   "GROUP BY 修饰符"
+  ],
+  [
+   "information-functions",
+   "信息函数"
+  ],
+  [
+   "json-functions",
+   "JSON 函数"
+  ],
+  [
+   "json-functions-aggregate",
+   "聚合 JSON 值的 JSON 函数"
+  ],
+  [
+   "json-functions-create",
+   "创建 JSON 值的 JSON 函数"
+  ],
+  [
+   "json-functions-modify",
+   "修改 JSON 值的 JSON 函数"
+  ],
+  [
+   "json-functions-return",
+   "返回 JSON 值的 JSON 函数"
+  ],
+  [
+   "json-functions-search",
+   "搜索 JSON 值的 JSON 函数"
+  ],
+  [
+   "json-functions-utility",
+   "JSON 效用函数"
+  ],
+  [
+   "json-functions-validate",
+   "验证 JSON 文档的函数"
+  ],
+  [
+   "locking-functions",
+   "锁函数"
+  ],
+  [
+   "miscellaneous-functions",
+   "其他函数"
+  ],
+  [
+   "numeric-functions-and-operators",
+   "数值函数与操作符"
+  ],
+  [
+   "operators",
+   "操作符"
+  ],
+  [
+   "precision-math",
+   "精度数学"
+  ],
+  [
+   "sequence-functions",
+   "序列函数"
+  ],
+  [
+   "set-operators",
+   "集合运算"
+  ],
+  [
+   "string-functions",
+   "字符串函数"
+  ],
+  [
+   "tidb-functions",
+   "TiDB 特有的函数"
+  ],
+  [
+   "type-conversion-in-expression-evaluation",
+   "表达式求值的类型转换"
+  ],
+  [
+   "utility-functions",
+   "效用函数"
+  ],
+  [
+   "window-functions",
+   "窗口函数"
+  ],
+  [
+   "sql-statement-add-column",
+   "ADD COLUMN"
+  ],
+  [
+   "sql-statement-add-index",
+   "ADD INDEX"
+  ],
+  [
+   "sql-statement-admin-alter-ddl",
+   "ADMIN ALTER DDL JOBS"
+  ],
+  [
+   "sql-statement-admin-bdr-role",
+   "ADMIN [SET|SHOW|UNSET] BDR ROLE"
+  ],
+  [
+   "sql-statement-admin-cancel-ddl",
+   "ADMIN CANCEL DDL"
+  ],
+  [
+   "sql-statement-admin-check-table-index",
+   "ADMIN CHECK [TABLE|INDEX]"
+  ],
+  [
+   "sql-statement-admin-checksum-table",
+   "ADMIN CHECKSUM TABLE"
+  ],
+  [
+   "sql-statement-admin-cleanup",
+   "ADMIN CLEANUP INDEX"
+  ],
+  [
+   "sql-statement-admin-pause-ddl",
+   "ADMIN PAUSE DDL JOBS"
+  ],
+  [
+   "sql-statement-admin-recover",
+   "ADMIN RECOVER INDEX"
+  ],
+  [
+   "sql-statement-admin-resume-ddl",
+   "ADMIN RESUME DDL JOBS"
+  ],
+  [
+   "sql-statement-admin-show-ddl",
+   "ADMIN SHOW DDL [JOBS|JOB QUERIES]"
+  ],
+  [
+   "sql-statement-admin",
+   "ADMIN"
+  ],
+  [
+   "sql-statement-alter-database",
+   "ALTER DATABASE"
+  ],
+  [
+   "sql-statement-alter-index",
+   "ALTER INDEX"
+  ],
+  [
+   "sql-statement-alter-instance",
+   "ALTER INSTANCE"
+  ],
+  [
+   "sql-statement-alter-placement-policy",
+   "ALTER PLACEMENT POLICY"
+  ],
+  [
+   "sql-statement-alter-range",
+   "ALTER RANGE"
+  ],
+  [
+   "sql-statement-alter-resource-group",
+   "ALTER RESOURCE GROUP"
+  ],
+  [
+   "sql-statement-alter-sequence",
+   "ALTER SEQUENCE"
+  ],
+  [
+   "sql-statement-alter-table-compact",
+   "ALTER TABLE ... COMPACT"
+  ],
+  [
+   "sql-statement-alter-table",
+   "ALTER TABLE"
+  ],
+  [
+   "sql-statement-alter-user",
+   "ALTER USER"
+  ],
+  [
+   "sql-statement-analyze-table",
+   "ANALYZE"
+  ],
+  [
+   "sql-statement-backup",
+   "BACKUP"
+  ],
+  [
+   "sql-statement-batch",
+   "BATCH"
+  ],
+  [
+   "sql-statement-begin",
+   "BEGIN"
+  ],
+  [
+   "sql-statement-calibrate-resource",
+   "`CALIBRATE RESOURCE`"
+  ],
+  [
+   "sql-statement-cancel-distribution-job",
+   "CANCEL DISTRIBUTION JOB"
+  ],
+  [
+   "sql-statement-cancel-import-job",
+   "CANCEL IMPORT"
+  ],
+  [
+   "sql-statement-change-column",
+   "CHANGE COLUMN"
+  ],
+  [
+   "sql-statement-commit",
+   "COMMIT"
+  ],
+  [
+   "sql-statement-create-binding",
+   "CREATE [GLOBAL|SESSION] BINDING"
+  ],
+  [
+   "sql-statement-create-database",
+   "CREATE DATABASE"
+  ],
+  [
+   "sql-statement-create-index",
+   "CREATE INDEX"
+  ],
+  [
+   "sql-statement-create-placement-policy",
+   "CREATE PLACEMENT POLICY"
+  ],
+  [
+   "sql-statement-create-resource-group",
+   "CREATE RESOURCE GROUP"
+  ],
+  [
+   "sql-statement-create-role",
+   "CREATE ROLE"
+  ],
+  [
+   "sql-statement-create-sequence",
+   "CREATE SEQUENCE"
+  ],
+  [
+   "sql-statement-create-table-like",
+   "CREATE TABLE LIKE"
+  ],
+  [
+   "sql-statement-create-table",
+   "CREATE TABLE"
+  ],
+  [
+   "sql-statement-create-user",
+   "CREATE USER"
+  ],
+  [
+   "sql-statement-create-view",
+   "CREATE VIEW"
+  ],
+  [
+   "sql-statement-deallocate",
+   "DEALLOCATE"
+  ],
+  [
+   "sql-statement-delete",
+   "DELETE"
+  ],
+  [
+   "sql-statement-desc",
+   "DESC"
+  ],
+  [
+   "sql-statement-describe",
+   "DESCRIBE"
+  ],
+  [
+   "sql-statement-distribute-table",
+   "DISTRIBUTE TABLE"
+  ],
+  [
+   "sql-statement-do",
+   "DO"
+  ],
+  [
+   "sql-statement-drop-binding",
+   "DROP [GLOBAL|SESSION] BINDING"
+  ],
+  [
+   "sql-statement-drop-column",
+   "DROP COLUMN"
+  ],
+  [
+   "sql-statement-drop-database",
+   "DROP DATABASE"
+  ],
+  [
+   "sql-statement-drop-index",
+   "DROP INDEX"
+  ],
+  [
+   "sql-statement-drop-placement-policy",
+   "DROP PLACEMENT POLICY"
+  ],
+  [
+   "sql-statement-drop-resource-group",
+   "DROP RESOURCE GROUP"
+  ],
+  [
+   "sql-statement-drop-role",
+   "DROP ROLE"
+  ],
+  [
+   "sql-statement-drop-sequence",
+   "DROP SEQUENCE"
+  ],
+  [
+   "sql-statement-drop-stats",
+   "DROP STATS"
+  ],
+  [
+   "sql-statement-drop-table",
+   "DROP TABLE"
+  ],
+  [
+   "sql-statement-drop-user",
+   "DROP USER"
+  ],
+  [
+   "sql-statement-drop-view",
+   "DROP VIEW"
+  ],
+  [
+   "sql-statement-execute",
+   "EXECUTE"
+  ],
+  [
+   "sql-statement-explain-analyze",
+   "EXPLAIN ANALYZE"
+  ],
+  [
+   "sql-statement-explain",
+   "EXPLAIN"
+  ],
+  [
+   "sql-statement-flashback-cluster",
+   "FLASHBACK CLUSTER"
+  ],
+  [
+   "sql-statement-flashback-database",
+   "FLASHBACK DATABASE"
+  ],
+  [
+   "sql-statement-flashback-table",
+   "FLASHBACK TABLE"
+  ],
+  [
+   "sql-statement-flush-privileges",
+   "FLUSH PRIVILEGES"
+  ],
+  [
+   "sql-statement-flush-stats-delta",
+   "FLUSH STATS_DELTA"
+  ],
+  [
+   "sql-statement-flush-status",
+   "FLUSH STATUS"
+  ],
+  [
+   "sql-statement-flush-tables",
+   "FLUSH TABLES"
+  ],
+  [
+   "sql-statement-grant-privileges",
+   "`GRANT <privileges>`"
+  ],
+  [
+   "sql-statement-grant-role",
+   "`GRANT <role>`"
+  ],
+  [
+   "sql-statement-import-into",
+   "IMPORT INTO"
+  ],
+  [
+   "sql-statement-insert",
+   "INSERT"
+  ],
+  [
+   "sql-statement-kill",
+   "KILL"
+  ],
+  [
+   "sql-statement-load-data",
+   "LOAD DATA"
+  ],
+  [
+   "sql-statement-load-stats",
+   "LOAD STATS"
+  ],
+  [
+   "sql-statement-lock-stats",
+   "LOCK STATS"
+  ],
+  [
+   "sql-statement-lock-tables-and-unlock-tables",
+   "LOCK TABLES 和 UNLOCK TABLES"
+  ],
+  [
+   "sql-statement-modify-column",
+   "MODIFY COLUMN"
+  ],
+  [
+   "sql-statement-overview",
+   "SQL 语句概述"
+  ],
+  [
+   "sql-statement-prepare",
+   "PREPARE"
+  ],
+  [
+   "sql-statement-query-watch",
+   "QUERY WATCH"
+  ],
+  [
+   "sql-statement-recover-table",
+   "RECOVER TABLE"
+  ],
+  [
+   "sql-statement-rename-index",
+   "RENAME INDEX"
+  ],
+  [
+   "sql-statement-rename-table",
+   "RENAME TABLE"
+  ],
+  [
+   "sql-statement-rename-user",
+   "RENAME USER"
+  ],
+  [
+   "sql-statement-replace",
+   "REPLACE"
+  ],
+  [
+   "sql-statement-restore",
+   "RESTORE"
+  ],
+  [
+   "sql-statement-revoke-privileges",
+   "`REVOKE <privileges>`"
+  ],
+  [
+   "sql-statement-revoke-role",
+   "`REVOKE <role>`"
+  ],
+  [
+   "sql-statement-rollback",
+   "ROLLBACK"
+  ],
+  [
+   "sql-statement-savepoint",
+   "SAVEPOINT"
+  ],
+  [
+   "sql-statement-select",
+   "SELECT"
+  ],
+  [
+   "sql-statement-set-default-role",
+   "`SET DEFAULT ROLE`"
+  ],
+  [
+   "sql-statement-set-names",
+   "SET [NAMES|CHARACTER SET]"
+  ],
+  [
+   "sql-statement-set-password",
+   "SET PASSWORD"
+  ],
+  [
+   "sql-statement-set-resource-group",
+   "SET RESOURCE GROUP"
+  ],
+  [
+   "sql-statement-set-role",
+   "SET ROLE"
+  ],
+  [
+   "sql-statement-set-transaction",
+   "SET TRANSACTION"
+  ],
+  [
+   "sql-statement-set-variable",
+   "`SET [GLOBAL|SESSION] <variable>`"
+  ],
+  [
+   "sql-statement-show-affinity",
+   "SHOW AFFINITY"
+  ],
+  [
+   "sql-statement-show-analyze-status",
+   "SHOW ANALYZE STATUS"
+  ],
+  [
+   "sql-statement-show-backups",
+   "SHOW [BACKUPS|RESTORES]"
+  ],
+  [
+   "sql-statement-show-bindings",
+   "SHOW [GLOBAL|SESSION] BINDINGS"
+  ],
+  [
+   "sql-statement-show-builtins",
+   "SHOW BUILTINS"
+  ],
+  [
+   "sql-statement-show-character-set",
+   "SHOW CHARACTER SET"
+  ],
+  [
+   "sql-statement-show-collation",
+   "SHOW COLLATION"
+  ],
+  [
+   "sql-statement-show-column-stats-usage",
+   "SHOW COLUMN_STATS_USAGE"
+  ],
+  [
+   "sql-statement-show-columns-from",
+   "SHOW [FULL] COLUMNS FROM"
+  ],
+  [
+   "sql-statement-show-config",
+   "SHOW CONFIG"
+  ],
+  [
+   "sql-statement-show-create-database",
+   "SHOW CREATE DATABASE"
+  ],
+  [
+   "sql-statement-show-create-placement-policy",
+   "SHOW CREATE PLACEMENT POLICY"
+  ],
+  [
+   "sql-statement-show-create-resource-group",
+   "SHOW CREATE RESOURCE GROUP"
+  ],
+  [
+   "sql-statement-show-create-sequence",
+   "SHOW CREATE SEQUENCE"
+  ],
+  [
+   "sql-statement-show-create-table",
+   "SHOW CREATE TABLE"
+  ],
+  [
+   "sql-statement-show-create-user",
+   "SHOW CREATE USER"
+  ],
+  [
+   "sql-statement-show-databases",
+   "SHOW DATABASES"
+  ],
+  [
+   "sql-statement-show-distribution-jobs",
+   "SHOW DISTRIBUTION JOBS"
+  ],
+  [
+   "sql-statement-show-engines",
+   "SHOW ENGINES"
+  ],
+  [
+   "sql-statement-show-errors",
+   "SHOW ERRORS"
+  ],
+  [
+   "sql-statement-show-fields-from",
+   "SHOW [FULL] FIELDS FROM"
+  ],
+  [
+   "sql-statement-show-grants",
+   "SHOW GRANTS"
+  ],
+  [
+   "sql-statement-show-import-job",
+   "SHOW IMPORT"
+  ],
+  [
+   "sql-statement-show-indexes",
+   "SHOW INDEXES [FROM|IN]"
+  ],
+  [
+   "sql-statement-show-master-status",
+   "SHOW MASTER STATUS"
+  ],
+  [
+   "sql-statement-show-placement-for",
+   "SHOW PLACEMENT FOR"
+  ],
+  [
+   "sql-statement-show-placement-labels",
+   "SHOW PLACEMENT LABELS"
+  ],
+  [
+   "sql-statement-show-placement",
+   "SHOW PLACEMENT"
+  ],
+  [
+   "sql-statement-show-plugins",
+   "SHOW PLUGINS"
+  ],
+  [
+   "sql-statement-show-privileges",
+   "SHOW PRIVILEGES"
+  ],
+  [
+   "sql-statement-show-processlist",
+   "SHOW [FULL] PROCESSLIST"
+  ],
+  [
+   "sql-statement-show-profiles",
+   "SHOW PROFILES"
+  ],
+  [
+   "sql-statement-show-schemas",
+   "SHOW SCHEMAS"
+  ],
+  [
+   "sql-statement-show-stats-buckets",
+   "SHOW STATS_BUCKETS"
+  ],
+  [
+   "sql-statement-show-stats-healthy",
+   "SHOW STATS_HEALTHY"
+  ],
+  [
+   "sql-statement-show-stats-histograms",
+   "SHOW STATS_HISTOGRAMS"
+  ],
+  [
+   "sql-statement-show-stats-locked",
+   "SHOW STATS_LOCKED"
+  ],
+  [
+   "sql-statement-show-stats-meta",
+   "SHOW STATS_META"
+  ],
+  [
+   "sql-statement-show-stats-topn",
+   "SHOW STATS_TOPN"
+  ],
+  [
+   "sql-statement-show-status",
+   "SHOW [GLOBAL|SESSION] STATUS"
+  ],
+  [
+   "sql-statement-show-table-distribution",
+   "SHOW TABLE DISTRIBUTION"
+  ],
+  [
+   "sql-statement-show-table-next-rowid",
+   "SHOW TABLE NEXT_ROW_ID"
+  ],
+  [
+   "sql-statement-show-table-regions",
+   "SHOW TABLE REGIONS"
+  ],
+  [
+   "sql-statement-show-table-status",
+   "SHOW TABLE STATUS"
+  ],
+  [
+   "sql-statement-show-tables",
+   "SHOW [FULL] TABLES"
+  ],
+  [
+   "sql-statement-show-variables",
+   "SHOW [GLOBAL|SESSION] VARIABLES"
+  ],
+  [
+   "sql-statement-show-warnings",
+   "SHOW WARNINGS"
+  ],
+  [
+   "sql-statement-shutdown",
+   "SHUTDOWN"
+  ],
+  [
+   "sql-statement-split-region",
+   "Split Region 使用文档"
+  ],
+  [
+   "sql-statement-start-transaction",
+   "START TRANSACTION"
+  ],
+  [
+   "sql-statement-table",
+   "TABLE"
+  ],
+  [
+   "sql-statement-trace",
+   "TRACE"
+  ],
+  [
+   "sql-statement-truncate",
+   "TRUNCATE"
+  ],
+  [
+   "sql-statement-unlock-stats",
+   "UNLOCK STATS"
+  ],
+  [
+   "sql-statement-update",
+   "UPDATE"
+  ],
+  [
+   "sql-statement-use",
+   "USE"
+  ],
+  [
+   "sql-statement-with",
+   "WITH"
+  ]
+ ],
+ "config": [
+  [
+   "auto-increment",
+   "AUTO_INCREMENT"
+  ],
+  [
+   "auto-random",
+   "AUTO_RANDOM"
+  ],
+  [
+   "best-practices-for-security-configuration",
+   "TiDB 安全配置最佳实践"
+  ],
+  [
+   "cached-tables",
+   "缓存表"
+  ],
+  [
+   "character-set-and-collation",
+   "字符集和排序规则"
+  ],
+  [
+   "character-set-gbk",
+   "GBK"
+  ],
+  [
+   "clustered-indexes",
+   "聚簇索引"
+  ],
+  [
+   "command-line-flags-for-pd-configuration",
+   "PD 配置参数"
+  ],
+  [
+   "command-line-flags-for-scheduling-configuration",
+   "Scheduling 配置参数"
+  ],
+  [
+   "command-line-flags-for-tidb-configuration",
+   "TiDB 配置参数"
+  ],
+  [
+   "command-line-flags-for-tikv-configuration",
+   "TiKV 配置参数"
+  ],
+  [
+   "command-line-flags-for-tso-configuration",
+   "TSO 配置参数"
+  ],
+  [
+   "configure-load-base-split",
+   "Load Base Split"
+  ],
+  [
+   "configure-memory-usage",
+   "TiDB 内存控制文档"
+  ],
+  [
+   "configure-placement-rules",
+   "Placement Rules 使用文档"
+  ],
+  [
+   "configure-store-limit",
+   "Store Limit"
+  ],
+  [
+   "configure-time-zone",
+   "时区支持"
+  ],
+  [
+   "coprocessor-cache",
+   "下推计算结果缓存"
+  ],
+  [
+   "cost-model",
+   "代价模型"
+  ],
+  [
+   "dynamic-config",
+   "在线修改集群配置"
+  ],
+  [
+   "extended-statistics",
+   "扩展统计信息"
+  ],
+  [
+   "garbage-collection-configuration",
+   "GC 配置"
+  ],
+  [
+   "garbage-collection-overview",
+   "GC 机制简介"
+  ],
+  [
+   "pd-configuration-file",
+   "PD 配置文件描述"
+  ],
+  [
+   "placement-rules-in-sql",
+   "Placement Rules in SQL"
+  ],
+  [
+   "scheduling-configuration-file",
+   "Scheduling 配置文件描述"
+  ],
+  [
+   "schema-cache",
+   "Schema 缓存"
+  ],
+  [
+   "sql-mode",
+   "SQL 模式"
+  ],
+  [
+   "sql-non-prepared-plan-cache",
+   "非 Prepare 语句执行计划缓存"
+  ],
+  [
+   "sql-prepared-plan-cache",
+   "Prepare 语句执行计划缓存"
+  ],
+  [
+   "statement-summary-tables",
+   "Statement Summary Tables"
+  ],
+  [
+   "statistics",
+   "常规统计信息"
+  ],
+  [
+   "status-variables",
+   "服务器状态变量"
+  ],
+  [
+   "system-variable-reference",
+   "系统变量索引"
+  ],
+  [
+   "system-variables",
+   "系统变量"
+  ],
+  [
+   "tidb-configuration-file",
+   "TiDB 配置文件描述"
+  ],
+  [
+   "tidb-performance-tuning-config",
+   "配置 TiDB 以优化性能"
+  ],
+  [
+   "tikv-configuration-file",
+   "TiKV 配置文件描述"
+  ],
+  [
+   "tikv-in-memory-engine",
+   "TiKV MVCC 内存引擎"
+  ],
+  [
+   "transaction-isolation-levels",
+   "TiDB 事务隔离级别"
+  ],
+  [
+   "tso-configuration-file",
+   "TSO 配置文件描述"
+  ],
+  [
+   "tune-tikv-memory-performance",
+   "TiKV 内存参数性能调优"
+  ],
+  [
+   "user-defined-variables",
+   "用户自定义变量"
+  ]
+ ],
+ "tikv": [
+  [
+   "rocksdb-overview",
+   "RocksDB 简介"
+  ],
+  [
+   "titan-configuration",
+   "Titan 配置"
+  ],
+  [
+   "titan-overview",
+   "Titan 介绍"
+  ],
+  [
+   "command-line-flags-for-pd-configuration",
+   "PD 配置参数"
+  ],
+  [
+   "command-line-flags-for-tikv-configuration",
+   "TiKV 配置参数"
+  ],
+  [
+   "configure-load-base-split",
+   "Load Base Split"
+  ],
+  [
+   "exporting-grafana-snapshots",
+   "将 Grafana 监控数据导出成快照"
+  ],
+  [
+   "grafana-pd-dashboard",
+   "PD 重要监控指标详解"
+  ],
+  [
+   "grafana-tikv-dashboard",
+   "TiKV 监控指标详解"
+  ],
+  [
+   "partitioned-raft-kv",
+   "Partitioned Raft KV"
+  ],
+  [
+   "pd-configuration-file",
+   "PD 配置文件描述"
+  ],
+  [
+   "pd-control",
+   "PD Control 使用说明"
+  ],
+  [
+   "pd-microservices-deployment-topology",
+   "PD 微服务部署拓扑"
+  ],
+  [
+   "pd-microservices",
+   "PD 微服务"
+  ],
+  [
+   "pd-recover",
+   "PD Recover 使用文档"
+  ],
+  [
+   "tikv-configuration-file",
+   "TiKV 配置文件描述"
+  ],
+  [
+   "tikv-control",
+   "TiKV Control 使用说明"
+  ],
+  [
+   "tikv-in-memory-engine",
+   "TiKV MVCC 内存引擎"
+  ],
+  [
+   "tikv-overview",
+   "TiKV 简介"
+  ],
+  [
+   "tune-operating-system",
+   "操作系统性能参数调优"
+  ],
+  [
+   "tune-region-performance",
+   "Region 性能调优"
+  ],
+  [
+   "tune-tikv-memory-performance",
+   "TiKV 内存参数性能调优"
+  ],
+  [
+   "tune-tikv-thread-performance",
+   "TiKV 线程池性能调优"
+  ]
+ ],
+ "ticdc": [
+  [
+   "deploy-ticdc",
+   "TiCDC 安装部署与集群运维"
+  ],
+  [
+   "integrate-confluent-using-ticdc",
+   "与 Confluent Cloud 和 Snowflake、ksqlDB、SQL Server 进行数据集成"
+  ],
+  [
+   "monitor-ticdc",
+   "TiCDC 详细监控指标"
+  ],
+  [
+   "ticdc-alert-rules",
+   "TiCDC 集群监控报警规则"
+  ],
+  [
+   "ticdc-architecture",
+   "TiCDC 新架构"
+  ],
+  [
+   "ticdc-avro-checksum-verification",
+   "基于 Avro 的 TiCDC 行数据 Checksum 校验"
+  ],
+  [
+   "ticdc-avro-protocol",
+   "TiCDC Avro Protocol"
+  ],
+  [
+   "ticdc-bidirectional-replication",
+   "TiCDC 双向复制"
+  ],
+  [
+   "ticdc-canal-json",
+   "TiCDC Canal-JSON Protocol"
+  ],
+  [
+   "ticdc-changefeed-config",
+   "TiCDC Changefeed 命令行参数和配置参数"
+  ],
+  [
+   "ticdc-changefeed-overview",
+   "Changefeed 概述"
+  ],
+  [
+   "ticdc-classic-architecture",
+   "TiCDC 老架构"
+  ],
+  [
+   "ticdc-client-authentication",
+   "TiCDC 客户端鉴权"
+  ],
+  [
+   "ticdc-compatibility",
+   "TiCDC 兼容性"
+  ],
+  [
+   "ticdc-csv",
+   "TiCDC CSV Protocol"
+  ],
+  [
+   "ticdc-data-replication-capabilities",
+   "TiCDC 数据同步能力详解"
+  ],
+  [
+   "ticdc-ddl",
+   "Changefeed DDL 同步"
+  ],
+  [
+   "ticdc-debezium",
+   "TiCDC Debezium Protocol"
+  ],
+  [
+   "ticdc-faq",
+   "TiCDC 常见问题解答"
+  ],
+  [
+   "ticdc-filter",
+   "Changefeed 日志过滤器"
+  ],
+  [
+   "ticdc-integrity-check",
+   "TiCDC 单行数据正确性校验"
+  ],
+  [
+   "ticdc-manage-changefeed",
+   "管理 Changefeed"
+  ],
+  [
+   "ticdc-open-api-v2",
+   "TiCDC OpenAPI v2"
+  ],
+  [
+   "ticdc-open-api",
+   "TiCDC OpenAPI v1"
+  ],
+  [
+   "ticdc-open-protocol",
+   "TiCDC Open Protocol"
+  ],
+  [
+   "ticdc-overview",
+   "TiCDC 简介"
+  ],
+  [
+   "ticdc-server-config",
+   "TiCDC Server 配置"
+  ],
+  [
+   "ticdc-simple-protocol",
+   "TiCDC Simple Protocol"
+  ],
+  [
+   "ticdc-sink-to-cloud-storage",
+   "同步数据到存储服务"
+  ],
+  [
+   "ticdc-sink-to-kafka",
+   "同步数据到 Kafka"
+  ],
+  [
+   "ticdc-sink-to-mysql",
+   "同步数据到 MySQL 兼容数据库"
+  ],
+  [
+   "ticdc-sink-to-pulsar",
+   "同步数据到 Pulsar"
+  ],
+  [
+   "ticdc-split-update-behavior",
+   "TiCDC 拆分 UPDATE 事件行为说明"
+  ],
+  [
+   "ticdc-storage-consumer-dev-guide",
+   "Storage sink 消费程序设计"
+  ],
+  [
+   "ticdc-summary-monitor",
+   "TiCDC 基本监控指标"
+  ],
+  [
+   "ticdc-table-routing",
+   "TiCDC 表路由"
+  ],
+  [
+   "ticdc-upstream-downstream-check",
+   "TiDB 主从集群数据校验和快照读"
+  ],
+  [
+   "troubleshoot-ticdc",
+   "TiCDC 故障处理"
+  ]
+ ],
+ "dm": [
+  [
+   "deploy-a-dm-cluster-using-binary",
+   "使用 DM binary 部署 DM 集群"
+  ],
+  [
+   "deploy-a-dm-cluster-using-tiup-offline",
+   "使用 TiUP 离线镜像部署 DM 集群"
+  ],
+  [
+   "deploy-a-dm-cluster-using-tiup",
+   "使用 TiUP 部署 DM 集群"
+  ],
+  [
+   "dm-alert-rules",
+   "DM 告警信息"
+  ],
+  [
+   "dm-arch",
+   "Data Migration 架构"
+  ],
+  [
+   "dm-benchmark-v5.4.0",
+   "DM 5.4.0 性能测试报告"
+  ],
+  [
+   "dm-best-practices",
+   "DM 数据迁移最佳实践"
+  ],
+  [
+   "dm-binlog-event-filter",
+   "dm-binlog-event-filter"
+  ],
+  [
+   "dm-block-allow-table-lists",
+   "TiDB Data Migration 黑白名单过滤"
+  ],
+  [
+   "dm-command-line-flags",
+   "TiDB Data Migration 命令行参数"
+  ],
+  [
+   "dm-compatibility-catalog",
+   "TiDB Data Migration 兼容性目录"
+  ],
+  [
+   "dm-config-overview",
+   "DM 配置简介"
+  ],
+  [
+   "dm-continuous-data-validation",
+   "DM 增量数据校验"
+  ],
+  [
+   "dm-create-task",
+   "创建 TiDB Data Migration 数据迁移任务"
+  ],
+  [
+   "dm-customized-secret-key",
+   "DM 自定义加解密 key"
+  ],
+  [
+   "dm-daily-check",
+   "TiDB Data Migration 日常巡检"
+  ],
+  [
+   "dm-ddl-compatible",
+   "Data Migration DDL 特殊处理说明"
+  ],
+  [
+   "dm-dml-replication-logic",
+   "Data Migration 中的 DML 同步机制"
+  ],
+  [
+   "dm-enable-tls",
+   "为 DM 的连接开启加密传输"
+  ],
+  [
+   "dm-error-handling",
+   "TiDB Data Migration 故障及处理方法"
+  ],
+  [
+   "dm-export-import-config",
+   "TiDB Data Migration 导出和导入集群的数据源和任务配置"
+  ],
+  [
+   "dm-faq",
+   "Data Migration 常见问题"
+  ],
+  [
+   "dm-generate-self-signed-certificates",
+   "TiDB Data Migration 生成自签名证书"
+  ],
+  [
+   "dm-handle-alerts",
+   "TiDB Data Migration 处理告警"
+  ],
+  [
+   "dm-handle-performance-issues",
+   "TiDB Data Migration 性能问题及处理方法"
+  ],
+  [
+   "dm-hardware-and-software-requirements",
+   "TiDB Data Migration 集群软硬件环境需求"
+  ],
+  [
+   "dm-high-availability",
+   "Data Migration 高可用机制"
+  ],
+  [
+   "dm-manage-schema",
+   "管理 TiDB Data Migration 迁移表的表结构"
+  ],
+  [
+   "dm-manage-source",
+   "管理 TiDB Data Migration 上游数据源"
+  ],
+  [
+   "dm-master-configuration-file",
+   "DM-master 配置文件介绍"
+  ],
+  [
+   "dm-online-ddl-tool-support",
+   "TiDB Data Migration 对 online DDL 工具的支持"
+  ],
+  [
+   "dm-open-api",
+   "使用 OpenAPI 运维 TiDB Data Migration 集群"
+  ],
+  [
+   "dm-overview",
+   "TiDB Data Migration 简介"
+  ],
+  [
+   "dm-pause-task",
+   "暂停 TiDB Data Migration 数据迁移任务"
+  ],
+  [
+   "dm-performance-test",
+   "DM 集群性能测试"
+  ],
+  [
+   "dm-precheck",
+   "TiDB Data Migration 任务前置检查"
+  ],
+  [
+   "dm-query-status",
+   "TiDB Data Migration 查询任务状态"
+  ],
+  [
+   "dm-release-notes",
+   "TiDB Data Migration 版本发布历史"
+  ],
+  [
+   "dm-resume-task",
+   "恢复 TiDB Data Migration 数据迁移任务"
+  ],
+  [
+   "dm-safe-mode",
+   "DM 安全模式"
+  ],
+  [
+   "dm-shard-merge",
+   "TiDB Data Migration 分库分表合并"
+  ],
+  [
+   "dm-source-configuration-file",
+   "TiDB Data Migration 上游数据库配置文件介绍"
+  ],
+  [
+   "dm-stop-task",
+   "停止 TiDB Data Migration 数据迁移任务"
+  ],
+  [
+   "dm-table-routing",
+   "TiDB Data Migration 表路由"
+  ],
+  [
+   "dm-task-configuration-guide",
+   "TiDB Data Migration 数据迁移任务配置向导"
+  ],
+  [
+   "dm-tune-configuration",
+   "DM 配置优化"
+  ],
+  [
+   "dm-webui-guide",
+   "使用 WebUI 管理 DM 迁移任务"
+  ],
+  [
+   "dm-worker-configuration-file",
+   "DM-worker 配置文件介绍"
+  ],
+  [
+   "dm-worker-intro",
+   "DM-worker 简介"
+  ],
+  [
+   "dmctl-introduction",
+   "使用 dmctl 运维 TiDB Data Migration 集群"
+  ],
+  [
+   "feature-expression-filter",
+   "通过 SQL 表达式过滤 DML"
+  ],
+  [
+   "feature-online-ddl",
+   "迁移使用 gh-ost/pt-osc 的源数据库"
+  ],
+  [
+   "feature-shard-merge-optimistic",
+   "乐观模式下分库分表合并迁移"
+  ],
+  [
+   "feature-shard-merge-pessimistic",
+   "悲观模式下分库分表合并迁移"
+  ],
+  [
+   "feature-shard-merge",
+   "分库分表合并迁移"
+  ],
+  [
+   "handle-failed-ddl-statements",
+   "使用 TiDB Data Migration 处理出错的 DDL 语句"
+  ],
+  [
+   "maintain-dm-using-tiup",
+   "使用 TiUP 运维 DM 集群"
+  ],
+  [
+   "manually-handling-sharding-ddl-locks",
+   "手动处理 Sharding DDL Lock"
+  ],
+  [
+   "manually-upgrade-dm-1.0-to-2.0",
+   "TiDB Data Migration 1.0.x 到 2.0+ 手动升级"
+  ],
+  [
+   "migrate-data-using-dm",
+   "使用 DM 迁移数据"
+  ],
+  [
+   "monitor-a-dm-cluster",
+   "DM 监控指标"
+  ],
+  [
+   "quick-start-create-source",
+   "创建 TiDB Data Migration 数据源"
+  ],
+  [
+   "quick-start-create-task",
+   "创建 TiDB Data Migration 数据迁移任务"
+  ],
+  [
+   "quick-start-with-dm",
+   "TiDB Data Migration 快速上手指南"
+  ],
+  [
+   "relay-log",
+   "DM Relay Log"
+  ],
+  [
+   "shard-merge-best-practices",
+   "分表合并数据迁移最佳实践"
+  ],
+  [
+   "table-selector",
+   "DM Table Selector"
+  ],
+  [
+   "task-configuration-file-full",
+   "DM 任务完整配置文件介绍"
+  ],
+  [
+   "usage-scenario-master-slave-switch",
+   "切换 DM-worker 与上游 MySQL 实例的连接"
+  ]
+ ],
+ "tiflash": [
+  [
+   "create-tiflash-replicas",
+   "构建 TiFlash 副本"
+  ],
+  [
+   "maintain-tiflash",
+   "TiFlash 集群运维"
+  ],
+  [
+   "monitor-tiflash",
+   "TiFlash 集群监控"
+  ],
+  [
+   "tiflash-alert-rules",
+   "TiFlash 报警规则"
+  ],
+  [
+   "tiflash-command-line-flags",
+   "TiFlash 命令行参数"
+  ],
+  [
+   "tiflash-compatibility",
+   "TiFlash 兼容性说明"
+  ],
+  [
+   "tiflash-configuration",
+   "TiFlash 配置参数"
+  ],
+  [
+   "tiflash-data-validation",
+   "TiFlash 数据校验"
+  ],
+  [
+   "tiflash-disaggregated-and-s3",
+   "TiFlash 存算分离架构与 S3 支持"
+  ],
+  [
+   "tiflash-late-materialization",
+   "延迟物化"
+  ],
+  [
+   "tiflash-mintso-scheduler",
+   "TiFlash MinTSO 调度器"
+  ],
+  [
+   "tiflash-overview",
+   "TiFlash 简介"
+  ],
+  [
+   "tiflash-pipeline-model",
+   "TiFlash Pipeline Model 执行模型"
+  ],
+  [
+   "tiflash-results-materialization",
+   "TiFlash 查询结果物化"
+  ],
+  [
+   "tiflash-spill-disk",
+   "TiFlash 数据落盘"
+  ],
+  [
+   "tiflash-supported-pushdown-calculations",
+   "TiFlash 支持的计算下推"
+  ],
+  [
+   "troubleshoot-tiflash",
+   "TiFlash 常见问题"
+  ],
+  [
+   "tune-tiflash-performance",
+   "TiFlash 性能调优"
+  ],
+  [
+   "use-fastscan",
+   "使用 FastScan 功能"
+  ],
+  [
+   "use-tidb-to-read-tiflash",
+   "使用 TiDB 读取 TiFlash"
+  ],
+  [
+   "use-tiflash-mpp-mode",
+   "使用 MPP 模式"
+  ]
+ ],
+ "ops": [
+  [
+   "best-practices-on-public-cloud",
+   "在公有云上部署 TiDB 的最佳实践"
+  ],
+  [
+   "ddl-introduction",
+   "DDL 语句的执行原理及最佳实践"
+  ],
+  [
+   "grafana-monitor-best-practices",
+   "使用 Grafana 监控 TiDB 的最佳实践"
+  ],
+  [
+   "haproxy-best-practices",
+   "HAProxy 在 TiDB 中的最佳实践"
+  ],
+  [
+   "high-concurrency-best-practices",
+   "TiDB 高并发写入场景最佳实践"
+  ],
+  [
+   "index-management-best-practices",
+   "管理索引和识别未使用索引的最佳实践"
+  ],
+  [
+   "massive-regions-best-practices",
+   "海量 Region 集群调优最佳实践"
+  ],
+  [
+   "multi-column-index-best-practices",
+   "多列索引优化最佳实践"
+  ],
+  [
+   "pd-scheduling-best-practices",
+   "PD 调度策略最佳实践"
+  ],
+  [
+   "readonly-nodes",
+   "只读存储节点最佳实践"
+  ],
+  [
+   "saas-best-practices",
+   "SaaS 多租户场景下处理百万张表的最佳实践"
+  ],
+  [
+   "three-dc-local-read",
+   "在三数据中心下就近读取数据"
+  ],
+  [
+   "three-nodes-hybrid-deployment",
+   "三节点混合部署的最佳实践"
+  ],
+  [
+   "tidb-best-practices",
+   "TiDB 最佳实践"
+  ],
+  [
+   "tidb-partitioned-tables-best-practices",
+   "使用 TiDB 分区表的最佳实践"
+  ],
+  [
+   "uuid",
+   "将 UUID 用作主键的最佳实践"
+  ],
+  [
+   "backup-and-restore-design",
+   "TiDB 备份与恢复功能架构概述"
+  ],
+  [
+   "backup-and-restore-overview",
+   "TiDB 备份与恢复概述"
+  ],
+  [
+   "backup-and-restore-storages",
+   "备份存储"
+  ],
+  [
+   "backup-and-restore-use-cases",
+   "TiDB 备份与恢复实践示例"
+  ],
+  [
+   "br-auto-tune",
+   "备份自动调节"
+  ],
+  [
+   "br-batch-create-table",
+   "批量建表"
+  ],
+  [
+   "br-checkpoint-backup",
+   "断点备份"
+  ],
+  [
+   "br-checkpoint-restore",
+   "断点恢复"
+  ],
+  [
+   "br-compact-log-backup",
+   "压缩日志备份"
+  ],
+  [
+   "br-incremental-guide",
+   "TiDB 增量备份与恢复使用指南"
+  ],
+  [
+   "br-log-architecture",
+   "TiDB 日志备份与 PITR 功能架构"
+  ],
+  [
+   "br-monitoring-and-alert",
+   "备份恢复监控告警"
+  ],
+  [
+   "br-pitr-guide",
+   "TiDB 日志备份与 PITR 使用指南"
+  ],
+  [
+   "br-pitr-manual",
+   "TiDB 日志备份与 PITR 命令行手册"
+  ],
+  [
+   "br-snapshot-architecture",
+   "TiDB 快照备份与恢复功能架构"
+  ],
+  [
+   "br-snapshot-guide",
+   "TiDB 快照备份与恢复使用指南"
+  ],
+  [
+   "br-snapshot-manual",
+   "TiDB 快照备份与恢复命令行手册"
+  ],
+  [
+   "br-use-overview",
+   "TiDB 备份与恢复功能使用概述"
+  ],
+  [
+   "rawkv-backup-and-restore",
+   "备份与恢复 RawKV 数据"
+  ],
+  [
+   "use-br-command-line-tool",
+   "br 命令行手册"
+  ],
+  [
+   "backup-and-restore-faq",
+   "备份与恢复常见问题"
+  ],
+  [
+   "deploy-and-maintain-faq",
+   "TiDB 安装部署常见问题"
+  ],
+  [
+   "faq-overview",
+   "TiDB 产品常见问题解答汇总"
+  ],
+  [
+   "high-availability-faq",
+   "高可用常见问题"
+  ],
+  [
+   "high-reliability-faq",
+   "高可靠常见问题"
+  ],
+  [
+   "manage-cluster-faq",
+   "TiDB 集群管理常见问题"
+  ],
+  [
+   "migration-tidb-faq",
+   "迁移常见问题"
+  ],
+  [
+   "monitor-faq",
+   "TiDB 监控常见问题"
+  ],
+  [
+   "sql-faq",
+   "SQL 操作常见问题"
+  ],
+  [
+   "tidb-faq",
+   "TiDB 产品常见问题"
+  ],
+  [
+   "upgrade-faq",
+   "升级与升级后常见问题"
+  ],
+  [
+   "customized-montior-in-tiup-environment",
+   "自定义监控组件的配置"
+  ],
+  [
+   "tiup-bench",
+   "使用 TiUP bench 组件压测 TiDB"
+  ],
+  [
+   "tiup-cluster-no-sudo-mode",
+   "使用 TiUP no-sudo 模式部署运维 TiDB 线上集群"
+  ],
+  [
+   "tiup-cluster-topology-reference",
+   "通过 TiUP 部署 TiDB 集群的拓扑文件配置"
+  ],
+  [
+   "tiup-cluster",
+   "使用 TiUP 部署运维 TiDB 线上集群"
+  ],
+  [
+   "tiup-command-clean",
+   "tiup clean"
+  ],
+  [
+   "tiup-command-completion",
+   "tiup completion"
+  ],
+  [
+   "tiup-command-env",
+   "tiup env"
+  ],
+  [
+   "tiup-command-help",
+   "tiup help"
+  ],
+  [
+   "tiup-command-install",
+   "tiup install"
+  ],
+  [
+   "tiup-command-list",
+   "tiup list"
+  ],
+  [
+   "tiup-command-mirror-clone",
+   "tiup mirror clone"
+  ],
+  [
+   "tiup-command-mirror-genkey",
+   "tiup mirror genkey"
+  ],
+  [
+   "tiup-command-mirror-grant",
+   "tiup mirror grant"
+  ],
+  [
+   "tiup-command-mirror-init",
+   "tiup mirror init"
+  ],
+  [
+   "tiup-command-mirror-merge",
+   "tiup mirror merge"
+  ],
+  [
+   "tiup-command-mirror-modify",
+   "tiup mirror modify"
+  ],
+  [
+   "tiup-command-mirror-publish",
+   "tiup mirror publish"
+  ],
+  [
+   "tiup-command-mirror-rotate",
+   "tiup mirror rotate"
+  ],
+  [
+   "tiup-command-mirror-set",
+   "tiup mirror set"
+  ],
+  [
+   "tiup-command-mirror-sign",
+   "tiup mirror sign"
+  ],
+  [
+   "tiup-command-mirror",
+   "tiup mirror"
+  ],
+  [
+   "tiup-command-status",
+   "tiup status"
+  ],
+  [
+   "tiup-command-telemetry",
+   "tiup telemetry"
+  ],
+  [
+   "tiup-command-uninstall",
+   "tiup uninstall"
+  ],
+  [
+   "tiup-command-update",
+   "tiup update"
+  ],
+  [
+   "tiup-component-cluster-audit-cleanup",
+   "tiup cluster audit cleanup"
+  ],
+  [
+   "tiup-component-cluster-audit",
+   "tiup cluster audit"
+  ],
+  [
+   "tiup-component-cluster-check",
+   "tiup cluster check"
+  ],
+  [
+   "tiup-component-cluster-clean",
+   "tiup cluster clean"
+  ],
+  [
+   "tiup-component-cluster-deploy",
+   "tiup cluster deploy"
+  ],
+  [
+   "tiup-component-cluster-destroy",
+   "tiup cluster destroy"
+  ],
+  [
+   "tiup-component-cluster-disable",
+   "tiup cluster disable"
+  ],
+  [
+   "tiup-component-cluster-display",
+   "tiup cluster display"
+  ],
+  [
+   "tiup-component-cluster-edit-config",
+   "tiup cluster edit-config"
+  ],
+  [
+   "tiup-component-cluster-enable",
+   "tiup cluster enable"
+  ],
+  [
+   "tiup-component-cluster-help",
+   "tiup cluster help"
+  ],
+  [
+   "tiup-component-cluster-import",
+   "tiup cluster import"
+  ],
+  [
+   "tiup-component-cluster-list",
+   "tiup cluster list"
+  ],
+  [
+   "tiup-component-cluster-meta-backup",
+   "tiup cluster meta backup"
+  ],
+  [
+   "tiup-component-cluster-meta-restore",
+   "tiup cluster meta restore"
+  ],
+  [
+   "tiup-component-cluster-patch",
+   "tiup cluster patch"
+  ],
+  [
+   "tiup-component-cluster-prune",
+   "tiup cluster prune"
+  ],
+  [
+   "tiup-component-cluster-reload",
+   "tiup cluster reload"
+  ],
+  [
+   "tiup-component-cluster-rename",
+   "tiup cluster rename"
+  ],
+  [
+   "tiup-component-cluster-replay",
+   "tiup cluster replay"
+  ],
+  [
+   "tiup-component-cluster-restart",
+   "tiup cluster restart"
+  ],
+  [
+   "tiup-component-cluster-scale-in",
+   "tiup cluster scale-in"
+  ],
+  [
+   "tiup-component-cluster-scale-out",
+   "tiup cluster scale-out"
+  ],
+  [
+   "tiup-component-cluster-start",
+   "tiup cluster start"
+  ],
+  [
+   "tiup-component-cluster-stop",
+   "tiup cluster stop"
+  ],
+  [
+   "tiup-component-cluster-template",
+   "tiup cluster template"
+  ],
+  [
+   "tiup-component-cluster-tls",
+   "tiup cluster tls"
+  ],
+  [
+   "tiup-component-cluster-upgrade",
+   "tiup cluster upgrade"
+  ],
+  [
+   "tiup-component-cluster",
+   "TiUP Cluster"
+  ],
+  [
+   "tiup-component-dm-audit",
+   "tiup dm audit"
+  ],
+  [
+   "tiup-component-dm-deploy",
+   "tiup dm deploy"
+  ],
+  [
+   "tiup-component-dm-destroy",
+   "tiup dm destroy"
+  ],
+  [
+   "tiup-component-dm-disable",
+   "tiup dm disable"
+  ],
+  [
+   "tiup-component-dm-display",
+   "tiup dm display"
+  ],
+  [
+   "tiup-component-dm-edit-config",
+   "tiup dm edit-config"
+  ],
+  [
+   "tiup-component-dm-enable",
+   "tiup dm enable"
+  ],
+  [
+   "tiup-component-dm-help",
+   "tiup dm help"
+  ],
+  [
+   "tiup-component-dm-import",
+   "tiup dm import"
+  ],
+  [
+   "tiup-component-dm-list",
+   "tiup dm list"
+  ],
+  [
+   "tiup-component-dm-patch",
+   "在线应用 Hotfix 到 DM 集群"
+  ],
+  [
+   "tiup-component-dm-prune",
+   "tiup dm prune"
+  ],
+  [
+   "tiup-component-dm-reload",
+   "tiup dm reload"
+  ],
+  [
+   "tiup-component-dm-replay",
+   "tiup dm replay"
+  ],
+  [
+   "tiup-component-dm-restart",
+   "tiup dm restart"
+  ],
+  [
+   "tiup-component-dm-scale-in",
+   "tiup dm scale-in"
+  ],
+  [
+   "tiup-component-dm-scale-out",
+   "tiup dm scale-out"
+  ],
+  [
+   "tiup-component-dm-start",
+   "tiup dm start"
+  ],
+  [
+   "tiup-component-dm-stop",
+   "tiup dm stop"
+  ],
+  [
+   "tiup-component-dm-template",
+   "tiup dm template"
+  ],
+  [
+   "tiup-component-dm-upgrade",
+   "tiup dm upgrade"
+  ],
+  [
+   "tiup-component-dm",
+   "TiUP DM"
+  ],
+  [
+   "tiup-component-management",
+   "使用 TiUP 命令管理组件"
+  ],
+  [
+   "tiup-dm-topology-reference",
+   "通过 TiUP 部署 DM 集群的拓扑文件配置"
+  ],
+  [
+   "tiup-documentation-guide",
+   "TiUP 文档地图"
+  ],
+  [
+   "tiup-faq",
+   "TiUP FAQ"
+  ],
+  [
+   "tiup-mirror-reference",
+   "TiUP 镜像参考指南"
+  ],
+  [
+   "tiup-mirror",
+   "搭建私有镜像"
+  ],
+  [
+   "tiup-overview",
+   "TiUP 简介"
+  ],
+  [
+   "tiup-playground",
+   "本地快速部署 TiDB 集群"
+  ],
+  [
+   "tiup-reference",
+   "TiUP 命令概览"
+  ],
+  [
+   "tiup-terminology-and-concepts",
+   "TiUP 术语及核心概念"
+  ],
+  [
+   "tiup-troubleshooting-guide",
+   "TiUP 故障排查"
+  ]
+ ],
+ "other": [
+  [
+   "dm-api-overview",
+   "Data Migration API 概览"
+  ],
+  [
+   "monitoring-api-overview",
+   "TiDB 监控 API 概览"
+  ],
+  [
+   "ticdc-api-overview",
+   "TiCDC API 概览"
+  ],
+  [
+   "tidb-cloud-api-overview",
+   "TiDB Cloud API 概览"
+  ],
+  [
+   "tidb-cloud-api-v1beta",
+   "TiDB Cloud API v1beta 概览"
+  ],
+  [
+   "tidb-cloud-api-v1beta1",
+   "TiDB Cloud API v1beta1 概览"
+  ],
+  [
+   "tidb-operator-api-overview",
+   "TiDB Operator API 概览"
+  ],
+  [
+   "tiproxy-api-overview",
+   "TiProxy API 概览"
+  ],
+  [
+   "clinic-collect-sql-query-plan",
+   "使用 PingCAP Clinic Diag 采集 SQL 查询计划信息"
+  ],
+  [
+   "clinic-data-instruction-for-tiup",
+   "PingCAP Clinic 数据采集说明"
+  ],
+  [
+   "clinic-introduction",
+   "PingCAP Clinic 诊断服务简介"
+  ],
+  [
+   "clinic-report",
+   "使用 PingCAP Clinic 生成诊断报告"
+  ],
+  [
+   "clinic-user-guide-for-tiup",
+   "使用 PingCAP Clinic 诊断集群"
+  ],
+  [
+   "quick-start-with-clinic",
+   "PingCAP Clinic 快速上手指南"
+  ],
+  [
+   "continuous-profiling",
+   "TiDB Dashboard 实例性能分析 - 持续分析页面"
+  ],
+  [
+   "dashboard-access",
+   "访问 TiDB Dashboard"
+  ],
+  [
+   "dashboard-cluster-info",
+   "TiDB Dashboard 集群信息页面"
+  ],
+  [
+   "dashboard-diagnostics-access",
+   "TiDB Dashboard 集群诊断页面"
+  ],
+  [
+   "dashboard-diagnostics-report",
+   "TiDB Dashboard 诊断报告"
+  ],
+  [
+   "dashboard-diagnostics-usage",
+   "使用 TiDB Dashboard 诊断报告定位问题"
+  ],
+  [
+   "dashboard-faq",
+   "TiDB Dashboard 常见问题"
+  ],
+  [
+   "dashboard-intro",
+   "TiDB Dashboard 介绍"
+  ],
+  [
+   "dashboard-key-visualizer",
+   "TiDB Dashboard 流量可视化页面"
+  ],
+  [
+   "dashboard-log-search",
+   "TiDB Dashboard 日志搜索页面"
+  ],
+  [
+   "dashboard-metrics-relation",
+   "TiDB Dashboard 监控关系图"
+  ],
+  [
+   "dashboard-monitoring",
+   "TiDB Dashboard 监控页面"
+  ],
+  [
+   "dashboard-ops-deploy",
+   "部署 TiDB Dashboard"
+  ],
+  [
+   "dashboard-ops-reverse-proxy",
+   "通过反向代理使用 TiDB Dashboard"
+  ],
+  [
+   "dashboard-ops-security",
+   "提高 TiDB Dashboard 安全性"
+  ],
+  [
+   "dashboard-overview",
+   "TiDB Dashboard 概况页面"
+  ],
+  [
+   "dashboard-profiling",
+   "TiDB Dashboard 实例性能分析 - 手动分析页面"
+  ],
+  [
+   "dashboard-resource-manager",
+   "TiDB Dashboard 资源管控页面"
+  ],
+  [
+   "dashboard-session-share",
+   "分享 TiDB Dashboard 会话"
+  ],
+  [
+   "dashboard-session-sso",
+   "配置 TiDB Dashboard 使用 SSO 登录"
+  ],
+  [
+   "dashboard-slow-query",
+   "TiDB Dashboard 慢查询页面"
+  ],
+  [
+   "dashboard-statement-details",
+   "TiDB Dashboard SQL 语句分析执行详情页面"
+  ],
+  [
+   "dashboard-statement-list",
+   "TiDB Dashboard SQL 语句分析执行详情页面"
+  ],
+  [
+   "dashboard-user",
+   "TiDB Dashboard 用户管理"
+  ],
+  [
+   "top-sql",
+   "TiDB Dashboard Top SQL 页面"
+  ],
+  [
+   "dev-guide-aws-appflow-integration",
+   "TiDB 与 Amazon AppFlow 集成指南"
+  ],
+  [
+   "dev-guide-bookshop-schema-design",
+   "Bookshop 应用"
+  ],
+  [
+   "dev-guide-build-cluster-in-cloud",
+   "创建 {{{ .starter }}} 实例"
+  ],
+  [
+   "dev-guide-choose-driver-or-orm",
+   "选择驱动或 ORM 框架"
+  ],
+  [
+   "dev-guide-connect-to-tidb",
+   "连接到 TiDB"
+  ],
+  [
+   "dev-guide-connection-parameters",
+   "配置连接池与连接参数"
+  ],
+  [
+   "dev-guide-create-database",
+   "创建数据库"
+  ],
+  [
+   "dev-guide-create-secondary-indexes",
+   "创建二级索引"
+  ],
+  [
+   "dev-guide-create-table",
+   "创建表"
+  ],
+  [
+   "dev-guide-delete-data",
+   "删除数据"
+  ],
+  [
+   "dev-guide-get-data-from-single-table",
+   "单表查询"
+  ],
+  [
+   "dev-guide-gui-mysql-workbench",
+   "使用 MySQL Workbench 连接到 TiDB"
+  ],
+  [
+   "dev-guide-gui-navicat",
+   "使用 Navicat 连接到 TiDB"
+  ],
+  [
+   "dev-guide-hybrid-oltp-and-olap-queries",
+   "HTAP 查询"
+  ],
+  [
+   "dev-guide-implicit-type-conversion",
+   "避免隐式类型转换"
+  ],
+  [
+   "dev-guide-index-best-practice",
+   "索引的最佳实践"
+  ],
+  [
+   "dev-guide-insert-data",
+   "插入数据"
+  ],
+  [
+   "dev-guide-join-tables",
+   "多表连接查询"
+  ],
+  [
+   "dev-guide-mysql-tools",
+   "通过 MySQL 工具连接到 TiDB"
+  ],
+  [
+   "dev-guide-object-naming-guidelines",
+   "对象命名规范"
+  ],
+  [
+   "dev-guide-optimistic-and-pessimistic-transaction",
+   "乐观事务和悲观事务"
+  ],
+  [
+   "dev-guide-optimize-sql-best-practices",
+   "性能调优最佳实践"
+  ],
+  [
+   "dev-guide-optimize-sql-overview",
+   "概览"
+  ],
+  [
+   "dev-guide-optimize-sql",
+   "SQL 性能调优"
+  ],
+  [
+   "dev-guide-paginate-results",
+   "分页查询"
+  ],
+  [
+   "dev-guide-playground-gitpod",
+   "Gitpod"
+  ],
+  [
+   "dev-guide-prepared-statement",
+   "预处理语句"
+  ],
+  [
+   "dev-guide-proxysql-integration",
+   "ProxySQL 集成指南"
+  ],
+  [
+   "dev-guide-sample-application-aws-lambda",
+   "在 AWS Lambda 函数中使用 mysql2 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-cs",
+   "使用 C\\# 连接 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-golang-gorm",
+   "使用 GORM 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-golang-sql-driver",
+   "使用 Go-MySQL-Driver 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-java-hibernate",
+   "使用 Hibernate 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-java-jdbc",
+   "使用 JDBC 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-java-mybatis",
+   "使用 MyBatis 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-java-spring-boot",
+   "使用 Spring Boot 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nextjs",
+   "在 Next.js 中使用 mysql2 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nodejs-mysql2",
+   "使用 node-mysql2 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nodejs-mysqljs",
+   "使用 mysql.js 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nodejs-prisma",
+   "使用 Prisma 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nodejs-sequelize",
+   "使用 Sequelize 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-nodejs-typeorm",
+   "使用 TypeORM 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-django",
+   "使用 Django 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-mysql-connector",
+   "使用 MySQL Connector/Python 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-mysqlclient",
+   "使用 mysqlclient 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-peewee",
+   "使用 peewee 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-pymysql",
+   "使用 PyMySQL 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-python-sqlalchemy",
+   "使用 SQLAlchemy 连接到 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-ruby-mysql2",
+   "使用 mysql2 连接 TiDB"
+  ],
+  [
+   "dev-guide-sample-application-ruby-rails",
+   "使用 Rails 框架和 ActiveRecord ORM 连接 TiDB"
+  ],
+  [
+   "dev-guide-schema-design-overview",
+   "概述"
+  ],
+  [
+   "dev-guide-sql-development-specification",
+   "SQL 开发规范"
+  ],
+  [
+   "dev-guide-third-party-support",
+   "TiDB 支持的第三方工具"
+  ],
+  [
+   "dev-guide-third-party-tools-compatibility",
+   "已知的第三方工具兼容问题"
+  ],
+  [
+   "dev-guide-tidb-basics",
+   "TiDB 基础知识"
+  ],
+  [
+   "dev-guide-tidb-crud-sql",
+   "使用 TiDB 的增删改查 SQL"
+  ],
+  [
+   "dev-guide-time-to-live",
+   "使用 TTL (Time to Live) 定期删除过期数据"
+  ],
+  [
+   "dev-guide-timeouts-in-tidb",
+   "TiDB 中的各种超时"
+  ],
+  [
+   "dev-guide-transaction-overview",
+   "事务概览"
+  ],
+  [
+   "dev-guide-transaction-restraints",
+   "事务限制"
+  ],
+  [
+   "dev-guide-transaction-troubleshoot",
+   "事务错误处理"
+  ],
+  [
+   "dev-guide-troubleshoot-overview",
+   "SQL 或事务问题"
+  ],
+  [
+   "dev-guide-unique-serial-number-generation",
+   "唯一序列号生成方案"
+  ],
+  [
+   "dev-guide-unstable-result-set",
+   "结果集不稳定"
+  ],
+  [
+   "dev-guide-update-data",
+   "更新数据"
+  ],
+  [
+   "dev-guide-use-common-table-expression",
+   "公共表表达式 (CTE)"
+  ],
+  [
+   "dev-guide-use-follower-read",
+   "Follower Read"
+  ],
+  [
+   "dev-guide-use-stale-read",
+   "Stale Read"
+  ],
+  [
+   "dev-guide-use-subqueries",
+   "子查询"
+  ],
+  [
+   "dev-guide-use-temporary-tables",
+   "临时表"
+  ],
+  [
+   "dev-guide-use-views",
+   "视图"
+  ],
+  [
+   "dev-guide-vector-search",
+   "向量搜索"
+  ],
+  [
+   "dev-guide-wordpress",
+   "使用 {{{ .starter }}} 运行 WordPress"
+  ],
+  [
+   "java-app-best-practices",
+   "开发 Java 应用使用 TiDB 的最佳实践"
+  ],
+  [
+   "serverless-driver-drizzle-example",
+   "TiDB Cloud serverless driver Drizzle 教程"
+  ],
+  [
+   "serverless-driver-kysely-example",
+   "TiDB Cloud serverless driver Kysely 教程"
+  ],
+  [
+   "serverless-driver-node-example",
+   "TiDB Cloud serverless driver Node.js 教程"
+  ],
+  [
+   "serverless-driver-prisma-example",
+   "TiDB Cloud serverless driver Prisma 教程"
+  ],
+  [
+   "serverless-driver",
+   "TiDB Cloud serverless driver (PREVIEW)"
+  ],
+  [
+   "client-errors-summary-by-host",
+   "CLIENT_ERRORS_SUMMARY_BY_HOST"
+  ],
+  [
+   "client-errors-summary-by-user",
+   "CLIENT_ERRORS_SUMMARY_BY_USER"
+  ],
+  [
+   "client-errors-summary-global",
+   "CLIENT_ERRORS_SUMMARY_GLOBAL"
+  ],
+  [
+   "information-schema-analyze-status",
+   "ANALYZE_STATUS"
+  ],
+  [
+   "information-schema-character-sets",
+   "CHARACTER_SETS"
+  ],
+  [
+   "information-schema-check-constraints",
+   "CHECK\\_CONSTRAINTS"
+  ],
+  [
+   "information-schema-cluster-config",
+   "CLUSTER_CONFIG"
+  ],
+  [
+   "information-schema-cluster-hardware",
+   "CLUSTER_HARDWARE"
+  ],
+  [
+   "information-schema-cluster-info",
+   "CLUSTER_INFO"
+  ],
+  [
+   "information-schema-cluster-load",
+   "CLUSTER_LOAD"
+  ],
+  [
+   "information-schema-cluster-log",
+   "CLUSTER_LOG"
+  ],
+  [
+   "information-schema-cluster-systeminfo",
+   "CLUSTER_SYSTEMINFO"
+  ],
+  [
+   "information-schema-collation-character-set-applicability",
+   "COLLATION_CHARACTER_SET_APPLICABILITY"
+  ],
+  [
+   "information-schema-collations",
+   "COLLATIONS"
+  ],
+  [
+   "information-schema-columns",
+   "COLUMNS"
+  ],
+  [
+   "information-schema-data-lock-waits",
+   "DATA_LOCK_WAITS"
+  ],
+  [
+   "information-schema-ddl-jobs",
+   "DDL_JOBS"
+  ],
+  [
+   "information-schema-deadlocks",
+   "DEADLOCKS"
+  ],
+  [
+   "information-schema-engines",
+   "ENGINES"
+  ],
+  [
+   "information-schema-inspection-result",
+   "INSPECTION_RESULT"
+  ],
+  [
+   "information-schema-inspection-rules",
+   "INSPECTION_RULES"
+  ],
+  [
+   "information-schema-inspection-summary",
+   "INSPECTION_SUMMARY"
+  ],
+  [
+   "information-schema-key-column-usage",
+   "KEY_COLUMN_USAGE"
+  ],
+  [
+   "information-schema-keywords",
+   "KEYWORDS"
+  ],
+  [
+   "information-schema-memory-usage-ops-history",
+   "MEMORY_USAGE_OPS_HISTORY"
+  ],
+  [
+   "information-schema-memory-usage",
+   "MEMORY_USAGE"
+  ],
+  [
+   "information-schema-metrics-summary",
+   "METRICS_SUMMARY"
+  ],
+  [
+   "information-schema-metrics-tables",
+   "METRICS_TABLES"
+  ],
+  [
+   "information-schema-partitions",
+   "PARTITIONS"
+  ],
+  [
+   "information-schema-placement-policies",
+   "PLACEMENT_POLICIES"
+  ],
+  [
+   "information-schema-processlist",
+   "PROCESSLIST"
+  ],
+  [
+   "information-schema-referential-constraints",
+   "REFERENTIAL_CONSTRAINTS"
+  ],
+  [
+   "information-schema-resource-groups",
+   "RESOURCE_GROUPS"
+  ],
+  [
+   "information-schema-runaway-watches",
+   "RUNAWAY_WATCHES"
+  ],
+  [
+   "information-schema-schemata",
+   "SCHEMATA"
+  ],
+  [
+   "information-schema-sequences",
+   "SEQUENCES"
+  ],
+  [
+   "information-schema-session-variables",
+   "SESSION_VARIABLES"
+  ],
+  [
+   "information-schema-slow-query",
+   "SLOW_QUERY"
+  ],
+  [
+   "information-schema-sql-diagnostics",
+   "SQL 诊断"
+  ],
+  [
+   "information-schema-statistics",
+   "STATISTICS"
+  ],
+  [
+   "information-schema-table-constraints",
+   "TABLE_CONSTRAINTS"
+  ],
+  [
+   "information-schema-table-storage-stats",
+   "TABLE_STORAGE_STATS"
+  ],
+  [
+   "information-schema-tables",
+   "TABLES"
+  ],
+  [
+   "information-schema-tidb-check-constraints",
+   "TIDB\\_CHECK\\_CONSTRAINTS"
+  ],
+  [
+   "information-schema-tidb-hot-regions-history",
+   "TIDB_HOT_REGIONS_HISTORY"
+  ],
+  [
+   "information-schema-tidb-hot-regions",
+   "TIDB_HOT_REGIONS"
+  ],
+  [
+   "information-schema-tidb-index-usage",
+   "TIDB_INDEX_USAGE"
+  ],
+  [
+   "information-schema-tidb-indexes",
+   "TIDB_INDEXES"
+  ],
+  [
+   "information-schema-tidb-servers-info",
+   "TIDB_SERVERS_INFO"
+  ],
+  [
+   "information-schema-tidb-trx",
+   "TIDB_TRX"
+  ],
+  [
+   "information-schema-tiflash-indexes",
+   "TIFLASH_INDEXES"
+  ],
+  [
+   "information-schema-tiflash-replica",
+   "TIFLASH_REPLICA"
+  ],
+  [
+   "information-schema-tiflash-segments",
+   "TIFLASH_SEGMENTS"
+  ],
+  [
+   "information-schema-tiflash-tables",
+   "TIFLASH_TABLES"
+  ],
+  [
+   "information-schema-tikv-region-peers",
+   "TIKV_REGION_PEERS"
+  ],
+  [
+   "information-schema-tikv-region-status",
+   "TIKV_REGION_STATUS"
+  ],
+  [
+   "information-schema-tikv-store-status",
+   "TIKV_STORE_STATUS"
+  ],
+  [
+   "information-schema-user-attributes",
+   "USER_ATTRIBUTES"
+  ],
+  [
+   "information-schema-user-privileges",
+   "USER_PRIVILEGES"
+  ],
+  [
+   "information-schema-variables-info",
+   "VARIABLES_INFO"
+  ],
+  [
+   "information-schema-views",
+   "VIEWS"
+  ],
+  [
+   "information-schema",
+   "Information Schema"
+  ],
+  [
+   "dm-diff",
+   "基于 DM 同步场景下的数据校验"
+  ],
+  [
+   "route-diff",
+   "不同库名或表名的数据校验"
+  ],
+  [
+   "shard-diff",
+   "分库分表场景下的数据校验"
+  ],
+  [
+   "sync-diff-inspector-overview",
+   "sync-diff-inspector 用户文档"
+  ],
+  [
+   "tiproxy-api",
+   "TiProxy API"
+  ],
+  [
+   "tiproxy-command-line-flags",
+   "TiProxy 命令行参数"
+  ],
+  [
+   "tiproxy-configuration",
+   "TiProxy 配置文件"
+  ],
+  [
+   "tiproxy-deployment-topology",
+   "TiProxy 部署拓扑"
+  ],
+  [
+   "tiproxy-grafana",
+   "TiProxy 监控指标"
+  ],
+  [
+   "tiproxy-load-balance",
+   "TiProxy 负载均衡策略"
+  ],
+  [
+   "tiproxy-overview",
+   "TiProxy 简介"
+  ],
+  [
+   "tiproxy-performance-test",
+   "TiProxy 性能测试报告"
+  ],
+  [
+   "tiproxy-traffic-replay",
+   "TiProxy 流量回放"
+  ],
+  [
+   "troubleshoot-tiproxy",
+   "TiProxy 常见问题"
+  ]
+ ]
+}

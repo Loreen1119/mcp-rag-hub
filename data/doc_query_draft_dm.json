@@ -1,0 +1,92 @@
+[
+ {
+  "slug": "dm-overview",
+  "query": "TiDB DM（Data Migration）是做什么的，和 TiCDC 定位有什么不同？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[127]问 DM/TiCDC/Binlog 异同，此为 DM 定位"
+ },
+ {
+  "slug": "dm-arch",
+  "query": "DM 的 DM-master、DM-worker 分别负责什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[160]问什么是 DM 集群，此为组件分工"
+ },
+ {
+  "slug": "dm-best-practices",
+  "query": "DM 数据迁移有哪些最佳实践（如分库分表、在线迁移）？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[48]问迁移 1TB 时长，此为最佳实践"
+ },
+ {
+  "slug": "dm-create-task",
+  "query": "DM 怎么创建一个迁移任务，任务配置里有哪些关键项？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-source-configuration-file",
+  "query": "DM 上游数据源配置文件里，关键字段有哪些？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-task-configuration-guide",
+  "query": "DM 任务配置里，全量导出和增量同步是怎么衔接的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-block-allow-table-lists",
+  "query": "DM 的黑白名单（block-allow-list）怎么配置？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[114]问多库迁移，此为黑白名单配置"
+ },
+ {
+  "slug": "dm-table-routing",
+  "query": "DM 表路由规则能实现表名映射吗，怎么配？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-shard-merge",
+  "query": "DM 分库分表合并迁移是怎么工作的，有什么前提？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-safe-mode",
+  "query": "DM 的安全模式（safe mode）是什么，什么时候用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-error-handling",
+  "query": "DM 迁移出错时，常见错误怎么处理？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-query-status",
+  "query": "DM 怎么查询迁移任务的状态和进度？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[143]问 dump 少表，此为 query-status 用法"
+ },
+ {
+  "slug": "dm-ddl-compatible",
+  "query": "DM 对上游 DDL 的兼容性处理是怎样的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dm-high-availability",
+  "query": "DM 集群怎么做高可用，故障怎么切换？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "relay-log",
+  "query": "DM 的 Relay Log 是什么，有什么作用？",
+  "overlap": "不重叠",
+  "note": ""
+ }
+]

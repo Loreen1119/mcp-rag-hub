@@ -1,0 +1,152 @@
+[
+ {
+  "slug": "system-variables",
+  "query": "TiDB 系统变量在哪里查看和设置，session 级和 global 级的区别？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[13/37/64/78]问具体参数，此为变量作用域机制"
+ },
+ {
+  "slug": "system-variables",
+  "query": "TiDB 哪些系统变量是只读的，运行时不能动态修改？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-mode",
+  "query": "TiDB 的 SQL 模式（sql_mode）默认值是什么，和 MySQL 有什么差异？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-mode",
+  "query": "TiDB 修改 sql_mode 会影响哪些已有查询的行为？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tidb-configuration-file",
+  "query": "TiDB 配置文件里的参数和系统变量有什么关系，优先级谁高？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[15/71]问具体 log 配置，此为配置文件 vs 系统变量关系"
+ },
+ {
+  "slug": "tikv-configuration-file",
+  "query": "TiKV 配置文件里最重要的几个参数是什么（如 raftstore、rocksdb 段）？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[21/28/85/131]问具体故障，此为配置结构"
+ },
+ {
+  "slug": "pd-configuration-file",
+  "query": "PD 配置里 leader 调度相关的参数有哪些？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[25]问 merge 调度故障，此为调度参数"
+ },
+ {
+  "slug": "configure-memory-usage",
+  "query": "TiDB 内存相关的系统变量（mem-quota-query、server-memory-quota 等）分别控制什么？",
+  "overlap": "不重叠",
+  "note": "换角度：内存参数作用，真实用户会问"
+ },
+ {
+  "slug": "configure-time-zone",
+  "query": "TiDB 的时区是怎么处理的，和 MySQL 的时区行为一致吗？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "configure-placement-rules",
+  "query": "TiDB 怎么用 SQL 语句（CREATE PLACEMENT POLICY）来配置数据放置？",
+  "overlap": "不重叠",
+  "note": "换角度：placement 的 SQL 语法，真实用户会问"
+ },
+ {
+  "slug": "configure-store-limit",
+  "query": "TiDB Store Limit 是做什么的，怎么限制某个 TiKV 的写入速度？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[132]问上线 balance 速度，此为 store limit 机制"
+ },
+ {
+  "slug": "character-set-and-collation",
+  "query": "TiDB 支持的字符集和排序规则有哪些，默认是什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[80/130]问具体 collation 修改，此为字符集清单"
+ },
+ {
+  "slug": "time-to-live",
+  "query": "TiDB 建表时怎么设置 TTL 让数据自动过期，有哪些参数？",
+  "overlap": "不重叠",
+  "note": "换角度：TTL 建表语法，真实用户会问"
+ },
+ {
+  "slug": "cached-tables",
+  "query": "TiDB 缓存表（CACHE TABLE）适合什么场景，有什么限制？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "auto-increment",
+  "query": "TiDB 主键用 AUTO_INCREMENT 还是 AUTO_RANDOM，怎么选？",
+  "overlap": "不重叠",
+  "note": "换角度：主键策略选型，真实用户会问"
+ },
+ {
+  "slug": "auto-random",
+  "query": "TiDB AUTO_RANDOM 是什么，为什么能避免热点？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "clustered-indexes",
+  "query": "TiDB 聚簇索引和非聚簇索引在存储上有什么区别？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[75]问 drop 主键报错，此为聚簇索引存储原理"
+ },
+ {
+  "slug": "transaction-isolation-levels",
+  "query": "TiDB 支持哪些事务隔离级别，默认是什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "garbage-collection-configuration",
+  "query": "TiDB GC 清理太慢，应该调哪些参数？",
+  "overlap": "不重叠",
+  "note": "换角度：GC 调参，真实用户会问"
+ },
+ {
+  "slug": "garbage-collection-overview",
+  "query": "TiDB 删掉的数据要多久才真正从磁盘释放，GC 生命周期是什么？",
+  "overlap": "不重叠",
+  "note": "换角度：GC 生命周期，真实用户会问"
+ },
+ {
+  "slug": "cost-model",
+  "query": "TiDB 优化器是怎么估算查询代价的，代价模型（cost model）里的主要因子有哪些？",
+  "overlap": "不重叠",
+  "note": "B 换冷门文档：cost-model，多证据候选（代价模型+统计信息）"
+ },
+ {
+  "slug": "extended-statistics",
+  "query": "TiDB 扩展统计信息（多列相关性）能解决什么问题？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "coprocessor-cache",
+  "query": "TiDB 下推计算缓存（coprocessor cache）的命中条件是什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[6/79]问查询缓存，此为下推缓存机制"
+ },
+ {
+  "slug": "sql-prepared-plan-cache",
+  "query": "TiDB Prepared 语句的计划缓存是怎么工作的，什么时候失效？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[31/62]问计划缓存现象，此为机制"
+ },
+ {
+  "slug": "sql-non-prepared-plan-cache",
+  "query": "TiDB 非 Prepared 语句也能用计划缓存吗，怎么开启？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[6/140]问缓存功能，此为非 prepared 缓存开启"
+ }
+]

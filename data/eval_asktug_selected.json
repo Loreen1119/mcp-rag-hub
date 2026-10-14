@@ -1,0 +1,2469 @@
+[
+ {
+  "topic_id": "665857",
+  "title": "tidb 漏洞扫描处理- Prometheus 和 ETCD 未授权访问",
+  "views": 7963,
+  "replies": 20,
+  "url": "https://asktug.com/t/topic/665857",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/enable-tls-between-clients-and-servers",
+   "https://docs.pingcap.com/zh/tidb/stable/enable-tls-between-components"
+  ],
+  "file": "corpora/tidb/asktug/665857-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1021535",
+  "title": "触发TiKV_approximate_region_size告警,手动split超时",
+  "views": 2960,
+  "replies": 34,
+  "url": "https://asktug.com/t/topic/1021535",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-control#%E6%89%8B%E5%8A%A8-compact-%E5%8D%95%E4%B8%AA-tikv-%E7%9A%84%E6%95%B0%E6%8D%AE\"",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-control#%E6%9F%A5%E7%9C%8B-region-%E5%B1%9E%E6%80%A7\"",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-control#手动-compact-单个-tikv-的数据</a>",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-control#查看-region-属性</a>"
+  ],
+  "file": "corpora/tidb/asktug/1021535-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1020515",
+  "title": "tidb批量插入数据速度慢有没有什么优化方向",
+  "views": 2088,
+  "replies": 44,
+  "url": "https://asktug.com/t/topic/1020515",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#%E5%AF%BC%E5%87%BA%E4%B8%BA-csv-%E6%96%87%E4%BB%B6\"",
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#导出为-csv-文件</a>"
+  ],
+  "file": "corpora/tidb/asktug/1020515-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1020837",
+  "title": "请教大家个问题，用什么工具对tidb进行压测比较合适",
+  "views": 2040,
+  "replies": 37,
+  "url": "https://asktug.com/t/topic/1020837",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-ch#如何对-tidb-进行-ch-benchmark-测试",
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-sysbench#如何用-sysbench-测试-tidb",
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-tpcc#如何对-tidb-进行-tpc-c-测试"
+  ],
+  "file": "corpora/tidb/asktug/1020837-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1022951",
+  "title": "tidb删除数据很慢",
+  "views": 1880,
+  "replies": 27,
+  "url": "https://asktug.com/t/topic/1022951",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb&hellip;</a>",
+   "https://docs.pingcap.com/zh/tidb/stable/non-transactional-dml\""
+  ],
+  "file": "corpora/tidb/asktug/1022951-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1027034",
+  "title": "TIDB 查询的时候有结果缓存吗？",
+  "views": 1867,
+  "replies": 24,
+  "url": "https://asktug.com/t/topic/1027034",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/coprocessor-cache",
+   "https://docs.pingcap.com/zh/tidb/stable/manage-cluster-faq#tikv-block-cache-有哪些特性",
+   "https://docs.pingcap.com/zh/tidb/stable/sql-non-prepared-plan-cache",
+   "https://docs.pingcap.com/zh/tidb/stable/sql-prepared-plan-cache#prepare-语句执行计划缓存"
+  ],
+  "file": "corpora/tidb/asktug/1027034-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1027908",
+  "title": "tidb有sqltest这种测试工具吗",
+  "views": 1755,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1027908",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-sysbench/\"",
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-sysbench/</a>",
+   "https://docs.pingcap.com/zh/tidb/stable/tiup-bench/\"",
+   "https://docs.pingcap.com/zh/tidb/stable/tiup-bench/</a>"
+  ],
+  "file": "corpora/tidb/asktug/1027908-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1015574",
+  "title": "TiFlash 表从1副本扩容到2副本过程，tiflash特性可用么",
+  "views": 1560,
+  "replies": 28,
+  "url": "https://asktug.com/t/topic/1015574",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/create-tiflash-replicas#%E6%8C%89%E5%BA%93%E6%9E%84%E5%BB%BA-tiflash-%E5%89%AF%E6%9C%AC\"",
+   "https://docs.pingcap.com/zh/tidb/stable/create-tiflash-replicas#按库构建-tiflash-副本</a>"
+  ],
+  "file": "corpora/tidb/asktug/1015574-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1029752",
+  "title": "analyze table问题",
+  "views": 1533,
+  "replies": 32,
+  "url": "https://asktug.com/t/topic/1029752",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-faq#%E5%9C%A8-tidb-%E4%B8%AD-auto-analyze-%E7%9A%84%E8%A7%A6%E5%8F%91%E7%AD%96%E7%95%A5%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84\">https://docs.pingcap.com/zh/tidb/stable/sql-faq#在-tidb-中-auto-analyze-的触发策略是怎样的</a>",
+   "https://docs.pingcap.com/zh/tidb/stable/statistics#%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0\">https://docs.pingcap.com/zh/tidb/stable/statistics#自动更新</a>"
+  ],
+  "file": "corpora/tidb/asktug/1029752-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1025198",
+  "title": "tidb有个机器内存耗尽人工重启了，怎么排查具体原因",
+  "views": 1413,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1025198",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/troubleshoot-tidb-oom",
+   "https://docs.pingcap.com/zh/tidb/stable/tune-tikv-memory-performance"
+  ],
+  "file": "corpora/tidb/asktug/1025198-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1016287",
+  "title": "一条sql显示慢在not(isnull(字段))，是什么原因？",
+  "views": 1407,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1016287",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/explain-joins#hash-join\"",
+   "https://docs.pingcap.com/zh/tidb/stable/explain-joins#hash-join</a>",
+   "https://docs.pingcap.com/zh/tidb/stable/optimizer-hints#hash_joint1_name--tl_name-\"",
+   "https://docs.pingcap.com/zh/tidb/stable/optimizer-hints#hash_joint1_name--tl_name-</a>"
+  ],
+  "file": "corpora/tidb/asktug/1016287-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1026509",
+  "title": "TiDB 有什么办法让当前会话只读，START transaction read only 无效",
+  "views": 1393,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1026509",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_enable_noop_functions-从-v40-版本开始引入",
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_restricted_read_only-从-v520-版本开始引入"
+  ],
+  "file": "corpora/tidb/asktug/1026509-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1020919",
+  "title": "关于tidb_auto_analyze_ratio参数的优化",
+  "views": 1368,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1020919",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/dev/sql-faq#在-tidb-中-auto-analyze-的触发策略是怎样的",
+   "https://docs.pingcap.com/zh/tidb/stable/release-3.0.8#tidb"
+  ],
+  "file": "corpora/tidb/asktug/1020919-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1029194",
+  "title": "DM 没有LOCK 权限能不能备份全量？",
+  "views": 1329,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1029194",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#调整-dumpling-的数据一致性选项",
+   "https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full"
+  ],
+  "file": "corpora/tidb/asktug/1029194-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1025483",
+  "title": "设置日志文件处理方式的log.file在哪里设置",
+  "views": 1296,
+  "replies": 28,
+  "url": "https://asktug.com/t/topic/1025483",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/minimal-deployment-topology#拓扑模版",
+   "https://docs.pingcap.com/zh/tidb/stable/tiup-component-cluster-edit-config#tiup-cluster-edit-config）",
+   "https://docs.pingcap.com/zh/tidb/stable/tiup-component-cluster-reload#tiup-cluster-reload）"
+  ],
+  "file": "corpora/tidb/asktug/1025483-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1021087",
+  "title": "如何查看br历史备份信息？",
+  "views": 1230,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1021087",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/br-pitr-guide#清理过期的日志备份数据",
+   "https://docs.pingcap.com/zh/tidb/stable/br-snapshot-guide#查询快照备份的时间点信息"
+  ],
+  "file": "corpora/tidb/asktug/1021087-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1010432",
+  "title": "TiDB json查询与常规like查询对比时间过慢",
+  "views": 1198,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1010432",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/generated-columns#生成列",
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-create-index#多值索引"
+  ],
+  "file": "corpora/tidb/asktug/1010432-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1019311",
+  "title": "请教TiDB多表关联时是怎么实现下推的？",
+  "views": 1160,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1019311",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/explain-overview#tidb-执行计划概览",
+   "https://docs.pingcap.com/zh/tidb/stable/use-tiflash-mpp-mode#使用-mpp-模式"
+  ],
+  "file": "corpora/tidb/asktug/1019311-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1010736",
+  "title": "dumpling如何限速，减少对生产上的影响",
+  "views": 1154,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1010736",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#dumpling-主要选项表",
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_distsql_scan_concurrency"
+  ],
+  "file": "corpora/tidb/asktug/1010736-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1020180",
+  "title": "几百万数据group有没有优化空间，能提升到10几秒吗？group条件过滤之前大概数据300万到400万",
+  "views": 1137,
+  "replies": 22,
+  "url": "https://asktug.com/t/topic/1020180",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiflash-supported-pushdown-calculations#支持下推的算子",
+   "https://docs.pingcap.com/zh/tidb/stable/use-tiflash-mpp-mode#使用-mpp-模式"
+  ],
+  "file": "corpora/tidb/asktug/1020180-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1033955",
+  "title": "删除一个tikv挂载盘，IO跌零10秒以上",
+  "views": 1084,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1033955",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#grpc-keepalive-time",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#grpc-keepalive-timeout"
+  ],
+  "file": "corpora/tidb/asktug/1033955-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1022309",
+  "title": "表设置好tiflash设置后，执行计划看不到tiflash使用",
+  "views": 1011,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1022309",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/use-tidb-to-read-tiflash#手工-hint",
+   "https://docs.pingcap.com/zh/tidb/stable/use-tidb-to-read-tiflash#智能选择"
+  ],
+  "file": "corpora/tidb/asktug/1022309-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1020956",
+  "title": "TiDB备份问题",
+  "views": 1009,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1020956",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/search?type=tidb&version=dev&q=tso",
+   "https://docs.pingcap.com/zh/tidb/stable/tso#tidb-中的-timestamp-oracle-tso"
+  ],
+  "file": "corpora/tidb/asktug/1020956-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1009874",
+  "title": "dm配置上游数据库",
+  "views": 982,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1009874",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-webui-guide",
+   "https://docs.pingcap.com/zh/tidb/stable/dm-worker-intro#dm-worker-所需权限"
+  ],
+  "file": "corpora/tidb/asktug/1009874-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1013248",
+  "title": "MergeRegion 不工作",
+  "views": 904,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1013248",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/pd-scheduling-best-practices#region-merge-速度慢",
+   "https://docs.pingcap.com/zh/tidb/stable/release-5.0.0#默认开启跨表合并-region-功能"
+  ],
+  "file": "corpora/tidb/asktug/1013248-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1010549",
+  "title": "关于使用Bulk Copy导致事务失效问题",
+  "views": 897,
+  "replies": 5,
+  "url": "https://asktug.com/t/topic/1010549",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-load-data#mysql-兼容性",
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-rollback"
+  ],
+  "file": "corpora/tidb/asktug/1010549-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1033425",
+  "title": "生产环境的br全备和增量备份以及恢复脚本",
+  "views": 862,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1033425",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/br-pitr-guide",
+   "https://docs.pingcap.com/zh/tidb/stable/br-snapshot-guide"
+  ],
+  "file": "corpora/tidb/asktug/1033425-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1031693",
+  "title": "日志问题，wal的日志和rocksDB里面的raft日志的区别与作用",
+  "views": 858,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1031693",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#raft-engine",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#raftstore",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#rocksdb"
+  ],
+  "file": "corpora/tidb/asktug/1031693-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1010693",
+  "title": "快速地将大量数据导入 TiDB 集群为什么要用DM？ 而不建议使用inset?",
+  "views": 855,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1010693",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-best-practices",
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-lightning-physical-import-mode"
+  ],
+  "file": "corpora/tidb/asktug/1010693-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1028331",
+  "title": "如何查看titandb里的Blob内容都是属于那些表的",
+  "views": 837,
+  "replies": 7,
+  "url": "https://asktug.com/t/topic/1028331",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/titan-configuration#关闭-titan",
+   "https://docs.pingcap.com/zh/tidb/stable/titan-configuration#数据迁移"
+  ],
+  "file": "corpora/tidb/asktug/1028331-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1023418",
+  "title": "同一个sql指纹， 产生了不同的执行计划id，但计划内容又一样！为什么？",
+  "views": 775,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1023418",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-prepared-plan-cache",
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_enable_non_prepared_plan_cache"
+  ],
+  "file": "corpora/tidb/asktug/1023418-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1035857",
+  "title": "对视图进行分页查询期间，视图涉及到的表的数据变化导致查询不一致",
+  "views": 774,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1035857",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dev-guide-use-stale-read#stale-read",
+   "https://docs.pingcap.com/zh/tidb/stable/garbage-collection-overview",
+   "https://docs.pingcap.com/zh/tidb/stable/stale-read"
+  ],
+  "file": "corpora/tidb/asktug/1035857-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1028226",
+  "title": "tidb压力测试造数脚本",
+  "views": 707,
+  "replies": 7,
+  "url": "https://asktug.com/t/topic/1028226",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-ch#导入数据",
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-sysbench#数据导入",
+   "https://docs.pingcap.com/zh/tidb/stable/benchmark-tidb-using-tpcc#导入数据"
+  ],
+  "file": "corpora/tidb/asktug/1028226-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1018602",
+  "title": "dm-worker在同步上游mysql的DDL时同步暂停，但query-status结果却正常",
+  "views": 704,
+  "replies": 6,
+  "url": "https://asktug.com/t/topic/1018602",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-binlog-event-filter",
+   "https://docs.pingcap.com/zh/tidb/stable/handle-failed-ddl-statements",
+   "https://docs.pingcap.com/zh/tidb/stable/mysql-compatibility#ddl-的限制"
+  ],
+  "file": "corpora/tidb/asktug/1018602-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1039729",
+  "title": "tikv 三台机器，压测写入数据时只有一台机器负载比较高，其他两台处于空闲",
+  "views": 694,
+  "replies": 36,
+  "url": "https://asktug.com/t/topic/1039729",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/high-concurrency-best-practices#%E7%83%AD%E7%82%B9%E9%97%AE%E9%A2%98%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0\"",
+   "https://docs.pingcap.com/zh/tidb/stable/high-concurrency-best-practices#热点问题产生的原因</a>"
+  ],
+  "file": "corpora/tidb/asktug/1039729-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1038120",
+  "title": "dumpling导出数据到csv解析longtext字段不符合预期",
+  "views": 689,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1038120",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#dumpling-主要选项表",
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#导出为-csv-文件"
+  ],
+  "file": "corpora/tidb/asktug/1038120-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1041822",
+  "title": "tidb内存持续升高",
+  "views": 687,
+  "replies": 40,
+  "url": "https://asktug.com/t/topic/1041822",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables/#tidb_enable_historical_stats\"",
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables/#tidb_enable_historical_stats</a>"
+  ],
+  "file": "corpora/tidb/asktug/1041822-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1032064",
+  "title": "有2个tidb节点的情况下，怎么样做负载均衡？",
+  "views": 677,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1032064",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiproxy-deployment-topology",
+   "https://docs.pingcap.com/zh/tidb/v7.5/haproxy-best-practices#haproxy-在-tidb-中的最佳实践"
+  ],
+  "file": "corpora/tidb/asktug/1032064-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1026985",
+  "title": "ticdc，tidb-mysql，能同步用户和数据库吗？还是只能同步表？",
+  "views": 655,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1026985",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/migrate-from-tidb-to-mysql#从-tidb-集群迁移数据至兼容-mysql-的数据库",
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-overview#ticdc-处理数据变更的实现原理"
+  ],
+  "file": "corpora/tidb/asktug/1026985-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1031948",
+  "title": "region和peer的理解",
+  "views": 582,
+  "replies": 6,
+  "url": "https://asktug.com/t/topic/1031948",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/glossary#regionpeerraft-group",
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-scheduling"
+  ],
+  "file": "corpora/tidb/asktug/1031948-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1038304",
+  "title": "并发查询导致查询变慢",
+  "views": 547,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1038304",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/grafana-tikv-dashboard#thread-cpu",
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#max-thread-count"
+  ],
+  "file": "corpora/tidb/asktug/1038304-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1043653",
+  "title": "dm向多副本容灾集群写入速度较慢 目前5副本",
+  "views": 476,
+  "replies": 49,
+  "url": "https://asktug.com/t/topic/1043653",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/latency-breakdown/#%E9%80%9A%E7%94%A8-sql-%E5%B1%82\"",
+   "https://docs.pingcap.com/zh/tidb/stable/latency-breakdown/#通用-sql-层</a>"
+  ],
+  "file": "corpora/tidb/asktug/1043653-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1037413",
+  "title": "AUTO_INCREMENT=1000001 并且 AUTO_ID_CACHE=1 主键id会跳号",
+  "views": 430,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1037413",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/auto-increment#mysql-兼容模式",
+   "https://docs.pingcap.com/zh/tidb/stable/auto-increment#清除自增-id-缓存"
+  ],
+  "file": "corpora/tidb/asktug/1037413-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1034466",
+  "title": "TiDB TTL导致系统读IO飙升",
+  "views": 421,
+  "replies": 5,
+  "url": "https://asktug.com/t/topic/1034466",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/hybrid-deployment-topology#混合部署的关键参数介绍",
+   "https://docs.pingcap.com/zh/tidb/stable/versioning#tidb-版本规则"
+  ],
+  "file": "corpora/tidb/asktug/1034466-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1043214",
+  "title": "使用TiCDC吧增量数据同步到kafka给BI用需要部署几台比较好",
+  "views": 343,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1043214",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/monitor-ticdc/",
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-architecture/"
+  ],
+  "file": "corpora/tidb/asktug/1043214-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1048799",
+  "title": "三台物理机，每台物理机部署4个tikv，同一副本的数据会存在同一台服务器上不同的tikv节点吗？",
+  "views": 321,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1048799",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/multi-data-centers-in-one-city-deployment/#tikv-labels-简介",
+   "https://docs.pingcap.com/zh/tidb/stable/schedule-replicas-by-topology-labels/#通过拓扑-label-进行副本调度"
+  ],
+  "file": "corpora/tidb/asktug/1048799-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1039168",
+  "title": "TIDB 平滑升级【v7.5.2-->v7.5.5】最佳实战",
+  "views": 304,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1039168",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/relea...",
+   "https://docs.pingcap.com/zh/tidb/stable/upgrade-tidb-using-tiup#使用-tiup-升级-tidb"
+  ],
+  "file": "corpora/tidb/asktug/1039168-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1037912",
+  "title": "使用DM迁移数据",
+  "views": 287,
+  "replies": 3,
+  "url": "https://asktug.com/t/topic/1037912",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-best-practices",
+   "https://docs.pingcap.com/zh/tidb/stable/dm-overview#使用限制"
+  ],
+  "file": "corpora/tidb/asktug/1037912-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1039943",
+  "title": "事务TTL作用",
+  "views": 279,
+  "replies": 6,
+  "url": "https://asktug.com/t/topic/1039943",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dev-guide-timeouts-in-tidb/#事务超时",
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file/#max-txn-ttl"
+  ],
+  "file": "corpora/tidb/asktug/1039943-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1043859",
+  "title": "RU占用高，如何找到占用RU较高的SQL排查？",
+  "views": 267,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1043859",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/information-schema-slow-query/#slow_query",
+   "https://docs.pingcap.com/zh/tidb/stable/statement-summary-tables/#statements_summary"
+  ],
+  "file": "corpora/tidb/asktug/1043859-topic.md",
+  "pool": "backup_200_500",
+  "precheck": "likely_ok",
+  "ver": "stable",
+  "group": "multi"
+ },
+ {
+  "topic_id": "1008163",
+  "title": "请问有办法降级嘛？比如从6.5.3 降级到6.5.1",
+  "views": 4346,
+  "replies": 70,
+  "url": "https://asktug.com/t/topic/1008163",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/pd-scheduling-best-practices#leaderregion-分布不均衡"
+  ],
+  "file": "corpora/tidb/asktug/1008163-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "574213",
+  "title": "对于mysql 都有个实例的概念，请问tidb 有这个概念吗",
+  "views": 2655,
+  "replies": 27,
+  "url": "https://asktug.com/t/topic/574213",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-architecture。"
+  ],
+  "file": "corpora/tidb/asktug/574213-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1015654",
+  "title": "tidb v3.1.0 40T数据迁移到新集群，有啥好的成熟方案，或者一键迁移工具吗",
+  "views": 2645,
+  "replies": 54,
+  "url": "https://asktug.com/t/topic/1015654",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-overview\""
+  ],
+  "file": "corpora/tidb/asktug/1015654-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023746",
+  "title": "无法analyze表",
+  "views": 2637,
+  "replies": 48,
+  "url": "https://asktug.com/t/topic/1023746",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_enable_fast_analyze\">系统变量"
+  ],
+  "file": "corpora/tidb/asktug/1023746-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1022991",
+  "title": "如何快速迁移一张表的数据 到 另一张表",
+  "views": 2628,
+  "replies": 48,
+  "url": "https://asktug.com/t/topic/1022991",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-batch#batch"
+  ],
+  "file": "corpora/tidb/asktug/1022991-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021544",
+  "title": "关于一个tikv节点region数量超5万影响性能问题请教",
+  "views": 2393,
+  "replies": 25,
+  "url": "https://asktug.com/t/topic/1021544",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/massive-regions-best-practices#%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98\""
+  ],
+  "file": "corpora/tidb/asktug/1021544-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1019908",
+  "title": "有没有处理过单表2亿条数据，33个字段（无大数据字段 text，blob之类的），要求：一个 select-from返回全表数据的",
+  "views": 2157,
+  "replies": 37,
+  "url": "https://asktug.com/t/topic/1019908",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dev-guide-connection-parameters#使用-streamingresult-流式获取执行结果"
+  ],
+  "file": "corpora/tidb/asktug/1019908-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1024092",
+  "title": "INSERT语句的select中不会走tiflash么？",
+  "views": 2133,
+  "replies": 22,
+  "url": "https://asktug.com/t/topic/1024092",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_enable_tiflash_read_for_write_stmt-从-v630-版本开始引入"
+  ],
+  "file": "corpora/tidb/asktug/1024092-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1022300",
+  "title": "TIDB 在数据安全做了哪些保障",
+  "views": 2131,
+  "replies": 34,
+  "url": "https://asktug.com/t/topic/1022300",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/enable-tls-between-clients-and-servers\">htt&hellip;</a>"
+  ],
+  "file": "corpora/tidb/asktug/1022300-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1024806",
+  "title": "TiDB 如何知晓查询计划里每个算子预估的代价",
+  "views": 2093,
+  "replies": 33,
+  "url": "https://asktug.com/t/topic/1024806",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-trace#trace"
+  ],
+  "file": "corpora/tidb/asktug/1024806-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "993986",
+  "title": "客户端终止，TiDB数据库不终止任务",
+  "views": 2067,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/993986",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/release-7.3.0"
+  ],
+  "file": "corpora/tidb/asktug/993986-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021925",
+  "title": "TiDB程序&手动执行SQL 执行计划不一致",
+  "views": 2063,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1021925",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-prepared-plan-cache#手动清空计划缓存"
+  ],
+  "file": "corpora/tidb/asktug/1021925-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021506",
+  "title": "TiFlash存算分离有哪些优劣势？",
+  "views": 1974,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1021506",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiflash-disaggregated-and-s3#tiflash-存算分离架构与-s3-支持"
+  ],
+  "file": "corpora/tidb/asktug/1021506-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023524",
+  "title": "tidb执行sql完成后内存能手动释放吗？我这边发现内存不会立即释放，后续执行sql可能会导致内存占用越来越高，最后导致被系统杀掉。",
+  "views": 1971,
+  "replies": 31,
+  "url": "https://asktug.com/t/topic/1023524",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_server_memory_limit_gc_trigger-从-v640-版本开始引入"
+  ],
+  "file": "corpora/tidb/asktug/1023524-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023492",
+  "title": "生产环境tidb主库集群OOM内存溢出",
+  "views": 1946,
+  "replies": 35,
+  "url": "https://asktug.com/t/topic/1023492",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/identify-expensive-queries#expensive-query-日志示例"
+  ],
+  "file": "corpora/tidb/asktug/1023492-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023627",
+  "title": "tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上",
+  "views": 1924,
+  "replies": 43,
+  "url": "https://asktug.com/t/topic/1023627",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/use-tiflash-mpp-mode"
+  ],
+  "file": "corpora/tidb/asktug/1023627-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1026338",
+  "title": "事务内Delete相关问题",
+  "views": 1834,
+  "replies": 21,
+  "url": "https://asktug.com/t/topic/1026338",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dev-guide-third-party-tools-compatibility#不支持-read-uncommitted-和-serializable-隔离级别"
+  ],
+  "file": "corpora/tidb/asktug/1026338-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1011059",
+  "title": "漏洞扫描安全评估问题",
+  "views": 1824,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1011059",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/high-reliability-faq#我们的安全漏洞扫描工具对-mysql-version-有要求tidb-是否支持修改-server-版本号呢"
+  ],
+  "file": "corpora/tidb/asktug/1011059-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020824",
+  "title": "region 心跳这样定时忽高忽低的正常吗",
+  "views": 1731,
+  "replies": 26,
+  "url": "https://asktug.com/t/topic/1020824",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/massive-regions-best-practices"
+  ],
+  "file": "corpora/tidb/asktug/1020824-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1019953",
+  "title": "tidb能用mysqldump工具备份吗",
+  "views": 1722,
+  "replies": 21,
+  "url": "https://asktug.com/t/topic/1019953",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview"
+  ],
+  "file": "corpora/tidb/asktug/1019953-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1029565",
+  "title": "tidb中的日志可以直接删吗？",
+  "views": 1706,
+  "replies": 25,
+  "url": "https://asktug.com/t/topic/1029565",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file#max-days"
+  ],
+  "file": "corpora/tidb/asktug/1029565-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018596",
+  "title": "TIDB插数据很占内存为什么？",
+  "views": 1686,
+  "replies": 31,
+  "url": "https://asktug.com/t/topic/1018596",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/rocksdb-overview#rocksdb-%E7%9A%84%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8\""
+  ],
+  "file": "corpora/tidb/asktug/1018596-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1025197",
+  "title": "可以多表同时授权吗？",
+  "views": 1686,
+  "replies": 22,
+  "url": "https://asktug.com/t/topic/1025197",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-grant-privileges"
+  ],
+  "file": "corpora/tidb/asktug/1025197-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021891",
+  "title": "请教tiflash 安装服务器无AVX2指令集的问题",
+  "views": 1657,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1021891",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiflash-overview#整体架构"
+  ],
+  "file": "corpora/tidb/asktug/1021891-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1025256",
+  "title": "\"Error 8200 (HY000): Unsupported drop primary key when the table is using clustered index",
+  "views": 1656,
+  "replies": 16,
+  "url": "https://asktug.com/t/topic/1025256",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/clustered-indexes#聚簇索引"
+  ],
+  "file": "corpora/tidb/asktug/1025256-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1029954",
+  "title": "tikv节点存储有大小限制吗？",
+  "views": 1635,
+  "replies": 34,
+  "url": "https://asktug.com/t/topic/1029954",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/hardware-and-software-requirements#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83\""
+  ],
+  "file": "corpora/tidb/asktug/1029954-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021546",
+  "title": "br快照备份监控",
+  "views": 1630,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1021546",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-show-backups#show-backupsrestores"
+  ],
+  "file": "corpora/tidb/asktug/1021546-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021103",
+  "title": "如何设置GO的环境变量 GOMEMLIMIT",
+  "views": 1611,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1021103",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/configure-memory-usage"
+  ],
+  "file": "corpora/tidb/asktug/1021103-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018860",
+  "title": "tidb生产环境中是否建议使用查询缓存功能？",
+  "views": 1607,
+  "replies": 21,
+  "url": "https://asktug.com/t/topic/1018860",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/coprocessor-cache#配置"
+  ],
+  "file": "corpora/tidb/asktug/1018860-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1013347",
+  "title": "Tidb v6.0 Collation能否改为mysql 8.0的collation",
+  "views": 1544,
+  "replies": 25,
+  "url": "https://asktug.com/t/topic/1013347",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/character-set-and-collation#数据库的字符集和排序规则"
+  ],
+  "file": "corpora/tidb/asktug/1013347-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1028695",
+  "title": "tidb cdc 同步数据异常",
+  "views": 1542,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1028695",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-avro-protocol"
+  ],
+  "file": "corpora/tidb/asktug/1028695-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1026510",
+  "title": "删除数据transaction is too large,size:104857608",
+  "views": 1535,
+  "replies": 22,
+  "url": "https://asktug.com/t/topic/1026510",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/migration-tidb-faq#transaction-too-large-是什么原因怎么解决"
+  ],
+  "file": "corpora/tidb/asktug/1026510-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1013679",
+  "title": "如何使用flyway连接tidb",
+  "views": 1531,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1013679",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file#server-version"
+  ],
+  "file": "corpora/tidb/asktug/1013679-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1017401",
+  "title": "hashjoin前过滤数据，提高sql查询速度",
+  "views": 1513,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1017401",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/explain-joins#index-join"
+  ],
+  "file": "corpora/tidb/asktug/1017401-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1032129",
+  "title": "tikv 无法写入，这个参数是在哪看的，怎么修改磁盘使用限制",
+  "views": 1509,
+  "replies": 35,
+  "url": "https://asktug.com/t/topic/1032129",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#reserve-space"
+  ],
+  "file": "corpora/tidb/asktug/1032129-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1015973",
+  "title": "truncate table是对表做删除标记还是对行做删除标记?",
+  "views": 1501,
+  "replies": 29,
+  "url": "https://asktug.com/t/topic/1015973",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/garbage-collection-overview#gc-机制简介"
+  ],
+  "file": "corpora/tidb/asktug/1015973-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1010563",
+  "title": "tidb分区表如何使用全表分组查询",
+  "views": 1472,
+  "replies": 5,
+  "url": "https://asktug.com/t/topic/1010563",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/use-tiflash-mpp-mode#控制是否选择-mpp-模式"
+  ],
+  "file": "corpora/tidb/asktug/1010563-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021895",
+  "title": "TiDB与Greenplum7的OLTP性能",
+  "views": 1472,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1021895",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/v5.4-performance-benchmarking-with-tpch#测试概况"
+  ],
+  "file": "corpora/tidb/asktug/1021895-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1015386",
+  "title": "dashboard 用户登录认证失败：authenticate failed",
+  "views": 1453,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1015386",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dashboard-ops-deploy"
+  ],
+  "file": "corpora/tidb/asktug/1015386-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1001253",
+  "title": "TiDB 有提供C++的API吗",
+  "views": 1447,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1001253",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dev-guide-choose-driver-or-orm"
+  ],
+  "file": "corpora/tidb/asktug/1001253-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1013694",
+  "title": "tidb gc清理异常，导致空间不断上涨",
+  "views": 1407,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1013694",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/release-5.3.1"
+  ],
+  "file": "corpora/tidb/asktug/1013694-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018048",
+  "title": "tikv一节点下线很慢",
+  "views": 1397,
+  "replies": 26,
+  "url": "https://asktug.com/t/topic/1018048",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiflash-configuration#pd-调度参数"
+  ],
+  "file": "corpora/tidb/asktug/1018048-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014880",
+  "title": "dumpling导出csv文件怎么输出到一个文件",
+  "views": 1396,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1014880",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#导出为-sql-文件"
+  ],
+  "file": "corpora/tidb/asktug/1014880-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021410",
+  "title": "归档产生delete事件导致cdc链路延迟",
+  "views": 1395,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1021410",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-filter"
+  ],
+  "file": "corpora/tidb/asktug/1021410-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020011",
+  "title": "为什么语句的执行计划没有算子",
+  "views": 1385,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1020011",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/subquery-optimization#exists-子查询以及---select--from-"
+  ],
+  "file": "corpora/tidb/asktug/1020011-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1029151",
+  "title": "TIDB数据导出",
+  "views": 1356,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1029151",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-select#select--into-outfile"
+  ],
+  "file": "corpora/tidb/asktug/1029151-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1024802",
+  "title": "TiDB 索引结构是怎么存储的，是会在rocksdb新建一个列簇吗？",
+  "views": 1348,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1024802",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-computing#索引数据和-key-value-的映射关系"
+  ],
+  "file": "corpora/tidb/asktug/1024802-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1012181",
+  "title": "主从2个数据库同一个sql执行计划不一样",
+  "views": 1346,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1012181",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/explain-index-merge"
+  ],
+  "file": "corpora/tidb/asktug/1012181-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1027909",
+  "title": "哪里有tidb的grafanna平台比较完整的使用说明",
+  "views": 1341,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1027909",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/grafana-overview-dashboard#overview-面板重要监控指标详解"
+  ],
+  "file": "corpora/tidb/asktug/1027909-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018023",
+  "title": "/tmp/tidb目录空间大小如何计算",
+  "views": 1295,
+  "replies": 25,
+  "url": "https://asktug.com/t/topic/1018023",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/hardware-and-software-requirements#磁盘空间要求"
+  ],
+  "file": "corpora/tidb/asktug/1018023-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1033318",
+  "title": "为何简单的查询会产生慢查询",
+  "views": 1294,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1033318",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/partitioned-table#动态裁剪模式"
+  ],
+  "file": "corpora/tidb/asktug/1033318-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1011019",
+  "title": "动态分区裁剪下收集统计信息在做globalstats合并的时候，耗时很久未完成，hang住了",
+  "views": 1292,
+  "replies": 5,
+  "url": "https://asktug.com/t/topic/1011019",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_merge_partition_stats_concurrency"
+  ],
+  "file": "corpora/tidb/asktug/1011019-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020722",
+  "title": "关于sql执行计划顺序怎么看",
+  "views": 1292,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1020722",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/explain-overview#算子的执行顺序"
+  ],
+  "file": "corpora/tidb/asktug/1020722-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1034617",
+  "title": "表亿级数据，查询速度慢",
+  "views": 1287,
+  "replies": 25,
+  "url": "https://asktug.com/t/topic/1034617",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/use-tiflash-mpp-mode#控制是否选择-mpp-模式"
+  ],
+  "file": "corpora/tidb/asktug/1034617-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1010212",
+  "title": "tikv突然出错后自己退出 tikv-20160.service main process exited, FAILURE",
+  "views": 1276,
+  "replies": 20,
+  "url": "https://asktug.com/t/topic/1010212",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/release-5.4.2"
+  ],
+  "file": "corpora/tidb/asktug/1010212-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1019431",
+  "title": "如何高效修改大表id列？",
+  "views": 1275,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1019431",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/auto-increment#mysql-兼容模式"
+  ],
+  "file": "corpora/tidb/asktug/1019431-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1017966",
+  "title": "求助如何查询一个月前的DML sql执行语句",
+  "views": 1271,
+  "replies": 23,
+  "url": "https://asktug.com/t/topic/1017966",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/backup-and-restore-overview"
+  ],
+  "file": "corpora/tidb/asktug/1017966-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1016158",
+  "title": "关于timestamp(0)的默认值问题",
+  "views": 1246,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1016158",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/data-type-date-and-time#日期和时间类型"
+  ],
+  "file": "corpora/tidb/asktug/1016158-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023141",
+  "title": "基于 TiCDC 不能同步无有效索引表的问题，如何从源头解决无有效索引表的创建呢？",
+  "views": 1246,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1023141",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#sql_require_primary_key-从-v630-版本开始引入"
+  ],
+  "file": "corpora/tidb/asktug/1023141-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1031490",
+  "title": "TiDB目前只支持hash跟range分区吗？",
+  "views": 1242,
+  "replies": 28,
+  "url": "https://asktug.com/t/topic/1031490",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/partitioned-table#分区类型"
+  ],
+  "file": "corpora/tidb/asktug/1031490-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023286",
+  "title": "技术咨询：BR备份从TiKV集群搂数据，是从leader搂还是所有region中都搂",
+  "views": 1237,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1023286",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/br-snapshot-architecture#备份流程"
+  ],
+  "file": "corpora/tidb/asktug/1023286-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1017725",
+  "title": "Write conflict写写冲突问题",
+  "views": 1228,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1017725",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file#pessimistic-auto-commit"
+  ],
+  "file": "corpora/tidb/asktug/1017725-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014869",
+  "title": "tikv的sst文件与rocksdb raft与rocksdb kv关系",
+  "views": 1217,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1014869",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/rocksdb-overview"
+  ],
+  "file": "corpora/tidb/asktug/1014869-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1012339",
+  "title": "DM不支持多库迁移？",
+  "views": 1216,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1012339",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-block-allow-table-lists"
+  ],
+  "file": "corpora/tidb/asktug/1012339-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1016970",
+  "title": "tidb单机离线部署",
+  "views": 1206,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1016970",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/check-before-deployment#手动配置-ssh-互信及-sudo-免密码"
+  ],
+  "file": "corpora/tidb/asktug/1016970-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1021872",
+  "title": "为什么使用navcat在tidb创建表的时候，没办法往表里面添加自增id呢？",
+  "views": 1204,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1021872",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/auto-increment"
+  ],
+  "file": "corpora/tidb/asktug/1021872-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1017563",
+  "title": "使用tiup 部署完了，应等保修改了 ssh 端口，还需要我配合做什么吗？",
+  "views": 1203,
+  "replies": 21,
+  "url": "https://asktug.com/t/topic/1017563",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/maintain-tidb-using-tiup"
+  ],
+  "file": "corpora/tidb/asktug/1017563-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014050",
+  "title": "tikc-ctl 扫描数据的时候警告",
+  "views": 1201,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1014050",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/pd-control#region-scan"
+  ],
+  "file": "corpora/tidb/asktug/1014050-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1015672",
+  "title": "配置冷热隔离分区策略，新增lable disk=hhd 出现数据写入慢，cpu拉的很高",
+  "views": 1190,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1015672",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/configure-placement-rules#配置规则操作步骤"
+  ],
+  "file": "corpora/tidb/asktug/1015672-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1026549",
+  "title": "TICDC的同步任务可以暂停多长时间？",
+  "views": 1190,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1026549",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-faq#ticdc-的-gc-ttl-是什么"
+  ],
+  "file": "corpora/tidb/asktug/1026549-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023761",
+  "title": "tidb读取热点问题",
+  "views": 1189,
+  "replies": 18,
+  "url": "https://asktug.com/t/topic/1023761",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dashboard-key-visualizer#y-轴明暗交替需要关注产生的热点聚集程度"
+  ],
+  "file": "corpora/tidb/asktug/1023761-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014641",
+  "title": "临时表插入报错the table is full",
+  "views": 1186,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1014641",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_tmp_table_max_size-从-v53-版本开始引入"
+  ],
+  "file": "corpora/tidb/asktug/1014641-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1026543",
+  "title": "dumpling导数很慢",
+  "views": 1180,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1026543",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dumpling-overview#导出为-sql-文件"
+  ],
+  "file": "corpora/tidb/asktug/1026543-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020380",
+  "title": "TiDB 现在表级别压缩是否支持？",
+  "views": 1177,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1020380",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-statement-create-table#语法图"
+  ],
+  "file": "corpora/tidb/asktug/1020380-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1011817",
+  "title": "单机房3节点tikv集群如何在线扩容成3机房9节点集群",
+  "views": 1176,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1011817",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/multi-data-centers-in-one-city-deployment#同区域三-az-方案"
+  ],
+  "file": "corpora/tidb/asktug/1011817-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1016159",
+  "title": "咨询贴：TiKV之间的网络带宽占用看那个监控图",
+  "views": 1170,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1016159",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/grafana-tikv-dashboard#raft-engine"
+  ],
+  "file": "corpora/tidb/asktug/1016159-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1033323",
+  "title": "大致说一下，DM，TiCDC，TiDB Binlog各自的适用场景，优缺点和异同",
+  "views": 1170,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1033323",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/migration-tools#数据迁移工具概览"
+  ],
+  "file": "corpora/tidb/asktug/1033323-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023222",
+  "title": "pump 检查数据同步延迟",
+  "views": 1169,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1023222",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/monitor-tidb-binlog-cluster#binlog_drainer_checkpoint_high_delay"
+  ],
+  "file": "corpora/tidb/asktug/1023222-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014978",
+  "title": "TIDB 统计信息收集的采样比例可以调整么",
+  "views": 1163,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1014978",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/statistics"
+  ],
+  "file": "corpora/tidb/asktug/1014978-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1027948",
+  "title": "主键值对空格的处理疑问",
+  "views": 1160,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1027948",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/character-set-and-collation#旧框架下的排序规则支持"
+  ],
+  "file": "corpora/tidb/asktug/1027948-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1010278",
+  "title": "TiDB 7.1集群卡住，报 lock txn not found, lock has expired",
+  "views": 1147,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1010278",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file#wait-for-lock-timeout"
+  ],
+  "file": "corpora/tidb/asktug/1010278-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1010515",
+  "title": "节点上线-balance速度控制问题",
+  "views": 1147,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1010515",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/configure-store-limit"
+  ],
+  "file": "corpora/tidb/asktug/1010515-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1019355",
+  "title": "TiUP Grafana 匿名登录配置",
+  "views": 1137,
+  "replies": 11,
+  "url": "https://asktug.com/t/topic/1019355",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/customized-montior-in-tiup-environment#自定义-alertmanager-配置"
+  ],
+  "file": "corpora/tidb/asktug/1019355-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023095",
+  "title": "有没有语句把一个表变成另外一个表内的分区表",
+  "views": 1123,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1023095",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/partitioned-table"
+  ],
+  "file": "corpora/tidb/asktug/1023095-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1011056",
+  "title": "为何非分区表在修改分区时报错",
+  "views": 1114,
+  "replies": 7,
+  "url": "https://asktug.com/t/topic/1011056",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/non-transactional-dml#非事务-dml-语句），但是非事务"
+  ],
+  "file": "corpora/tidb/asktug/1011056-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1025955",
+  "title": "Tidb 7.5.1 有那些有用的特性哦？",
+  "views": 1089,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1025955",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/release-7.5.0"
+  ],
+  "file": "corpora/tidb/asktug/1025955-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1008921",
+  "title": "关于tikv的空间占用和gc的问题",
+  "views": 1086,
+  "replies": 7,
+  "url": "https://asktug.com/t/topic/1008921",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tikv-control#手动-compact-单个-tikv-的数据"
+  ],
+  "file": "corpora/tidb/asktug/1008921-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1024437",
+  "title": "怎么对TICDC同步异常做报警",
+  "views": 1075,
+  "replies": 12,
+  "url": "https://asktug.com/t/topic/1024437",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-alert-rules#cdc_checkpoint_high_delay"
+  ],
+  "file": "corpora/tidb/asktug/1024437-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020342",
+  "title": "哪里能看到TiCDC的历史版本和更新内容啊",
+  "views": 1071,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1020342",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/release-notes"
+  ],
+  "file": "corpora/tidb/asktug/1020342-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1023425",
+  "title": "TIDB 后续是否实现 执行计划缓存 功能",
+  "views": 1067,
+  "replies": 10,
+  "url": "https://asktug.com/t/topic/1023425",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sql-non-prepared-plan-cache"
+  ],
+  "file": "corpora/tidb/asktug/1023425-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1022845",
+  "title": "like支持下发到个个kv节点计算吗",
+  "views": 1057,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1022845",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/expressions-pushed-down#下推到-tikv-的表达式列表"
+  ],
+  "file": "corpora/tidb/asktug/1022845-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1014748",
+  "title": "ticdc 已经有webui了么？原生或者第三方的",
+  "views": 1042,
+  "replies": 14,
+  "url": "https://asktug.com/t/topic/1014748",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ticdc-open-api-v2"
+  ],
+  "file": "corpora/tidb/asktug/1014748-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1017746",
+  "title": "DM全量dump阶段日志信息少一个表",
+  "views": 1042,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1017746",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/sync-diff-inspector-overview"
+  ],
+  "file": "corpora/tidb/asktug/1017746-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1025826",
+  "title": "Online DDL语句执行流程中做的？",
+  "views": 1041,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1025826",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/ddl-introduction#ddl-语句的执行原理及最佳实践"
+  ],
+  "file": "corpora/tidb/asktug/1025826-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1020918",
+  "title": "修改了服务器IP后，playground需要改哪些配置呢？",
+  "views": 1030,
+  "replies": 19,
+  "url": "https://asktug.com/t/topic/1020918",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiup-playground"
+  ],
+  "file": "corpora/tidb/asktug/1020918-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1005916",
+  "title": "想问一下，如果把表删了，磁盘空间会立即释放吗？如果不会释放应该怎么才能把空间给释放出来",
+  "views": 1024,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1005916",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/garbage-collection-configuration#gc-配置"
+  ],
+  "file": "corpora/tidb/asktug/1005916-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1025859",
+  "title": "tidb server执行SQL，如何判断OOM?",
+  "views": 1019,
+  "replies": 13,
+  "url": "https://asktug.com/t/topic/1025859",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/configure-memory-usage"
+  ],
+  "file": "corpora/tidb/asktug/1025859-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1007853",
+  "title": "低版本tidb迁移到高版本方案",
+  "views": 1011,
+  "replies": 9,
+  "url": "https://asktug.com/t/topic/1007853",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-binlog-overview"
+  ],
+  "file": "corpora/tidb/asktug/1007853-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1036843",
+  "title": "应用程序在连接到tidb 的ip地址连接串中，可以使用多个ip+port的组合么？",
+  "views": 1003,
+  "replies": 34,
+  "url": "https://asktug.com/t/topic/1036843",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tiproxy-overview#tiproxy-简介"
+  ],
+  "file": "corpora/tidb/asktug/1036843-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1024396",
+  "title": "报警TiKV pending task too much type: resolved-ts",
+  "views": 1002,
+  "replies": 8,
+  "url": "https://asktug.com/t/topic/1024396",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/troubleshoot-stale-read#什么是-resolved-ts"
+  ],
+  "file": "corpora/tidb/asktug/1024396-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1033818",
+  "title": "tidb最大能存储多少数据？",
+  "views": 991,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1033818",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/hardware-and-software-requirements#生产环境"
+  ],
+  "file": "corpora/tidb/asktug/1033818-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018026",
+  "title": "Tidb支持MySQL的事件功能嘛",
+  "views": 990,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1018026",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/mysql-compatibility#不支持的功能特性"
+  ],
+  "file": "corpora/tidb/asktug/1018026-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1018234",
+  "title": "监控文档里没有Flow Control 相关指标描述",
+  "views": 982,
+  "replies": 6,
+  "url": "https://asktug.com/t/topic/1018234",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/grafana-tikv-dashboard#flow-control。"
+  ],
+  "file": "corpora/tidb/asktug/1018234-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1022574",
+  "title": "lightning增量数据导入报错",
+  "views": 974,
+  "replies": 17,
+  "url": "https://asktug.com/t/topic/1022574",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/tidb-lightning-checkpoints#--checkpoint-error-ignore"
+  ],
+  "file": "corpora/tidb/asktug/1022574-topic.md",
+  "ver": "stable",
+  "precheck": "likely_ok",
+  "pool": "main_500",
+  "group": "single"
+ },
+ {
+  "topic_id": "1026938",
+  "title": "batch ddl job执行时间差距巨大，原因几何？大佬速来",
+  "views": 2586,
+  "replies": 42,
+  "url": "https://asktug.com/t/topic/1026938",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/time-to-live\"",
+   "https://docs.pingcap.com/zh/tidb/stable/time-to-live</a>"
+  ],
+  "file": "corpora/tidb/asktug/1026938-topic.md",
+  "ver": "stable",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ },
+ {
+  "topic_id": "1017217",
+  "title": "大事务的判断",
+  "views": 2085,
+  "replies": 30,
+  "url": "https://asktug.com/t/topic/1017217",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/v7.4/dev-guide-transaction-restraints#事务限制"
+  ],
+  "file": "corpora/tidb/asktug/1017217-topic.md",
+  "ver": "old",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ },
+ {
+  "topic_id": "1021691",
+  "title": "等保扫描漏洞",
+  "views": 2085,
+  "replies": 33,
+  "url": "https://asktug.com/t/topic/1021691",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/high-reliability-faq#我们的安全漏洞扫描工具对-mysql-version-有要求tidb-是否支持修改-server-版本号呢"
+  ],
+  "file": "corpora/tidb/asktug/1021691-topic.md",
+  "ver": "stable",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ },
+ {
+  "topic_id": "1022385",
+  "title": "磁盘超过90%",
+  "views": 1879,
+  "replies": 33,
+  "url": "https://asktug.com/t/topic/1022385",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/v6.5/pd-configuration-file\"",
+   "https://docs.pingcap.com/zh/tidb/v6.5/pd-configuration-file</a>"
+  ],
+  "file": "corpora/tidb/asktug/1022385-topic.md",
+  "ver": "old",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ },
+ {
+  "topic_id": "1016279",
+  "title": "可以使用hint强制使用tiflash吗？没有成功，同时希望大佬们帮忙看看语句慢在哪",
+  "views": 1292,
+  "replies": 27,
+  "url": "https://asktug.com/t/topic/1016279",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_opt_force_inline_cte-%E4%BB%8E-v630-%E7%89%88%E6%9C%AC%E5%BC%80%E5%A7%8B%E5%BC%95%E5%85%A5\"",
+   "https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_opt_force_inline_cte-从-v630-版本开始引入</a>"
+  ],
+  "file": "corpora/tidb/asktug/1016279-topic.md",
+  "ver": "stable",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ },
+ {
+  "topic_id": "1024528",
+  "title": "啥是DM集群",
+  "views": 1156,
+  "replies": 15,
+  "url": "https://asktug.com/t/topic/1024528",
+  "doc_refs": [
+   "https://docs.pingcap.com/zh/tidb/stable/dm-arch"
+  ],
+  "file": "corpora/tidb/asktug/1024528-topic.md",
+  "ver": "stable",
+  "precheck": "check",
+  "pool": "main_500",
+  "group": "check_rescued"
+ }
+]

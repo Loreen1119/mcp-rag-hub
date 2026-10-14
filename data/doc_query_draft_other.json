@@ -1,0 +1,80 @@
+[
+ {
+  "slug": "dev-guide-choose-driver-or-orm",
+  "query": "TiDB 支持哪些驱动和 ORM 框架，怎么选？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[90]问 C++ API，此为驱动选型"
+ },
+ {
+  "slug": "dev-guide-connection-parameters",
+  "query": "TiDB 连接池参数（maxConnections 等）怎么配置？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[57]问返回数据量，此为连接池配置"
+ },
+ {
+  "slug": "dev-guide-implicit-type-conversion",
+  "query": "TiDB 的隐式类型转换会导致什么问题？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dev-guide-index-best-practice",
+  "query": "TiDB 索引设计有哪些最佳实践？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dev-guide-optimistic-and-pessimistic-transaction",
+  "query": "TiDB 乐观事务和悲观事务的区别是什么，怎么选？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[112]问 write conflict，此为事务模型选型"
+ },
+ {
+  "slug": "dev-guide-timeouts-in-tidb",
+  "query": "TiDB 有哪些超时参数，分别控制什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[61]问客户端终止，此为超时参数"
+ },
+ {
+  "slug": "dev-guide-unique-serial-number-generation",
+  "query": "TiDB 怎么生成全局唯一的序列号？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dev-guide-use-stale-read",
+  "query": "TiDB Stale Read 是什么，怎么用？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[32]问视图一致性挂 stale-read，此为 stale read 用法"
+ },
+ {
+  "slug": "dev-guide-use-follower-read",
+  "query": "TiDB Follower Read 和 Stale Read 有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dashboard-slow-query",
+  "query": "TiDB Dashboard 慢查询页面能做什么，怎么定位慢 SQL？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[101]问慢查询，此为 Dashboard 工具用法"
+ },
+ {
+  "slug": "tiproxy-overview",
+  "query": "TiProxy 是什么，解决什么问题？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[149]问连接串，此为 tiproxy 定位"
+ },
+ {
+  "slug": "tiproxy-load-balance",
+  "query": "TiProxy 的负载均衡策略有哪些？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "dashboard-key-visualizer",
+  "query": "TiDB Dashboard 的流量可视化（Key Visualizer）页面能看出什么？",
+  "overlap": "不重叠",
+  "note": "补足 167 的第 167 条"
+ }
+]

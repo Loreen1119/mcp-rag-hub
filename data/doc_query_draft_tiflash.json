@@ -1,0 +1,92 @@
+[
+ {
+  "slug": "tiflash-overview",
+  "query": "TiFlash 是什么，解决什么场景的问题？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[74]问 AVX2 启动，此为 TiFlash 定位"
+ },
+ {
+  "slug": "create-tiflash-replicas",
+  "query": "怎么给表添加 TiFlash 副本，副本数怎么设？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[8]问扩容过程可用性，此为副本构建"
+ },
+ {
+  "slug": "use-tidb-to-read-tiflash",
+  "query": "TiDB 查询怎么走 TiFlash，是自动还是手动指定？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[22/58]问不走 TiFlash，此为读取方式"
+ },
+ {
+  "slug": "use-tiflash-mpp-mode",
+  "query": "TiFlash 的 MPP 模式是什么，怎么开启？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[66/87/104]问 MPP 慢，此为 MPP 机制"
+ },
+ {
+  "slug": "tiflash-disaggregated-and-s3",
+  "query": "TiFlash 存算分离架构是什么，和传统架构区别？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[63]问存算分离优劣势，此为架构机制"
+ },
+ {
+  "slug": "tiflash-configuration",
+  "query": "TiFlash 的配置文件里关键参数有哪些？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-supported-pushdown-calculations",
+  "query": "TiFlash 支持哪些计算下推，和 TiKV 下推有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-spill-disk",
+  "query": "TiFlash 数据落盘（spill to disk）是什么机制？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-late-materialization",
+  "query": "TiFlash 延迟物化（late materialization）优化是什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-pipeline-model",
+  "query": "TiFlash 的 Pipeline 执行模型和传统火山模型有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-mintso-scheduler",
+  "query": "TiFlash MinTSO 调度器解决什么问题？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-data-validation",
+  "query": "TiFlash 的数据校验是怎么做的，如何验证一致性？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tune-tiflash-performance",
+  "query": "TiFlash 查询慢时，有哪些调优手段？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "use-fastscan",
+  "query": "TiFlash 的 FastScan 功能是什么，适合什么场景？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tiflash-compatibility",
+  "query": "TiFlash 和 TiDB 有哪些兼容性差异需要注意？",
+  "overlap": "不重叠",
+  "note": ""
+ }
+]

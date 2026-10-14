@@ -1,0 +1,161 @@
+# 全量语义扫表（第6轮）
+
+151 条 AskTUG 逐条语义复核。多证据组在前（直接影响 is_true_multi），单证据组按 id 序。
+发现语义错位的条目：在这行末尾加「⚠️ + 一句话说明」，或直接在下面评论区列 id + 问题。
+
+## 一、多证据组（30 条，golden 去重后 ≥2）
+
+- [ ] [1] TiDB 集群被安全扫描出 Prometheus 和 ETCD 未授权访问漏洞，应该怎么修复？ ｜ golden: enable-tls-between-clients-and-servers, enable-tls-between-components
+- [ ] [4] 用什么工具对 TiDB 做性能压测？ ｜ golden: benchmark-tidb-using-ch, benchmark-tidb-using-sysbench, benchmark-tidb-using-tpcc
+- [ ] [6] TiDB 查询有没有缓存机制？ ｜ golden: coprocessor-cache, manage-cluster-faq, sql-non-prepared-plan-cache, sql-prepared-plan-cache
+- [ ] [7] 有没有类似 mysqltest 的工具能批量测试 TiDB 的 SQL？ ｜ golden: benchmark-tidb-using-sysbench, tiup-bench ｜ golden可疑，tiup-bench 是压测非 sqltest，人工复核/替换
+- [ ] [9] TiDB 数据清理和插入后频繁触发 analyze table，怎么避免？ ｜ golden: sql-faq, statistics ｜ 确认原帖是否问频繁自动执行
+- [ ] [10] TiDB 服务器内存耗尽被重启，怎么排查原因？ ｜ golden: troubleshoot-tidb-oom, tune-tikv-memory-performance
+- [ ] [11] 一条 SQL 慢在 not(isnull(字段)) 上，是什么原因？ ｜ golden: explain-joins, optimizer-hints
+- [ ] [14] DM 没有 LOCK 权限能不能做全量备份？ ｜ golden: dumpling-overview, task-configuration-file-full
+- [ ] [15] TiDB 节点的 tidb.log 和慢日志太大想清理，log.file 相关配置在哪里设置？ ｜ golden: minimal-deployment-topology, tiup-component-cluster-edit-config, tiup-component-cluster-reload
+- [ ] [16] 怎么查看 BR 的历史备份信息（做过哪些备份、是全量还是增量）？ ｜ golden: br-pitr-guide, br-snapshot-guide
+- [ ] [17] TiDB 里 JSON 查询比 like 模糊查询慢很多，怎么优化？ ｜ golden: generated-columns, sql-statement-create-index
+- [ ] [18] TiDB 多表关联时是怎么把关联下推到 TiKV 执行的？ ｜ golden: explain-overview, use-tiflash-mpp-mode
+- [ ] [19] dumpling 导出大表时怎么限速，减少对生产的影响？ ｜ golden: dumpling-overview, system-variables
+- [ ] [24] 同一个 TiDB 集群里，上游下游都是这个集群，只是不同数据库的表，能不能用 DM 同步？ ｜ golden: dm-webui-guide, dm-worker-intro
+- [ ] [26] 事务里用 Bulk Copy 插入数据后，未提交时其他事务也能读到，ROLLBACK 也无法回退，怎么回事？ ｜ golden: sql-statement-load-data, sql-statement-rollback
+- [ ] [27] 生产环境的 BR 全量备份和增量备份、恢复脚本，用 TSO 做增量还是用日志备份，各有什么优缺点？ ｜ golden: br-pitr-guide, br-snapshot-guide
+- [ ] [29] 快速把大量数据导入 TiDB，为什么建议用 DM 而不是直接 insert？ ｜ golden: dm-best-practices, tidb-lightning-physical-import-mode
+- [ ] [31] 同一个 SQL 指纹为什么会产生不同的执行计划 id，但计划内容又一样？ ｜ golden: sql-prepared-plan-cache, system-variables
+- [ ] [32] 对视图分页查询期间，视图涉及的表数据变化导致查询结果不一致，怎么解决？ ｜ golden: dev-guide-use-stale-read, garbage-collection-overview, stale-read
+- [ ] [34] dm-worker 同步上游 MySQL 的 DDL 时暂停了，但 query-status 显示正常，怎么排查？ ｜ golden: dm-binlog-event-filter, handle-failed-ddl-statements, mysql-compatibility
+- [ ] [38] 有两个 TiDB 节点的情况下，怎么做负载均衡？ ｜ golden: haproxy-best-practices, tiproxy-deployment-topology
+- [ ] [39] TiCDC 或 TiDB-to-MySQL 同步，能同步用户和数据库吗，还是只能同步表？ ｜ golden: migrate-from-tidb-to-mysql, ticdc-overview
+- [ ] [40] region 和 peer 怎么理解，3 副本是指 3 个 peer 吗？ ｜ golden: glossary, tidb-scheduling
+- [ ] [41] 并发查询导致其他查询变慢，从 1 秒变 50 秒，怎么排查？ ｜ golden: grafana-tikv-dashboard, tikv-configuration-file
+- [ ] [45] 用 TiCDC 把增量数据同步到 Kafka 给 BI 用，需要部署几台 TiCDC？ ｜ golden: monitor-ticdc, ticdc-architecture
+- [ ] [46] 三台物理机各部署 4 个 TiKV，同一副本的数据会落在同一台服务器上的不同 TiKV 节点吗？ ｜ golden: multi-data-centers-in-one-city-deployment, schedule-replicas-by-topology-labels
+- [ ] [48] 用 DM 从 MySQL 迁移 1TB 数据到 TiDB，大概要多久？遇到 TiDB 不支持的数据类型怎么处理？ ｜ golden: dm-best-practices, dm-overview
+- [ ] [49] TiDB 事务里每隔 10 秒 send TxnHeartBeat 更新 TTL，这个 TTL 怎么理解？ ｜ golden: dev-guide-timeouts-in-tidb, tidb-configuration-file
+- [ ] [50] RU 占用高，怎么找到占用 RU 较高的 SQL？ ｜ golden: information-schema-slow-query, statement-summary-tables
+- [ ] [159] 可以用 hint 强制使用 TiFlash 吗，怎么用？ ｜ golden: optimizer-hints, use-tidb-to-read-tiflash ｜ 多证据候选，待判定
+
+## 二、单证据组（121 条）
+
+- [ ] [2] TiKV 触发 TiKV_approximate_region_size 告警，手动 split region 超时怎么办？ ｜ golden: tikv-control
+- [ ] [3] 往 TiDB 批量 insert 数据很慢，有什么优化方向？ ｜ golden: dumpling-overview ｜ golden可疑，人工复核（导入场景走 Lightning，insert 优化走事务/SQL）
+- [ ] [5] TiDB 大表按时间条件删历史数据 delete 很慢，怎么快速删除？ ｜ golden: non-transactional-dml
+- [ ] [8] TiFlash 副本从 1 个扩到 2 个的过程中，表还能正常用 TiFlash 查吗？ ｜ golden: create-tiflash-replicas
+- [ ] [12] TiDB 有没有办法让当前会话只读，START TRANSACTION READ ONLY 无效？ ｜ golden: sql-statement-start-transaction ｜ golden 已替换（会话只读语法在 START TRANSACTION 文档）
+- [ ] [13] tidb_auto_analyze_ratio 参数怎么优化设置？ ｜ golden:  ｜ golden 碎链 release-3，人工复核；碎链未解析: release-3
+- [ ] [21] 删除一个 TiKV 挂载盘导致 IO 跌零 10 秒以上，怎么回事？ ｜ golden: tikv-configuration-file
+- [ ] [22] 表设置了 TiFlash 副本后，执行计划却没有走 TiFlash，怎么处理？ ｜ golden: use-tidb-to-read-tiflash
+- [ ] [23] TiDB 里的 TSO 是什么？ ｜ golden: tso ｜ 标题与正文脱节，query 已按正文重写
+- [ ] [25] TiDB MergeRegion 调度不工作，空 region 持续增加不合并，怎么处理？ ｜ golden: pd-scheduling-best-practices ｜ 碎链未解析: release-5
+- [ ] [28] WAL 日志和 RocksDB 里的 Raft 日志有什么区别，各自作用是什么？ ｜ golden: tikv-configuration-file
+- [ ] [30] 怎么查看 TiKV 里 Blob 内容都属于哪些表？ ｜ golden: titan-configuration
+- [ ] [35] TiKV 三台机器压测写入时只有一台负载高，另外两台空闲，为什么？ ｜ golden: high-concurrency-best-practices
+- [ ] [36] dumpling 导出数据到 csv，longtext 字段解析不符合预期，怎么处理？ ｜ golden: dumpling-overview
+- [ ] [37] TiDB 内存持续升高，间歇性 OOM，heapinuse 有什么参数能限制吗？ ｜ golden: configure-memory-usage ｜ golden 已替换（参数限制题）
+- [ ] [42] DM 向多副本容灾集群写入速度较慢（5 副本），怎么优化？ ｜ golden: latency-breakdown
+- [ ] [43] AUTO_INCREMENT=1000001 且 AUTO_ID_CACHE=1 时主键 id 会跳号，为什么？ ｜ golden: auto-increment
+- [ ] [44] TiDB 表设置 TTL 后导致系统读 IO 飙升、慢查询增多，怎么处理？ ｜ golden: time-to-live ｜ golden 已替换（TTL 读 IO 飙升）
+- [ ] [47] TiDB 从 v7.5.2 平滑升级到 v7.5.5 的最佳实践？ ｜ golden: upgrade-tidb-using-tiup ｜ 碎链未解析: relea
+- [ ] [52] MySQL 有实例的概念，TiDB 有这个概念吗？ ｜ golden: tidb-architecture
+- [ ] [53] TiDB v3.1.0 的 40T 数据迁移到新集群，有什么成熟的方案或迁移工具？ ｜ golden: dm-overview
+- [ ] [55] 普通表改成分区表后，怎么快速把普通表的数据导入分区表？ ｜ golden: sql-statement-batch
+- [ ] [56] 一个 TiKV 节点 region 数量近 20 万（官方建议不超 5 万），会影响性能吗？ ｜ golden: massive-regions-best-practices
+- [ ] [57] 单表 2 亿条数据一次 select 返回全表，内存 24G 报溢出，TiDB 一次查询支持返回多少数据？ ｜ golden: dev-guide-connection-parameters
+- [ ] [58] INSERT 语句的 select 里不会走 TiFlash 吗？ ｜ golden: use-tidb-to-read-tiflash ｜ golden 已替换（INSERT SELECT 走 TiFlash）
+- [ ] [59] TiDB 在数据安全方面做了哪些保障？ ｜ golden: enable-tls-between-clients-and-servers
+- [ ] [60] 怎么在查询计划里看每个算子基于代价模型预估的代价？ ｜ golden: sql-statement-trace
+- [ ] [61] 客户端终止长事务后，TiDB 数据库端不终止任务且最终提交，怎么解决？ ｜ golden:  ｜ 碎链未解析: release-7
+- [ ] [62] TiDB 程序执行和手动执行同一 SQL，执行计划不一致，为什么？ ｜ golden: sql-prepared-plan-cache
+- [ ] [63] TiFlash 存算分离架构有哪些优劣势，适合什么场景？ ｜ golden: tiflash-disaggregated-and-s3
+- [ ] [64] TiDB 执行 SQL 完成后内存不会立即释放，导致占用越来越高，怎么解决？ ｜ golden: configure-memory-usage ｜ golden 已替换（内存机制题）
+- [ ] [65] 生产环境 TiDB 主库集群 OOM 内存溢出，怎么排查？ ｜ golden: identify-expensive-queries
+- [ ] [66] TiFlash 查 1.5 亿数据的表，执行计划走了 TiFlash 却比平时慢 2 倍，为什么？ ｜ golden: use-tiflash-mpp-mode
+- [ ] [67] 事务内 delete 是作用在 buffer 上吗，commit 前不会真正删 KV 吗？ ｜ golden: dev-guide-third-party-tools-compatibility
+- [ ] [68] TiDB 升级到 v7.1.1 后安全扫描出漏洞，怎么解决？ ｜ golden: high-reliability-faq
+- [ ] [69] region 心跳定时忽高忽低正常吗？ ｜ golden: massive-regions-best-practices
+- [ ] [70] TiDB 能用 mysqldump 工具备份吗，兼容吗？ ｜ golden: dumpling-overview
+- [ ] [71] TiDB 的日志可以直接删吗，有没有自动删除策略？ ｜ golden: tidb-configuration-file
+- [ ] [72] TiDB 插数据很占内存，为什么？ ｜ golden: rocksdb-overview
+- [ ] [73] TiDB 可以多表同时授权吗？ ｜ golden: sql-statement-grant-privileges
+- [ ] [74] TiFlash 服务器无 AVX2 指令集导致无法启动，怎么处理？ ｜ golden: tiflash-overview
+- [ ] [75] 使用聚簇索引时 drop primary key 报 Error 8200，怎么处理？ ｜ golden: clustered-indexes
+- [ ] [76] TiKV 节点存储有大小限制吗？ ｜ golden: hardware-and-software-requirements
+- [ ] [77] BR 快照备份时，怎么监控备份进度？ ｜ golden: sql-statement-show-backups
+- [ ] [78] 怎么设置 GO 的环境变量 GOMEMLIMIT，在哪些组件设置？ ｜ golden: configure-memory-usage
+- [ ] [79] TiDB 生产环境建议使用查询缓存功能吗？ ｜ golden: coprocessor-cache
+- [ ] [80] TiDB v6.0 的 Collation 能改成 MySQL 8.0 的 utf8mb4_0900_ai_ci 吗？ ｜ golden: character-set-and-collation
+- [ ] [81] TiCDC 同步数据异常（多条数据合并），怎么排查？ ｜ golden: ticdc-avro-protocol
+- [ ] [82] 删除数据报 transaction is too large, size 104857608，怎么处理？ ｜ golden: migration-tidb-faq
+- [ ] [83] 怎么用 flyway 连接 TiDB？ ｜ golden: tidb-configuration-file
+- [ ] [84] hash join 前先过滤数据，怎么提高 SQL 查询速度？ ｜ golden: explain-joins
+- [ ] [85] TiKV 无法写入，磁盘使用限制参数在哪看，怎么修改？ ｜ golden: tikv-configuration-file
+- [ ] [86] truncate table 是对表还是对行做删除标记？drop table 呢？ ｜ golden: garbage-collection-overview
+- [ ] [87] TiDB 分区表怎么做全表分组查询？ ｜ golden: use-tiflash-mpp-mode
+- [ ] [88] TiDB 与 Greenplum 7 的 OLTP 性能对比如何？ ｜ golden:  ｜ golden 碎链 v5，人工复核；碎链未解析: v5
+- [ ] [89] dashboard 用户登录认证失败 authenticate failed，怎么处理？ ｜ golden: dashboard-ops-deploy
+- [ ] [90] TiDB 有提供 C++ 的 API 吗？ ｜ golden: dev-guide-choose-driver-or-orm
+- [ ] [91] TiDB GC 清理异常导致空间不断上涨，怎么处理？ ｜ golden:  ｜ 碎链未解析: release-5
+- [ ] [92] TiKV 一个节点下线很慢，怎么加速？ ｜ golden: tiup-component-cluster-scale-in ｜ golden 已替换（TiKV 下线=缩容）
+- [ ] [93] dumpling 导出 CSV 怎么输出到一个文件？ ｜ golden: dumpling-overview
+- [ ] [94] 归档产生 delete 事件导致 CDC 链路延迟，怎么处理？ ｜ golden: ticdc-filter
+- [ ] [95] 为什么语句的执行计划没有算子？ ｜ golden: subquery-optimization
+- [ ] [96] TiDB 查询结果怎么导出到指定文件？ ｜ golden: sql-statement-select
+- [ ] [97] TiDB 索引结构是怎么存储的，会在 RocksDB 新建一个列簇吗？ ｜ golden: tidb-computing
+- [ ] [98] 主从两个库同一个 SQL 执行计划不一样，为什么？ ｜ golden: explain-index-merge
+- [ ] [99] 哪里有 TiDB 的 Grafana 比较完整的使用说明？ ｜ golden: grafana-overview-dashboard
+- [ ] [100] /tmp/tidb 目录空间大小怎么计算？ ｜ golden: hardware-and-software-requirements
+- [ ] [101] 为什么简单的查询会产生慢查询？ ｜ golden: partitioned-table
+- [ ] [102] 动态分区裁剪收集统计信息时 globalstats 合并耗时很久 hang 住，怎么处理？ ｜ golden: partitioned-table ｜ golden 已替换（动态裁剪 globalstats）
+- [ ] [103] SQL 执行计划的顺序怎么看？ ｜ golden: explain-overview
+- [ ] [104] 表亿级数据，查询速度慢，怎么优化？ ｜ golden: use-tiflash-mpp-mode
+- [ ] [105] TiKV 突然出错后自己退出，tikv-20160.service 主进程退出，怎么排查？ ｜ golden:  ｜ 碎链未解析: release-5
+- [ ] [106] 如何高效修改大表 id 列改成递增数字？ ｜ golden: auto-increment
+- [ ] [107] 怎么查询一个月前的 DML SQL 执行语句？ ｜ golden: statement-summary-tables ｜ golden 已替换（历史 SQL 查询）
+- [ ] [108] timestamp(0) 的默认值问题，怎么处理？ ｜ golden: data-type-date-and-time
+- [ ] [109] 基于 TiCDC 不能同步无有效索引表，怎么从源头解决无有效索引表的创建？ ｜ golden: sql-statement-create-index ｜ golden 已替换（无有效索引表从建索引解决）
+- [ ] [110] TiDB 目前只支持 hash 和 range 分区吗？ ｜ golden: partitioned-table
+- [ ] [111] BR 备份从 TiKV 集群读数据是从 leader 还是所有 peer 读？ ｜ golden: br-snapshot-architecture
+- [ ] [112] Write conflict 写写冲突怎么处理？ ｜ golden: tidb-configuration-file
+- [ ] [113] TiKV 里 SST 文件、Raft 日志和 KV 数据是怎么对应的？ ｜ golden: rocksdb-overview ｜ golden弱，可能补为多证据
+- [ ] [114] DM 不支持多库迁移吗？ ｜ golden: dm-block-allow-table-lists
+- [ ] [115] TiDB 单机离线部署怎么做？ ｜ golden: check-before-deployment
+- [ ] [116] 用 navicat 在 TiDB 建表时没办法添加自增 id，为什么？ ｜ golden: auto-increment
+- [ ] [117] 用 tiup 部署后，等保修改了 ssh 端口，还需要配合做什么吗？ ｜ golden: maintain-tidb-using-tiup
+- [ ] [118] tikv-ctl 扫描数据的时候的警告是什么原因？ ｜ golden: pd-control
+- [ ] [119] 配置冷热隔离分区策略后，新增 label disk=hhd 导致数据写入慢、cpu 高，怎么处理？ ｜ golden: configure-placement-rules
+- [ ] [120] TiCDC 同步任务可以暂停多长时间？ ｜ golden: ticdc-faq
+- [ ] [121] TiDB 读取热点是什么意思，怎么消除读热点？ ｜ golden: dashboard-key-visualizer
+- [ ] [122] 临时表插入大量数据报错 the table is full，怎么处理？ ｜ golden: dev-guide-use-temporary-tables ｜ golden 已替换（临时表 tmp-table-size）
+- [ ] [123] dumpling 导数据很慢，卡在 0% 不动，怎么处理？ ｜ golden: dumpling-overview
+- [ ] [124] TiDB 支持表级别压缩吗？ ｜ golden: sql-statement-create-table
+- [ ] [125] 单机房 3 节点 TiKV 集群怎么在线扩容成 3 机房 9 节点集群？ ｜ golden: multi-data-centers-in-one-city-deployment
+- [ ] [126] TiKV 之间的网络带宽占用看哪个监控图？ ｜ golden: grafana-tikv-dashboard
+- [ ] [127] DM、TiCDC、TiDB Binlog 各自的适用场景、优缺点和异同是什么？ ｜ golden: migration-tools
+- [ ] [129] TiDB 统计信息收集的采样比例可以调整吗？ ｜ golden: statistics
+- [ ] [130] TiDB 7.1 中主键值包含空格时行为怪异，是怎么回事？ ｜ golden: character-set-and-collation ｜ golden 待复核
+- [ ] [131] TiDB 7.1 集群卡住，报 lock txn not found, lock has expired，怎么处理？ ｜ golden: tikv-configuration-file
+- [ ] [132] 节点上线 balance 速度怎么控制？ ｜ golden: configure-store-limit
+- [ ] [134] 有没有语句把一个表变成另一个表内的分区表？ ｜ golden: partitioned-table
+- [ ] [135] 为什么非分区表在修改分区时报错？ ｜ golden: non-transactional-dml
+- [ ] [136] TiDB 7.5.1 有哪些有用的特性？ ｜ golden:  ｜ golden 碎链 release-7，人工复核；碎链未解析: release-7
+- [ ] [137] TiKV truncate 后磁盘空间不释放，GC 相关问题怎么处理？ ｜ golden: garbage-collection-overview ｜ golden 已替换（truncate 空间不释放=GC）
+- [ ] [138] 怎么对 TiCDC 同步异常做报警？ ｜ golden: ticdc-alert-rules
+- [ ] [140] TiDB 后续是否实现执行计划缓存功能？ ｜ golden: sql-non-prepared-plan-cache
+- [ ] [141] like 支持下推到各个 KV 节点计算吗？ ｜ golden: expressions-pushed-down
+- [ ] [142] TiCDC 已经有 WebUI 了吗？ ｜ golden: ticdc-open-api-v2
+- [ ] [143] DM 全量 dump 阶段日志信息少一个表，怎么排查？ ｜ golden: dm-query-status ｜ golden 已替换（dump 少表=状态查询）
+- [ ] [144] Online DDL 语句执行流程中做了哪些事？ ｜ golden: ddl-introduction
+- [ ] [145] 修改服务器 IP 后，playground 需要改哪些配置？ ｜ golden: tiup-playground
+- [ ] [146] 把表删了磁盘空间会立即释放吗，不释放怎么释放空间？ ｜ golden: garbage-collection-configuration
+- [ ] [147] TiDB Server 执行 SQL 怎么判断 OOM 内存溢出？ ｜ golden: configure-memory-usage
+- [ ] [148] 低版本 TiDB 迁移到高版本有什么方案？ ｜ golden: upgrade-tidb-using-tiup ｜ golden 已替换（原挂废弃 binlog）
+- [ ] [149] 多个 TiDB Server 时，应用连接串怎么写，还是用 HAProxy？ ｜ golden: tiproxy-overview ｜ golden 待复核
+- [ ] [150] 告警 TiKV pending task too much type resolved-ts，怎么处理？ ｜ golden: troubleshoot-stale-read
+- [ ] [151] TiDB 最大能存储多少数据？ ｜ golden: hardware-and-software-requirements
+- [ ] [152] TiDB 支持 MySQL 的事件功能吗？ ｜ golden: mysql-compatibility
+- [ ] [154] lightning 增量数据导入报错，checkpoint 怎么处理？ ｜ golden: tidb-lightning-checkpoints
+- [ ] [155] batch ddl job 执行时间差距巨大，可能原因有哪些？ ｜ golden: ddl-introduction ｜ golden 已替换（batch ddl 执行时间差）
+- [ ] [156] TiDB 是怎么判断大事务的？ ｜ golden: dev-guide-transaction-restraints
+- [ ] [158] TiKV 节点数据盘在哪些情况下超过 90% 必须扩容？ ｜ golden: alert-rules ｜ golden 已替换（磁盘超 90% 扩容=告警规则题）
+- [ ] [160] 什么是 DM 集群？ ｜ golden: dm-arch ｜ 简单基线题

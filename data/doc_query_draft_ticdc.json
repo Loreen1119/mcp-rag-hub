@@ -1,0 +1,92 @@
+[
+ {
+  "slug": "ticdc-overview",
+  "query": "TiCDC 的整体架构是什么样的，由哪些组件组成？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "deploy-ticdc",
+  "query": "TiCDC 怎么部署，和 TiDB 集群是什么关系？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-changefeed-overview",
+  "query": "TiCDC 的 Changefeed 是什么，一个同步任务包含什么？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[120]问暂停时长，此为 changefeed 概念"
+ },
+ {
+  "slug": "ticdc-changefeed-config",
+  "query": "TiCDC Changefeed 的 start-ts、checkpoint-ts 分别代表什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-sink-to-kafka",
+  "query": "TiCDC 同步数据到 Kafka 是怎么配置的，支持哪些输出格式？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[45]问部署几台，此为 kafka sink 配置"
+ },
+ {
+  "slug": "ticdc-sink-to-mysql",
+  "query": "TiCDC 同步到 MySQL 兼容库，DDL 是怎么同步的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-open-protocol",
+  "query": "TiCDC 的 Open Protocol 输出的事件格式是什么样的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-avro-protocol",
+  "query": "TiCDC Avro Protocol 适合什么场景，和 Open Protocol 区别？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[81]问 avro 同步异常，此为协议选型"
+ },
+ {
+  "slug": "ticdc-canal-json",
+  "query": "TiCDC Canal-JSON 格式是给什么消费者用的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-filter",
+  "query": "TiCDC 怎么过滤不需要同步的表或事件？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[94]问归档 delete 延迟，此为 filter 配置"
+ },
+ {
+  "slug": "ticdc-table-routing",
+  "query": "TiCDC 表路由（table routing）能做什么，怎么配置？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-ddl",
+  "query": "TiCDC 同步 DDL 时有哪些限制，DDL 失败怎么处理？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-bidirectional-replication",
+  "query": "TiCDC 双向复制是什么场景，有什么坑？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-data-replication-capabilities",
+  "query": "TiCDC 支持同步哪些数据变更，有哪些能力边界？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "ticdc-integrity-check",
+  "query": "TiCDC 怎么做单行数据正确性校验？",
+  "overlap": "不重叠",
+  "note": ""
+ }
+]

@@ -1,0 +1,152 @@
+[
+ {
+  "slug": "tikv-overview",
+  "query": "TiKV 的整体架构里，Raft 层、存储引擎、事务层是怎么分工的？",
+  "overlap": "不重叠",
+  "note": "AskTUG 无 TiKV 架构题"
+ },
+ {
+  "slug": "rocksdb-overview",
+  "query": "TiKV 底层 RocksDB 的 LSM-tree 是怎么工作的，写放大从哪来？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[72/113]问内存/SST 关系，此为 LSM 机制"
+ },
+ {
+  "slug": "titan-overview",
+  "query": "TiKV 的 Titan 引擎解决什么问题，适合什么场景？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "titan-configuration",
+  "query": "TiKV 怎么开启 Titan，有哪些关键配置参数？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tikv-in-memory-engine",
+  "query": "TiKV 内存引擎（MEM）和 RocksDB 有什么区别，什么场景用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tune-tikv-memory-performance",
+  "query": "TiKV 的 block-cache、write-buffer 这些内存参数分别控制什么，怎么设？",
+  "overlap": "不重叠",
+  "note": "换角度：内存参数作用，真实用户会问"
+ },
+ {
+  "slug": "tune-tikv-thread-performance",
+  "query": "TiKV 的线程池（grpc、raftstore、apply 等）分别负责什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tikv-control",
+  "query": "tikv-ctl 工具能做什么，常见用法有哪些？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[2/118]问具体命令，此为工具能力概览"
+ },
+ {
+  "slug": "partitioned-raft-kv",
+  "query": "TiKV 的分区 Raft KV（Partitioned Raft KV）是什么，解决什么问题？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tune-region-performance",
+  "query": "TiKV Region 的性能调优有哪些手段（如 hotspot 处理）？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[56/69]问 region 数量/心跳，此为 region 调优"
+ },
+ {
+  "slug": "configure-load-base-split",
+  "query": "TiKV 的 Load Base Split 是什么，和手动 split 有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "command-line-flags-for-tikv-configuration",
+  "query": "TiKV 启动时有哪些关键命令行参数？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "grafana-tikv-dashboard",
+  "query": "TiKV 监控面板里，哪些指标能反映写入性能？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[41/126]问具体指标，此为监控面板概览"
+ },
+ {
+  "slug": "pd-control",
+  "query": "pd-ctl 工具能做哪些运维操作？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[118]问 tikv-ctl 警告，此为 pd-ctl 能力"
+ },
+ {
+  "slug": "pd-recover",
+  "query": "TiDB 什么情况下需要用到 PD Recover，怎么操作？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "pd-microservices",
+  "query": "TiDB 的 PD 微服务（tso/调度分离）是什么，有什么好处？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "command-line-flags-for-pd-configuration",
+  "query": "PD 的调度参数里，leader-schedule-limit 等限制参数怎么理解？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "grafana-pd-dashboard",
+  "query": "PD 监控里，哪些指标反映调度是否均衡？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "tune-operating-system",
+  "query": "部署 TiKV 前，操作系统层面（内核、文件系统、I/O 调度）要做哪些优化？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "massive-regions-best-practices",
+  "query": "TiDB 集群 Region 数量很多时，有哪些成熟的调优手段？",
+  "overlap": "不重叠",
+  "note": "换角度：海量 region 调优手段，真实用户会问"
+ },
+ {
+  "slug": "rocksdb-overview",
+  "query": "TiKV RocksDB 的 compaction 有哪几种类型，分别解决什么？",
+  "overlap": "不重叠",
+  "note": "rocksdb 第2条，compaction 角度"
+ },
+ {
+  "slug": "tikv-overview",
+  "query": "TiKV 的 Raft 日志是怎么复制到多个副本的？",
+  "overlap": "不重叠",
+  "note": "tikv 第2条，raft 复制角度"
+ },
+ {
+  "slug": "pd-scheduling-best-practices",
+  "query": "PD 的调度器有哪些类型（balance/hot/leader），各自调度什么？",
+  "overlap": "不重叠",
+  "note": "换角度：调度器分类，真实用户会问"
+ },
+ {
+  "slug": "readonly-nodes",
+  "query": "TiDB 只读存储节点（readonly nodes）是什么，什么场景用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "three-nodes-hybrid-deployment",
+  "query": "TiDB 三节点混合部署（PD/TiKV/TiDB 混部）有什么注意点？",
+  "overlap": "不重叠",
+  "note": ""
+ }
+]

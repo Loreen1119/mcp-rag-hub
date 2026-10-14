@@ -1,0 +1,339 @@
+# AskTUG 评测集快筛表
+
+目标：多证据组选 50-60 条，常规组选 95-105 条，存疑组自由裁量。打勾=入选。  
+规则：一眼能想象出「这条会改写成什么 query」就勾；吐槽/闲聊/太模糊不勾。
+
+## 一、多证据组（54 条，答案引用 2+ 篇 docs，目标 50-60）
+
+- [x] [ 7963 views] tidb 漏洞扫描处理- Prometheus 和 ETCD 未授权访问 ｜665857｜多证据
+- [x] [ 2960 views] 触发TiKV_approximate_region_size告警,手动split超时 ｜1021535｜多证据
+- [x] [ 2088 views] tidb批量插入数据速度慢有没有什么优化方向 ｜1020515｜多证据
+- [x] [ 2040 views] 请教大家个问题，用什么工具对tidb进行压测比较合适 ｜1020837｜多证据
+- [x] [ 1880 views] tidb删除数据很慢 ｜1022951｜多证据
+- [x] [ 1867 views] TIDB 查询的时候有结果缓存吗？ ｜1027034｜多证据
+- [x] [ 1755 views] tidb有sqltest这种测试工具吗 ｜1027908｜多证据
+- [x] [ 1560 views] TiFlash 表从1副本扩容到2副本过程，tiflash特性可用么 ｜1015574｜多证据
+- [x] [ 1533 views] analyze table问题 ｜1029752｜多证据
+- [x] [ 1413 views] tidb有个机器内存耗尽人工重启了，怎么排查具体原因 ｜1025198｜多证据
+- [x] [ 1407 views] 一条sql显示慢在not(isnull(字段))，是什么原因？ ｜1016287｜多证据
+- [x] [ 1393 views] TiDB 有什么办法让当前会话只读，START transaction read only 无效 ｜1026509｜多证据
+- [ ] [ 1388 views] 数据库选型&对比 ｜1026524｜多证据
+- [x] [ 1368 views] 关于tidb_auto_analyze_ratio参数的优化 ｜1020919｜多证据
+- [x] [ 1329 views] DM 没有LOCK 权限能不能备份全量？ ｜1029194｜多证据
+- [ ] [ 1306 views] SQL执行状态疑惑 ｜1015551｜多证据
+- [x] [ 1296 views] 设置日志文件处理方式的log.file在哪里设置 ｜1025483｜多证据
+- [x] [ 1230 views] 如何查看br历史备份信息？ ｜1021087｜多证据
+- [x] [ 1198 views] TiDB json查询与常规like查询对比时间过慢 ｜1010432｜多证据
+- [x] [ 1160 views] 请教TiDB多表关联时是怎么实现下推的？ ｜1019311｜多证据
+- [x] [ 1154 views] dumpling如何限速，减少对生产上的影响 ｜1010736｜多证据
+- [x] [ 1137 views] 几百万数据group有没有优化空间，能提升到10几秒吗？group条件过滤之前大概数据300万到400万 ｜1020180｜多证据
+- [x] [ 1084 views] 删除一个tikv挂载盘，IO跌零10秒以上 ｜1033955｜多证据
+- [x] [ 1011 views] 表设置好tiflash设置后，执行计划看不到tiflash使用 ｜1022309｜多证据
+- [x] [ 1009 views] TiDB备份问题 ｜1020956｜多证据
+- [ ] [ 1003 views] 如何配置参数符合最佳实践 ｜1027981｜多证据
+- [x] [  982 views] dm配置上游数据库 ｜1009874｜多证据
+- [x] [  904 views] MergeRegion 不工作 ｜1013248｜多证据
+- [x] [  897 views] 关于使用Bulk Copy导致事务失效问题 ｜1010549｜多证据
+- [x] [  862 views] 生产环境的br全备和增量备份以及恢复脚本 ｜1033425｜多证据
+- [x] [  858 views] 日志问题，wal的日志和rocksDB里面的raft日志的区别与作用 ｜1031693｜多证据
+- [x] [  855 views] 快速地将大量数据导入 TiDB 集群为什么要用DM？ 而不建议使用inset? ｜1010693｜多证据
+- [x] [  837 views] 如何查看titandb里的Blob内容都是属于那些表的 ｜1028331｜多证据
+- [x] [  775 views] 同一个sql指纹， 产生了不同的执行计划id，但计划内容又一样！为什么？ ｜1023418｜多证据
+- [x] [  774 views] 对视图进行分页查询期间，视图涉及到的表的数据变化导致查询不一致 ｜1035857｜多证据
+- [x] [  707 views] tidb压力测试造数脚本 ｜1028226｜多证据
+- [x] [  704 views] dm-worker在同步上游mysql的DDL时同步暂停，但query-status结果却正常 ｜1018602｜多证据
+- [x] [  694 views] tikv 三台机器，压测写入数据时只有一台机器负载比较高，其他两台处于空闲 ｜1039729｜多证据
+- [x] [  689 views] dumpling导出数据到csv解析longtext字段不符合预期 ｜1038120｜多证据
+- [x] [  687 views] tidb内存持续升高 ｜1041822｜多证据
+- [x] [  677 views] 有2个tidb节点的情况下，怎么样做负载均衡？ ｜1032064｜多证据
+- [x] [  655 views] ticdc，tidb-mysql，能同步用户和数据库吗？还是只能同步表？ ｜1026985｜多证据
+- [x] [  582 views] region和peer的理解 ｜1031948｜多证据
+- [x] [  547 views] 并发查询导致查询变慢 ｜1038304｜多证据
+- [ ] [  484 views] TiDB文档有SQL改写方面的内容吗？帮忙发一下链接。。谢谢。。 ｜1023793｜多证据
+- [x] [  476 views] dm向多副本容灾集群写入速度较慢 目前5副本 ｜1043653｜多证据
+- [x] [  430 views] AUTO_INCREMENT=1000001 并且 AUTO_ID_CACHE=1 主键id会跳号 ｜1037413｜多证据
+- [x] [  421 views] TiDB TTL导致系统读IO飙升 ｜1034466｜多证据
+- [x] [  343 views] 使用TiCDC吧增量数据同步到kafka给BI用需要部署几台比较好 ｜1043214｜多证据
+- [x] [  321 views] 三台物理机，每台物理机部署4个tikv，同一副本的数据会存在同一台服务器上不同的tikv节点吗？ ｜1048799｜多证据
+- [x] [  304 views] TIDB 平滑升级【v7.5.2-->v7.5.5】最佳实战 ｜1039168｜多证据
+- [x] [  287 views] 使用DM迁移数据 ｜1037912｜多证据
+- [x] [  279 views] 事务TTL作用 ｜1039943｜多证据
+- [x] [  267 views] RU占用高，如何找到占用RU较高的SQL排查？ ｜1043859｜多证据
+
+
+## 二、常规组（244 条，单引用，目标 95-105，从上往下勾满即停）
+
+- [x] [ 4346 views] 请问有办法降级嘛？比如从6.5.3 降级到6.5.1 ｜1008163｜
+- [ ] [ 2880 views] 生产环境有用社区版🈶么？体验和稳定性如何 ｜1030363｜
+- [x] [ 2655 views] 对于mysql 都有个实例的概念，请问tidb 有这个概念吗 ｜574213｜
+- [x] [ 2645 views] tidb v3.1.0 40T数据迁移到新集群，有啥好的成熟方案，或者一键迁移工具吗 ｜1015654｜
+- [x] [ 2637 views] 无法analyze表 ｜1023746｜
+- [x] [ 2628 views] 如何快速迁移一张表的数据 到 另一张表 ｜1022991｜
+- [x] [ 2393 views] 关于一个tikv节点region数量超5万影响性能问题请教 ｜1021544｜
+- [x] [ 2157 views] 有没有处理过单表2亿条数据，33个字段（无大数据字段 text，blob之类的），要求：一个 select-from返回全表数据的 ｜1019908｜
+- [x] [ 2133 views] INSERT语句的select中不会走tiflash么？ ｜1024092｜
+- [x] [ 2131 views] TIDB 在数据安全做了哪些保障 ｜1022300｜
+- [x] [ 2093 views] TiDB 如何知晓查询计划里每个算子预估的代价 ｜1024806｜
+- [x] [ 2067 views] 客户端终止，TiDB数据库不终止任务 ｜993986｜
+- [x] [ 2063 views] TiDB程序&手动执行SQL 执行计划不一致 ｜1021925｜
+- [x] [ 1974 views] TiFlash存算分离有哪些优劣势？ ｜1021506｜
+- [x] [ 1971 views] tidb执行sql完成后内存能手动释放吗？我这边发现内存不会立即释放，后续执行sql可能会导致内存占用越来越高，最后导致被系统杀掉。 ｜1023524｜
+- [x] [ 1946 views] 生产环境tidb主库集群OOM内存溢出 ｜1023492｜
+- [x] [ 1924 views] tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上 ｜1023627｜
+- [x] [ 1834 views] 事务内Delete相关问题 ｜1026338｜
+- [x] [ 1824 views] 漏洞扫描安全评估问题 ｜1011059｜
+- [x] [ 1731 views] region 心跳这样定时忽高忽低的正常吗 ｜1020824｜
+- [x] [ 1722 views] tidb能用mysqldump工具备份吗 ｜1019953｜
+- [x] [ 1706 views] tidb中的日志可以直接删吗？ ｜1029565｜
+- [x] [ 1686 views] TIDB插数据很占内存为什么？ ｜1018596｜
+- [x] [ 1686 views] 可以多表同时授权吗？ ｜1025197｜
+- [x] [ 1657 views] 请教tiflash 安装服务器无AVX2指令集的问题 ｜1021891｜
+- [x] [ 1656 views] "Error 8200 (HY000): Unsupported drop primary key when the table is using clustered index ｜1025256｜
+- [x] [ 1635 views] tikv节点存储有大小限制吗？ ｜1029954｜
+- [x] [ 1630 views] br快照备份监控 ｜1021546｜
+- [x] [ 1611 views] 如何设置GO的环境变量 GOMEMLIMIT ｜1021103｜
+- [x] [ 1607 views] tidb生产环境中是否建议使用查询缓存功能？ ｜1018860｜
+- [x] [ 1544 views] Tidb v6.0 Collation能否改为mysql 8.0的collation ｜1013347｜
+- [x] [ 1542 views] tidb cdc 同步数据异常 ｜1028695｜
+- [x] [ 1535 views] 删除数据transaction is too large,size:104857608 ｜1026510｜
+- [x] [ 1531 views] 如何使用flyway连接tidb ｜1013679｜
+- [x] [ 1513 views] hashjoin前过滤数据，提高sql查询速度 ｜1017401｜
+- [x] [ 1509 views] tikv 无法写入，这个参数是在哪看的，怎么修改磁盘使用限制 ｜1032129｜
+- [x] [ 1501 views] truncate table是对表做删除标记还是对行做删除标记? ｜1015973｜
+- [x] [ 1472 views] tidb分区表如何使用全表分组查询 ｜1010563｜
+- [x] [ 1472 views] TiDB与Greenplum7的OLTP性能 ｜1021895｜
+- [x] [ 1453 views] dashboard 用户登录认证失败：authenticate failed ｜1015386｜
+- [x] [ 1447 views] TiDB 有提供C++的API吗 ｜1001253｜
+- [x] [ 1407 views] tidb gc清理异常，导致空间不断上涨 ｜1013694｜
+- [x] [ 1397 views] tikv一节点下线很慢 ｜1018048｜
+- [x] [ 1396 views] dumpling导出csv文件怎么输出到一个文件 ｜1014880｜
+- [x] [ 1395 views] 归档产生delete事件导致cdc链路延迟 ｜1021410｜
+- [x] [ 1385 views] 为什么语句的执行计划没有算子 ｜1020011｜
+- [x] [ 1356 views] TIDB数据导出 ｜1029151｜
+- [x] [ 1348 views] TiDB 索引结构是怎么存储的，是会在rocksdb新建一个列簇吗？ ｜1024802｜
+- [x] [ 1346 views] 主从2个数据库同一个sql执行计划不一样 ｜1012181｜
+- [x] [ 1341 views] 哪里有tidb的grafanna平台比较完整的使用说明 ｜1027909｜
+- [x] [ 1295 views] /tmp/tidb目录空间大小如何计算 ｜1018023｜
+- [x] [ 1294 views] 为何简单的查询会产生慢查询 ｜1033318｜
+- [x] [ 1292 views] 动态分区裁剪下收集统计信息在做globalstats合并的时候，耗时很久未完成，hang住了 ｜1011019｜
+- [x] [ 1292 views] 关于sql执行计划顺序怎么看 ｜1020722｜
+- [x] [ 1287 views] 表亿级数据，查询速度慢 ｜1034617｜
+- [x] [ 1276 views] tikv突然出错后自己退出 tikv-20160.service main process exited, FAILURE ｜1010212｜
+- [x] [ 1275 views] 如何高效修改大表id列？ ｜1019431｜
+- [x] [ 1271 views] 求助如何查询一个月前的DML sql执行语句 ｜1017966｜
+- [x] [ 1246 views] 关于timestamp(0)的默认值问题 ｜1016158｜
+- [x] [ 1246 views] 基于 TiCDC 不能同步无有效索引表的问题，如何从源头解决无有效索引表的创建呢？ ｜1023141｜
+- [x] [ 1242 views] TiDB目前只支持hash跟range分区吗？ ｜1031490｜
+- [x] [ 1237 views] 技术咨询：BR备份从TiKV集群搂数据，是从leader搂还是所有region中都搂 ｜1023286｜
+- [x] [ 1228 views] Write conflict写写冲突问题 ｜1017725｜
+- [x] [ 1217 views] tikv的sst文件与rocksdb raft与rocksdb kv关系 ｜1014869｜
+- [x] [ 1216 views] DM不支持多库迁移？ ｜1012339｜
+- [x] [ 1206 views] tidb单机离线部署 ｜1016970｜
+- [x] [ 1204 views] 为什么使用navcat在tidb创建表的时候，没办法往表里面添加自增id呢？ ｜1021872｜
+- [x] [ 1203 views] 使用tiup 部署完了，应等保修改了 ssh 端口，还需要我配合做什么吗？ ｜1017563｜
+- [x] [ 1201 views] tikc-ctl 扫描数据的时候警告 ｜1014050｜
+- [x] [ 1190 views] 配置冷热隔离分区策略，新增lable disk=hhd 出现数据写入慢，cpu拉的很高 ｜1015672｜
+- [x] [ 1190 views] TICDC的同步任务可以暂停多长时间？ ｜1026549｜
+- [x] [ 1189 views] tidb读取热点问题 ｜1023761｜
+- [x] [ 1186 views] 临时表插入报错the table is full ｜1014641｜
+- [x] [ 1180 views] dumpling导数很慢 ｜1026543｜
+- [x] [ 1177 views] TiDB 现在表级别压缩是否支持？ ｜1020380｜
+- [x] [ 1176 views] 单机房3节点tikv集群如何在线扩容成3机房9节点集群 ｜1011817｜
+- [x] [ 1170 views] 咨询贴：TiKV之间的网络带宽占用看那个监控图 ｜1016159｜
+- [x] [ 1170 views] 大致说一下，DM，TiCDC，TiDB Binlog各自的适用场景，优缺点和异同 ｜1033323｜
+- [x] [ 1169 views] pump 检查数据同步延迟 ｜1023222｜
+- [x] [ 1163 views] TIDB 统计信息收集的采样比例可以调整么 ｜1014978｜
+- [x] [ 1160 views] 主键值对空格的处理疑问 ｜1027948｜
+- [x] [ 1147 views] TiDB 7.1集群卡住，报 lock txn not found, lock has expired ｜1010278｜
+- [x] [ 1147 views] 节点上线-balance速度控制问题 ｜1010515｜
+- [x] [ 1137 views] TiUP Grafana 匿名登录配置 ｜1019355｜
+- [x] [ 1123 views] 有没有语句把一个表变成另外一个表内的分区表 ｜1023095｜
+- [x] [ 1114 views] 为何非分区表在修改分区时报错 ｜1011056｜
+- [x] [ 1089 views] Tidb 7.5.1 有那些有用的特性哦？ ｜1025955｜
+- [x] [ 1086 views] 关于tikv的空间占用和gc的问题 ｜1008921｜
+- [x] [ 1075 views] 怎么对TICDC同步异常做报警 ｜1024437｜
+- [x] [ 1071 views] 哪里能看到TiCDC的历史版本和更新内容啊 ｜1020342｜
+- [x] [ 1067 views] TIDB 后续是否实现 执行计划缓存 功能 ｜1023425｜
+- [x] [ 1057 views] like支持下发到个个kv节点计算吗 ｜1022845｜
+- [x] [ 1042 views] ticdc 已经有webui了么？原生或者第三方的 ｜1014748｜
+- [x] [ 1042 views] DM全量dump阶段日志信息少一个表 ｜1017746｜
+- [x] [ 1041 views] Online DDL语句执行流程中做的？ ｜1025826｜
+- [x] [ 1030 views] 修改了服务器IP后，playground需要改哪些配置呢？ ｜1020918｜
+- [x] [ 1024 views] 想问一下，如果把表删了，磁盘空间会立即释放吗？如果不会释放应该怎么才能把空间给释放出来 ｜1005916｜
+- [x] [ 1019 views] tidb server执行SQL，如何判断OOM? ｜1025859｜
+- [x] [ 1011 views] 低版本tidb迁移到高版本方案 ｜1007853｜
+- [x] [ 1003 views] 应用程序在连接到tidb 的ip地址连接串中，可以使用多个ip+port的组合么？ ｜1036843｜
+- [x] [ 1002 views] 报警TiKV pending task too much type: resolved-ts ｜1024396｜
+- [x] [  991 views] tidb最大能存储多少数据？ ｜1033818｜
+- [x] [  990 views] Tidb支持MySQL的事件功能嘛 ｜1018026｜
+- [x] [  982 views] 监控文档里没有Flow Control 相关指标描述 ｜1018234｜
+- [x] [  974 views] lightning增量数据导入报错 ｜1022574｜
+- [ ] [  969 views] tikv使用S3作为存储可行性 ｜1009470｜
+- [ ] [  969 views] 如何隐藏tidb telnet探测版本 ｜1020506｜
+- [ ] [  966 views] tiup cluster display fengxian tiup is checking updates for component cluster ...timeout(2s)! Error: unknown component ｜1022464｜
+- [ ] [  965 views] 参数配置生效问题 ｜1024879｜
+- [ ] [  958 views] curl -X DELETE pd api问题 ｜1021759｜
+- [ ] [  956 views] 官方的配置文件的key如何对应到tiup edit-config中的key ｜1017234｜
+- [ ] [  954 views] Tikv tidb_replica_read配置疑问 ｜1010621｜
+- [ ] [  950 views] region可以在多个表共享吗 ｜1014305｜
+- [ ] [  941 views] 使用 CONVERT ( c.val0, SIGNED ) 语法 解决 两张表的关联字段 id 数据类型不同，关联出错问题 ｜1021540｜
+- [ ] [  940 views] Raft日志复制是同步还是异步的呢？ ｜1031336｜
+- [ ] [  927 views] 低版本的tidb集群可以使用高版本的ticdc组件吗 ｜1021625｜
+- [ ] [  926 views] tidb多线程删除或者更新数据 ｜1027197｜
+- [ ] [  924 views] TiDB 是否支持Bit运算？ ｜1014135｜
+- [ ] [  921 views] 请问br备份，必须是在tikv服务器上使用tidb用户备份吗？ ｜1034832｜
+- [ ] [  913 views] TiCDC 支持自行选择是否将 Update 拆分为 Insert 和 Delete ｜1026214｜
+- [ ] [  905 views] springboot如何指定TiDB的连接地址 ｜1028830｜
+- [ ] [  900 views] dm离线部署按照文档部署版本不存在 ｜1018204｜
+- [ ] [  897 views] sysbench进行两个版本(7.5.2 VS 5.1.4)间的性能对比测试,7.5.2性能低于5.1.4 ｜1030812｜
+- [ ] [  894 views] 关于TIKV_REGION_STATUS、TIKV_REGION_PEERS及监控中tidb-acloud-overview的当前数据量疑问 ｜1019437｜
+- [ ] [  892 views] rocksdb CPU负载始终较高 ｜1026635｜
+- [ ] [  891 views] ticdc创建changefeed时do_tables配置不生效 ｜1023651｜
+- [ ] [  887 views] 通过tidb-lightning导入数据，无法匹配多个源数据文件 ｜1025392｜
+- [ ] [  879 views] 使用tidb 4.0版本，如何提升性能？ ｜1010737｜
+- [ ] [  879 views] <http://XXXXX:9100/debug/pprof/> ｜1019024｜
+- [ ] [  879 views] 主TIDB从mysql启动时，报错The slave IO thread stops because the master has an unknown @@GLOBAL.GTID_MODE '0'. ｜1020178｜
+- [ ] [  878 views] Tidb完全兼容mysql吗 ｜1021194｜
+- [ ] [  877 views] DM同步使用本地relay-log和不使用有什么区别 ｜1022188｜
+- [ ] [  875 views] 行存储转列存储疑问 ｜1017756｜
+- [ ] [  866 views] tikv client java 可以控制gc时间吗？怎么设置呢？ ｜1014524｜
+- [ ] [  865 views] 悲观事务模式范围查询加锁的问题 ｜1009215｜
+- [ ] [  865 views] dmctl 版本如何退回 ｜1026226｜
+- [ ] [  860 views] sync_diff报错panic: runtime error: invalid memory address or nil pointer dereference ｜1028091｜
+- [ ] [  859 views] 中控机如何迁移以及中控机高可用问题 ｜1031043｜
+- [ ] [  858 views] TIFlash 因为某条SQL导致OOM ｜1023967｜
+- [ ] [  843 views] dm分表数据合并同步问题 ｜1014931｜
+- [ ] [  830 views] 使用tiup playground 搭建试用环境，停止后如何保留数据？ ｜1020688｜
+- [ ] [  825 views] 文档-DM迁移模块，截图内容是不是文档bug啊？ ｜1028156｜
+- [ ] [  820 views] tidb集群配置，tikv的advertise-address应该怎么配 ｜1014254｜
+- [ ] [  819 views] TiDB Server 连接均匀，但是CPS分布不均匀以及CPU不均匀 ｜1010568｜
+- [ ] [  816 views] 求助，如何在离线环境下安装tidb集群 ｜1022723｜
+- [ ] [  814 views] dashboard可以查到5分钟内已经执行过的sql吗 ｜1013411｜
+- [ ] [  812 views] TiKV和TiDB混合部署的参数配置 ｜1012193｜
+- [ ] [  812 views] tiup扩容cdc没反应 ｜1022187｜
+- [ ] [  812 views] tidb高版本备份低版本问题 ｜1030037｜
+- [ ] [  810 views] Data Migration (DM) 从mysql到tidb 增量+全量同步是否支持改库名 ｜1014082｜
+- [ ] [  810 views] 关于固定访问tikv+tiflash ｜1028959｜
+- [ ] [  801 views] 7.5文档 instance 配置项差异 ｜1018636｜
+- [ ] [  795 views] 存储层不支持的谓词下推有哪些 ｜1032709｜
+- [ ] [  789 views] TiDB 哪些DDL操作是物理变更、哪些是元信息变更（即哪类耗时长，哪类耗时短） ｜1023872｜
+- [ ] [  787 views] 文档建议：用户资源限制 ｜1022930｜
+- [ ] [  784 views] text类型字段报错Data truncation: Data too long ｜1028009｜
+- [ ] [  782 views] v6.5.9要如何升级到v8.1的版本，可以直接升级到最新版本吗？ ｜1033356｜
+- [ ] [  779 views] 子查询的order by失效问题 ｜1032755｜
+- [ ] [  775 views] dashboard报集群中未启动必要组件 `NgMonitoring`，本功能不可用。 ｜1025367｜
+- [ ] [  772 views] DM同步工具可以同步mysql-mysql 或者tidb-tidb吗？ ｜1015429｜
+- [ ] [  771 views] 如何在线扩缩容tiflash ｜1019675｜
+- [ ] [  764 views] 调用PD API返回报错 ｜1025240｜
+- [ ] [  762 views] 请问一下 在开启全备和日志备份的下 能不能在tikv数据全没的时候把数据完全恢复过来。会丢几分钟数据？ ｜1027308｜
+- [ ] [  762 views] 强行缩容两个tikv节点后，tidb节点restart故障 ｜1034923｜
+- [ ] [  761 views] tidb和tikv之间网络流量过大怎么查 ｜1015331｜
+- [ ] [  759 views] DM 同步报错：冲突过多，参数怎么修改？ ｜1036742｜
+- [ ] [  758 views] tidb使用br做备份，恢复的时候，可以单独恢复某个表吗？ ｜1025350｜
+- [ ] [  758 views] DataGrip客户端连接tidb后跑一个sql，取消后实际sql仍在运行且无法kill ｜1028433｜
+- [ ] [  757 views] 多个insert into on duplicate key update语句用事务的方式执行, 报deadlock错误 ｜1028229｜
+- [ ] [  752 views] 如何下线不存在的pump和drainer 组件 ｜1021058｜
+- [ ] [  751 views] tikv支持挂新盘拷贝原数据的方式来扩容吗 ｜1010547｜
+- [ ] [  750 views] 6台TIKV故障2台后，region异常，tidb无法启动 ｜1029564｜
+- [ ] [  747 views] DM worker节点的高可用 ｜1012549｜
+- [ ] [  747 views] SUM函数里面有减法运算，结果溢出 ｜1029986｜
+- [ ] [  743 views] fail to get stats version for this histogram ｜1009674｜
+- [ ] [  741 views] TiDB系统化概况图 ｜1014919｜
+- [ ] [  741 views] ticdc是怎么处理大事务的? ｜1030159｜
+- [ ] [  740 views] tidb和tikv的告警配置重启节点后又恢复为原来配置 ｜1017237｜
+- [ ] [  727 views] 请问这三个参数怎么调整啊 ｜1020162｜
+- [ ] [  725 views] tidb集群日志备份失败 ｜1012079｜
+- [ ] [  722 views] 如何查看TIDB压缩前后每张表占用的磁盘空间 ｜1031503｜
+- [ ] [  721 views] tidb INFORMATION_SCHEMA.CLUSTER_SLOW_QUERY 表 sql查询数据不准 ｜1025224｜
+- [ ] [  720 views] 数据写入报错，超出最大单条数据存储限制，如何优化及调整 ｜1035960｜
+- [ ] [  719 views] 扩容tikv会导致ticdc停止 ｜1038195｜
+- [ ] [  714 views] ticdc集群内同步数据下游不更新 ｜1014847｜
+- [ ] [  714 views] ddl和gc的leader 怎么查看？ ｜1032071｜
+- [ ] [  706 views] TiDB 从哪个渠道可以获取每个版本的BUG列表？ ｜1019807｜
+- [ ] [  699 views] TIDB6.5升级TIDB7.5 出现 Error: unknown component 错误 ｜1021630｜
+- [ ] [  699 views] dm同步数据使用了gtid，但是主从切换后提示binlog文件找不到了 ｜1024920｜
+- [ ] [  692 views] 做完br恢复后新生成的\_\_TiDB_BR_Temporary_mysql数据库有什么用？可以删掉吗？ ｜1027102｜
+- [ ] [  692 views] 如何避免索引带来的写热点问题 ｜1038147｜
+- [ ] [  685 views] 在安装部署 tidb 过程中，执行 init 过程失败 ｜1037376｜
+- [ ] [  683 views] 大量ddl对tiflash造成查询性能影响 ｜1033332｜
+- [ ] [  679 views] tidb-server启动不了 ｜1031491｜
+- [ ] [  667 views] 在Tidb中，哪些数据类型不能作为主键？ ｜1036766｜
+- [ ] [  664 views] 如果环境已有prometheus + grafana ，安装时候可以不用安装么 ｜1029463｜
+- [ ] [  659 views] TiDB Data Migration与otter的选型 ｜1028015｜
+- [ ] [  654 views] lightning导入数据报错，求解啥原因 ｜1014920｜
+- [ ] [  654 views] TiKV缩容不掉如何解决？ ｜1030880｜
+- [ ] [  651 views] SQL解析和编译的问题，这个选啥 ｜1025474｜
+- [ ] [  649 views] 请问设置列存后还会同步吗 ｜1017990｜
+- [ ] [  648 views] 主键第一次查询耗时较长，执行计划每个阶段耗时也很短 ｜1014933｜
+- [ ] [  640 views] TiFlash 查询报错，报错内容是EstablishDisaggregatedTask failed: Memory limit exceeded caused by 'RSS(Resident Set Size) much larger than limit' ｜1034764｜
+- [ ] [  637 views] Reparo 使用文档中配置文件部分data-dir是指哪个组件的data-dir ｜1019233｜
+- [ ] [  627 views] TIDB 支持SQL过载保护功能么 ｜1014173｜
+- [ ] [  623 views] tikv的region合并后，tiflash后续的操作是什么？ 是否和wal有关系？ ｜1013478｜
+- [ ] [  613 views] last_plan_from_binding和last_plan_from_cache参数 ｜1032846｜
+- [ ] [  609 views] kettle写入tidb自动断开 ｜1009694｜
+- [ ] [  609 views] DM同步多个数据源使用多个task任务比较好还是一个task任务里面配置多个数据源 ｜1013017｜
+- [ ] [  608 views] 7.1版本中2地3中心，如何配置Placement Rules ｜1011028｜
+- [ ] [  608 views] 在使用tidbbinlog组件做数据同步时，pump会产生日志，但是drainer无法解析 ｜1021053｜
+- [ ] [  606 views] TiDB-v8.1的tidb-server内存占用不断升高，直至达到内存阈值服务重启 ｜1030849｜
+- [ ] [  601 views] 多大数据量可以正常增加tidb索引 ｜1027300｜
+- [ ] [  598 views] drainer 异常退出: skipDMLEvent failed: not found table id ｜1030900｜
+- [ ] [  596 views] 一个节点的虚拟机因为某些原因被删掉了，现在无法用缩容的方式把这个永久消失的节点删掉。 ｜1010360｜
+- [ ] [  595 views] TIDB数据库查询information_schema.tables表时,select慢，有什么优化方案吗 ｜1033387｜
+- [ ] [  591 views] 使用 TiUP 部署 TiDB 集群时，如果节点ssh端口不是默认的22，tiup cluster check等指令用什么参数制定ssh端口号 ｜1017280｜
+- [ ] [  588 views] 请教一下get_snapshot_time这个字段是做什么？ ｜1035764｜
+- [ ] [  586 views] dumpling指定一个库导出的同时能否过滤掉一个表 ｜1009487｜
+- [ ] [  585 views] 关于v6.5大小写与唯一索引冲突，有什么参数可忽略吗？ ｜1016271｜
+- [ ] [  583 views] DM同步报错问题 ｜1008825｜
+- [ ] [  583 views] 如何修改执行计划绑定的排序规则 ｜1023409｜
+- [ ] [  579 views] 【风险反馈】tidb 设置tmp-storage-quota参数后，无法限制临时磁盘使用 ｜1031520｜
+- [ ] [  579 views] Region层面日志信息 ｜1036244｜
+- [ ] [  578 views] tidb server的架构在7.5的文档哪个部分？ ｜1024910｜
+- [ ] [  563 views] PD 故障2个节点的恢复方案 ｜1032762｜
+- [ ] [  557 views] tikv实例故障后实例的状态为何最终不会变成tombstone ｜1032149｜
+- [ ] [  548 views] 有没有关于tidb 锁的文档啊 ｜1038023｜
+- [ ] [  544 views] v4.0.8 tikv 缩容遇到的问题 ｜1027022｜
+- [ ] [  534 views] TIDB7.5 SQL出错： ERROR 3065 (HY000): Expression #1 of ORDER BY clause is not in SELECT list ｜1032655｜
+- [ ] [  533 views] TIDB线上环境建议用那种部署方式 ｜1032666｜
+- [ ] [  533 views] 集群节点22端口禁用 ｜1035837｜
+- [ ] [  530 views] tidb数据备份恢复 ｜1030791｜
+- [ ] [  528 views] ticdc任务报错恢复 ｜1036835｜
+- [ ] [  525 views] TiDB 支持json查询吗？ ｜1049095｜
+- [ ] [  518 views] 数据迁移操作有什么建议或者指引？ ｜1012839｜
+- [ ] [  515 views] DM现在对MySQL8.0版本的支持还没有GA吗 ｜1028001｜
+- [ ] [  514 views] 我的tidb集群快要爆炸了 ｜1031008｜
+- [ ] [  513 views] 用tiup部署的TiDB-5.4.0 prometheus 存储时间 是30d，怎么修改成7天呢？ ｜1034230｜
+- [ ] [  508 views] 如何快速的更新大量数据 ｜1047874｜
+- [ ] [  507 views] 请问TiUp已经部署的应用，如何重新生成ssh密钥和service ｜1036221｜
+- [ ] [  506 views] TICDC Servers之间是什么关系？ ｜1027820｜
+- [ ] [  504 views] 请问dashboard、prometheus、grafana管理员帐号密码忘记了，如何找回？ ｜1036788｜
+- [ ] [  502 views] Error: fetch /7.node_exporter.json from mirror(<https://tiup-mirrors.pingcap.com>) failed: download from ｜1025480｜
+
+## 三、存疑组（27 条，机器拿不准，人判断）
+
+- [x] [ 2586 views] batch ddl job执行时间差距巨大，原因几何？大佬速来 ｜1026938｜多证据
+- [ ] [ 2215 views] 短暂宕机 ｜1017296｜多证据
+- [x] [ 2085 views] 大事务的判断 ｜1017217｜
+- [x] [ 2085 views] 等保扫描漏洞 ｜1021691｜
+- [x] [ 1879 views] 磁盘超过90% ｜1022385｜多证据
+- [ ] [ 1423 views] TiDB优化 ｜1022733｜
+- [ ] [ 1337 views] 热力图 ｜1007590｜
+- [ ] [ 1298 views] 如何 资源分配 ｜1013454｜多证据
+- [x] [ 1292 views] 可以使用hint强制使用tiflash吗？没有成功，同时希望大佬们帮忙看看语句慢在哪 ｜1016279｜多证据
+- [ ] [ 1196 views] DM同步失败 ｜1022502｜
+- [x] [ 1156 views] 啥是DM集群 ｜1024528｜
+- [ ] [ 1041 views] 数据同步 ｜1023721｜
+- [ ] [  993 views] 权限控制 ｜1019783｜
+- [ ] [  976 views] tidb部署 ｜1010496｜
+- [ ] [  946 views] PD状态异常 ｜1026019｜
+- [ ] [  933 views] dm部署报错 ｜1019713｜
+- [ ] [  856 views] 数据备份报错 ｜1030707｜
+- [ ] [  817 views] br 备份失败 ｜1010676｜
+- [ ] [  759 views] 参数修改问题 ｜1016145｜
+- [ ] [  748 views] 6.5升级问题 ｜1020797｜
+- [ ] [  725 views] 数据库恢复问题 ｜1030515｜
+- [ ] [  723 views] dm启动报错 ｜1019605｜多证据
+- [ ] [  647 views] br 备份报错 ｜1032123｜
+- [ ] [  627 views] tidb 特性 ｜1020765｜多证据
+- [ ] [  613 views] 安装集群报错 ｜1025711｜多证据
+- [ ] [  571 views] 重启异常 ｜1027463｜
+- [ ] [  541 views] DM同步报错 ｜1025445｜

@@ -1,0 +1,1122 @@
+[
+ {
+  "id": 1,
+  "grade": "A",
+  "eff_len": 387,
+  "title": "tidb 漏洞扫描处理- Prometheus 和 ETCD 未授权访问",
+  "group": "multi"
+ },
+ {
+  "id": 2,
+  "grade": "A",
+  "eff_len": 200,
+  "title": "触发TiKV_approximate_region_size告警,手动split超时",
+  "group": "multi"
+ },
+ {
+  "id": 3,
+  "grade": "A",
+  "eff_len": 145,
+  "title": "tidb批量插入数据速度慢有没有什么优化方向",
+  "group": "multi"
+ },
+ {
+  "id": 4,
+  "grade": "B",
+  "eff_len": 26,
+  "title": "请教大家个问题，用什么工具对tidb进行压测比较合适",
+  "group": "multi"
+ },
+ {
+  "id": 5,
+  "grade": "A",
+  "eff_len": 116,
+  "title": "tidb删除数据很慢",
+  "group": "multi"
+ },
+ {
+  "id": 6,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "TIDB 查询的时候有结果缓存吗？",
+  "group": "multi"
+ },
+ {
+  "id": 7,
+  "grade": "B",
+  "eff_len": 29,
+  "title": "tidb有sqltest这种测试工具吗",
+  "group": "multi"
+ },
+ {
+  "id": 8,
+  "grade": "A",
+  "eff_len": 135,
+  "title": "TiFlash 表从1副本扩容到2副本过程，tiflash特性可用么",
+  "group": "multi"
+ },
+ {
+  "id": 9,
+  "grade": "A",
+  "eff_len": 60,
+  "title": "analyze table问题",
+  "group": "multi"
+ },
+ {
+  "id": 10,
+  "grade": "A",
+  "eff_len": 143,
+  "title": "tidb有个机器内存耗尽人工重启了，怎么排查具体原因",
+  "group": "multi"
+ },
+ {
+  "id": 11,
+  "grade": "A",
+  "eff_len": 39,
+  "title": "一条sql显示慢在not(isnull(字段))，是什么原因？",
+  "group": "multi"
+ },
+ {
+  "id": 12,
+  "grade": "A",
+  "eff_len": 270,
+  "title": "TiDB 有什么办法让当前会话只读，START transaction read only 无效",
+  "group": "multi"
+ },
+ {
+  "id": 13,
+  "grade": "A",
+  "eff_len": 271,
+  "title": "关于tidb_auto_analyze_ratio参数的优化",
+  "group": "multi"
+ },
+ {
+  "id": 14,
+  "grade": "A",
+  "eff_len": 48,
+  "title": "DM 没有LOCK 权限能不能备份全量？",
+  "group": "multi"
+ },
+ {
+  "id": 15,
+  "grade": "A",
+  "eff_len": 57,
+  "title": "设置日志文件处理方式的log.file在哪里设置",
+  "group": "multi"
+ },
+ {
+  "id": 16,
+  "grade": "A",
+  "eff_len": 106,
+  "title": "如何查看br历史备份信息？",
+  "group": "multi"
+ },
+ {
+  "id": 17,
+  "grade": "A",
+  "eff_len": 102,
+  "title": "TiDB json查询与常规like查询对比时间过慢",
+  "group": "multi"
+ },
+ {
+  "id": 18,
+  "grade": "A",
+  "eff_len": 88,
+  "title": "请教TiDB多表关联时是怎么实现下推的？",
+  "group": "multi"
+ },
+ {
+  "id": 19,
+  "grade": "A",
+  "eff_len": 76,
+  "title": "dumpling如何限速，减少对生产上的影响",
+  "group": "multi"
+ },
+ {
+  "id": 20,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "几百万数据group有没有优化空间，能提升到10几秒吗？group条件过滤之前大概数据300万到400万",
+  "group": "multi"
+ },
+ {
+  "id": 21,
+  "grade": "A",
+  "eff_len": 165,
+  "title": "删除一个tikv挂载盘，IO跌零10秒以上",
+  "group": "multi"
+ },
+ {
+  "id": 22,
+  "grade": "A",
+  "eff_len": 224,
+  "title": "表设置好tiflash设置后，执行计划看不到tiflash使用",
+  "group": "multi"
+ },
+ {
+  "id": 23,
+  "grade": "A",
+  "eff_len": 90,
+  "title": "TiDB备份问题",
+  "group": "multi"
+ },
+ {
+  "id": 24,
+  "grade": "A",
+  "eff_len": 245,
+  "title": "dm配置上游数据库",
+  "group": "multi"
+ },
+ {
+  "id": 25,
+  "grade": "A",
+  "eff_len": 149,
+  "title": "MergeRegion 不工作",
+  "group": "multi"
+ },
+ {
+  "id": 26,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "关于使用Bulk Copy导致事务失效问题",
+  "group": "multi"
+ },
+ {
+  "id": 27,
+  "grade": "A",
+  "eff_len": 116,
+  "title": "生产环境的br全备和增量备份以及恢复脚本",
+  "group": "multi"
+ },
+ {
+  "id": 28,
+  "grade": "B",
+  "eff_len": 25,
+  "title": "日志问题，wal的日志和rocksDB里面的raft日志的区别与作用",
+  "group": "multi"
+ },
+ {
+  "id": 29,
+  "grade": "A",
+  "eff_len": 96,
+  "title": "快速地将大量数据导入 TiDB 集群为什么要用DM？ 而不建议使用inset?",
+  "group": "multi"
+ },
+ {
+  "id": 30,
+  "grade": "A",
+  "eff_len": 243,
+  "title": "如何查看titandb里的Blob内容都是属于那些表的",
+  "group": "multi"
+ },
+ {
+  "id": 31,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "同一个sql指纹， 产生了不同的执行计划id，但计划内容又一样！为什么？",
+  "group": "multi"
+ },
+ {
+  "id": 32,
+  "grade": "B",
+  "eff_len": 17,
+  "title": "对视图进行分页查询期间，视图涉及到的表的数据变化导致查询不一致",
+  "group": "multi"
+ },
+ {
+  "id": 33,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "tidb压力测试造数脚本",
+  "group": "multi"
+ },
+ {
+  "id": 34,
+  "grade": "A",
+  "eff_len": 347,
+  "title": "dm-worker在同步上游mysql的DDL时同步暂停，但query-status结果却正常",
+  "group": "multi"
+ },
+ {
+  "id": 35,
+  "grade": "A",
+  "eff_len": 145,
+  "title": "tikv 三台机器，压测写入数据时只有一台机器负载比较高，其他两台处于空闲",
+  "group": "multi"
+ },
+ {
+  "id": 36,
+  "grade": "A",
+  "eff_len": 280,
+  "title": "dumpling导出数据到csv解析longtext字段不符合预期",
+  "group": "multi"
+ },
+ {
+  "id": 37,
+  "grade": "A",
+  "eff_len": 50,
+  "title": "tidb内存持续升高",
+  "group": "multi"
+ },
+ {
+  "id": 38,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "有2个tidb节点的情况下，怎么样做负载均衡？",
+  "group": "multi"
+ },
+ {
+  "id": 39,
+  "grade": "A",
+  "eff_len": 70,
+  "title": "ticdc，tidb-mysql，能同步用户和数据库吗？还是只能同步表？",
+  "group": "multi"
+ },
+ {
+  "id": 40,
+  "grade": "A",
+  "eff_len": 391,
+  "title": "region和peer的理解",
+  "group": "multi"
+ },
+ {
+  "id": 41,
+  "grade": "A",
+  "eff_len": 198,
+  "title": "并发查询导致查询变慢",
+  "group": "multi"
+ },
+ {
+  "id": 42,
+  "grade": "A",
+  "eff_len": 88,
+  "title": "dm向多副本容灾集群写入速度较慢 目前5副本",
+  "group": "multi"
+ },
+ {
+  "id": 43,
+  "grade": "A",
+  "eff_len": 392,
+  "title": "AUTO_INCREMENT=1000001 并且 AUTO_ID_CACHE=1 主键id会跳号",
+  "group": "multi"
+ },
+ {
+  "id": 44,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "TiDB TTL导致系统读IO飙升",
+  "group": "multi"
+ },
+ {
+  "id": 45,
+  "grade": "A",
+  "eff_len": 127,
+  "title": "使用TiCDC吧增量数据同步到kafka给BI用需要部署几台比较好",
+  "group": "multi"
+ },
+ {
+  "id": 46,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "三台物理机，每台物理机部署4个tikv，同一副本的数据会存在同一台服务器上不同的tikv节点吗？",
+  "group": "multi"
+ },
+ {
+  "id": 47,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "TIDB 平滑升级【v7.5.2-->v7.5.5】最佳实战",
+  "group": "multi"
+ },
+ {
+  "id": 48,
+  "grade": "A",
+  "eff_len": 114,
+  "title": "使用DM迁移数据",
+  "group": "multi"
+ },
+ {
+  "id": 49,
+  "grade": "A",
+  "eff_len": 397,
+  "title": "事务TTL作用",
+  "group": "multi"
+ },
+ {
+  "id": 50,
+  "grade": "A",
+  "eff_len": 206,
+  "title": "RU占用高，如何找到占用RU较高的SQL排查？",
+  "group": "multi"
+ },
+ {
+  "id": 51,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "请问有办法降级嘛？比如从6.5.3 降级到6.5.1",
+  "group": "single"
+ },
+ {
+  "id": 52,
+  "grade": "A",
+  "eff_len": 41,
+  "title": "对于mysql 都有个实例的概念，请问tidb 有这个概念吗",
+  "group": "single"
+ },
+ {
+  "id": 53,
+  "grade": "A",
+  "eff_len": 42,
+  "title": "tidb v3.1.0 40T数据迁移到新集群，有啥好的成熟方案，或者一键迁移工具吗",
+  "group": "single"
+ },
+ {
+  "id": 54,
+  "grade": "A",
+  "eff_len": 101,
+  "title": "无法analyze表",
+  "group": "single"
+ },
+ {
+  "id": 55,
+  "grade": "A",
+  "eff_len": 45,
+  "title": "如何快速迁移一张表的数据 到 另一张表",
+  "group": "single"
+ },
+ {
+  "id": 56,
+  "grade": "A",
+  "eff_len": 188,
+  "title": "关于一个tikv节点region数量超5万影响性能问题请教",
+  "group": "single"
+ },
+ {
+  "id": 57,
+  "grade": "A",
+  "eff_len": 65,
+  "title": "有没有处理过单表2亿条数据，33个字段（无大数据字段 text，blob之类的），要求：一个 select-from返回全表数据的",
+  "group": "single"
+ },
+ {
+  "id": 58,
+  "grade": "A",
+  "eff_len": 192,
+  "title": "INSERT语句的select中不会走tiflash么？",
+  "group": "single"
+ },
+ {
+  "id": 59,
+  "grade": "A",
+  "eff_len": 45,
+  "title": "TIDB 在数据安全做了哪些保障",
+  "group": "single"
+ },
+ {
+  "id": 60,
+  "grade": "B",
+  "eff_len": 29,
+  "title": "TiDB 如何知晓查询计划里每个算子预估的代价",
+  "group": "single"
+ },
+ {
+  "id": 61,
+  "grade": "A",
+  "eff_len": 262,
+  "title": "客户端终止，TiDB数据库不终止任务",
+  "group": "single"
+ },
+ {
+  "id": 62,
+  "grade": "A",
+  "eff_len": 376,
+  "title": "TiDB程序&手动执行SQL 执行计划不一致",
+  "group": "single"
+ },
+ {
+  "id": 63,
+  "grade": "A",
+  "eff_len": 51,
+  "title": "TiFlash存算分离有哪些优劣势？",
+  "group": "single"
+ },
+ {
+  "id": 64,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "tidb执行sql完成后内存能手动释放吗？我这边发现内存不会立即释放，后续执行sql可能会导致内存占用越来越高，最后导致被系统杀掉。",
+  "group": "single"
+ },
+ {
+  "id": 65,
+  "grade": "A",
+  "eff_len": 255,
+  "title": "生产环境tidb主库集群OOM内存溢出",
+  "group": "single"
+ },
+ {
+  "id": 66,
+  "grade": "A",
+  "eff_len": 68,
+  "title": "tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上",
+  "group": "single"
+ },
+ {
+  "id": 67,
+  "grade": "A",
+  "eff_len": 130,
+  "title": "事务内Delete相关问题",
+  "group": "single"
+ },
+ {
+  "id": 68,
+  "grade": "A",
+  "eff_len": 390,
+  "title": "漏洞扫描安全评估问题",
+  "group": "single"
+ },
+ {
+  "id": 69,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "region 心跳这样定时忽高忽低的正常吗",
+  "group": "single"
+ },
+ {
+  "id": 70,
+  "grade": "A",
+  "eff_len": 33,
+  "title": "tidb能用mysqldump工具备份吗",
+  "group": "single"
+ },
+ {
+  "id": 71,
+  "grade": "A",
+  "eff_len": 91,
+  "title": "tidb中的日志可以直接删吗？",
+  "group": "single"
+ },
+ {
+  "id": 72,
+  "grade": "A",
+  "eff_len": 150,
+  "title": "TIDB插数据很占内存为什么？",
+  "group": "single"
+ },
+ {
+  "id": 73,
+  "grade": "A",
+  "eff_len": 200,
+  "title": "可以多表同时授权吗？",
+  "group": "single"
+ },
+ {
+  "id": 74,
+  "grade": "A",
+  "eff_len": 350,
+  "title": "请教tiflash 安装服务器无AVX2指令集的问题",
+  "group": "single"
+ },
+ {
+  "id": 75,
+  "grade": "A",
+  "eff_len": 140,
+  "title": "\"Error 8200 (HY000): Unsupported drop primary key when the table is using clustered index",
+  "group": "single"
+ },
+ {
+  "id": 76,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "tikv节点存储有大小限制吗？",
+  "group": "single"
+ },
+ {
+  "id": 77,
+  "grade": "A",
+  "eff_len": 59,
+  "title": "br快照备份监控",
+  "group": "single"
+ },
+ {
+  "id": 78,
+  "grade": "A",
+  "eff_len": 155,
+  "title": "如何设置GO的环境变量 GOMEMLIMIT",
+  "group": "single"
+ },
+ {
+  "id": 79,
+  "grade": "A",
+  "eff_len": 123,
+  "title": "tidb生产环境中是否建议使用查询缓存功能？",
+  "group": "single"
+ },
+ {
+  "id": 80,
+  "grade": "A",
+  "eff_len": 143,
+  "title": "Tidb v6.0 Collation能否改为mysql 8.0的collation",
+  "group": "single"
+ },
+ {
+  "id": 81,
+  "grade": "A",
+  "eff_len": 319,
+  "title": "tidb cdc 同步数据异常",
+  "group": "single"
+ },
+ {
+  "id": 82,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "删除数据transaction is too large,size:104857608",
+  "group": "single"
+ },
+ {
+  "id": 83,
+  "grade": "A",
+  "eff_len": 287,
+  "title": "如何使用flyway连接tidb",
+  "group": "single"
+ },
+ {
+  "id": 84,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "hashjoin前过滤数据，提高sql查询速度",
+  "group": "single"
+ },
+ {
+  "id": 85,
+  "grade": "A",
+  "eff_len": 30,
+  "title": "tikv 无法写入，这个参数是在哪看的，怎么修改磁盘使用限制",
+  "group": "single"
+ },
+ {
+  "id": 86,
+  "grade": "A",
+  "eff_len": 45,
+  "title": "truncate table是对表做删除标记还是对行做删除标记?",
+  "group": "single"
+ },
+ {
+  "id": 87,
+  "grade": "A",
+  "eff_len": 93,
+  "title": "tidb分区表如何使用全表分组查询",
+  "group": "single"
+ },
+ {
+  "id": 88,
+  "grade": "A",
+  "eff_len": 51,
+  "title": "TiDB与Greenplum7的OLTP性能",
+  "group": "single"
+ },
+ {
+  "id": 89,
+  "grade": "A",
+  "eff_len": 310,
+  "title": "dashboard 用户登录认证失败：authenticate failed",
+  "group": "single"
+ },
+ {
+  "id": 90,
+  "grade": "A",
+  "eff_len": 38,
+  "title": "TiDB 有提供C++的API吗",
+  "group": "single"
+ },
+ {
+  "id": 91,
+  "grade": "A",
+  "eff_len": 78,
+  "title": "tidb gc清理异常，导致空间不断上涨",
+  "group": "single"
+ },
+ {
+  "id": 92,
+  "grade": "A",
+  "eff_len": 191,
+  "title": "tikv一节点下线很慢",
+  "group": "single"
+ },
+ {
+  "id": 93,
+  "grade": "A",
+  "eff_len": 58,
+  "title": "dumpling导出csv文件怎么输出到一个文件",
+  "group": "single"
+ },
+ {
+  "id": 94,
+  "grade": "A",
+  "eff_len": 230,
+  "title": "归档产生delete事件导致cdc链路延迟",
+  "group": "single"
+ },
+ {
+  "id": 95,
+  "grade": "A",
+  "eff_len": 389,
+  "title": "为什么语句的执行计划没有算子",
+  "group": "single"
+ },
+ {
+  "id": 96,
+  "grade": "A",
+  "eff_len": 163,
+  "title": "TIDB数据导出",
+  "group": "single"
+ },
+ {
+  "id": 97,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "TiDB 索引结构是怎么存储的，是会在rocksdb新建一个列簇吗？",
+  "group": "single"
+ },
+ {
+  "id": 98,
+  "grade": "A",
+  "eff_len": 52,
+  "title": "主从2个数据库同一个sql执行计划不一样",
+  "group": "single"
+ },
+ {
+  "id": 99,
+  "grade": "A",
+  "eff_len": 107,
+  "title": "哪里有tidb的grafanna平台比较完整的使用说明",
+  "group": "single"
+ },
+ {
+  "id": 100,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "/tmp/tidb目录空间大小如何计算",
+  "group": "single"
+ },
+ {
+  "id": 101,
+  "grade": "A",
+  "eff_len": 233,
+  "title": "为何简单的查询会产生慢查询",
+  "group": "single"
+ },
+ {
+  "id": 102,
+  "grade": "A",
+  "eff_len": 143,
+  "title": "动态分区裁剪下收集统计信息在做globalstats合并的时候，耗时很久未完成，hang住了",
+  "group": "single"
+ },
+ {
+  "id": 103,
+  "grade": "A",
+  "eff_len": 43,
+  "title": "关于sql执行计划顺序怎么看",
+  "group": "single"
+ },
+ {
+  "id": 104,
+  "grade": "A",
+  "eff_len": 342,
+  "title": "表亿级数据，查询速度慢",
+  "group": "single"
+ },
+ {
+  "id": 105,
+  "grade": "A",
+  "eff_len": 334,
+  "title": "tikv突然出错后自己退出 tikv-20160.service main process exited, FAILURE",
+  "group": "single"
+ },
+ {
+  "id": 106,
+  "grade": "A",
+  "eff_len": 36,
+  "title": "如何高效修改大表id列？",
+  "group": "single"
+ },
+ {
+  "id": 107,
+  "grade": "A",
+  "eff_len": 55,
+  "title": "求助如何查询一个月前的DML sql执行语句",
+  "group": "single"
+ },
+ {
+  "id": 108,
+  "grade": "A",
+  "eff_len": 323,
+  "title": "关于timestamp(0)的默认值问题",
+  "group": "single"
+ },
+ {
+  "id": 109,
+  "grade": "A",
+  "eff_len": 63,
+  "title": "基于 TiCDC 不能同步无有效索引表的问题，如何从源头解决无有效索引表的创建呢？",
+  "group": "single"
+ },
+ {
+  "id": 110,
+  "grade": "B",
+  "eff_len": 23,
+  "title": "TiDB目前只支持hash跟range分区吗？",
+  "group": "single"
+ },
+ {
+  "id": 111,
+  "grade": "A",
+  "eff_len": 159,
+  "title": "技术咨询：BR备份从TiKV集群搂数据，是从leader搂还是所有region中都搂",
+  "group": "single"
+ },
+ {
+  "id": 112,
+  "grade": "A",
+  "eff_len": 360,
+  "title": "Write conflict写写冲突问题",
+  "group": "single"
+ },
+ {
+  "id": 113,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "tikv的sst文件与rocksdb raft与rocksdb kv关系",
+  "group": "single"
+ },
+ {
+  "id": 114,
+  "grade": "A",
+  "eff_len": 249,
+  "title": "DM不支持多库迁移？",
+  "group": "single"
+ },
+ {
+  "id": 115,
+  "grade": "A",
+  "eff_len": 30,
+  "title": "tidb单机离线部署",
+  "group": "single"
+ },
+ {
+  "id": 116,
+  "grade": "A",
+  "eff_len": 65,
+  "title": "为什么使用navcat在tidb创建表的时候，没办法往表里面添加自增id呢？",
+  "group": "single"
+ },
+ {
+  "id": 117,
+  "grade": "B",
+  "eff_len": 13,
+  "title": "使用tiup 部署完了，应等保修改了 ssh 端口，还需要我配合做什么吗？",
+  "group": "single"
+ },
+ {
+  "id": 118,
+  "grade": "A",
+  "eff_len": 188,
+  "title": "tikc-ctl 扫描数据的时候警告",
+  "group": "single"
+ },
+ {
+  "id": 119,
+  "grade": "A",
+  "eff_len": 354,
+  "title": "配置冷热隔离分区策略，新增lable disk=hhd 出现数据写入慢，cpu拉的很高",
+  "group": "single"
+ },
+ {
+  "id": 120,
+  "grade": "A",
+  "eff_len": 109,
+  "title": "TICDC的同步任务可以暂停多长时间？",
+  "group": "single"
+ },
+ {
+  "id": 121,
+  "grade": "B",
+  "eff_len": 25,
+  "title": "tidb读取热点问题",
+  "group": "single"
+ },
+ {
+  "id": 122,
+  "grade": "B",
+  "eff_len": 27,
+  "title": "临时表插入报错the table is full",
+  "group": "single"
+ },
+ {
+  "id": 123,
+  "grade": "A",
+  "eff_len": 318,
+  "title": "dumpling导数很慢",
+  "group": "single"
+ },
+ {
+  "id": 124,
+  "grade": "A",
+  "eff_len": 317,
+  "title": "TiDB 现在表级别压缩是否支持？",
+  "group": "single"
+ },
+ {
+  "id": 125,
+  "grade": "A",
+  "eff_len": 76,
+  "title": "单机房3节点tikv集群如何在线扩容成3机房9节点集群",
+  "group": "single"
+ },
+ {
+  "id": 126,
+  "grade": "A",
+  "eff_len": 116,
+  "title": "咨询贴：TiKV之间的网络带宽占用看那个监控图",
+  "group": "single"
+ },
+ {
+  "id": 127,
+  "grade": "A",
+  "eff_len": 55,
+  "title": "大致说一下，DM，TiCDC，TiDB Binlog各自的适用场景，优缺点和异同",
+  "group": "single"
+ },
+ {
+  "id": 128,
+  "grade": "A",
+  "eff_len": 60,
+  "title": "pump 检查数据同步延迟",
+  "group": "single"
+ },
+ {
+  "id": 129,
+  "grade": "C",
+  "eff_len": 0,
+  "title": "TIDB 统计信息收集的采样比例可以调整么",
+  "group": "single"
+ },
+ {
+  "id": 130,
+  "grade": "A",
+  "eff_len": 229,
+  "title": "主键值对空格的处理疑问",
+  "group": "single"
+ },
+ {
+  "id": 131,
+  "grade": "A",
+  "eff_len": 326,
+  "title": "TiDB 7.1集群卡住，报 lock txn not found, lock has expired",
+  "group": "single"
+ },
+ {
+  "id": 132,
+  "grade": "A",
+  "eff_len": 235,
+  "title": "节点上线-balance速度控制问题",
+  "group": "single"
+ },
+ {
+  "id": 133,
+  "grade": "A",
+  "eff_len": 214,
+  "title": "TiUP Grafana 匿名登录配置",
+  "group": "single"
+ },
+ {
+  "id": 134,
+  "grade": "B",
+  "eff_len": 20,
+  "title": "有没有语句把一个表变成另外一个表内的分区表",
+  "group": "single"
+ },
+ {
+  "id": 135,
+  "grade": "A",
+  "eff_len": 348,
+  "title": "为何非分区表在修改分区时报错",
+  "group": "single"
+ },
+ {
+  "id": 136,
+  "grade": "B",
+  "eff_len": 21,
+  "title": "Tidb 7.5.1 有那些有用的特性哦？",
+  "group": "single"
+ },
+ {
+  "id": 137,
+  "grade": "A",
+  "eff_len": 234,
+  "title": "关于tikv的空间占用和gc的问题",
+  "group": "single"
+ },
+ {
+  "id": 138,
+  "grade": "A",
+  "eff_len": 81,
+  "title": "怎么对TICDC同步异常做报警",
+  "group": "single"
+ },
+ {
+  "id": 139,
+  "grade": "B",
+  "eff_len": 21,
+  "title": "哪里能看到TiCDC的历史版本和更新内容啊",
+  "group": "single"
+ },
+ {
+  "id": 140,
+  "grade": "A",
+  "eff_len": 45,
+  "title": "TIDB 后续是否实现 执行计划缓存 功能",
+  "group": "single"
+ },
+ {
+  "id": 141,
+  "grade": "A",
+  "eff_len": 46,
+  "title": "like支持下发到个个kv节点计算吗",
+  "group": "single"
+ },
+ {
+  "id": 142,
+  "grade": "A",
+  "eff_len": 197,
+  "title": "ticdc 已经有webui了么？原生或者第三方的",
+  "group": "single"
+ },
+ {
+  "id": 143,
+  "grade": "A",
+  "eff_len": 301,
+  "title": "DM全量dump阶段日志信息少一个表",
+  "group": "single"
+ },
+ {
+  "id": 144,
+  "grade": "A",
+  "eff_len": 131,
+  "title": "Online DDL语句执行流程中做的？",
+  "group": "single"
+ },
+ {
+  "id": 145,
+  "grade": "A",
+  "eff_len": 389,
+  "title": "修改了服务器IP后，playground需要改哪些配置呢？",
+  "group": "single"
+ },
+ {
+  "id": 146,
+  "grade": "A",
+  "eff_len": 43,
+  "title": "想问一下，如果把表删了，磁盘空间会立即释放吗？如果不会释放应该怎么才能把空间给释放出来",
+  "group": "single"
+ },
+ {
+  "id": 147,
+  "grade": "B",
+  "eff_len": 29,
+  "title": "tidb server执行SQL，如何判断OOM?",
+  "group": "single"
+ },
+ {
+  "id": 148,
+  "grade": "A",
+  "eff_len": 106,
+  "title": "低版本tidb迁移到高版本方案",
+  "group": "single"
+ },
+ {
+  "id": 149,
+  "grade": "A",
+  "eff_len": 83,
+  "title": "应用程序在连接到tidb 的ip地址连接串中，可以使用多个ip+port的组合么？",
+  "group": "single"
+ },
+ {
+  "id": 150,
+  "grade": "A",
+  "eff_len": 156,
+  "title": "报警TiKV pending task too much type: resolved-ts",
+  "group": "single"
+ },
+ {
+  "id": 151,
+  "grade": "A",
+  "eff_len": 172,
+  "title": "tidb最大能存储多少数据？",
+  "group": "single"
+ },
+ {
+  "id": 152,
+  "grade": "A",
+  "eff_len": 225,
+  "title": "Tidb支持MySQL的事件功能嘛",
+  "group": "single"
+ },
+ {
+  "id": 153,
+  "grade": "B",
+  "eff_len": 27,
+  "title": "监控文档里没有Flow Control 相关指标描述",
+  "group": "single"
+ },
+ {
+  "id": 154,
+  "grade": "A",
+  "eff_len": 137,
+  "title": "lightning增量数据导入报错",
+  "group": "single"
+ },
+ {
+  "id": 155,
+  "grade": "A",
+  "eff_len": 244,
+  "title": "batch ddl job执行时间差距巨大，原因几何？大佬速来",
+  "group": "check_rescued"
+ },
+ {
+  "id": 156,
+  "grade": "B",
+  "eff_len": 14,
+  "title": "大事务的判断",
+  "group": "check_rescued"
+ },
+ {
+  "id": 157,
+  "grade": "B",
+  "eff_len": 17,
+  "title": "等保扫描漏洞",
+  "group": "check_rescued"
+ },
+ {
+  "id": 158,
+  "grade": "A",
+  "eff_len": 34,
+  "title": "磁盘超过90%",
+  "group": "check_rescued"
+ },
+ {
+  "id": 159,
+  "grade": "A",
+  "eff_len": 77,
+  "title": "可以使用hint强制使用tiflash吗？没有成功，同时希望大佬们帮忙看看语句慢在哪",
+  "group": "check_rescued"
+ },
+ {
+  "id": 160,
+  "grade": "C",
+  "eff_len": 10,
+  "title": "啥是DM集群",
+  "group": "check_rescued"
+ }
+]

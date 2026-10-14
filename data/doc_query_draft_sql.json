@@ -1,0 +1,236 @@
+[
+ {
+  "slug": "sql-statement-add-index",
+  "query": "TiDB 在线加索引（ADD INDEX）是怎么做到不锁表的？",
+  "overlap": "不重叠",
+  "note": "AskTUG 无在线加索引题"
+ },
+ {
+  "slug": "sql-statement-explain-analyze",
+  "query": "EXPLAIN ANALYZE 和 EXPLAIN 有什么区别，各自看什么？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "explain-overview",
+  "query": "TiDB 执行计划里各算子（TableReader/IndexLookup 等）代表什么含义？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[103]问执行计划顺序，此为算子含义，角度不同"
+ },
+ {
+  "slug": "explain-joins",
+  "query": "TiDB 多表 JOIN 的执行计划里，join 顺序是怎么决定的？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[84]问 hashjoin 过滤优化，此为 join 顺序"
+ },
+ {
+  "slug": "sql-statement-with",
+  "query": "TiDB 支持递归 CTE（WITH RECURSIVE）吗，怎么写？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "partitioned-table",
+  "query": "TiDB 分区表的分区裁剪（partition pruning）是怎么工作的？",
+  "overlap": "不重叠",
+  "note": "改角度：分区裁剪机制，非类型清单"
+ },
+ {
+  "slug": "sql-statement-alter-table",
+  "query": "TiDB ALTER TABLE 加列/改列时，哪些操作会重写整张表？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-create-view",
+  "query": "TiDB 的视图是物化的还是每次查询实时算的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "generated-columns",
+  "query": "TiDB 生成列（generated column）能不能建索引？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[17]问 JSON 查询优化挂 generated-columns，此为生成列本身"
+ },
+ {
+  "slug": "sql-statement-analyze-table",
+  "query": "TiDB 手动 ANALYZE TABLE 和自动 analyze 有什么区别？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[9]问频繁 analyze 避免，此为手动 vs 自动"
+ },
+ {
+  "slug": "optimizer-hints",
+  "query": "TiDB 的 hint 语法是怎么写的，hint 生效需要满足什么条件？",
+  "overlap": "不重叠",
+  "note": "改角度：hint 语法与生效条件，非用法清单"
+ },
+ {
+  "slug": "sql-statement-load-data",
+  "query": "TiDB LOAD DATA 导入和 INSERT 批量导入哪个快？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[3]问批量 insert 慢，此为 LOAD DATA 用法"
+ },
+ {
+  "slug": "sql-statement-flashback-table",
+  "query": "TiDB 误删表后怎么用 FLASHBACK TABLE 恢复？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-kill",
+  "query": "TiDB KILL 语句能终止正在执行的查询吗，和 MySQL 有什么不同？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "window-functions",
+  "query": "TiDB 窗口函数（ROW_NUMBER/RANK）支持哪些，怎么用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "json-functions",
+  "query": "TiDB 的 JSON 函数和 MySQL 兼容吗，常用 JSON 函数有哪些？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[17]问 JSON 查询慢优化，此为 JSON 函数列表"
+ },
+ {
+  "slug": "cast-functions-and-operators",
+  "query": "TiDB 里 CAST 和 CONVERT 有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "date-and-time-functions",
+  "query": "TiDB 日期函数里，怎么计算两个日期的天数差？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "group-by-modifier",
+  "query": "TiDB 支持 WITH ROLLUP 和 GROUPING 吗，GROUP BY 修饰符怎么用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "string-functions",
+  "query": "TiDB 字符串函数里，怎么用正则匹配和替换？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "control-flow-functions",
+  "query": "TiDB 的 CASE WHEN 和 IF 函数在 SQL 里怎么用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-grant-privileges",
+  "query": "TiDB 的权限体系和 MySQL 完全一样吗，GRANT 有哪些 TiDB 特有权限？",
+  "overlap": "部分重叠",
+  "note": "AskTUG[73]问多表授权，此为权限体系"
+ },
+ {
+  "slug": "sql-statement-savepoint",
+  "query": "TiDB 事务里 SAVEPOINT 怎么用，和 MySQL 兼容吗？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-prepare",
+  "query": "TiDB 的 PREPARE 预处理语句和直接执行有什么区别，为什么要用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "expressions-pushed-down",
+  "query": "TiDB 表达式下推到 TiKV 后，为什么有些查询反而变慢了？",
+  "overlap": "不重叠",
+  "note": "改角度：下推的性能影响，非下推清单"
+ },
+ {
+  "slug": "sql-statement-flashback-cluster",
+  "query": "TiDB FLASHBACK CLUSTER 能恢复整个集群到指定时间点吗？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-recover-table",
+  "query": "TiDB RECOVER TABLE 和 FLASHBACK TABLE 有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "aggregate-group-by-functions",
+  "query": "TiDB 聚合函数里 COUNT(*) 和 COUNT(列) 有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "join-reorder",
+  "query": "TiDB 的 join reorder 优化是什么，什么时候会改变 join 顺序？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-import-into",
+  "query": "TiDB IMPORT INTO 和 LOAD DATA 有什么区别，各适合什么场景？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-create-sequence",
+  "query": "TiDB 的 SEQUENCE 对象怎么创建和使用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-lock-tables-and-unlock-tables",
+  "query": "TiDB 支持 LOCK TABLES 吗，和 MySQL 的锁表有什么区别？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "information-functions",
+  "query": "TiDB 里怎么查看当前版本、连接 ID 等信息函数？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "locking-functions",
+  "query": "TiDB 的 GET_LOCK 等锁函数怎么用，能实现分布式锁吗？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "numeric-functions-and-operators",
+  "query": "TiDB 数值计算里 DECIMAL 精度是怎么保证的？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "miscellaneous-functions",
+  "query": "TiDB 有哪些 MySQL 没有的特有函数？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-query-watch",
+  "query": "TiDB QUERY WATCH 怎么用来拦截和管控慢查询？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "sql-statement-calibrate-resource",
+  "query": "TiDB CALIBRATE RESOURCE 是做什么的，怎么用？",
+  "overlap": "不重叠",
+  "note": ""
+ },
+ {
+  "slug": "window-functions",
+  "query": "TiDB 窗口函数里 frame 子句（ROWS BETWEEN）和 LAG/LEAD 怎么用？",
+  "overlap": "不重叠",
+  "note": "第2条换角度：frame 子句/LAG-LEAD，非排名"
+ }
+]

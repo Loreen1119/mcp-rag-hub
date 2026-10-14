@@ -1,0 +1,1643 @@
+[
+ {
+  "id": 1,
+  "group": "multi",
+  "title": "tidb 漏洞扫描处理- Prometheus 和 ETCD 未授权访问",
+  "slugs": [
+   "enable-tls-between-clients-and-servers",
+   "enable-tls-between-components"
+  ],
+  "multi": true,
+  "qbody": "\n安全产品进行漏洞扫描，PD和prometheus结果如下，该如何处理\n |CoreOS ETCD集群API未授权访问漏洞|未授权访问|\n |CoreOS ETCD集群API未授权访问漏洞|未授权访问|\n |CoreOS ETCD集群API未授权访问漏洞|未授权访问|\n |Prometheus监控告警平台未授权访问|未授权访问|\n [图片]\n 1、请参考官方设置身份验证文档增加身份验证：https://github.com/etcd-io/etcd/blob/master/Documentation/v2/authentication.md，密码最好包含大小写字母、数字和特殊字符等，且位数大于8位。2、如非必要，禁止公网访问该服务。3、通过防火墙等安全设备设置访问策略，设置白名单访问。\n 1、添加身份验证，密码最好包含大小写字母、数字和特殊字符等，且位数大于8位。2、如非必要，禁止公网访问"
+ },
+ {
+  "id": 2,
+  "group": "multi",
+  "title": "触发TiKV_approximate_region_size告警,手动split超时",
+  "slugs": [
+   "tikv-control"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 触发了TiKV_approximate_region_size告警，监控如下：\n PD\n\n[图片]\nimage1672×516 42.9 KB\n\n TiKV-Details\n\n[图片]\nimage1920×665 91.4 KB\n\n TiKV-Trouble-Shooting\n\n[图片]\nimage1920×713 134 KB\n\n 查看Region\n\n[图片]\nimage1776×1120 60.8 KB\n\n 都集中在同一张表上\n\n手动split\n tiup ctl:v6.5.2 pd -u http://xx.xx.xx.xx:2379 operator add split-region 417438\n 可以看到PD Dashboard"
+ },
+ {
+  "id": 3,
+  "group": "multi",
+  "title": "tidb批量插入数据速度慢有没有什么优化方向",
+  "slugs": [
+   "dumpling-overview"
+  ],
+  "multi": false,
+  "qbody": "\n现在需求是让开发吧云上的tidb历史数据查出来，插入到本地的tidb里面。代码里面是吧每天的数据查出来之后拼接成一条条insert，每次insert一条数据。5000条insert用了3分钟。\n 有没有什么可以提高速度的。十几个表呢。每个表每天百万数据。如果按照这速度，一天估计很难同步完。。\n"
+ },
+ {
+  "id": 4,
+  "group": "multi",
+  "title": "请教大家个问题，用什么工具对tidb进行压测比较合适",
+  "slugs": [
+   "benchmark-tidb-using-ch",
+   "benchmark-tidb-using-sysbench",
+   "benchmark-tidb-using-tpcc"
+  ],
+  "multi": true,
+  "qbody": "\n请教大家个问题，用什么工具对tidb进行压测比较合适\n"
+ },
+ {
+  "id": 5,
+  "group": "multi",
+  "title": "tidb删除数据很慢",
+  "slugs": [
+   "non-transactional-dml"
+  ],
+  "multi": false,
+  "qbody": "\ndelete from + delTab + where +timeKey+ < startDay limit 100000,\n 删除数据很慢10多秒删除一次，表有10亿条数据并按timeKey建了索引，删除的很慢，各位大神有快方案？\n"
+ },
+ {
+  "id": 6,
+  "group": "multi",
+  "title": "TIDB 查询的时候有结果缓存吗？",
+  "slugs": [
+   "coprocessor-cache",
+   "manage-cluster-faq",
+   "sql-non-prepared-plan-cache",
+   "sql-prepared-plan-cache"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】tidb查询有结果缓存吗？ 为select * 查询0.01S，select count（） 2S，使用explain analyze 查询执行计划，耗时是一样的，但是直接select count（） 比select * 耗时长很长，查询结果只有3条\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 7,
+  "group": "multi",
+  "title": "tidb有sqltest这种测试工具吗",
+  "slugs": [
+   "benchmark-tidb-using-sysbench",
+   "tiup-bench"
+  ],
+  "multi": true,
+  "qbody": "\n有没有类似mysqltest这种啊可以测试全量sql功能的\n"
+ },
+ {
+  "id": 8,
+  "group": "multi",
+  "title": "TiFlash 表从1副本扩容到2副本过程，tiflash特性可用么",
+  "slugs": [
+   "create-tiflash-replicas"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】7.1.0\n 【复现路径】无\n 【遇到的问题：问题现象及影响】\n tifalsh同步1副本处于AVAILABLE=1状态，需要扩容2副本保证ha\n\n问题：\n 扩容过程表的tiflash特性是否可用。\n\n补充说明，自测过程可以用，大佬们有没有实际操作案例？\n tiflash由1副本扩为2副本 tiflash 特性可用.log (30.7 KB)\n"
+ },
+ {
+  "id": 9,
+  "group": "multi",
+  "title": "analyze table问题",
+  "slugs": [
+   "sql-faq",
+   "statistics"
+  ],
+  "multi": true,
+  "qbody": "\n版本7.1\n 数据清理+数据插入造成的吗？如何避免这种频繁的analyze table?\n\n[图片]\n图片1419×229 21.9 KB\n"
+ },
+ {
+  "id": 10,
+  "group": "multi",
+  "title": "tidb有个机器内存耗尽人工重启了，怎么排查具体原因",
+  "slugs": [
+   "troubleshoot-tidb-oom",
+   "tune-tikv-memory-performance"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】7.5.1\n\n【遇到的问题：问题现象及影响】\n 原理的集群重装为版本7.5.1,使用原来的配置文件部署，然后lightning导入重装前的备份数据。导入完成后，又重启了一次集群，发现集群故障\n\n故障现象：\n 19.207服务器内存耗尽离线了\n Heaplnuse-192.168.19.207:10080 占用了很大的内存：95.9 GiB\n\n[图片]\nimage1875×1126 148 KB\n\n[图片]\nimage1199×275 26.3 KB\n\n[图片]\nimage1190×415 56.9 KB\n\n[图片]\nimage1192×467 67 KB\n"
+ },
+ {
+  "id": 11,
+  "group": "multi",
+  "title": "一条sql显示慢在not(isnull(字段))，是什么原因？",
+  "slugs": [
+   "explain-joins",
+   "optimizer-hints"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage1459×381 27.2 KB\n\n 测试的sql.sql (11.3 KB)\n 无标题.xlsx (12.0 KB)\n"
+ },
+ {
+  "id": 12,
+  "group": "multi",
+  "title": "TiDB 有什么办法让当前会话只读，START transaction read only 无效",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】6.1, 7.5\n 【遇到的问题：问题现象及影响】\n 我们需求背景是：计划在跳板机上配置两个 MySQL client ，一个用于只读，比如就叫 mysql ，一个用于变更比如 叫mysql_rw，这样无论传参使用什么账户密码都可以默认兜住一些不必要的更新。\n\nMySQL 可以在init_connect里面设置 SET TRANSACTION READ ONLY=1 来让当前会话只读，但 TiDB 没有实现这个系统变量，还有其他方案吗？ 新增一个专用的 全局读账户可以，但如果我们想的无论什么账户密码连上去，都默认只读呢？\n\n找了许久，没发现好的法子，是在不行最后我最后就得加个全局只读账户了。\n"
+ },
+ {
+  "id": 13,
+  "group": "multi",
+  "title": "关于tidb_auto_analyze_ratio参数的优化",
+  "slugs": [
+   "release-3"
+  ],
+  "multi": false,
+  "qbody": "\n关于tidb_auto_analyze_ratio参数设置问题\n 在官方文档中\n\n- 出现的页面：https://docs.pingcap.com/zh/tidb/stable/system-variables#tidb_auto_analyze_ratio\n\n[图片]\nimage1294×388 31.8 KB\n\n 在配置页面中最小值 可以配置为 0\n\n而在 https://docs.pingcap.com/zh/tidb/stable/sql-faq#在-tidb-中-auto-analyze-的触发策略是怎样的\n\n[图片]\nimage1270×343 44.2 KB\n\n在故障诊断，故障场景一节中 确有如下配置建议\n\n[图片]\nimage1512×636 88.2 KB\n\n希望优化一下，给出更合理的参数配置建议\n"
+ },
+ {
+  "id": 14,
+  "group": "multi",
+  "title": "DM 没有LOCK 权限能不能备份全量？",
+  "slugs": [
+   "dumpling-overview",
+   "task-configuration-file-full"
+  ],
+  "multi": true,
+  "qbody": "\nDM 8.1 版本\n 源库是分库分表 MySQL ,但是申请不了 LOCK 权限，能不能全量备份？\n"
+ },
+ {
+  "id": 15,
+  "group": "multi",
+  "title": "设置日志文件处理方式的log.file在哪里设置",
+  "slugs": [
+   "minimal-deployment-topology",
+   "tiup-component-cluster-edit-config",
+   "tiup-component-cluster-reload"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【遇到的问题：问题现象及影响】\n tidb节点下面的tidb.log和慢日志最近数据量很大，我想清理下，下图这些[配置添加到哪个路径下还是说怎么应用\n\n[图片]\nimage1025×760 23.1 KB\n"
+ },
+ {
+  "id": 16,
+  "group": "multi",
+  "title": "如何查看br历史备份信息？",
+  "slugs": [
+   "br-pitr-guide",
+   "br-snapshot-guide"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】 测试/ Poc\n 【 TiDB 版本】7.5.0\n 【遇到的问题：问题现象及影响】\n 之前通过br对数据库做了一些备份，包括全量备份、单表备份、增量备份和日志备份。请问通过什么方法可以查看到br的历史备份信息？比如如何查看我之前做过哪些备份？如何查看这些备份的具体备份内容，是全量增量还是单表备份？\n"
+ },
+ {
+  "id": 17,
+  "group": "multi",
+  "title": "TiDB json查询与常规like查询对比时间过慢",
+  "slugs": [
+   "generated-columns",
+   "sql-statement-create-index"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】5.4\n 同一张表1800w数据，执行count(*) 操作 like模糊查询只需要0.2秒，json数据查询需要10秒，看执行计划，使用like比使用JSON查询的效率还要高一点，请教各位大神，这种需要怎么优化？\n\n[图片]\nimage1284×353 23.4 KB\n\n[图片]\nimage1253×389 23.1 KB\n\n[图片]\nimage1316×379 25.4 KB\n"
+ },
+ {
+  "id": 18,
+  "group": "multi",
+  "title": "请教TiDB多表关联时是怎么实现下推的？",
+  "slugs": [
+   "explain-overview",
+   "use-tiflash-mpp-mode"
+  ],
+  "multi": true,
+  "qbody": "\nGreenplum之类分布式数据库的表关联，关联键和分布键不相同的时候，有重分布和广播的概念。\n TiDB在关联多个表的时候可以将关联下推到TiKV节点执行吗，具体怎么实现的呢？\n"
+ },
+ {
+  "id": 19,
+  "group": "multi",
+  "title": "dumpling如何限速，减少对生产上的影响",
+  "slugs": [
+   "dumpling-overview",
+   "system-variables"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】\n 有个需求，需要在TiDB上导出一个大表，使用dumpling，运行时增多了慢查和响应时间，也触发了告警，有没有什么办法可以限制dumpling导出的速度\n"
+ },
+ {
+  "id": 20,
+  "group": "multi",
+  "title": "几百万数据group有没有优化空间，能提升到10几秒吗？group条件过滤之前大概数据300万到400万",
+  "slugs": [
+   "tiflash-supported-pushdown-calculations",
+   "use-tiflash-mpp-mode"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage1071×606 75.2 KB\n\n[图片]\nimage1441×733 61.3 KB\n"
+ },
+ {
+  "id": 21,
+  "group": "multi",
+  "title": "删除一个tikv挂载盘，IO跌零10秒以上",
+  "slugs": [
+   "tikv-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【背景】\n 我们构建了一套 juicefs + tikv + ceph 的分布式文件系统，其中 tikv 集群用于存放元数据，由 3 个物理节点构成，每个节点上都混部了一个 tikv 服务和一个 pd 服务。\n\n【 TiDB 版本】\n v 6.5.0\n\n【复现路径】\n 删除tikv的挂载盘\n\n[图片]\nimage976×418 11.6 KB\n\n【遇到的问题：问题现象及影响】\n vdbench IO出现跌零15s，客户端和集群相差13~14秒左右\n\n[图片]\nimage1522×456 20.1 KB\n\n[图片]\nimage1711×942 28.9 KB\n\n【附件：截图/日志/监控】\n tikv日志\n\n[图片]\nimage1701×398 63 KB\n\n[图片]\nimage1701×333 54.5 KB\n\n[图片]\nimage1142×224 6.69 KB\n\n监控\n\n[图片]\nim"
+ },
+ {
+  "id": 22,
+  "group": "multi",
+  "title": "表设置好tiflash设置后，执行计划看不到tiflash使用",
+  "slugs": [
+   "use-tidb-to-read-tiflash"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】7.1\n 【复现路径】表设置了tiflash副本完成后，表查询的执行计划发现查询没有走tiflash; explain SQL\n 【遇到的问题：问题现象及影响】\n 查询的执行计划发现查询没有走tiflash; explain SQL；\n 但是按照网上的介绍，可以强制设置mpp，\n set tidb_allow_mpp=‘ON’;\n set tidb_enforce_mpp=‘ON’;\n set tidb_opt_force_inline_cte=‘ON’;\n 但是它都是在session范围内生效，无法在全局内生效。请问怎样让他在全局内生效？或者说设置了tiflash，但是执行计划不走tiflash，它的原因是什么？\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机"
+ },
+ {
+  "id": 23,
+  "group": "multi",
+  "title": "TiDB备份问题",
+  "slugs": [
+   "tso"
+  ],
+  "multi": false,
+  "qbody": "\n[图片]\n17058895273271662×433 34.9 KB\n\n 大佬们，我想知道这个TSO代表什么。我怎么感觉TSO这么像时间戳。可是上面那个时间戳不是具体时间么？这个文档看的我傻傻的\n"
+ },
+ {
+  "id": 24,
+  "group": "multi",
+  "title": "dm配置上游数据库",
+  "slugs": [
+   "dm-webui-guide",
+   "dm-worker-intro"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】\n 【附件：截图/日志/监控】\n 同一个tidb集群，上游下游都是这个tidb集群，只是不同数据库的表能否进行dm同步。 配置数据源出错\n\nMessage: database driver error, RawCause: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line \"SLAVE HOSTS\"\n"
+ },
+ {
+  "id": 25,
+  "group": "multi",
+  "title": "MergeRegion 不工作",
+  "slugs": [
+   "pd-scheduling-best-practices",
+   "release-5"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v5.4\n 【复现路径】reload 集群\n 【遇到的问题：问题现象及影响】\n region merge 调度不工作，造成空 region 持续增加，不合并\n 【资源配置】\n 【附件：截图/日志/监控】\n\n[图片]\niShot_2023-09-15_17.37.081798×533 165 KB\n\n 上图显示的是最后 merge region 的时间\n\n[图片]\nimage3586×1850 711 KB\n\n使用 reload 进行过操作，但是没有作用。。\n\n这是 config show 的内容\n\n[图片]\nimage990×1158 143 KB\n"
+ },
+ {
+  "id": 26,
+  "group": "multi",
+  "title": "关于使用Bulk Copy导致事务失效问题",
+  "slugs": [
+   "sql-statement-load-data",
+   "sql-statement-rollback"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】5.7.25-TiDB-v7.1.1\n 【复现路径】开启一个事务，先用insert插入A表数据，再使用Bulk Copy插入B表数据，在未commit的情况下，另外开启一个事务查询A表和B表\n 【遇到的问题：未提交情况下发现AB表已经写入了，使用ROLLBACK无法回退。Mysql无此问题正常回退】\n"
+ },
+ {
+  "id": 27,
+  "group": "multi",
+  "title": "生产环境的br全备和增量备份以及恢复脚本",
+  "slugs": [
+   "br-pitr-guide",
+   "br-snapshot-guide"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.5.9\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 是否可以提供下大家的生产环境的br全备和增量备份以及恢复脚本（去除敏感信息后的），我看303视频里面的br的增量备份使用的是获取上次备份的TSO，这种备份方式是否依旧适用于生产环境?我看现在还有一种是备份日志的方式，两种的优缺点是？\n"
+ },
+ {
+  "id": 28,
+  "group": "multi",
+  "title": "日志问题，wal的日志和rocksDB里面的raft日志的区别与作用",
+  "slugs": [
+   "tikv-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n为什么要两个日志？分别的作用是什么？具体怎么看到？\n"
+ },
+ {
+  "id": 29,
+  "group": "multi",
+  "title": "快速地将大量数据导入 TiDB 集群为什么要用DM？ 而不建议使用inset?",
+  "slugs": [
+   "dm-best-practices",
+   "tidb-lightning-physical-import-mode"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 快速地将大量数据导入 TiDB 集群为什么要建议使用DM工具？ 而不建议直接使用inset方式直接插入数据?，\n 用DM的话，不是需要再创建一个mysql数据库来作同步数据源，这样不是更麻烦吗？\n"
+ },
+ {
+  "id": 30,
+  "group": "multi",
+  "title": "如何查看titandb里的Blob内容都是属于那些表的",
+  "slugs": [
+   "titan-configuration"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 正常业务DDL变更(只有创建索引)时报错，问题现象跟这个 PD扩缩容成功后，执行create index语句报错ERROR 1105 (HY000): DDL job rollback, error报错一样，经和使用方沟通后，在业务低谷时段执行reload操作\n 执行tiup cluster reload cluster_name时报\n\n```\nError: init config failed: xxx.xxx.xxx.xxx:20160: executor.ssh.execute_"
+ },
+ {
+  "id": 31,
+  "group": "multi",
+  "title": "同一个sql指纹， 产生了不同的执行计划id，但计划内容又一样！为什么？",
+  "slugs": [
+   "sql-prepared-plan-cache",
+   "system-variables"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】TiDB Dashboard -》sql语句分析， 根据执行计划数排序\n 【问题】 发现同一个sql指纹下，出现多个不同的执行计划。查看计划详细信息，发现执行计划相同（使用了同一个索引，同一种算子）可为什么还是产生了不同的执行计划呢？\n\n[图片]\nimage1375×992 80.6 KB\n\n[图片]\nimage970×372 25 KB\n\n[图片]\nimage951×340 24.4 KB\n"
+ },
+ {
+  "id": 32,
+  "group": "multi",
+  "title": "对视图进行分页查询期间，视图涉及到的表的数据变化导致查询不一致",
+  "slugs": [
+   "dev-guide-use-stale-read",
+   "garbage-collection-overview",
+   "stale-read"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】V8.1.0\n 【复现路径】\n 【遇到的问题：问题现象及影响】 创建一个视图，分页查询，在分页查询期间，如果视图中某张表的数据变化了，会导致查询结果和第一次查询时不一致\n\n请问有没有什么好的办法来解决次问题\n"
+ },
+ {
+  "id": 33,
+  "group": "multi",
+  "title": "tidb压力测试造数脚本",
+  "slugs": [
+   "benchmark-tidb-using-ch",
+   "benchmark-tidb-using-sysbench",
+   "benchmark-tidb-using-tpcc"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】6.5.1\n 【复现路径】\n 【遇到的问题：问题现象及影响】生活环境有五六亿条数据 ，我想dumpling下来，做个压力测试，哪位大佬有现成的造数脚本，借来一用，不胜感激。\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 34,
+  "group": "multi",
+  "title": "dm-worker在同步上游mysql的DDL时同步暂停，但query-status结果却正常",
+  "slugs": [
+   "dm-binlog-event-filter",
+   "handle-failed-ddl-statements",
+   "mysql-compatibility"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n Tidb版本：4.0.11\n dm版本：2.0.1\n 【遇到的问题：问题现象及影响】\n 上游mysql通过pt工具，执行了alter table xxxx ENGINE = innodb这种回收表空间的操作。\n dm-worker同步数据hang住，但query-status查看状态正常，导致没有触发报警。\n dm-woker.log日志报错\n\n[2023/12/06 10:35:14.295 +08:00] [ERROR] [subtask.go:310] [“unit process error”] [subtask=online_internal] [unit=Sync] [“error information”=“{\"ErrCode\":44006,\"ErrClass\":\"schema-tracker\",\"ErrScope"
+ },
+ {
+  "id": 35,
+  "group": "multi",
+  "title": "tikv 三台机器，压测写入数据时只有一台机器负载比较高，其他两台处于空闲",
+  "slugs": [
+   "high-concurrency-best-practices"
+  ],
+  "multi": false,
+  "qbody": "\n当txnkv压测，写数据用了事务的两阶段提交时，写入key的字节数越大qps明显下降许多，但资源是并没有吃满的：\n\n[图片]\nimage690×457 60.9 KB\n\n[图片]\nimg_91664×1252 185 KB\n\n[图片]\nimg_102866×1126 220 KB\n\n[图片]\nimg_11942×452 29.6 KB\n\n[图片]\nimg_12946×438 32.5 KB\n"
+ },
+ {
+  "id": 36,
+  "group": "multi",
+  "title": "dumpling导出数据到csv解析longtext字段不符合预期",
+  "slugs": [
+   "dumpling-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n\n-\ntidb : 7.5.4\n\n-\ndumpling 7.5.4\n 【复现路径】做过哪些操作出现的问题\n\n-\n表结构如下\n\n[图片]\nimage569×197 5.69 KB\n\n-\n插入数据\n\n```\ncreate table t1(id int primary key,username  varchar(20),testcol longtext);\ninsert into t1 values(1,'aaa','{\"a1\":\"A1\",\"b1\":\"B1\",\"c1\":\"\",\"d1\":\"{\\\\\\\"e1\\\\\\\":\\\\\\\"E1\\\\\\\"}\"}');\n\n```\n\n[图片]\nimage726×120 3.37 KB\n\n- 使用 dumpling导出\n```\n.tiup/components/dumpling/v7.5.4/du"
+ },
+ {
+  "id": 37,
+  "group": "multi",
+  "title": "tidb内存持续升高",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【TiDB 使用环境】生产环境\n 【TiDB 版本】8.5.0\n 【操作系统】centos 32c64G\n 【部署方式】云上部署\n\n[图片]\nimage1233×343 113 KB\n\n[图片]\nimage1590×868 34.3 KB\n\n间歇性oom\n 请问下大家 这个heaplnuse 有什么参数作为限制吗 ，目前系统大页这些参数均设置\n"
+ },
+ {
+  "id": 38,
+  "group": "multi",
+  "title": "有2个tidb节点的情况下，怎么样做负载均衡？",
+  "slugs": [
+   "haproxy-best-practices",
+   "tiproxy-deployment-topology"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】v5 v6 v7\n 【遇到的问题：问题现象及影响】tidb v5 v6 v7版本在有2个tidb节点的情况下，怎么样做负载均衡？\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage903×648 20.9 KB\n"
+ },
+ {
+  "id": 39,
+  "group": "multi",
+  "title": "ticdc，tidb-mysql，能同步用户和数据库吗？还是只能同步表？",
+  "slugs": [
+   "migrate-from-tidb-to-mysql",
+   "ticdc-overview"
+  ],
+  "multi": true,
+  "qbody": "\nticdc，tidb-mysql，如果mysql没有创建任何用户和数据库，t建立changfeed后，tidb中的用户和数据库能同步过去吗？\n"
+ },
+ {
+  "id": 40,
+  "group": "multi",
+  "title": "region和peer的理解",
+  "slugs": [
+   "glossary",
+   "tidb-scheduling"
+  ],
+  "multi": true,
+  "qbody": "\n3副本指的是PEER_ID为2742037,2742038,2742039 三个？\n REGION_ID 是IS_LEADER=1的leader角色peer 的一个副本指针？\n 可以这么理解吗\n\nshow config where name like ‘%replication.max-replicas%’;\n ±-----±---------------±-------------------------±------+\n | Type | Instance | Name | Value |\n ±-----±---------------±-------------------------±------+\n | pd | 127.0.0.1:2379 | replication.max-replicas | 3 |\n | pd | 127.0.0.1:2381 | replicatio"
+ },
+ {
+  "id": 41,
+  "group": "multi",
+  "title": "并发查询导致查询变慢",
+  "slugs": [
+   "grafana-tikv-dashboard",
+   "tikv-configuration-file"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】列表压测（单表查询），数据300w左右\n 【遇到的问题：问题现象及影响】 导致其他查询时间从1s → 50s左右\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage1535×889 189 KB\n\n| id | estRows | estCost | actRows | task | access object | execution info | operator info | memory | disk |\n | StreamAgg_10 | 1.00 | 91893354.59 | 1 | root | | time:44.9s, loops:2 | funcs:count(0)->"
+ },
+ {
+  "id": 42,
+  "group": "multi",
+  "title": "dm向多副本容灾集群写入速度较慢 目前5副本",
+  "slugs": [
+   "latency-breakdown"
+  ],
+  "multi": false,
+  "qbody": "\n【TiDB 使用环境】生产环境\n 【部署方式】腾讯云/32c128GNVME盘\n 【集群数据量】11T\n 【集群节点数】13\n\n目前有八个同步任务，分了8个task且均为默认dm参数 但tidb未接入业务流量，会经常出现延迟 请教大家看如何优化\n\n[图片]\n17506617790861920×3522 517 KB\n\n[图片]\nimage1920×895 167 KB\n"
+ },
+ {
+  "id": 43,
+  "group": "multi",
+  "title": "AUTO_INCREMENT=1000001 并且 AUTO_ID_CACHE=1 主键id会跳号",
+  "slugs": [
+   "auto-increment"
+  ],
+  "multi": false,
+  "qbody": "\n– 建表语句\n CREATE TABLE ieg_operation_promotion_project_sequence_cc (\n id int NOT NULL AUTO_INCREMENT COMMENT ‘主键id’,\n code varchar(64) DEFAULT NULL COMMENT ‘项目编码’,\n PRIMARY KEY (id) /*T![clustered_index] CLUSTERED */\n ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin AUTO_INCREMENT=1000001 /*T![auto_id_cache] AUTO_ID_CACHE=1 */ COMMENT=‘CC’;\n\n创建表后插入带主键数据\n INSERT INTO ieg_operation_promoti"
+ },
+ {
+  "id": 44,
+  "group": "multi",
+  "title": "TiDB TTL导致系统读IO飙升",
+  "slugs": [
+   "hybrid-deployment-topology",
+   "versioning"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v7.4.0\n 【复现路径】表设置TTL\n 【遇到的问题：问题现象及影响】TTL sql 占用系统资源导致系统慢查询飙升\n 【资源配置】\n\n[图片]\nimage1158×297 10.6 KB\n\n【附件：截图/日志/监控】\n\n[图片]\nimage2771×1452 303 KB\n\n[图片]\nimage2672×1331 276 KB\n\n[图片]\nimage2393×1373 320 KB\n\n[图片]\nimage2079×372 25.7 KB\n"
+ },
+ {
+  "id": 45,
+  "group": "multi",
+  "title": "使用TiCDC吧增量数据同步到kafka给BI用需要部署几台比较好",
+  "slugs": [
+   "monitor-ticdc",
+   "ticdc-architecture"
+  ],
+  "multi": true,
+  "qbody": "\n增量数据每天几十G，现在要使用CDC同步到kafka，\n 源端我需要几个台CDC够用呢？我把他扩容在tidb服务器 16核64G，1个够用吗？还是需要2台\n kafka需要几台呢？目前已经有个kafka集群。都是2核8G的。我搞一台单独的8核32G 可以吗？\n"
+ },
+ {
+  "id": 46,
+  "group": "multi",
+  "title": "三台物理机，每台物理机部署4个tikv，同一副本的数据会存在同一台服务器上不同的tikv节点吗？",
+  "slugs": [
+   "multi-data-centers-in-one-city-deployment",
+   "schedule-replicas-by-topology-labels"
+  ],
+  "multi": true,
+  "qbody": "\n【TiDB 使用环境】生产环境\n 【TiDB 版本】6.5.7\n 【操作系统】centos7.9\n 【集群节点数】3*4=12\n\n【问题】三台物理机，每台物理机部署4个tikv，同一副本的数据会存在同一台服务器上不同的tikv节点吗？如果会的话，如何可以避免？\n"
+ },
+ {
+  "id": 47,
+  "group": "multi",
+  "title": "TIDB 平滑升级【v7.5.2-->v7.5.5】最佳实战",
+  "slugs": [
+   "relea",
+   "upgrade-tidb-using-tiup"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v7.5.2\n 【复现路径】哪位大神有对TIDB从v7.5.2–>v7.5.5的升级实战呢，最好是有详细的SOP [图片]\n"
+ },
+ {
+  "id": 48,
+  "group": "multi",
+  "title": "使用DM迁移数据",
+  "slugs": [
+   "dm-best-practices",
+   "dm-overview"
+  ],
+  "multi": true,
+  "qbody": "\n使用DM从mysql 中迁移数据到tidb，1TB的数据量，大概需要多长时间啊，tidb端，pd,tidb server,PD 各三个节点，服务器配置都很高\n 如果mysql 的表中，有tidb 不支持的数据类型，有什么处理思路啊\n"
+ },
+ {
+  "id": 49,
+  "group": "multi",
+  "title": "事务TTL作用",
+  "slugs": [
+   "dev-guide-timeouts-in-tidb",
+   "tidb-configuration-file"
+  ],
+  "multi": true,
+  "qbody": "\nbegin开启一个事务，进行dml操作，发现tidb log里面每隔10秒send TxnHeartBeat，并更新ttl。请教一个这个ttl怎么去理解？ 为什么要10s刷新一次。\n\nlog :\n\n```\n[INFO] [2pc.go:1163] [\"send TxnHeartBeat\"] [startTS=456497418059120642] [newTTL=201800]\n[INFO] [2pc.go:1163] [\"send TxnHeartBeat\"] [startTS=456497418059120642] [newTTL=211800]\n[INFO] [2pc.go:1163] [\"send TxnHeartBeat\"] [startTS=456497418059120642] [newTTL=221801]\n[INFO] [2pc.go:1163] [\"send TxnH"
+ },
+ {
+  "id": 50,
+  "group": "multi",
+  "title": "RU占用高，如何找到占用RU较高的SQL排查？",
+  "slugs": [
+   "information-schema-slow-query",
+   "statement-summary-tables"
+  ],
+  "multi": true,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 生产出现了，资源超出配额（初始配了500），导致查询报错的问题。已经进行了配额调整（1500），还配置了超出配额允许使用系统剩余的资源。\n 我想找到到底是哪个SQL，或者是哪些SQL导致的RU使用超标？\n\n[图片]\nimage237×218 14.8 KB\n\n 在这个时间区间内并没看找到明显资源占用多的SQL，反而有很多是由于 “RC 等待累积耗时” 过高导致整体执行时间很长的SQL。不知道是我排查的方式有问题还是其他原因？请教各位大佬，遇到这种问题你们是怎么排查的？\n"
+ },
+ {
+  "id": 51,
+  "group": "single",
+  "title": "请问有办法降级嘛？比如从6.5.3 降级到6.5.1",
+  "slugs": [
+   "pd-scheduling-best-practices"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】6.5.3 能否降级，太多问题了。\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 52,
+  "group": "single",
+  "title": "对于mysql 都有个实例的概念，请问tidb 有这个概念吗",
+  "slugs": [
+   "tidb-architecture"
+  ],
+  "multi": false,
+  "qbody": "\n对于mysql 都有个实例的概念，请问tidb 有这个概念吗，哪个大佬能回答一下吗\n"
+ },
+ {
+  "id": 53,
+  "group": "single",
+  "title": "tidb v3.1.0 40T数据迁移到新集群，有啥好的成熟方案，或者一键迁移工具吗",
+  "slugs": [
+   "dm-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】想把v3.1.0的数据迁移到新集群\n 【遇到的问题：问题现象及影响】\n 【资源配置】\n 【附件：截图/日志/监控】\n\ntidb v3.1.0 40T数据迁移到新集群，有啥好的成熟方案，或者一键迁移工具吗\n\n[图片]\nimage645×379 18.8 KB\n"
+ },
+ {
+  "id": 54,
+  "group": "single",
+  "title": "无法analyze表",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n ANALYZE TABLE JHVIEW.V_API_HDR_VISIT\n\n1105 - Primary key column not found\n\n[图片]\n1711697718878471×557 45.2 KB\n"
+ },
+ {
+  "id": 55,
+  "group": "single",
+  "title": "如何快速迁移一张表的数据 到 另一张表",
+  "slugs": [
+   "sql-statement-batch"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 背景：普通表改为分区表\n 新建分区表，现需要将普通表中的数据导入到分区表中，如何快速的导入？\n"
+ },
+ {
+  "id": 56,
+  "group": "single",
+  "title": "关于一个tikv节点region数量超5万影响性能问题请教",
+  "slugs": [
+   "massive-regions-best-practices"
+  ],
+  "multi": false,
+  "qbody": "\n官方文档说，一个tikv节点region数量不建议超过5万个，我一个测试集群，300G数据，region数量2万，生产3T数据量，一个tikv节点region数量近20万个，会影响性能吗？\n\n[图片]\n8827c74373078d20b26dbd93389e48e593×399 18.4 KB\n\n[图片]\n971afefc579cb7a3a7b023eabbbe3fc885×434 29.5 KB\n"
+ },
+ {
+  "id": 57,
+  "group": "single",
+  "title": "有没有处理过单表2亿条数据，33个字段（无大数据字段 text，blob之类的），要求：一个 select-from返回全表数据的",
+  "slugs": [
+   "dev-guide-connection-parameters"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】7.1.1\n 内存我给24g，现在跑一点就报内存溢出：\n\n[图片]\nimage1920×1080 192 KB\n\n各位有没有这方面经验的：\n\n- tidb 一次查询支持多少返回数据呀\n- 这个参数怎么调呀\n"
+ },
+ {
+  "id": 58,
+  "group": "single",
+  "title": "INSERT语句的select中不会走tiflash么？",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.5.3\n 【复现路径】无\n 【遇到的问题：问题现象及影响】\n 今天优化的时候发现，insert时的select不会走tiflash组件？即使hint了也没有走。之前一直用的4.0，之后升级到高版本后就没关注了。\n 搜索了一下社区，这个竟然在高版本里不支持了？有没有高版本的同学验证一下？\n 官方有计划在新版本中支持么？看issues是停留在了四年前。 [图片]\n\n [图片] INSERT INTO SELECT 语句也可以通过 TiFlash 进行加速 产品需求\n\n 需求反馈 【需求涉及的问题场景】 在 v4.0 早期版本支持这种方式，后来由于修复 bug 被改变行为了，issue: https://github.com/pingcap/tidb/pull/18534 【期望的需求行为】 像 INSERT INTO SELECT"
+ },
+ {
+  "id": 59,
+  "group": "single",
+  "title": "TIDB 在数据安全做了哪些保障",
+  "slugs": [
+   "enable-tls-between-clients-and-servers"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】V6.4.8\n 【遇到的问题：问题现象及影响】 在部署TIDB集群后，虽然可以正常使用了，但是比较担心数据安全的泄露隐患，例如：\n 1、Grafana监控这块是否会暴露业务表里面的数据\n 2、Openapi接口这里是否有隐患【默认我看没有鉴权的功能】\n"
+ },
+ {
+  "id": 60,
+  "group": "single",
+  "title": "TiDB 如何知晓查询计划里每个算子预估的代价",
+  "slugs": [
+   "sql-statement-trace"
+  ],
+  "multi": false,
+  "qbody": "\n为提高效率，请提供以下信息，问题描述清晰能够更快得到解决：\n\n【概述】 我想知道如何在查询计划里知晓每个算子基于代价模型预估的代价\n\n【应用框架及开发适配业务逻辑】\n\n【背景】 做过哪些操作\n\n【现象】 业务和数据库现象\n\n【问题】 当前遇到的问题\n\n【业务影响】\n\n【TiDB 版本】 v7.5.1\n\n【附件】 相关日志及监控\n"
+ },
+ {
+  "id": 61,
+  "group": "single",
+  "title": "客户端终止，TiDB数据库不终止任务",
+  "slugs": [
+   "release-7"
+  ],
+  "multi": false,
+  "qbody": "\nBug 反馈\n 长事务语句执行，客户端强制终止，但是数据库端未终止，且最终完成事务提交\n 【 TiDB 版本】6.3以及之前\n 【 Bug 的影响】影响跑批等\n\n【可能的问题复现步骤】\n create table A ;\n sql_text = “insert into A select * from (复杂执行时间较长查询，便于模拟)”\n 在客户端执行sql_text，预计执行20分钟。\n 客户端强行终止sql_text的连接，该语句会在数据库中继续执行直到完成事务。\n\n【看到的非预期行为】\n 客户端程序已超时终止，数据库端会继续执行直到事务成功完成。这样重复调起批次后有重复跑批风险。\n\n【期望看到的行为】\n 客户端中断连接后，数据库端应立即中断正在运行的会话和终止语句。\n"
+ },
+ {
+  "id": 62,
+  "group": "single",
+  "title": "TiDB程序&手动执行SQL 执行计划不一致",
+  "slugs": [
+   "sql-prepared-plan-cache"
+  ],
+  "multi": false,
+  "qbody": "\n# 问题\n\n相同SQL程序查询1天内数据慢，手动查询1天内数据快。最近上线的某个偏AP类业务从MySQL迁移到TiDB，应用程序SQL无改动\n\n# 版本\n\nTiDB版本6.1.5\n\nMybatis prepare预编译形式发送的SQL\n\njdbc版本\n [图片]\n\n```\njdbc:mysql://%s:%s/%s?characterEncoding=UTF-8&rewriteBatchedStatements=true&allowMultiQueries=true&connectTimeout=2000&socketTimeout=600000\n\n```\n\n# 表结构索引\n\n```\n#SQL语句\nselect xxxx FROM\n  xxxxx_004 l\nWHERE\n  l.mart_code = 'xxxx'\n  AND l.yn = 1\n  AND l.supplier_code"
+ },
+ {
+  "id": 63,
+  "group": "single",
+  "title": "TiFlash存算分离有哪些优劣势？",
+  "slugs": [
+   "tiflash-disaggregated-and-s3"
+  ],
+  "multi": false,
+  "qbody": "\n从 TiDB v7.0.0 开始，TiFlash 支持存算分离架构，它有哪些优劣势，适合哪些业务场景？\n"
+ },
+ {
+  "id": 64,
+  "group": "single",
+  "title": "tidb执行sql完成后内存能手动释放吗？我这边发现内存不会立即释放，后续执行sql可能会导致内存占用越来越高，最后导致被系统杀掉。",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n[图片]\nimage1916×771 136 KB\n"
+ },
+ {
+  "id": 65,
+  "group": "single",
+  "title": "生产环境tidb主库集群OOM内存溢出",
+  "slugs": [
+   "identify-expensive-queries"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.5.0\n 【复现路径】今天10：00左右，集群中的一台tidb-server内存突然被打满，3分钟后，产生OOM，实例自动重启\n 【遇到的问题：问题现象及影响】\n tidb和tikv的配置如下：\n\n```\nserver_configs:\n  tidb:\n    log.level: error\n    new_collations_enabled_on_first_bootstrap: true\n    performance.max-procs: 30\n    performance.txn-total-size-limit: 4221225472\n    prepared-plan-cache.enabled: true\n    tidb_mem_oom_action: CANCEL\n    tidb_mem_quota_"
+ },
+ {
+  "id": 66,
+  "group": "single",
+  "title": "tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上",
+  "slugs": [
+   "use-tiflash-mpp-mode"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.5.0\n 【复现路径】tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上\n 【遇到的问题：问题现象及影响】tiflash加载的几张表，单张超1.5亿的表，进行数据查询时，执行计划走了tiflash，但是，查询比平时慢2倍以上\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage1559×812 156 KB\n\ntiflash的2个节点内存消耗也在50%以下，且日志里也没有异常信息。\n 这种情况，如何排查。当时的临时解决办法是，重启tiflash。\n"
+ },
+ {
+  "id": 67,
+  "group": "single",
+  "title": "事务内Delete相关问题",
+  "slugs": [
+   "dev-guide-third-party-tools-compatibility"
+  ],
+  "multi": false,
+  "qbody": "\n看官方博客DML操作都是在事务的本地buffer中的，那delete也是针对buffer的吗，在commit之前不会真的去kv上删除，那delete完后再select，不是还会把刚才删除的那条数据从kv读上来吗，实际操作并没有出现这种情况，这个是怎么解决的呢？\n"
+ },
+ {
+  "id": 68,
+  "group": "single",
+  "title": "漏洞扫描安全评估问题",
+  "slugs": [
+   "high-reliability-faq"
+  ],
+  "multi": false,
+  "qbody": "\nTiDB集群版本升级到v7.1.1; 安全漏洞扫描出问题，详情如下；怎么解决？\n\nOpenSSL 代码问题漏洞(CVE-2020-1967)\n Oracle MySQL服务器5.7.X<5.7.42安全漏洞（2023年4月CPU）\n Haxx libcurl 缓冲区错误漏洞(CVE-2019-3822)\n Oracle MySQL Server 多个漏洞（2022 年 7 月 CPU）\n Oracle MySQL Server < 5.7.40 安全漏洞（2022年10月CPU）\n Oracle MySQL 服务器 < 5.7.37安全漏洞（2022 年 1 月 CPU）\n MySQL 5.7.x < 5.7.35 多个漏洞（2021 年 7 月 CPU）\n MySQL 5.7.x <5.7.33 多个漏洞（2021年1月补丁）\n MySQL 数据库 5.7.x < 5.7.32多个安全"
+ },
+ {
+  "id": 69,
+  "group": "single",
+  "title": "region 心跳这样定时忽高忽低的正常吗",
+  "slugs": [
+   "massive-regions-best-practices"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage933×375 55.4 KB\n"
+ },
+ {
+  "id": 70,
+  "group": "single",
+  "title": "tidb能用mysqldump工具备份吗",
+  "slugs": [
+   "dumpling-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.5.1\n 【遇到的问题：问题现象及影响】\n tidb的备份能用mysql的mysqldump工具备份吗，兼容吗\n"
+ },
+ {
+  "id": 71,
+  "group": "single",
+  "title": "tidb中的日志可以直接删吗？",
+  "slugs": [
+   "tidb-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n v8.1.0\n 【遇到的问题：问题现象及影响】\n tidb_slow_query 占了几百G的磁盘空间，磁盘使用率达到了91%，请问这个日志可以直接删吗？或者说这个日志有没有自动删除的策略？例如只保留最近30天的日志。\n"
+ },
+ {
+  "id": 72,
+  "group": "single",
+  "title": "TIDB插数据很占内存为什么？",
+  "slugs": [
+   "rocksdb-overview"
+  ],
+  "multi": false,
+  "qbody": "\n部署了一个单体的模拟集群，发现一直往里查数据内存上涨的很快，看了LSM-tree数据接口本身就是空间放大，这个也理解，但是我看LSM-tree只有C0层是内存层面，当数据到一定量，C0层就合并到下面的Cn层去了，要占空间也应该是硬盘空间占的多呀，有合并这个操作的话，为什么内存占用率也会跟着越来越大呢\n"
+ },
+ {
+  "id": 73,
+  "group": "single",
+  "title": "可以多表同时授权吗？",
+  "slugs": [
+   "sql-statement-grant-privileges"
+  ],
+  "multi": false,
+  "qbody": "\n可以类似mysql一样\n [图片]\n 进行多表授权吗？\n 当前在V6.5.6执行时提示错误\n ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 1 column 68 near\n"
+ },
+ {
+  "id": 74,
+  "group": "single",
+  "title": "请教tiflash 安装服务器无AVX2指令集的问题",
+  "slugs": [
+   "tiflash-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】V7.5.0\n 【复现路径】\n 本人将tidb6.5.0升级至7.5.0 升级后发现tiflash无法正常启动，排查后发现：\n Fail to check CPU flags: avx2 not supported. Require avx2 popcnt movbe.\n CPU不支持AVX2指令集，导致tiflash无法启动。\n 求教有没有什么命令可以跳过，或者兼容安装。\n 以下是我机器支持的字符集：\n flags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss ht syscall nx rdtscp lm constant_tsc arch_perfmon peb"
+ },
+ {
+  "id": 75,
+  "group": "single",
+  "title": "\"Error 8200 (HY000): Unsupported drop primary key when the table is using clustered index",
+  "slugs": [
+   "clustered-indexes"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】7.5\n 【复现路径】做过哪些操作出现的问题\n mysql DM同步TIDB\n 【遇到的问题：问题现象及影响】\n 因为mysql主库有问题 一个表删除了主键，但是tidb 无法删除主键\n \"Error 8200 (HY000): Unsupported drop primary key when the table is using clustered index\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n\n[图片]\nimage1396×172 20.2 KB\n"
+ },
+ {
+  "id": 76,
+  "group": "single",
+  "title": "tikv节点存储有大小限制吗？",
+  "slugs": [
+   "hardware-and-software-requirements"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】V4.0.11 8TIKV 3PD 16TIKV 迁移到 v4.0.11 4tikv 3pd 3tikv\n 【复现路径】现在需要通过扩容缩容进行迁移，新的环境4tikv 3pd 3tikv，请教下tikv存储有没有限制。\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 77,
+  "group": "single",
+  "title": "br快照备份监控",
+  "slugs": [
+   "sql-statement-show-backups"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n进行br快照备份的时候，在数据库表里面或者promethus里面，有什么地方可以查到有一个备份任务吗？\n 不是日志备份。\n"
+ },
+ {
+  "id": 78,
+  "group": "single",
+  "title": "如何设置GO的环境变量 GOMEMLIMIT",
+  "slugs": [
+   "configure-memory-usage"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】6.1.3\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 请问怎么设置GO的环境变量 GOMEMLIMIT，及在哪些组件/节点设置？\n\n想缓解TiDB server 会发生 OOM的频率。\n\n设置环境变量 GOMEMLIMIT 缓解 OOM 问题\n https://docs.pingcap.com/zh/tidb/stable/configure-memory-usage\n\n【附件：截图/日志/监控】\n\n[图片]\nimage1141×637 79.3 KB\n"
+ },
+ {
+  "id": 79,
+  "group": "single",
+  "title": "tidb生产环境中是否建议使用查询缓存功能？",
+  "slugs": [
+   "coprocessor-cache"
+  ],
+  "multi": false,
+  "qbody": "\nv7.5.0 开始兼容mysql8.0. mysql8.0后查询缓存这个功能被淘汰了。tidb对这个功能(查询缓存)的使用？是关闭好还是启用好？\n\n[图片]\nimage929×369 13.9 KB\n\nshow VARIABLES like ‘%query_cache%’; 命令查看是启用这个参数的。\n"
+ },
+ {
+  "id": 80,
+  "group": "single",
+  "title": "Tidb v6.0 Collation能否改为mysql 8.0的collation",
+  "slugs": [
+   "character-set-and-collation"
+  ],
+  "multi": false,
+  "qbody": "\ntidb v6.0以上使用的排序规则可以更改为MySql8.0的排序规则吗，查了下官方文档没有找到修改方式。如下图能将tidb默认Collation改为utf8mb4_0900_ai_ci吗\n\n[图片]\n52edb3c20bbcf9e0d0727f7f58164ba1173×290 8.71 KB\n"
+ },
+ {
+  "id": 81,
+  "group": "single",
+  "title": "tidb cdc 同步数据异常",
+  "slugs": [
+   "ticdc-avro-protocol"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】 v7.5.1\n 【复现路径】多条数据合并到一起\n 【遇到的问题：问题现象及影响】\n\n建表语句：\n\n```\nCREATE TABLE ods.`ods_test` (\n  `id` int(11) NOT NULL,\n  `user_id` int(11) DEFAULT NULL COMMENT '用户id',\n  `user_name` varchar(48) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '',\n  `mysql_delete_type` int(11) NOT NULL DEFAULT '0' COMMENT 'mysql 数据类型',\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */\n) ENGINE"
+ },
+ {
+  "id": 82,
+  "group": "single",
+  "title": "删除数据transaction is too large,size:104857608",
+  "slugs": [
+   "migration-tidb-faq"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】/\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】删除数据transaction is too large,size:104857608\n"
+ },
+ {
+  "id": 83,
+  "group": "single",
+  "title": "如何使用flyway连接tidb",
+  "slugs": [
+   "tidb-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n根据flyway issue #3343，flyway支持tidb，请问如何实现？\n https://github.com/flyway/flyway/issues/3343\n\n目前产品使用flyway和mysql8.0，但是切换到tidb的时候，flyway提示是mysql5.7，请问tidb是如何兼容mysql8.0的？或者，如何让flyway兼容/支持tidb？（还是只有低版本flyway才支持tidb？）\n\n【 TiDB 使用环境】测试/ Poc\n 【 TiDB 版本】tidb-community-server-v7.3.0-linux-amd64\n\n【复现路径】做过哪些操作出现的问题\n\n【遇到的问题：问题现象及影响】\n Caused by: org.springframework.beans.factory.BeanCreationException: Error creati"
+ },
+ {
+  "id": 84,
+  "group": "single",
+  "title": "hashjoin前过滤数据，提高sql查询速度",
+  "slugs": [
+   "explain-joins"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】所有环境\n 【 TiDB 版本】\n 【复现路径】sql查询慢 例子 select * from t left join bt on t.cust_no=bt.cust_no where and bt.cust_name=‘adad’\n 【遇到的问题：问题现象及影响】查询慢,进行hashjoin前，表bt过滤后符合数据1条,但是却读取了t表的全部数据进行hashjoin,是否有办法先根据查询条件查出bt表数据然后再进行hashjoin呢，如图二，但是使用=不符合业务需求，只能使用in，有什么办法可以优化吗\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\nimage1590×771 81.6 KB\n\n[图片]\nimage1620×738 66.5 "
+ },
+ {
+  "id": 85,
+  "group": "single",
+  "title": "tikv 无法写入，这个参数是在哪看的，怎么修改磁盘使用限制",
+  "slugs": [
+   "tikv-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n tikv 无法写入，这个参数是在哪看的，怎么修改磁盘使用限制\n"
+ },
+ {
+  "id": 86,
+  "group": "single",
+  "title": "truncate table是对表做删除标记还是对行做删除标记?",
+  "slugs": [
+   "garbage-collection-overview"
+  ],
+  "multi": false,
+  "qbody": "\ntruncate table是对表做删除标记还是对行做删除标记?\n drop table呢？\n"
+ },
+ {
+  "id": 87,
+  "group": "single",
+  "title": "tidb分区表如何使用全表分组查询",
+  "slugs": [
+   "use-tiflash-mpp-mode"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】5.4\n 两张表数据相同，大概都有9000万左右数据，一张分区表一张全表，使用分区表进行groupby执行得不到count，使用普通表可以，怎么指定分区表不实用分区union all走全表查询呢。\n\n[图片]\nimage1359×430 19.9 KB\n\n[图片]\nimage1369×484 25.9 KB\n"
+ },
+ {
+  "id": 88,
+  "group": "single",
+  "title": "TiDB与Greenplum7的OLTP性能",
+  "slugs": [
+   "v5"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n如题，多表Join，单表差不多10亿条数据量，TiDB和Greenplum7的TPC-C性能谁的更好？\n"
+ },
+ {
+  "id": 89,
+  "group": "single",
+  "title": "dashboard 用户登录认证失败：authenticate failed",
+  "slugs": [
+   "dashboard-ops-deploy"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】\n V7.1.0\n\n【复现路径】做过哪些操作出现的问题\n 原有集群关闭，新增一套新的集群，新集群的pd与原有老集群pd的节点不重合，所以端口仍为2379，其他组件均修改端口。\n 同时也做了ip 透传设置：\n proxy-protocol.networks: 1xx.xxx.xxx.183,1xx.xxx.xxx.184\n\n在tidb server节点无pd的节点上做中控机安装集群\n\n```\nCluster type:       tidb\nCluster name:       testdlstrack\nCluster version:    v7.1.0\nDeploy user:        tidb\nSSH type:           builtin\nDashboard URL:      http://1xx.xxx.xxx"
+ },
+ {
+  "id": 90,
+  "group": "single",
+  "title": "TiDB 有提供C++的API吗",
+  "slugs": [
+   "dev-guide-choose-driver-or-orm"
+  ],
+  "multi": false,
+  "qbody": "\nTiDB 有提供C++的API吗？我看示例程序都是JAVA,PYTHON这些\n"
+ },
+ {
+  "id": 91,
+  "group": "single",
+  "title": "tidb gc清理异常，导致空间不断上涨",
+  "slugs": [
+   "release-5"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】5.1.4\n 【复现路径】gc时间清理非常慢\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n gc清理已经卡在了几天前\n\n[图片]\nimage539×346 17.7 KB\n\n查看gc清理日志，一直有失败，看着失败都是在 delete range\n\n[图片]\nimage1746×526 143 KB\n\n从当前集群来看 ，并没有太多物理删除需要清理\n\n[图片]\nimage408×123 2 KB\n\ngc相关监控\n\n[图片]\nimage1791×652 120 KB\n"
+ },
+ {
+  "id": 92,
+  "group": "single",
+  "title": "tikv一节点下线很慢",
+  "slugs": [
+   "tiflash-configuration"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v5.2.4\n 【遇到的问题：问题现象及影响】\n 一台tikv服务器宕机了，上面有两个tikv节点，早上下线了其中一个节点，之前region count有4w多，下线到现在还有38864，下线太慢了；\n\n[图片]\n图片1516×550 56.3 KB\n\n tikv资源监控\n\n[图片]\n图片1843×299 89.9 KB\n\n pd资源监控\n\n[图片]\n图片1840×268 74.3 KB\n\n tidb资源监控\n\n[图片]\n图片1840×538 80.7 KB\n\n pd调度参数\n\n[图片]\n图片375×609 10.9 KB\n"
+ },
+ {
+  "id": 93,
+  "group": "single",
+  "title": "dumpling导出csv文件怎么输出到一个文件",
+  "slugs": [
+   "dumpling-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】5.2.4\n 【遇到的问题：问题现象及影响】\n dumpling导出csv文件怎么输出到一个csv文件，不是导出好多csv小文件；\n\n[图片]\n图片1198×727 58.1 KB\n"
+ },
+ {
+  "id": 94,
+  "group": "single",
+  "title": "归档产生delete事件导致cdc链路延迟",
+  "slugs": [
+   "ticdc-filter"
+  ],
+  "multi": false,
+  "qbody": "\n2024-01-18 20:10:00 对TiDB其中几个表进行了归档操作，归档期间cdc产生延迟，直到停止归档后cdc链路延迟消费完成后恢复\n\n【 TiDB 版本】 V6.1.5\n 【 Bug 的影响】\n 每日0点会对通过cdc同步到kafka的前一天的数据进行处理，如果0点的时候延迟会影响到当天的报表数据。\n cdc的延迟导致0点过后消费时未完全消费完当天数据\n\n【期望看到的行为】\n 归档时cdc性能能够承载删除产生的数据量\n\n【其他背景信息或者截图】\n 归档日志截图：\n\n[图片]\nimage847×404 96.6 KB\n\n cdc延迟grafana截图1：\n\n[图片]\nimage710×457 61.1 KB\n\n cdc延迟grafana截图2：\n\n[图片]\nimage1248×593 102 KB\n\n cdc延迟grafana截图3：\n\n[图片]\nimage1249×582 1"
+ },
+ {
+  "id": 95,
+  "group": "single",
+  "title": "为什么语句的执行计划没有算子",
+  "slugs": [
+   "subquery-optimization"
+  ],
+  "multi": false,
+  "qbody": "\n版本:v6.5.3\n 数据来源于tpch\n 语句:\n\n```\nexplain analyze select * from  orders where O_ORDERKEY >=(select O_ORDERKEY  from  orders where O_TOTALPRICE >=370000 order by O_ORDERDATE asc limit 500,1)   limit 10;\n\n```\n\n```\n表结构\nmysql> show create table orders;\n+--------+-----------------------------------------------------------------------------------------------------------------------------------------------"
+ },
+ {
+  "id": 96,
+  "group": "single",
+  "title": "TIDB数据导出",
+  "slugs": [
+   "sql-statement-select"
+  ],
+  "multi": false,
+  "qbody": "\nTIDB版本：7.5.0\n 问题：进入数据库后编辑sql后，想要将查询到的结果导入指定文件怎么实现？\n Mysql数据库可以通过 show global variables like ‘%secure%’;查看secure_file_priv的值即默认导出的路径，tidb中执行该sql后并无secure_file_priv显示。\n"
+ },
+ {
+  "id": 97,
+  "group": "single",
+  "title": "TiDB 索引结构是怎么存储的，是会在rocksdb新建一个列簇吗？",
+  "slugs": [
+   "tidb-computing"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】看官方课程，数据都是存储在rocksdb中的，索引数据在rocksdb是怎么存储的呢\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 98,
+  "group": "single",
+  "title": "主从2个数据库同一个sql执行计划不一样",
+  "slugs": [
+   "explain-index-merge"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 我这有一个简单sql 单表查询在主库中默认不走索引全表扫描了，在从库中执行默认就走索引，请问这个是为什么\n\n[图片]\nimage975×365 15 KB\n\n[图片]\nimage1231×429 19.6 KB\n"
+ },
+ {
+  "id": 99,
+  "group": "single",
+  "title": "哪里有tidb的grafanna平台比较完整的使用说明",
+  "slugs": [
+   "grafana-overview-dashboard"
+  ],
+  "multi": false,
+  "qbody": "\n感觉grafana的资料比较分散，官方监控话题的说明又只是对指标的零散说明，但实际上监控犹如医生的各种检查设备和指标，需要综合利用才能够精准判断系统的状况，从而指定出有效解决问题的方案。\n 请教目前有这类的pdf吗？\n"
+ },
+ {
+  "id": 100,
+  "group": "single",
+  "title": "/tmp/tidb目录空间大小如何计算",
+  "slugs": [
+   "hardware-and-software-requirements"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：/tmp/tidb目录空间大小如何计算】\n 【资源配置】\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 101,
+  "group": "single",
+  "title": "为何简单的查询会产生慢查询",
+  "slugs": [
+   "partitioned-table"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n[图片]\n18fd6c2abec0d4b8d6ad2ed140b10c71190×406 13.1 KB\n\n CREATE TABLE users (\n _id bigint(0) NOT NULL AUTO_INCREMENT,\n password varchar(255) DEFAULT NULL,\n auth int(11) NOT NULL,\n firstlogin tinyint(1) DEFAULT NULL,\n sk varbinary(128) DEFAULT NULL"
+ },
+ {
+  "id": 102,
+  "group": "single",
+  "title": "动态分区裁剪下收集统计信息在做globalstats合并的时候，耗时很久未完成，hang住了",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\nsql报错：disable dynamic pruning due to t gm lon cont has no global stats\n\n然后搜集统计信息：ANALYZE table ###;\n\n然后花费了很久未收集完成，观察show analyze status;\n 疑似hang住了\n\n[图片]\nimage888×286 46.2 KB\n"
+ },
+ {
+  "id": 103,
+  "group": "single",
+  "title": "关于sql执行计划顺序怎么看",
+  "slugs": [
+   "explain-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】7.5\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 比如以下执行计划，我觉得是先执行的是TableFullScan_163，不知道对不对？\n\n[图片]\nimage1737×675 45.9 KB\n"
+ },
+ {
+  "id": 104,
+  "group": "single",
+  "title": "表亿级数据，查询速度慢",
+  "slugs": [
+   "use-tiflash-mpp-mode"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】8.1.0\n 【查询sql】\n SELECT\n summer.parent_hash_id as hash_id,summer.com_id\n FROM\n normal_summer summer\n INNER JOIN basic_detail LISTING ON LISTING.com_id = 9\n AND LISTING.delete_flag = 0\n AND summer.store_id = LISTING.store_id\n AND LISTING.asin = summer.asin\n WHERE\n summer.com_id = 123\n AND summer.delete_flag = 0\n AND summer.node_type IN (1, 2, 3)\n GROUP BY\n summer.parent_"
+ },
+ {
+  "id": 105,
+  "group": "single",
+  "title": "tikv突然出错后自己退出 tikv-20160.service main process exited, FAILURE",
+  "slugs": [
+   "release-5"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v5.4.2\n 【复现路径】无\n 【遇到的问题：问题现象及影响】\n 业务低峰期，系统运行好好的，突然某一tikv节点出错后自己退出。导致系统崩溃，出现大量平时不是慢查询的慢查询。看上去像是tidb程序出什么BUG了？\n 报错如下：\n tikv-20160.service: main process exited, code=exited, status=1/FAILURE\n\n[2023/07/24 18:30:55.854 +08:00] [FATAL] [lib.rs:465] [“elapsed=5717168819; when=5717168817”] [backtrace=\" 0: tikv_util::set_panic_hook::{{closure}}\\n at /home/jenkins/agent/workspac"
+ },
+ {
+  "id": 106,
+  "group": "single",
+  "title": "如何高效修改大表id列？",
+  "slugs": [
+   "auto-increment"
+  ],
+  "multi": false,
+  "qbody": "\n现在有个5kw的测试表，要将原来乱序的id列修改成递增数字，有好办法吗？\n"
+ },
+ {
+  "id": 107,
+  "group": "single",
+  "title": "求助如何查询一个月前的DML sql执行语句",
+  "slugs": [
+   "backup-and-restore-overview"
+  ],
+  "multi": false,
+  "qbody": "\n想找回一个月前的一条数据，未开启general log ，但是开启了binlog，找不到binlog的存放目录\n\n[图片]\nimage363×170 14.8 KB\n"
+ },
+ {
+  "id": 108,
+  "group": "single",
+  "title": "关于timestamp(0)的默认值问题",
+  "slugs": [
+   "data-type-date-and-time"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试/\n 【 TiDB 版本】6.5.3\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n CREATE TABLE testdm.event (\n db char(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT ‘’,\n name char(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ‘’,\n body longblob NOT NULL,\n definer char(93) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT ‘’,\n execute_at datetime(0) NULL DEFAULT NULL,\n interval"
+ },
+ {
+  "id": 109,
+  "group": "single",
+  "title": "基于 TiCDC 不能同步无有效索引表的问题，如何从源头解决无有效索引表的创建呢？",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】7.1\n 基于 TiCDC 不能同步无有效索引表的问题，如何从源头解决无有效索引表的创建呢？\n eg：比如是否有参数禁止无有效索引表创建？\n"
+ },
+ {
+  "id": 110,
+  "group": "single",
+  "title": "TiDB目前只支持hash跟range分区吗？",
+  "slugs": [
+   "partitioned-table"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n TiDB目前只支持hash跟range分区吗？\n\n【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n"
+ },
+ {
+  "id": 111,
+  "group": "single",
+  "title": "技术咨询：BR备份从TiKV集群搂数据，是从leader搂还是所有region中都搂",
+  "slugs": [
+   "br-snapshot-architecture"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】7.1.0\n\n问题\n BR备份从TiKV集群搂数据，是从leader搂还是所有peer中都搂？\n\n官方文档说明：从tikv集群的snapshort中获取tikv和region信息，拉取数据到存储；\n https://docs.pingcap.com/zh/tidb/stable/br-snapshot-architecture#备份流程\n"
+ },
+ {
+  "id": 112,
+  "group": "single",
+  "title": "Write conflict写写冲突问题",
+  "slugs": [
+   "tidb-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 版本】\n V7.1.2\n 【复现路径】\n 单表大量数据更新，两个简单update语句同时执行，报写冲突，设置得有set @@session.autocommit = 1;\n 【遇到的问题：问题现象及影响】\n Write conflict, txnStartTS=445789926295863313, conflictStartTS=445789926020612100, conflictCommitTS=445789926308970497, key={tableID=1063399, tableName=ods_extend.qi_asr_result, handle=2933907}, originalKey=7480000000001039e75f7280000000002cc493, primary={tableID=1063399, tableName=ods_e"
+ },
+ {
+  "id": 113,
+  "group": "single",
+  "title": "tikv的sst文件与rocksdb raft与rocksdb kv关系",
+  "slugs": [
+   "rocksdb-overview"
+  ],
+  "multi": false,
+  "qbody": ""
+ },
+ {
+  "id": 114,
+  "group": "single",
+  "title": "DM不支持多库迁移？",
+  "slugs": [
+   "dm-block-allow-table-lists"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】 Poc\n 【 TiDB 版本】7.3\n\n[图片]\n21634×848 57.5 KB\n\n[图片]\n11634×848 37.8 KB\n\n[图片]\n微信截图_202309012115571634×848 94.6 KB\n\n **迁移源 “clover”,\"db01\"这两个全库。\n\n```\nblock-allow-list:\n  bw-rule-1:                              # 名称\n    do-dbs: [\"clover\",\"db01\"]\n\n```\n\n[图片]\n微信图片_202309012115071634×848 46 KB\n\ndo-dbs: [“clover”,“db01”]写一个可以，多个就不行了。不出错但目标没有数据\n"
+ },
+ {
+  "id": 115,
+  "group": "single",
+  "title": "tidb单机离线部署",
+  "slugs": [
+   "check-before-deployment"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试CentOS7\n 【 TiDB 版本】7.4.0\n 【复现路径】tiup cluster deploy tidb-test01 v7.4.0 ./topology.yaml --user tidb -p tidbtidb -i /home/tidb/.ssh/gcp_rsa\n 报错如下图：\n 【附件：截图/日志/监控】\n\n[图片]\nimage1160×104 4.62 KB\n\n 还有，tidb的安装一定需要ssh命令吗。。。\n"
+ },
+ {
+  "id": 116,
+  "group": "single",
+  "title": "为什么使用navcat在tidb创建表的时候，没办法往表里面添加自增id呢？",
+  "slugs": [
+   "auto-increment"
+  ],
+  "multi": false,
+  "qbody": "\n为提高效率，请提供以下信息，问题描述清晰能够更快得到解决：\n\n【问题】 没办法往表里面添加自增id呢\n\n【TiDB 版本】 7.3.0\n\n[图片]\n微信图片编辑_202402231532181350×364 124 KB\n"
+ },
+ {
+  "id": 117,
+  "group": "single",
+  "title": "使用tiup 部署完了，应等保修改了 ssh 端口，还需要我配合做什么吗？",
+  "slugs": [
+   "maintain-tidb-using-tiup"
+  ],
+  "multi": false,
+  "qbody": "\n如题，麻烦各位大老指点一下\n"
+ },
+ {
+  "id": 118,
+  "group": "single",
+  "title": "tikc-ctl 扫描数据的时候警告",
+  "slugs": [
+   "pd-control"
+  ],
+  "multi": false,
+  "qbody": "\n命令如下： ./tikv-ctl --data-dir ./import/tikv1 scan --from “z”\n 用tikv-ctl扫描sst文件的时候，会有这样的警告：\n [config.rs:712] [“compaction guard is disabled due to region info provider not available”]\n 然后数据扫描不出来\n"
+ },
+ {
+  "id": 119,
+  "group": "single",
+  "title": "配置冷热隔离分区策略，新增lable disk=hhd 出现数据写入慢，cpu拉的很高",
+  "slugs": [
+   "configure-placement-rules"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 6.5.2\n 昨晚配置冷热策略出现一些意外 1、第一步设置ssd、hhd策略，第二步把历史所有数据设置指定ssd策略例如DATABASE estadver “CONSTRAINTS=”“[+disk=ssd]”“” SCHEDULED 3、新增2个kv实例 lable设置成disk=hhd 现象 集群过一小时后cpu拉很高，数据实时离线数据写入很慢，有一部分数据会向lable=hhd的kv节点转移，缩容新增的hhd后恢复正常\n\n过程：第一步：\n 配置的策略 CREATE PLACEMENT POLICY onssd CONSTRAINTS=“[+disk=ssd]”;\n CREATE PLACEMENT POLICY onhdd CONSTRAINTS=“[+disk=hhd]”;\n 第二步：把所有历史数据库 "
+ },
+ {
+  "id": 120,
+  "group": "single",
+  "title": "TICDC的同步任务可以暂停多长时间？",
+  "slugs": [
+   "ticdc-faq"
+  ],
+  "multi": false,
+  "qbody": "\n使用OpenAPI调用暂停同步任务任务后\n POST /api/v2/changefeeds/{changefeed_id}/pause\n\n这个同步任务可以暂停多长时间？比如数据库一直有数据变化，会不会把缓存或者磁盘占满？\n"
+ },
+ {
+  "id": 121,
+  "group": "single",
+  "title": "tidb读取热点问题",
+  "slugs": [
+   "dashboard-key-visualizer"
+  ],
+  "multi": false,
+  "qbody": "\n[图片]\nimage1064×644 54.5 KB\n\n 各位大佬，这个读取热点是什么意思？如何消除读热点？\n"
+ },
+ {
+  "id": 122,
+  "group": "single",
+  "title": "临时表插入报错the table is full",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】5.7.25-TiDB-v7.1.0\n 【复现路径】向临时表中插入大量数据\n 【遇到的问题：问题现象及影响】\n 报错提示The table ‘xxx’ is full\n"
+ },
+ {
+  "id": 123,
+  "group": "single",
+  "title": "dumpling导数很慢",
+  "slugs": [
+   "dumpling-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【遇到的问题：问题现象及影响】\n\n### 背景：\n\nT1 表 33亿数据量\n\n### 使用dumpling过滤导出一直卡着不动，[progress] [tables=“0/1 (0.0%)”]\n\n```\ndumpling -u root -p \"123456\" -P 4000 -h 127.0.0.1 -T gf_sta.T1\\\n--where \"data_date >= '2024-05-21'\" \\\n-o ${BACKUP_DIR}\n\n```\n\n[图片]\nimage2206×1056 206 KB\n\n### 使用mysqldump导出同样过滤条件的数据几分钟就导完了，4G多的sql文件\n\n```\nmysqldump -uroot -p123456 gf_sta T1 --where \"data_date >= '2024-0"
+ },
+ {
+  "id": 124,
+  "group": "single",
+  "title": "TiDB 现在表级别压缩是否支持？",
+  "slugs": [
+   "sql-statement-create-table"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 想咨询一下TiDB是否有表级别压缩？在SQL语法中有 compression选项。\n\n[图片]\nimage1004×507 22.5 KB\n\n 在github.com 上发现：\n |Hi @shenlijungg ,\n Compression is not supported now. If the create table statement contains compression options, TiDB will ignore them.|\n Does tidb support column compression or table compression？ · Issue #8847 · pingcap/tidb · GitHub\n\n请问在几版本以后支持compression选项。\n"
+ },
+ {
+  "id": 125,
+  "group": "single",
+  "title": "单机房3节点tikv集群如何在线扩容成3机房9节点集群",
+  "slugs": [
+   "multi-data-centers-in-one-city-deployment"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】6.1.0\n\n现在想把单机房3节点的tikv集群扩容成3机房9节点集群，然后根据不同机房设置不同区域。如果其中一个机房三个节点挂了依然能正常使用。我应该如何进行扩容？\n"
+ },
+ {
+  "id": 126,
+  "group": "single",
+  "title": "咨询贴：TiKV之间的网络带宽占用看那个监控图",
+  "slugs": [
+   "grafana-tikv-dashboard"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】7.1.0\n 【复现路径】无\n 【遇到的问题：问题现象及影响】\n\n跨云迁移TiDB集群，想看下所有region/raft同步副本的网络带宽情况。\n\nRaft propose speed 可以么？\n\n[图片]\nimage1844×785 205 KB\n\n另：Write flow：不同写操作的流量 可以覆盖Raft同步(replica 阶段)的网络带宽情况么\n"
+ },
+ {
+  "id": 127,
+  "group": "single",
+  "title": "大致说一下，DM，TiCDC，TiDB Binlog各自的适用场景，优缺点和异同",
+  "slugs": [
+   "migration-tools"
+  ],
+  "multi": false,
+  "qbody": "\n简单介绍一下，DM，TiCDC，TiDB Binlog各自的适用场景，优缺点和异同，有什么好的专栏文章推荐看看\n"
+ },
+ {
+  "id": 128,
+  "group": "single",
+  "title": "pump 检查数据同步延迟",
+  "slugs": [
+   "monitor-tidb-binlog-cluster"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v4.0.6\n\n数据同步使用的是pump 和 driainer 工具， 除检查同步工具运行状态外， 如何查看数据同步状态和数据同步延迟？\n"
+ },
+ {
+  "id": 129,
+  "group": "single",
+  "title": "TIDB 统计信息收集的采样比例可以调整么",
+  "slugs": [
+   "statistics"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】v6.1.7\n 【遇到的问题：问题现象及影响】 人工触发analyze table TAB的时候能看到返回结果是auto adject 0.012%比例的行数，这个比例可以调整么？\n"
+ },
+ {
+  "id": 130,
+  "group": "single",
+  "title": "主键值对空格的处理疑问",
+  "slugs": [
+   "character-set-and-collation"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】v7.1.0\n 【复现路径】\n\n发现7.1版本中对于主键存在空格时的行为比较怪异：\n\n```\nmysql> select @@sql_mode;\n+-------------------------------------------------------------------------------------------------------------------------------------------+\n| @@sql_mode                                                                                                                                |\n+---------------"
+ },
+ {
+  "id": 131,
+  "group": "single",
+  "title": "TiDB 7.1集群卡住，报 lock txn not found, lock has expired",
+  "slugs": [
+   "tikv-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试/ Poc\n 【 TiDB 版本】7.1.0\n 【复现路径】长时间无法连接集群\n 【遇到的问题：问题现象及影响】\n 长时间无法连接集群，报错。重启集群也不能恢复。\n\n```\n[2023/07/25 20:12:03.322 +08:00] [WARN] [lock_resolver.go:667] [\"lock txn not found, lock has expired\"] [CallerStartTs=0] [\"lock str\"=\"key: 7480000000000000285f7280000000012c8e03, primary: 7480000000000000165f698000000000000002038000000000005b42, txnStartTS: 443098245297340417, lockForUpdateTS:443"
+ },
+ {
+  "id": 132,
+  "group": "single",
+  "title": "节点上线-balance速度控制问题",
+  "slugs": [
+   "configure-store-limit"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】poc\n 【 TiDB 版本】\n v6.5.2\n 【复现路径】做过哪些操作出现的问题\n 扩容tikv\n tiup cluster scale-out t2 ./scale-out-tikv.yaml\n\n【遇到的问题：问题现象及影响】\n 想要控制上线速度，以防对生产线上业务造成影响，看了文档，如下截图，修改参数并没有生效\n 修改内容如下\n region-schedule-limit由2048改为20480\n max-pending-peer-count由64改为512\n max-snapshot-count由64改为512\n\n[图片]\nimage1798×1350 222 KB\n\n速度一直是15-20MB，如下图\n\n[图片]\nimage1474×334 59.3 KB\n\n请问什么参数能控制节点上线速度\n\n【资源配置】进入到 TiDB Dashboard -集群信息 "
+ },
+ {
+  "id": 133,
+  "group": "single",
+  "title": "TiUP Grafana 匿名登录配置",
+  "slugs": [
+   "customized-montior-in-tiup-environment"
+  ],
+  "multi": false,
+  "qbody": "\n【 架构信息】\n\nTiDB 版本：v 7.1.1\n\n【遇到的问题】\n\n1、通过 ps -ef 查看 grafana.ini 配置文件存放位置，增加了匿名登录配置\n\n```\n[auth.anonymous]\nenabled = true\n\n```\n\n2、tiup reload 后，配置文件被还原\n\n【疑问】\n\ngrafana reload 后配置文件被还原，但是 edit-config 没有实现匿名登录的配置，那么我应该如何去修改能够让 grafana reload 之后也能生效呢？\n"
+ },
+ {
+  "id": 134,
+  "group": "single",
+  "title": "有没有语句把一个表变成另外一个表内的分区表",
+  "slugs": [
+   "partitioned-table"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 就和pg一样 表可以成为另外一个表的分区\n"
+ },
+ {
+  "id": 135,
+  "group": "single",
+  "title": "为何非分区表在修改分区时报错",
+  "slugs": [
+   "non-transactional-dml"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】V4.0.8\n 【复现路径】\n ALTER TABLE finance_r_m_deparement PARTITION BY RANGE (TO_DAYS(quarters)) (\n PARTITION p20211 VALUES LESS THAN (‘20211’),\n PARTITION p20212 VALUES LESS THAN (‘20212’),\n PARTITION p20213 VALUES LESS THAN (‘20213’),\n PARTITION p20214 VALUES LESS THAN (‘20214’),\n PARTITION p20221 VALUES LESS THAN (‘20221’),\n PARTITION p20222 VALUES LESS THAN (‘20222’),\n PA"
+ },
+ {
+  "id": 136,
+  "group": "single",
+  "title": "Tidb 7.5.1 有那些有用的特性哦？",
+  "slugs": [
+   "release-7"
+  ],
+  "multi": false,
+  "qbody": "\nv6退出了热点表缓存，V7有那些好的特性？\n"
+ },
+ {
+  "id": 137,
+  "group": "single",
+  "title": "关于tikv的空间占用和gc的问题",
+  "slugs": [
+   "tikv-control"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】测试\n 【 TiDB 版本】7.1\n 【遇到的问题：问题现象及影响】\n\n测试环境：3节点tikv的单机测试\n 测试内容，新建一个表，插入1000万条数据，然后truncate.\n\n问题：\n gc使用默认10分钟设置，truncate1000万条数据的表后，等了半个小时，硬盘占用空间并没有变小\n 占用如下：\n\n[图片]\nimage780×259 43.1 KB\n\n 经过检查，占用空间的除了sst文件，还有大量log文件\n [图片]\n 重启集群后log文件只剩下一个，硬盘占用空间也得到了释放\n\n[图片]\nimage766×256 45.7 KB\n\n [图片]\n\n想问问log文件什么时候会回收，gc回收多久才能释放硬盘空间\n 还有占用空间最多的是raftlog，这里不是业务数据为何占用最多\n\n[图片]\nimage838×220 66.8 KB\n"
+ },
+ {
+  "id": 138,
+  "group": "single",
+  "title": "怎么对TICDC同步异常做报警",
+  "slugs": [
+   "ticdc-alert-rules"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】V7.5\n\n怎么对TICDC同步异常做报警啊，是可以从Changefeed面板里看到lag，但是怎么做报警呢？查了半天官方文档，也只有报警规则，具体怎么做也没有啊。请教~~~\n"
+ },
+ {
+  "id": 139,
+  "group": "single",
+  "title": "哪里能看到TiCDC的历史版本和更新内容啊",
+  "slugs": [
+   "release-notes"
+  ],
+  "multi": false,
+  "qbody": "\n哪里能看到TiCDC的历史版本和更新内容啊\n"
+ },
+ {
+  "id": 140,
+  "group": "single",
+  "title": "TIDB 后续是否实现 执行计划缓存 功能",
+  "slugs": [
+   "sql-non-prepared-plan-cache"
+  ],
+  "multi": false,
+  "qbody": "\n后续版本是否实现执行计划缓存 功能\n 比如 Oracle 和 Oceanbase 都有此功能\n"
+ },
+ {
+  "id": 141,
+  "group": "single",
+  "title": "like支持下发到个个kv节点计算吗",
+  "slugs": [
+   "expressions-pushed-down"
+  ],
+  "multi": false,
+  "qbody": "\nlike支持下发到个个kv节点计算吗 “%21”,“%123%”,\"342%\"这三种都支持吗\n"
+ },
+ {
+  "id": 142,
+  "group": "single",
+  "title": "ticdc 已经有webui了么？原生或者第三方的",
+  "slugs": [
+   "ticdc-open-api-v2"
+  ],
+  "multi": false,
+  "qbody": "\n疑问如题。\n\n- 背景    [图片] pingkai.cn   [图片]\n### 博客 - 体验TiDB v6.0.0 之TiCDC | TiDB 社区\n\n体验TiDB v6.0.0 之TiCDC一、背景TiDBv6.0.0发布具有特殊的意义，顺便体验一把TiCDC。接上篇从Mysql3306 通过DM迁移数据到TiDB集群中test_dm_all...\n\n Likes: 1 ❤\n\n一年前的文章。\n\n[图片]\n图片647×440 15.3 KB\n"
+ },
+ {
+  "id": 143,
+  "group": "single",
+  "title": "DM全量dump阶段日志信息少一个表",
+  "slugs": [
+   "sync-diff-inspector-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 查看DM同步任务的日志：\n [dumpling.go:299] [“progress status of dumpling”] [task=task_231121_01] [unit=dump] [total_tables=235] [finished_tables=234] [estimated_total_rows=4880299538] [finished_rows=5033309689] [estimated_progress=100.00%] [“new progress”=“100.00 %”] [bps=12889740]\n\n总共有235张表，显示完成了234张表，完成度还是100%。\n"
+ },
+ {
+  "id": 144,
+  "group": "single",
+  "title": "Online DDL语句执行流程中做的？",
+  "slugs": [
+   "ddl-introduction"
+  ],
+  "multi": false,
+  "qbody": "\n1.TiDB Server进行解析（Parse）和编译（Compile）,生成执行计划\n 2 将job队列中的DDL语句对应的表全部锁住为只读状态\n 请教一下大家觉得1/2哪个是ONline DDL必须做的？\n 我个人觉得应该是1，因为online ddl不阻塞读写。\n"
+ },
+ {
+  "id": 145,
+  "group": "single",
+  "title": "修改了服务器IP后，playground需要改哪些配置呢？",
+  "slugs": [
+   "tiup-playground"
+  ],
+  "multi": false,
+  "qbody": "\n```\nStarting component `playground`: /Users/home/.tiup/components/playground/v1.13.1/tiup-playground --db 2 --pd 3 --kv 3 --host 0.0.0.0 --tag test2023\nUsing the version v7.5.0 for version constraint \"\".\n\nIf you'd like to use a TiDB version other than v7.5.0, cancel and retry with the following arguments:\n\tSpecify version manually:   tiup playground <version>\n\tSpecify version range:      tiup pla"
+ },
+ {
+  "id": 146,
+  "group": "single",
+  "title": "想问一下，如果把表删了，磁盘空间会立即释放吗？如果不会释放应该怎么才能把空间给释放出来",
+  "slugs": [
+   "garbage-collection-configuration"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 想问一下，如果把表删了，磁盘空间会立即释放吗？如果不会释放应该怎么才能把空间给释放出来\n"
+ },
+ {
+  "id": 147,
+  "group": "single",
+  "title": "tidb server执行SQL，如何判断OOM?",
+  "slugs": [
+   "configure-memory-usage"
+  ],
+  "multi": false,
+  "qbody": "\ntidb server执行SQL，如何判断OOM内存溢出?\n"
+ },
+ {
+  "id": 148,
+  "group": "single",
+  "title": "低版本tidb迁移到高版本方案",
+  "slugs": [
+   "tidb-binlog-overview"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】3.0.11\n 【遇到的问题：由于服务器性能问题及tidb版本过低，我们准备另外搭一套tidb来使用，现在想把原来老的集群迁移到新的集群，有什么好的不停机（或者停机少）方案吗。\n 本来打算用ticdc的，发现老版本根本没这个工具。\n"
+ },
+ {
+  "id": 149,
+  "group": "single",
+  "title": "应用程序在连接到tidb 的ip地址连接串中，可以使用多个ip+port的组合么？",
+  "slugs": [
+   "tiproxy-overview"
+  ],
+  "multi": false,
+  "qbody": "\n应用程序通过连接tidb server进而连接到tidb中，\n 但是tidb server有多个，这样的话，我应用程序连接串该怎么写？\n 还是通过haproxy进行连接？\n"
+ },
+ {
+  "id": 150,
+  "group": "single",
+  "title": "报警TiKV pending task too much type: resolved-ts",
+  "slugs": [
+   "troubleshoot-stale-read"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n\n告警日志：\n [WARNING] TiKV pending task too much\n 集群: xxxxx\n 内容: type: resolved-ts, instance: xxxxx, values: 3374\n\n[图片]\n1712641451360999×674 41 KB\n\n 时间段内有大量update，需要处理这个告警吗\n"
+ },
+ {
+  "id": 151,
+  "group": "single",
+  "title": "tidb最大能存储多少数据？",
+  "slugs": [
+   "hardware-and-software-requirements"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n 【复现路径】做过哪些操作出现的问题\n 【遇到的问题：问题现象及影响】\n 【资源配置】进入到 TiDB Dashboard -集群信息 (Cluster Info) -主机(Hosts) 截图此页面\n 【附件：截图/日志/监控】\n 内存中的数据达到一定阈值后，会刷到磁盘上生成 SST 文件 (Sorted String Table)，SST 又分为多层（默认至多 6 层），每一层的数据达到一定阈值后会挑选一部分 SST 合并到下一层，每一层的数据是上一层的 10 倍（因此 90% 的数据存储在最后一层）。\n 每层放大10倍，是不是会有个最大容量限制？最大的集群有多少数据？\n"
+ },
+ {
+  "id": 152,
+  "group": "single",
+  "title": "Tidb支持MySQL的事件功能嘛",
+  "slugs": [
+   "mysql-compatibility"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】 v7.2.0\n 【遇到的问题：想了解一下tidb可以创建事件吗，定时执行sql ，两个相同的创建事件SQL TIDB执行就报语法错误You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 1 column 10 near “EVENT IF EXISTS `xxxxx”\n"
+ },
+ {
+  "id": 153,
+  "group": "single",
+  "title": "监控文档里没有Flow Control 相关指标描述",
+  "slugs": [
+   "grafana-tikv-dashboard"
+  ],
+  "multi": false,
+  "qbody": "\n监控文档里缺失 Flow Control 相关指标描述\n"
+ },
+ {
+  "id": 154,
+  "group": "single",
+  "title": "lightning增量数据导入报错",
+  "slugs": [
+   "tidb-lightning-checkpoints"
+  ],
+  "multi": false,
+  "qbody": "\n需要想目标库增量导入数据，使用lightning时出现错误，处理后重新开启，提示需要先将几张表的checkpoint处理掉。如果根据提示用 --checkpint-error-destroy 的话会把这几张表直接删掉，那么我原来的数据也就跟着被丢失。这种情况我需要怎么处理？\n"
+ },
+ {
+  "id": 155,
+  "group": "check_rescued",
+  "title": "batch ddl job执行时间差距巨大，原因几何？大佬速来",
+  "slugs": [
+   "time-to-live"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】v7.1.5\n\n【遇到的问题：问题现象及影响】\n batch ddl进行历史数据清理，通过dashboard看到不同job执行时间差距巨大，想请教下这个可能原因有哪些？原因查找及如何优化呢\n\n[图片]\n8101634c8432ffca0a0c227ee538a9e1274×627 72.6 KB\n\n[图片]\nd85a25c05d8e0e31ea98b04b02a7ea51299×749 47.7 KB\n\n```\n| id                     | estRows      | estCost         | actRows   | task      | access object | execution info                                        "
+ },
+ {
+  "id": 156,
+  "group": "check_rescued",
+  "title": "大事务的判断",
+  "slugs": [
+   "dev-guide-transaction-restraints"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境 /测试/ Poc\n 【 TiDB 版本】\n\nTiDB是如何判断大事务的？\n"
+ },
+ {
+  "id": 157,
+  "group": "check_rescued",
+  "title": "等保扫描漏洞",
+  "slugs": [
+   "high-reliability-faq"
+  ],
+  "multi": false,
+  "qbody": "\n等保测评扫描漏洞\n\n[图片]\nimage847×1046 134 KB\n\n 这些怎么解决呢。\n"
+ },
+ {
+  "id": 158,
+  "group": "check_rescued",
+  "title": "磁盘超过90%",
+  "slugs": [
+   "pd-configuration-file"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】 v6.5.1\n\nTIDB的tikv节点数据盘，在哪些情况下，超过 90% 必须扩容啊\n"
+ },
+ {
+  "id": 159,
+  "group": "check_rescued",
+  "title": "可以使用hint强制使用tiflash吗？没有成功，同时希望大佬们帮忙看看语句慢在哪",
+  "slugs": [
+   "system-variables"
+  ],
+  "multi": false,
+  "qbody": "\n【 TiDB 使用环境】生产环境\n 【 TiDB 版本】\n 【复现路径】使用hint没有成功\n 【遇到的问题：问题现象及影响】\n\n【附件：截图/日志/监控】\n\n[图片]\nimage1468×757 52.8 KB\n\n我现在是使用这种方式强制使用的tiflash，hint不会用，想问下怎么用\n 无标题.xlsx (11.9 KB)\n 测试的sql.sql (11.3 KB)\n"
+ },
+ {
+  "id": 160,
+  "group": "check_rescued",
+  "title": "啥是DM集群",
+  "slugs": [
+   "dm-arch"
+  ],
+  "multi": false,
+  "qbody": "\n能描述一下DM集群吗\n"
+ }
+]
