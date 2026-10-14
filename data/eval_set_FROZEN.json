@@ -1,18 +1,48 @@
 {
- "version": "1.0",
- "frozen_at": "2026-10-14",
- "total_main": 375,
- "total_version_probe": 31,
- "freeze_scope": [
-  "query",
-  "golden_slugs",
-  "source",
-  "unanswerable"
- ],
- "deferred": [
-  "failure_mode.primary",
-  "failure_mode.secondary",
-  "is_true_multi(部分)"
- ],
- "note": "主集375+版本混淆独立集31=406。failure_mode分层：设计决定3类已标，实验决定3类W2标。"
+  "version": "0.1",
+  "frozen_at": "2026-10-14",
+  "supersedes": "1.0",
+  "total_main": 375,
+  "total_version_probe": 31,
+  "freeze_scope": [
+    "query",
+    "golden_slugs",
+    "source",
+    "unanswerable"
+  ],
+  "deferred": [
+    "failure_mode.primary",
+    "failure_mode.secondary",
+    "is_true_multi(部分)"
+  ],
+  "corrections_v0_1": [
+    {
+      "id": "mk_16",
+      "kind": "标注错（golden 磁盘不存在）",
+      "before": ["sql-statement-select-into"],
+      "after": ["sql-statement-select"],
+      "reason": "原 slug 在 corpora/tidb/ 无对应文件，该条恒判未命中（系统性拉低 [X]/[Y]）。真实承载页为 sql-statement-select（内含 SELECT ... INTO OUTFILE 章节）。"
+    },
+    {
+      "id": "ask_2",
+      "kind": "标注松（不改 golden，只标注）",
+      "before": ["tikv-control"],
+      "after": ["tikv-control"],
+      "reason": "采纳答案两次显式引用 tikv-control（查看 region 属性 / 手动 compact），golden 忠于答案故不改。query 用告警名与现象词、页面用命令名 → 按「松对齐」标注，保留为术语鸿沟样本。"
+    },
+    {
+      "id": "ask_3",
+      "kind": "标注不完整（漏 slug）",
+      "before": ["tidb-lightning-overview"],
+      "after": ["dumpling-overview", "tidb-lightning-overview"],
+      "reason": "采纳答案 onebox 主链为 dumpling-overview；正文另称 lightning 可由 csv 做物理/逻辑导入。补齐后由单证据升为双证据（is_true_multi=true）。"
+    }
+  ],
+  "probe_review_v0_1": {
+    "action": "保留，不替换",
+    "diff_point": "31 条全部由「待 W3 逐页核验」回填为真实差异点（ver_10~ver_31 共 22 条本次回填）；diff_point 不在冻结范围。",
+    "low_diff_probes": ["ver_22", "ver_24", "ver_30"],
+    "low_diff_reason": "新版 docs-cn/ 将公司名改为文档模板变量（旧版为 PingCAP），行级 diff 被模板化放大，实质版本差异低。旧版页仍可被检索、干扰真实存在，故保留。报告分「全量 31 条 [Z]」与「高差异 28 条 [Z]_high」两组口径。"
+  },
+  "note": "主集 375 + 版本混淆独立集 31 = 406。v0.1 = 三条标注质量修正后的冻结版本；[X]/[Y] 一律以 v0.1 为准。"
 }

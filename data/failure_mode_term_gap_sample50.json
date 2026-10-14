@@ -1,0 +1,476 @@
+{
+ "sample_n": 50,
+ "seed": 42,
+ "term_gap_yes": 27,
+ "rate": 0.54,
+ "by_source": {
+  "asktug": {
+   "n": 30,
+   "yes": 24,
+   "rate": 0.8
+  },
+  "doc_fact": {
+   "n": 18,
+   "yes": 2,
+   "rate": 0.1111
+  },
+  "miss_kill": {
+   "n": 2,
+   "yes": 1,
+   "rate": 0.5
+  }
+ },
+ "note": "抽检自 226 条未命中（召回缺失+排序压制）样本，按 source 分层（asktug 30/doc_fact 18/miss_kill 2），seed=42。判定基准：query 术语 vs golden 页面真实 title。",
+ "records": [
+  {
+   "id": "ask_127",
+   "primary": "召回缺失",
+   "query": "DM、TiCDC、TiDB Binlog 各自的适用场景、优缺点和异同是什么？",
+   "golden": "migration-tools",
+   "title": "数据迁移工具概览",
+   "term_gap": true,
+   "reason": "对比题无「概览/对比」词，页面为「数据迁移工具概览」"
+  },
+  {
+   "id": "ask_106",
+   "primary": "召回缺失",
+   "query": "如何高效修改大表 id 列改成递增数字？",
+   "golden": "auto-increment",
+   "title": "AUTO_INCREMENT",
+   "term_gap": true,
+   "reason": "query「递增数字」↔ 页面 AUTO_INCREMENT"
+  },
+  {
+   "id": "ask_30",
+   "primary": "召回缺失",
+   "query": "怎么查看 TiKV 里 Blob 内容都属于哪些表？",
+   "golden": "titan-configuration",
+   "title": "Titan 配置",
+   "term_gap": true,
+   "reason": "query「Blob 内容」↔ 页面 Titan"
+  },
+  {
+   "id": "ask_23",
+   "primary": "召回缺失",
+   "query": "TiDB 里的 TSO 是什么？",
+   "golden": "tso",
+   "title": "TiDB 中的 TimeStamp Oracle (TSO)",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_18",
+   "primary": "召回缺失",
+   "query": "TiDB 多表关联时是怎么把关联下推到 TiKV 执行的？",
+   "golden": "explain-overview",
+   "title": "TiDB 执行计划概览",
+   "term_gap": true,
+   "reason": "query「关联下推」↔ 页面「执行计划概览」"
+  },
+  {
+   "id": "ask_14",
+   "primary": "召回缺失",
+   "query": "DM 没有 LOCK 权限能不能做全量备份？",
+   "golden": "dumpling-overview",
+   "title": "使用 Dumpling 导出数据",
+   "term_gap": true,
+   "reason": "query「LOCK 权限/全量备份」↔ 页面「使用 Dumpling 导出数据」"
+  },
+  {
+   "id": "ask_125",
+   "primary": "召回缺失",
+   "query": "单机房 3 节点 TiKV 集群怎么在线扩容成 3 机房 9 节点集群？",
+   "golden": "multi-data-centers-in-one-city-deployment",
+   "title": "单区域多 AZ 部署 TiDB",
+   "term_gap": true,
+   "reason": "query「机房」↔ 页面「多 AZ」"
+  },
+  {
+   "id": "ask_46",
+   "primary": "召回缺失",
+   "query": "三台物理机各部署 4 个 TiKV，同一副本的数据会落在同一台服务器上的不同 TiKV 节点吗？",
+   "golden": "multi-data-centers-in-one-city-deployment",
+   "title": "单区域多 AZ 部署 TiDB",
+   "term_gap": true,
+   "reason": "query「物理机/同服务器」↔ 页面「多 AZ 部署」"
+  },
+  {
+   "id": "ask_55",
+   "primary": "召回缺失",
+   "query": "普通表改成分区表后，怎么快速把普通表的数据导入分区表？",
+   "golden": "sql-statement-batch",
+   "title": "BATCH",
+   "term_gap": true,
+   "reason": "query「快速导入」↔ 页面 BATCH（命令名）"
+  },
+  {
+   "id": "ask_77",
+   "primary": "召回缺失",
+   "query": "BR 快照备份时，怎么监控备份进度？",
+   "golden": "sql-statement-show-backups",
+   "title": "SHOW [BACKUPS|RESTORES]",
+   "term_gap": true,
+   "reason": "query「监控备份进度」↔ 页面命令名 SHOW BACKUPS"
+  },
+  {
+   "id": "ask_3",
+   "primary": "召回缺失",
+   "query": "往 TiDB 批量 insert 数据很慢，有什么优化方向？",
+   "golden": "dumpling-overview",
+   "title": "使用 Dumpling 导出数据",
+   "term_gap": true,
+   "reason": "query「批量 insert 慢」↔ 页面「Dumpling 导出」"
+  },
+  {
+   "id": "ask_110",
+   "primary": "排序压制",
+   "query": "TiDB 目前只支持 hash 和 range 分区吗？",
+   "golden": "partitioned-table",
+   "title": "分区表",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_36",
+   "primary": "排序压制",
+   "query": "dumpling 导出数据到 csv，longtext 字段解析不符合预期，怎么处理？",
+   "golden": "dumpling-overview",
+   "title": "使用 Dumpling 导出数据",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_16",
+   "primary": "召回缺失",
+   "query": "怎么查看 BR 的历史备份信息（做过哪些备份、是全量还是增量）？",
+   "golden": "br-pitr-guide",
+   "title": "TiDB 日志备份与 PITR 使用指南",
+   "term_gap": true,
+   "reason": "query「历史备份信息」↔ 页面「日志备份与 PITR」"
+  },
+  {
+   "id": "ask_103",
+   "primary": "召回缺失",
+   "query": "SQL 执行计划的顺序怎么看？",
+   "golden": "explain-overview",
+   "title": "TiDB 执行计划概览",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_101",
+   "primary": "召回缺失",
+   "query": "为什么简单的查询会产生慢查询？",
+   "golden": "identify-expensive-queries",
+   "title": "定位消耗系统资源多的查询",
+   "term_gap": true,
+   "reason": "query「慢查询」↔ 页面「消耗资源多的查询」"
+  },
+  {
+   "id": "ask_86",
+   "primary": "召回缺失",
+   "query": "truncate table 是对表还是对行做删除标记？drop table 呢？",
+   "golden": "garbage-collection-overview",
+   "title": "GC 机制简介",
+   "term_gap": true,
+   "reason": "query「truncate 删除标记」↔ 页面「GC 机制」"
+  },
+  {
+   "id": "ask_126",
+   "primary": "召回缺失",
+   "query": "TiKV 之间的网络带宽占用看哪个监控图？",
+   "golden": "grafana-tikv-dashboard",
+   "title": "TiKV 监控指标详解",
+   "term_gap": true,
+   "reason": "query「网络带宽监控图」↔ 页面「监控指标详解」"
+  },
+  {
+   "id": "ask_13",
+   "primary": "排序压制",
+   "query": "tidb_auto_analyze_ratio 参数怎么优化设置？",
+   "golden": "statistics",
+   "title": "常规统计信息",
+   "term_gap": true,
+   "reason": "query 变量名 tidb_auto_analyze_ratio ↔ 页面「常规统计信息」"
+  },
+  {
+   "id": "ask_25",
+   "primary": "排序压制",
+   "query": "TiDB MergeRegion 调度不工作，空 region 持续增加不合并，怎么处理？",
+   "golden": "pd-scheduling-best-practices",
+   "title": "PD 调度策略最佳实践",
+   "term_gap": true,
+   "reason": "query 子命令 MergeRegion ↔ 页面「PD 调度策略最佳实践」"
+  },
+  {
+   "id": "ask_38",
+   "primary": "召回缺失",
+   "query": "有两个 TiDB 节点的情况下，怎么做负载均衡？",
+   "golden": "haproxy-best-practices",
+   "title": "HAProxy 在 TiDB 中的最佳实践",
+   "term_gap": true,
+   "reason": "query「负载均衡」未提组件名 ↔ 页面 HAProxy"
+  },
+  {
+   "id": "ask_82",
+   "primary": "排序压制",
+   "query": "删除数据报 transaction is too large, size 104857608，怎么处理？",
+   "golden": "migration-tidb-faq",
+   "title": "迁移常见问题",
+   "term_gap": true,
+   "reason": "query 报错原文 ↔ 页面「迁移常见问题」"
+  },
+  {
+   "id": "ask_31",
+   "primary": "排序压制",
+   "query": "同一个 SQL 指纹为什么会产生不同的执行计划 id，但计划内容又一样？",
+   "golden": "sql-prepared-plan-cache",
+   "title": "Prepare 语句执行计划缓存",
+   "term_gap": true,
+   "reason": "query「SQL 指纹/计划 id」↔ 页面「Prepare 计划缓存」"
+  },
+  {
+   "id": "ask_124",
+   "primary": "召回缺失",
+   "query": "TiDB 支持表级别压缩吗？",
+   "golden": "sql-statement-create-table",
+   "title": "CREATE TABLE",
+   "term_gap": true,
+   "reason": "query「表级别压缩」↔ 页面 CREATE TABLE"
+  },
+  {
+   "id": "ask_50",
+   "primary": "召回缺失",
+   "query": "RU 占用高，怎么找到占用 RU 较高的 SQL？",
+   "golden": "information-schema-slow-query",
+   "title": "SLOW_QUERY",
+   "term_gap": true,
+   "reason": "query 术语 RU ↔ 页面 SLOW_QUERY"
+  },
+  {
+   "id": "ask_43",
+   "primary": "排序压制",
+   "query": "AUTO_INCREMENT=1000001 且 AUTO_ID_CACHE=1 时主键 id 会跳号，为什么？",
+   "golden": "auto-increment",
+   "title": "AUTO_INCREMENT",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_49",
+   "primary": "召回缺失",
+   "query": "TiDB 事务里每隔 10 秒 send TxnHeartBeat 更新 TTL，这个 TTL 怎么理解？",
+   "golden": "dev-guide-timeouts-in-tidb",
+   "title": "TiDB 中的各种超时",
+   "term_gap": true,
+   "reason": "query TxnHeartBeat/TTL ↔ 页面「各种超时」"
+  },
+  {
+   "id": "ask_87",
+   "primary": "召回缺失",
+   "query": "TiDB 分区表怎么做全表分组查询？",
+   "golden": "use-tiflash-mpp-mode",
+   "title": "使用 MPP 模式",
+   "term_gap": true,
+   "reason": "query「分区表全表分组」↔ 页面「MPP 模式」"
+  },
+  {
+   "id": "ask_159",
+   "primary": "排序压制",
+   "query": "可以用 hint 强制使用 TiFlash 吗，怎么用？",
+   "golden": "optimizer-hints",
+   "title": "Optimizer Hints",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "ask_99",
+   "primary": "召回缺失",
+   "query": "哪里有 TiDB 的 Grafana 比较完整的使用说明？",
+   "golden": "grafana-overview-dashboard",
+   "title": "Overview 面板重要监控指标详解",
+   "term_gap": true,
+   "reason": "query「Grafana 完整说明」↔ 页面「Overview 面板监控指标」"
+  },
+  {
+   "id": "doc_ticdc_93",
+   "primary": "召回缺失",
+   "query": "TiCDC Changefeed 的 start-ts、checkpoint-ts 分别代表什么？",
+   "golden": "ticdc-changefeed-config",
+   "title": "TiCDC Changefeed 命令行参数和配置参数",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_tikv_80",
+   "primary": "排序压制",
+   "query": "TiDB 的 PD 微服务（tso/调度分离）是什么，有什么好处？",
+   "golden": "pd-microservices",
+   "title": "PD 微服务",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_other_162",
+   "primary": "排序压制",
+   "query": "TiDB Stale Read 是什么，怎么用？",
+   "golden": "dev-guide-use-stale-read",
+   "title": "Stale Read",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_config_40",
+   "primary": "排序压制",
+   "query": "TiDB 系统变量在哪里查看和设置，session 级和 global 级的区别？",
+   "golden": "system-variables",
+   "title": "系统变量",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_dm_117",
+   "primary": "排序压制",
+   "query": "DM 对上游 DDL 的兼容性处理是怎样的？",
+   "golden": "dm-ddl-compatible",
+   "title": "Data Migration DDL 特殊处理说明",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_ticdc_103",
+   "primary": "排序压制",
+   "query": "TiCDC 支持同步哪些数据变更，有哪些能力边界？",
+   "golden": "ticdc-data-replication-capabilities",
+   "title": "TiCDC 数据同步能力详解",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_sql_24",
+   "primary": "召回缺失",
+   "query": "TiDB 的 PREPARE 预处理语句和直接执行有什么区别，为什么要用？",
+   "golden": "sql-statement-prepare",
+   "title": "PREPARE",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_tikv_85",
+   "primary": "召回缺失",
+   "query": "TiKV RocksDB 的 compaction 有哪几种类型，分别解决什么？",
+   "golden": "rocksdb-overview",
+   "title": "RocksDB 简介",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_dm_116",
+   "primary": "排序压制",
+   "query": "DM 怎么查询迁移任务的状态和进度？",
+   "golden": "dm-query-status",
+   "title": "TiDB Data Migration 查询任务状态",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_ops_142",
+   "primary": "排序压制",
+   "query": "TiDB 用 TiUP 升级的完整流程和注意事项是什么？",
+   "golden": "upgrade-tidb-using-tiup",
+   "title": "使用 TiUP 升级 TiDB",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_tikv_81",
+   "primary": "召回缺失",
+   "query": "PD 的调度参数里，leader-schedule-limit 等限制参数怎么理解？",
+   "golden": "command-line-flags-for-pd-configuration",
+   "title": "PD 配置参数",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_dm_106",
+   "primary": "排序压制",
+   "query": "DM 的 DM-master、DM-worker 分别负责什么？",
+   "golden": "dm-arch",
+   "title": "Data Migration 架构",
+   "term_gap": true,
+   "reason": "query 组件名 DM-master/worker ↔ 页面「Data Migration 架构」"
+  },
+  {
+   "id": "doc_config_59",
+   "primary": "召回缺失",
+   "query": "TiDB 删掉的数据要多久才真正从磁盘释放，GC 生命周期是什么？",
+   "golden": "garbage-collection-overview",
+   "title": "GC 机制简介",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_sql_36",
+   "primary": "排序压制",
+   "query": "TiDB 有哪些 MySQL 没有的特有函数？",
+   "golden": "miscellaneous-functions",
+   "title": "其他函数",
+   "term_gap": true,
+   "reason": "query「特有函数」↔ 页面「其他函数」"
+  },
+  {
+   "id": "doc_dm_105",
+   "primary": "召回缺失",
+   "query": "TiDB DM（Data Migration）是做什么的，和 TiCDC 定位有什么不同？",
+   "golden": "dm-overview",
+   "title": "TiDB Data Migration 简介",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_sql_30",
+   "primary": "排序压制",
+   "query": "TiDB IMPORT INTO 和 LOAD DATA 有什么区别，各适合什么场景？",
+   "golden": "sql-statement-import-into",
+   "title": "IMPORT INTO",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_sql_3",
+   "primary": "排序压制",
+   "query": "TiDB 执行计划里各算子（TableReader/IndexLookup 等）代表什么含义？",
+   "golden": "explain-overview",
+   "title": "TiDB 执行计划概览",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "doc_other_159",
+   "primary": "排序压制",
+   "query": "TiDB 乐观事务和悲观事务的区别是什么，怎么选？",
+   "golden": "dev-guide-optimistic-and-pessimistic-transaction",
+   "title": "乐观事务和悲观事务",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  },
+  {
+   "id": "mk_1",
+   "primary": "召回缺失",
+   "query": "TiDB 是不是不支持在线加索引？",
+   "golden": "sql-statement-add-index",
+   "title": "ADD INDEX",
+   "term_gap": true,
+   "reason": "query「在线加索引」↔ 页面 ADD INDEX（命令名）"
+  },
+  {
+   "id": "mk_8",
+   "primary": "排序压制",
+   "query": "TiDB 是不是不能给表加多个 TiFlash 副本？",
+   "golden": "create-tiflash-replicas",
+   "title": "构建 TiFlash 副本",
+   "term_gap": false,
+   "reason": "query 术语与页面标题一致，失败非术语问题"
+  }
+ ]
+}
