@@ -17,9 +17,80 @@ set MCP_RAG_CORPUS=vue-zh && python -m streamlit run app.py
 |---|---|---|---|
 | `fastapi-zh/` | [fastapi/fastapi](https://github.com/fastapi/fastapi) `docs/zh/docs/` | 122 文件 / 677KB / 1445 chunk | MIT |
 | `vue-zh/` | [vuejs-translations/docs-zh-cn](https://github.com/vuejs-translations/docs-zh-cn) `src/` | 110 文件 / 941KB / 1804 chunk | **CC BY 4.0**（图片除外） |
+| `tidb/` | 官方文档 + AskTUG 问答 + TiDB 社区专栏（四目录） | 9169 文件 / 约 1 万文档 / 近 10 万 chunk | **不入库，本地维护** · 见下方「tidb 来源声明」 |
 
 > 原来的 `docs/` 目录**不再作为知识库**，它是项目自身的文档（设计说明、速查表）。
 > 语料换成真实第三方文档后，`docs/` 保留原样仅供人阅读。
+
+---
+
+## tidb 来源声明（2026-10-13 入库）
+
+> ⚠️ **`corpora/tidb/` 整目录不入库**（已写进根 `.gitignore`，与 `experiments/chroma_db/` 同理）。
+> 原因：三源都拿不到「逐条再分发」授权 —— `docs-cn` 为 CC BY-SA 3.0（ShareAlike，会传染），
+> AskTUG 与 tidb.net 为用户生成内容（UGC，版权分散）。公开仓库只留抓取脚本与本节声明。
+> 语料本体留在本地，任何时候都可按下节命令重抓。
+>
+> **对外口径：约 1 万文档 / 近 10 万 chunk。**
+> 入库过程、口径与踩坑见 `journal/TiDB语料入库-2026-10-13.md`；本地细节见 `corpora/tidb/README.md`（该文件同样不入库）。
+
+抓取脚本为 `scripts/fetch_tidb_corpus.py`（docs / asktug / tidbnet / stats）与
+`scripts/tidb_version_diff.py`（双版本差异页识别）。复现命令：
+
+```bash
+python scripts/fetch_tidb_corpus.py docs
+python scripts/fetch_tidb_corpus.py docs --branch release-8.4 --dest <临时目录>
+python scripts/tidb_version_diff.py --old <临时目录> --new corpora/tidb/docs-cn \
+    --copy-changed-old corpora/tidb/docs-cn-v8.4
+python scripts/fetch_tidb_corpus.py asktug --target-solved 5000
+python scripts/fetch_tidb_corpus.py tidbnet
+```
+
+三条抓取命令都**可重跑**（已落盘文件直接跳过），状态记在 `corpora/tidb/_meta/*.state.json`。
+
+### 1. `tidb/docs-cn/` — TiDB 官方中文文档
+
+- **上游仓库**：https://github.com/pingcap/docs-cn
+- **分支**：`release-8.5`（最新稳定版）
+- **许可**：**CC BY-SA 3.0**（Attribution-ShareAlike 3.0 Unported，见上游 `LICENSE`）。
+  ⚠️ 与本目录其他语料都不同 —— **ShareAlike 要求衍生作品以相同方式共享**，
+  且必须署名。正文一字未改，目录结构原样保留。
+- **体量**：1318 篇 / 16MB
+- **剔除项**：贡献者元文档（`.agents/` `.github/` `.vaunt/`、`CONTRIBUTING.md`、`README.md`）、
+  导航页（`TOC*`、`_` 前缀文件），共 32 篇
+
+### 2. `tidb/docs-cn-v8.4/` — 版本差异页的旧版正文
+
+- 与 `release-8.4` 分支同名文件逐行比对后，**改动 ≥10 行 或 ≥5%** 的页面（306 篇），
+  收录其 **8.4 版**正文。
+- 比对前剔除「整行纯版本号」与「整行纯 URL」两类噪声行。
+- 用途：让语料里同时存在新旧两版，版本混淆 / 版本冲突才有真实素材。
+- **许可同 `docs-cn/`（CC BY-SA 3.0）**。
+
+### 3. `tidb/asktug/` — AskTUG 社区问答
+
+- **上游**：https://asktug.com （Discourse 论坛，JSON API）
+- **筛选**：只取带「已采纳答案」的主题，5009 篇
+- **内容**：问题 + 已采纳答案 + 其他回复
+- **许可**：社区用户生成内容（UGC），版权归各发帖人。每篇正文顶部保留了
+  话题编号、原帖链接、发布日期与标签，引用需回溯原帖；本语料仅用于非商业研究。
+- `_meta/asktug_topics.jsonl` 另存了枚举到的**全部主题元信息**（含未采纳的），
+  可用于构造真实中文 query 与困难负例。
+
+### 4. `tidb/tidb-net/` — TiDB 社区专栏
+
+- **上游**：https://tidb.net/blog （Next.js 站点）
+- **筛选**：剔除「社区与动态」类活动稿与不足 600 字的短文，保留 2536 篇技术长文
+  （全量口径干货率 82.1%）
+- **许可**：社区投稿内容，版权归原作者。每篇正文顶部保留了标题、作者、发布日期、
+  分类、标签与原文链接。
+
+### `_meta/` 目录
+
+存放抓取清单、断点状态与差异比对结果。⚠️ **这里的文件一律不得使用 `.md` / `.txt`
+后缀**（`_` 前缀不会被 `iter_supported_docs` 跳过），否则会被当成语料扫进索引 ——
+已实测踩到一次（差异页清单曾用 `.txt`，改名 `.list` 后 `iter_supported_docs("corpora/tidb")`
+返回 9169 篇且 `_meta` 零误入）。允许的后缀：`.source` / `.json` / `.jsonl` / `.log` / `.list`。
 
 ---
 
