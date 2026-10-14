@@ -1,15 +1,21 @@
 """Read-only audit for the persisted Chroma index.
 
 Usage:
-    python scripts/audit_chroma_index.py
+    python scripts/audit_chroma_index.py [--corpus fastapi-zh]
 
 This script does not rebuild, delete, or write to the index.  It only reads
 Chroma metadata/content and, optionally, loads the existing pipeline to compare
 the runtime chunk count.
+
+集合命名已随多语料改造从 knowledge_base__{模型}__v{schema}__{hash8} 改为
+kb__{语料}__{模型}__v{schema}，故本脚本按「语料名」定位集合：
+默认取 config.CORPUS，可用 --corpus 指定。集合名本身复用
+src.pipeline.corpus_collection_name（单一命名来源，避免两处实现漂移）。
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import logging
 import sys
@@ -23,10 +29,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from config import CHROMA_PERSIST_DIR, DOCS_DIR, EMBEDDING_MODEL, INDEX_SCHEMA_VERSION
+from config import CHROMA_PERSIST_DIR, CORPUS, CORPUS_ROOT, EMBEDDING_MODEL
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
+
+# 分页读取 payload 的页大小。审计必须遍历全量（否则「声明条数 == 实际条数」的
+# 校验失去意义），但一次性 get() 十万级 collection 会把全部 embeddings 拉进内存
+# （104,192 × 512 维 ≈ 数百 MB 起步），故改为分页累加计数与维度。
+_PAGE_SIZE = 5000
 
 
 def _jsonable(value: Any) -> Any:
@@ -35,25 +46,60 @@ def _jsonable(value: Any) -> Any:
     return value
 
 
-def _collection_candidates(client: Any) -> list[Any]:
-    collections = client.list_collections()
-    expected_prefix = f"knowledge_base__{EMBEDDING_MODEL}__v{INDEX_SCHEMA_VERSION}__"
-    names = [item if isinstance(item, str) else getattr(item, "name", "") for item in collections]
-    return [client.get_collection(name) for name in names if name.startswith(expected_prefix)]
+def _expected_collection_name(corpus: str, model_name: str = EMBEDDING_MODEL) -> str:
+    """按生产规则推导该语料的 collection 名（复用 src.pipeline 的实现）。"""
+    from src.pipeline import corpus_collection_name
+
+    return corpus_collection_name(corpus, model_name)
 
 
-def _audit_collection(collection: Any) -> dict[str, Any]:
+def _collection_candidates(client: Any, corpus: str | None = None) -> tuple[list[Any], str]:
+    """返回 (候选集合, 期望集合名)。
+
+    优先精确命中 kb__{corpus}__{model}__v{schema}；未命中时列出所有 kb__* 集合
+    供诊断（例如语料名拼错、索引尚未构建）。
+    """
+    corpus = corpus or CORPUS
+    expected_name = _expected_collection_name(corpus)
+    names = [item if isinstance(item, str) else getattr(item, "name", "") for item in client.list_collections()]
+    if expected_name in names:
+        return [client.get_collection(expected_name)], expected_name
+    return [client.get_collection(name) for name in names if name.startswith("kb__")], expected_name
+
+
+def _audit_collection(collection: Any, page_size: int = _PAGE_SIZE) -> dict[str, Any]:
     metadata = collection.metadata or {}
     declared_count = metadata.get("chunk_count")
     count_method = int(collection.count())
-    data = collection.get(include=["documents", "embeddings", "metadatas"])
-    ids = data.get("ids") or []
-    documents = data.get("documents") or []
-    embeddings = data.get("embeddings")
-    ids_count = len(ids)
-    documents_count = len(documents)
-    embeddings_count = len(embeddings) if embeddings is not None else 0
-    dimensions = sorted({len(vector) for vector in embeddings if vector is not None}) if embeddings is not None else []
+
+    # 分页遍历全量 payload，只累加计数/维度，样本只留前 3 条（内存有界）
+    ids_count = documents_count = embeddings_count = 0
+    dimensions: set[int] = set()
+    sample_documents: list[str] = []
+    offset = 0
+    while offset < count_method:
+        page = collection.get(
+            include=["documents", "embeddings", "metadatas"],
+            limit=page_size,
+            offset=offset,
+        )
+        page_ids = page.get("ids") or []
+        if not page_ids:
+            break
+        page_documents = page.get("documents") or []
+        page_embeddings = page.get("embeddings")
+        ids_count += len(page_ids)
+        documents_count += len(page_documents)
+        if page_embeddings is not None:
+            embeddings_count += len(page_embeddings)
+            dimensions.update(len(vector) for vector in page_embeddings if vector is not None)
+        if len(sample_documents) < 3:
+            for item in page_documents:
+                if len(sample_documents) >= 3:
+                    break
+                sample_documents.append(item[:160])
+        offset += len(page_ids)
+
     counts_match = ids_count == documents_count == embeddings_count
     return {
         "name": collection.name,
@@ -65,7 +111,7 @@ def _audit_collection(collection: Any) -> dict[str, Any]:
             "documents": documents_count,
             "embeddings": embeddings_count,
         },
-        "embedding_dimensions": dimensions,
+        "embedding_dimensions": sorted(dimensions),
         "consistency": {
             "count_method_eq_ids": count_method == ids_count,
             "ids_eq_documents": ids_count == documents_count,
@@ -73,7 +119,7 @@ def _audit_collection(collection: Any) -> dict[str, Any]:
             "all_payload_counts_match": counts_match,
             "declared_eq_actual": declared_count is None or declared_count == count_method,
         },
-        "sample_documents": [item[:160] for item in documents[:3]],
+        "sample_documents": sample_documents,
     }
 
 
@@ -81,11 +127,11 @@ def _diagnose(index_meta: dict[str, Any] | None, collection: dict[str, Any] | No
     context = context or {}
     if collection is None:
         all_collections = context.get("all_collections", [])
-        expected_prefix = context.get("expected_prefix", "")
-        summary = "未找到当前版本的 Chroma collection"
+        expected_name = context.get("expected_name", "")
+        summary = "未找到该语料的 Chroma collection"
         if all_collections:
-            summary += f"；找到的 collections：{all_collections}；期望前缀：{expected_prefix}"
-        return {"verdict": "MISSING", "summary": summary, "action": "检查索引命名、路径或执行显式重建", "risk_level": "HIGH"}
+            summary += f"；找到的 collections：{all_collections}；期望集合名：{expected_name}"
+        return {"verdict": "MISSING", "summary": summary, "action": "检查语料名、索引命名或执行显式重建", "risk_level": "HIGH"}
     counts = collection["actual_counts"]
     declared = collection["declared_chunk_count"]
     actual = counts["collection_count"]
@@ -106,8 +152,22 @@ def _diagnose(index_meta: dict[str, Any] | None, collection: dict[str, Any] | No
     return result
 
 
-def audit_chroma_index() -> dict[str, Any]:
-    report: dict[str, Any] = {"timestamp": datetime.now().isoformat(), "stages": {}}
+def audit_chroma_index(
+    corpus: str | None = None,
+    docs_dir: str | Path | None = None,
+    skip_runtime: bool = False,
+) -> dict[str, Any]:
+    """审计指定语料的持久化索引（只读）。
+
+    corpus: 语料名，决定 collection 名与默认语料目录；默认取 config.CORPUS。
+    docs_dir: 覆盖运行时切片目录；默认 CORPUS_ROOT / corpus。
+    skip_runtime: 跳过 process_directory 全量切片（十万级语料要 1~2 分钟且吃内存），
+        跳过时运行时计数不参与诊断。
+    """
+    corpus = corpus or CORPUS
+    docs_dir = Path(docs_dir) if docs_dir else (CORPUS_ROOT / corpus)
+
+    report: dict[str, Any] = {"timestamp": datetime.now().isoformat(), "corpus": corpus, "stages": {}}
     meta_path = CHROMA_PERSIST_DIR / "index_meta.json"
     index_meta = None
     if meta_path.exists():
@@ -125,24 +185,30 @@ def audit_chroma_index() -> dict[str, Any]:
     client = chromadb.PersistentClient(path=str(CHROMA_PERSIST_DIR))
     all_collections_raw = client.list_collections()
     all_collection_names = [item if isinstance(item, str) else getattr(item, "name", "") for item in all_collections_raw]
-    expected_prefix = f"knowledge_base__{EMBEDDING_MODEL}__v{INDEX_SCHEMA_VERSION}__"
-    collections = _collection_candidates(client)
+    collections, expected_name = _collection_candidates(client, corpus)
     report["stages"]["chroma_connection"] = {
         "status": "OK",
         "candidate_collections": [item.name for item in collections],
         "all_collections": all_collection_names,
-        "expected_prefix": expected_prefix,
+        "expected_name": expected_name,
     }
     collection_data = _audit_collection(collections[0]) if collections else None
     report["stages"]["collection_data"] = {"status": "OK" if collection_data else "MISSING", "data": collection_data}
 
     runtime_count = None
-    try:
-        from src.data_pipeline import process_directory
-        runtime_count = len(process_directory(DOCS_DIR))
-        report["stages"]["runtime_chunks"] = {"status": "OK", "count": runtime_count, "source": "process_directory(docs)"}
-    except Exception as exc:
-        report["stages"]["runtime_chunks"] = {"status": "PARTIAL", "error": str(exc)}
+    if skip_runtime:
+        report["stages"]["runtime_chunks"] = {
+            "status": "SKIPPED",
+            "reason": "--skip-runtime；docs_dir=未切片",
+            "docs_dir": str(docs_dir),
+        }
+    else:
+        try:
+            from src.data_pipeline import process_directory
+            runtime_count = len(process_directory(docs_dir))
+            report["stages"]["runtime_chunks"] = {"status": "OK", "count": runtime_count, "source": f"process_directory({docs_dir})"}
+        except Exception as exc:
+            report["stages"]["runtime_chunks"] = {"status": "PARTIAL", "error": str(exc)}
 
     query_test = None
     if collection_data and collection_data["actual_counts"]["collection_count"] > 0:
@@ -154,7 +220,7 @@ def audit_chroma_index() -> dict[str, Any]:
         index_meta,
         collection_data,
         runtime_count,
-        context={"all_collections": all_collection_names, "expected_prefix": expected_prefix},
+        context={"all_collections": all_collection_names, "expected_name": expected_name},
     )
     print_report(report)
     return report
@@ -165,6 +231,8 @@ def print_report(report: dict[str, Any]) -> None:
     print("CHROMA INDEX AUDIT REPORT")
     print("=" * 60)
     print(f"Timestamp: {report['timestamp']}")
+    if report.get("corpus"):
+        print(f"Corpus: {report['corpus']}")
     for name, stage in report["stages"].items():
         print(f"\n[{name}] {stage.get('status')}")
         if "error" in stage:
@@ -172,7 +240,7 @@ def print_report(report: dict[str, Any]) -> None:
         if name == "chroma_connection":
             print(f"  matched collections: {stage.get('candidate_collections', [])}")
             print(f"  all collections: {stage.get('all_collections', [])}")
-            print(f"  expected prefix: {stage.get('expected_prefix', '')}")
+            print(f"  expected name: {stage.get('expected_name', '')}")
         elif name == "collection_data" and stage.get("data"):
             data = stage["data"]
             print(f"  collection: {data['name']}")
@@ -194,4 +262,9 @@ def print_report(report: dict[str, Any]) -> None:
 
 
 if __name__ == "__main__":
-    audit_chroma_index()
+    parser = argparse.ArgumentParser(description="只读审计某个语料的 Chroma 持久化索引")
+    parser.add_argument("--corpus", default=CORPUS, help="语料名（corpora/ 下的子目录名），默认取 config.CORPUS")
+    parser.add_argument("--docs-dir", default=None, help="覆盖运行时切片目录，默认 CORPUS_ROOT/<corpus>")
+    parser.add_argument("--skip-runtime", action="store_true", help="跳过 process_directory 全量切片（十万级语料要 1~2 分钟）")
+    args = parser.parse_args()
+    audit_chroma_index(corpus=args.corpus, docs_dir=args.docs_dir, skip_runtime=args.skip_runtime)

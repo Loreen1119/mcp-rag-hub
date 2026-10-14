@@ -33,6 +33,16 @@ def iter_supported_docs(dir_path: str | Path) -> list[Path]:
     必须递归：真实语料通常是分层目录（如 FastAPI 中文档的
     tutorial/ advanced/ how-to/ deployment/），平扫会漏掉绝大部分文件。
     corpus_hash 复用本函数，扫描口径变化时 hash 自动同步。
+
+    TODO(2026-10-14, 待评测集冻结后统一处理): 本函数只看后缀，不区分「语料文档」
+    与「语料目录的说明文件」。实测 corpora/tidb/README.md（语料构成/许可/复现说明）
+    被当成语料扫进索引，多出 1 篇 / 11 chunk（文档数 9169 → 9170），该文件的内容
+    还会成为可被检索到的上下文。同一类坑此前在 _meta/ 目录踩过一次（靠"禁用
+    .md/.txt 后缀"绕过）。
+    处理方式二选一：① 语料根说明文件改用非受支持后缀或移出语料目录；② 在本函数
+    加一条"跳过语料根 README.md"的规则。
+    ⚠️ 两种方式都会改变扫描口径 → corpus_hash 变化 → 下次启动触发一次全量重建
+    （TiDB 语料约 64 分钟），必须与索引重建一起做，不要单独改。
     """
     dir_path = Path(dir_path)
     return sorted(

@@ -127,6 +127,13 @@ class VectorRetriever:
           构建失败会让当前索引不可用，仅供实验/显式维护使用（如 experiments.py、force_rebuild）。
     """
 
+    # 单次 collection.add 的记录条数上限由底层 SQLite 的变量数决定，Chroma 超限即抛错
+    # （本机实测 client.get_max_batch_size() = 5461；单次 add 6000 条报
+    #  "Batch size 6000 exceeds maximum batch size 5461"）。
+    # 若一次性 add 全部 chunk，1445 条的 fastapi-zh 语料不触发，但 10 万级的 TiDB 语料必然崩：
+    # 故 _index_chunks 按本批大小分批写入（留出余量，不贴上限）。
+    ADD_BATCH_SIZE = 5000
+
     def __init__(
         self,
         chunks: List[Chunk],
@@ -355,24 +362,36 @@ class VectorRetriever:
         return clean
 
     def _index_chunks(self, collection: "chromadb.Collection", chunks: List[Chunk]) -> None:
-        """手动对所有 Chunk 做 embedding 并存入 ChromaDB。"""
+        """手动对所有 Chunk 做 embedding 并分批存入 ChromaDB。
+
+        分批是必需的，不是优化：Chroma 单次 add 的记录数上限约 5461 条
+        （见 ADD_BATCH_SIZE 注释），一次性 add 在 10 万级语料上会直接报错。
+        分批只影响写入次数，不影响 embedding 参数与最终内容；每批写入后打印
+        进度，便于长任务确认真实推进（也便于中断后按 id 差集续跑）。
+        """
         texts = [c.content for c in chunks]
         ids = [c.chunk_id for c in chunks]
         metadatas = [self._sanitize_metadata(c.metadata) for c in chunks]
 
-        logger.info("开始批量 Embedding (%d 条文本)...", len(texts))
-        embeddings = self.model.encode(
-            texts,
-            show_progress_bar=True,
-            batch_size=32,
-        )
+        total = len(texts)
+        batch = self.ADD_BATCH_SIZE
+        logger.info("开始批量 Embedding (%d 条文本, 每批 %d 条写入)...", total, batch)
 
-        collection.add(
-            ids=ids,
-            documents=texts,
-            embeddings=embeddings.tolist(),
-            metadatas=metadatas,
-        )
+        for start in range(0, total, batch):
+            end = min(start + batch, total)
+            embeddings = self.model.encode(
+                texts[start:end],
+                show_progress_bar=True,
+                batch_size=32,
+            )
+            collection.add(
+                ids=ids[start:end],
+                documents=texts[start:end],
+                embeddings=embeddings.tolist(),
+                metadatas=metadatas[start:end],
+            )
+            logger.info("已写入 %d/%d 条", end, total)
+
         logger.info("Embedding + 写入完成")
 
     def search(self, query: str, top_k: int = VECTOR_TOP_K) -> List[RetrievalResult]:
