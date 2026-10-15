@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-10-15T20:34:22",
+  "corpus": "tidb",
+  "models": {
+    "generation": "qwen2.5:3b",
+    "judge": "qwen2.5:7b"
+  },
+  "generation": {
+    "n": 100,
+    "n_error": 0,
+    "n_empty_answer": 0,
+    "mean_elapsed_s": 77.92
+  },
+  "three_metrics": {
+    "n": 100,
+    "faithfulness": 0.785,
+    "answer_relevancy": 0.761,
+    "context_recall": 0.568,
+    "faithfulness_ge_0.8": 0.42,
+    "low_faithfulness_ids": []
+  },
+  "refusal_end_to_end": {
+    "total": 60,
+    "valid": 58,
+    "skipped": 2,
+    "unanswerable_n": 38,
+    "unanswerable_refused": 4,
+    "unanswerable_refusal_rate": 0.1053,
+    "miss_kill_n": 20,
+    "miss_kill_false_refused": 1,
+    "miss_kill_false_refusal_rate": 0.05,
+    "status_distribution": null,
+    "details_file": "experiments\\generation_eval\\refusal_60.jsonl"
+  }
+}

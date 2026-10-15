@@ -1,0 +1,38 @@
+{
+  "description": "各阶段平均延迟 (ms)",
+  "note": "由 scripts/reproduce_latency.py 产出；机器空闲时测量",
+  "corpus": "tidb",
+  "n_queries": 18,
+  "warmup": 2,
+  "ce_candidate_k": 30,
+  "with_graph": false,
+  "source": "eval_set",
+  "timings": {
+    "bm25_search_ms": {
+      "mean_ms": 592.43,
+      "min_ms": 239.11,
+      "max_ms": 1057.86,
+      "p95_ms": 1057.86
+    },
+    "vector_search_ms": {
+      "mean_ms": 62.83,
+      "min_ms": 42.15,
+      "max_ms": 99.02,
+      "p95_ms": 99.02
+    },
+    "rrf_fusion_ms": {
+      "mean_ms": 0.19,
+      "min_ms": 0.13,
+      "max_ms": 0.29,
+      "p95_ms": 0.29
+    },
+    "ce_rerank_ms": {
+      "mean_ms": 6991.63,
+      "min_ms": 5408.68,
+      "max_ms": 9812.17,
+      "p95_ms": 9812.17
+    }
+  },
+  "total_mean_ms": 7647.08,
+  "ce_share_pct": 91.4
+}

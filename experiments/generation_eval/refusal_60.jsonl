@@ -1,0 +1,1560 @@
+{
+  "partial": true,
+  "refusal": {
+    "details": [
+      {
+        "query_id": "una_1",
+        "query": "TiDB 的 tidb_vector_index 参数怎么配置？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了关于如何配置 tidb_vector_index 参数的具体建议和相关文档链接",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1015921-topic.md",
+          "docs-cn/command-line-flags-for-tidb-configuration.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1015921-topic.md",
+          "docs-cn/command-line-flags-for-tidb-configuration.md",
+          "tidb-net/b5ce2b9b-TiDB 在个推丨掌握这两个调优技巧，让 TiDB 性能提速千倍！.md"
+        ],
+        "answer": "TiDB的tidb_vector_index参数需要根据实际应用场景进行配置。查阅官方文档和多轮实测有助于调整该配置参数以充分利用服务器资源。相关文档可参考第2条证据（docs-cn/command-line-flags-for-tidb-configuration.md），以及在个推丨掌握这两个调优技巧，让 TiDB 性能提速千倍！中的配置参数优化方法。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 181520.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_2",
+        "query": "TiDB 怎么开启自动分库分表（sharding）功能？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "证据1提供了TiDB替代ShardingSphere的方法；证据2和证据3解释了TiDB的自动分片和负载均衡机制以及开启方法",
+        "used_source_ids": [
+          2,
+          3
+        ],
+        "cited_sources": [
+          "asktug/1029874-topic.md",
+          "asktug/1048703-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/d995e0a4-MySQL 分库分表 vs TiDB：分布式架构扩展性与运维复杂度全面对比.md",
+          "asktug/1029874-topic.md",
+          "asktug/1048703-topic.md"
+        ],
+        "answer": "TiDB通过Region实现自动分片和负载均衡，无需手动开启，文档建议多看文档就可以快速上手。要使用自动分库分表功能，需要熟悉 TiDB 的文档并了解其应用场景，可以通过搭建业务数据来加深理解。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41054.5,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_3",
+        "query": "TiDB 支持存储过程吗，怎么写一个存储过程？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档内容描述了TiDB 不支持存储过程，但有平滑过渡方案，并推荐了尽量选LTS版本的建议。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1032441-topic.md",
+          "asktug/1056150-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1032441-topic.md",
+          "asktug/1056150-topic.md",
+          "asktug/1045680-topic.md"
+        ],
+        "answer": "TiDB 不支持存储过程，但有平滑过渡方案。老项目大量的存储过程需要改造，建议使用 AI 进行分析，并应用层面来实现，研发团队进行改造。版本选择上尽量选LTS版本。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 37899.3,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_4",
+        "query": "TiDB 的物化视图怎么创建，多久刷新一次？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档中提到了使用连续的事务实现物化视图的更新，并且说明了 TiFlash 可能依赖于 TiKV 的稳定性。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/5f3dfb25-TiFlink_ 使用 TiKV 和 Flink 实现强一致的物化视图.md",
+          "tidb-net/772a4767-TiDB 的 TiFlash 怎么用 _ TiFlash 的最佳场景&稳定性管理.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/5f3dfb25-TiFlink_ 使用 TiKV 和 Flink 实现强一致的物化视图.md",
+          "tidb-net/772a4767-TiDB 的 TiFlash 怎么用 _ TiFlash 的最佳场景&稳定性管理.md",
+          "tidb-net/772a4767-TiDB 的 TiFlash 怎么用 _ TiFlash 的最佳场景&稳定性管理.md"
+        ],
+        "answer": "TiDB 的物化视图可以通过手动刷新来创建和保持一致性，具体频率没有明确提到，可能需要根据实际应用的需要进行设置。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41660.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_5",
+        "query": "TiDB 怎么配置全表二级索引自动同步？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/7720be36-TiDB 在国信证券海量数据高并发场景中的实践.md",
+          "asktug/1027105-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/7720be36-TiDB 在国信证券海量数据高并发场景中的实践.md",
+          "asktug/1027105-topic.md",
+          "tidb-net/65e0399d-Oracle 11g R2 → TiDB 8.x 迁移实施步骤.md"
+        ],
+        "answer": "无相关配置全表二级索引自动同步的信息在提供的文档中。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 32659.6,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "una_6",
+        "query": "TiDB 有没有内置的查询结果缓存淘汰策略参数？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了两个证据的相关信息来回答用户的问题",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1018860-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1018860-topic.md",
+          "asktug/1018860-topic.md",
+          "docs-cn/sql-prepared-plan-cache.md"
+        ],
+        "answer": "tidb-server有条件地支持执行计划的缓存，但对完整的查询结果暂不支持。由于查询缓存命中率低且会带来内存管理的问题，建议关闭此功能。tidb-server有一个Coprocessor Cache缓存，用于存储region维度的查询结果，并不共享给其他实例。对于一些特定情况，如访问TiFlash或信息视图的查询计划将不会被缓存。关于内置的查询结果缓存淘汰策略参数，文档中未提及此信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 43022.5,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_7",
+        "query": "TiDB 怎么开启列式存储的自动合并功能？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/explain-index-merge.md",
+          "tidb-net/7c3878a1-贝壳金服 TiDB 在线跨机房迁移实践.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/explain-index-merge.md",
+          "tidb-net/7c3878a1-贝壳金服 TiDB 在线跨机房迁移实践.md",
+          "tidb-net/ca2bb901-一栈式 X 规模化 X 多元化：平凯星辰 马晓宇谈 TiDB HTAP 演进之路.md"
+        ],
+        "answer": "在 TiDB 中开启列式存储的自动合并功能需要通过设置 `tidb_enable_index_merge` 参数为 ON 开启索引合并功能。在 v5.4.0 及以上版本的新建集群中，索引合并默认开启。如果需要手动启用，可以通过将 tidb_enable_index_merge 的值设为 ON 来实现。同时，开启 Region merge 功能也是后续计划之一。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 38591.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_8",
+        "query": "TiDB 支持触发器（trigger）吗，怎么创建？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "asktug/1028705-topic.md",
+          "tidb-net/45c4b9b2-分布式数据库的局限性是什么？TiDB 不适用场景与替代方案.md",
+          "asktug/1056147-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1028705-topic.md",
+          "tidb-net/45c4b9b2-分布式数据库的局限性是什么？TiDB 不适用场景与替代方案.md",
+          "asktug/1056147-topic.md"
+        ],
+        "answer": "TiDB 不支持存储过程和触发器，如果应用强依赖存储过程或触发器，迁移到 TiDB 前需要提前改造。关于视图的支持情况是只读视图（不支持物化视图和 DML 操作）。\n从第2条文档了解到，TiDB 在 MySQL 协议兼容性上做到 95%+，但存储过程、触发器、事件调度器、部分数据类型和函数存在差异。因此 TiDB 不适合作为某些生态特性（如复制过滤、插件体系）要求较高的应用。\n第3条文档提到视图、存储过程和触发器在 TiDB 中的支持情况如下：视图只读视图（不支持物化视图和 DML 操作），存储过程不支持，触发器也不支持。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 46217.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_9",
+        "query": "TiDB 的外键约束是怎么实现的？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于 TiDB 外键约束及其在不同版本中的支持情况的信息。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/constraints.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/constraints.md",
+          "docs-cn/constraints.md",
+          "docs-cn/foreign-key.md"
+        ],
+        "answer": "TiDB 的外键约束功能从 v6.6.0 开始支持，并在 v8.5.0 成为正式功能。外键允许跨表交叉引用相关数据，而外键约束则可以保证相关数据的一致性。其实现基于 TiDB 数据库中外键约束的使用概况。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41087.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_10",
+        "query": "TiDB 怎么设置表级别的数据加密密钥？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "没有找到关于设置表级别数据加密密钥的信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/user-account-management.md",
+          "docs-cn/br/br-snapshot-manual.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/user-account-management.md",
+          "docs-cn/br/br-snapshot-manual.md",
+          "docs-cn-v8.4/br/br-snapshot-manual.md"
+        ],
+        "answer": "",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42353.9,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "una_11",
+        "query": "TiDB Binlog 怎么部署和使用？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于如何创建实例、添加用户以及使用 TiDB Binlog 的详细信息。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/c911abce-TiDB 在 UCloud 公有云上的实践.md",
+          "tidb-net/5ae7ec7a-轻松离线部署 TiDB：开发测试环境实操文档.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/c911abce-TiDB 在 UCloud 公有云上的实践.md",
+          "tidb-net/5ae7ec7a-轻松离线部署 TiDB：开发测试环境实操文档.md",
+          "tidb-net/38b6163c-基于TiDB Binlog架构的主备集群部署及数据同步操作手册.md"
+        ],
+        "answer": "TiDB Binlog 的部署与使用需要先创建实例并输入 root 帐号的密码，然后添加只读用户，并且根据需求开启 Binlog 同步服务，默认情况下 TiDB Binlog 支持 MySQL、Pb 和 Kafka 等协议。详见文档[1]和[2]。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40931.8,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_12",
+        "query": "TiDB 的 Pump 和 Drainer 怎么配置？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于如何配置 Pump 和 Drainer 的信息，包括 binlogctl 工具的使用方法，以及基本的部署和配置建议。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/3a28b2c7-TiDB Binlog使用实践.md",
+          "tidb-net/926ee18a-TiDB 快速入门：从零到一 部署初探.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/3a28b2c7-TiDB Binlog使用实践.md",
+          "tidb-net/926ee18a-TiDB 快速入门：从零到一 部署初探.md",
+          "tidb-net/8accbc11-基于Drainer的TiDB的闪回实现.md"
+        ],
+        "answer": "TiDB 的 Pump 和 Drainer 配置可以通过 binlogctl 工具来实现。例如，可以使用 `binlogctl add pump` 命令来添加或配置泵，并通过 `binlogctl start pump` 来启动泵。对于 Drainer，则需要根据具体的下游需求进行相应的设置和配置。请参考 TiDB 官方文档以获取更详细的信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 36583.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_13",
+        "query": "TiDB 老版本的分区表全局索引怎么用？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档内容给出了 TiDB 老版本的分区表全局索引如何使用和注意事项。",
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "tidb-net/3e1ca9db-53 倍性能提升！TiDB 全局索引如何优化分区表查询？.md",
+          "tidb-net/7077577f-53倍性能提升！TiDB 全局索引如何优化分区表查询？.md",
+          "docs-cn-v8.4/partitioned-table.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/3e1ca9db-53 倍性能提升！TiDB 全局索引如何优化分区表查询？.md",
+          "tidb-net/7077577f-53倍性能提升！TiDB 全局索引如何优化分区表查询？.md",
+          "docs-cn-v8.4/partitioned-table.md"
+        ],
+        "answer": "TiDB 老版本的分区表全局索引可以通过在索引定义中添加 `GLOBAL` 关键字来实现。如需创建不包含分区表达式的唯一索引，可通过使用 `GLOBAL` 关键字确保其全局唯一性。注意执行 `DROP`, `TRUNCATE` 和 `REORGANIZE PARTITION` 操作时可能会影响表级别的全局索引，需要在更新后返回结果。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41370.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_14",
+        "query": "TiDB 的 old-value 缓存功能怎么开启？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了关于 TiDB old-value 缓存功能开启方法的相关证据",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/system-variables.md",
+          "docs-cn-v8.4/system-variables.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/system-variables.md",
+          "docs-cn-v8.4/system-variables.md",
+          "asktug/1026863-topic.md"
+        ],
+        "answer": "TiDB 的 old-value 缓存功能可以通过设置 enable-old-value 配置来开启，该配置从 v4.0.5 开始支持，默认值为 true，在 v5.0 开始默认为 true。相关文档可在版本 v6.1.0 和 v8.4 中找到有关 tidb_prepared_plan_cache_size 的信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41380.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_15",
+        "query": "TiDB 的 TiSpark 怎么集成 Spark 做分析？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn-v8.4/explore-htap.md",
+          "tidb-net/beeb9eaf-TiDB 数据库核心原理与架构_Lesson 01 TiDB 数据库架构概述课程整理.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn-v8.4/explore-htap.md",
+          "tidb-net/beeb9eaf-TiDB 数据库核心原理与架构_Lesson 01 TiDB 数据库架构概述课程整理.md",
+          "tidb-net/afba880a-大模型训练数据管道方案：TiDB + Spark 端到端数据管理与版本控制.md"
+        ],
+        "answer": "TiSpark 集成到 Spark 做分析可以通过部署 TiSpark 用户指南和合理设置 Spark 分区数与 TiDB Region 数对齐等方法实现性能优化。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 39046.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_16",
+        "query": "TiDB 内部 kvproto 的 coprocessor 接口怎么调用？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1021896-topic.md",
+          "tidb-net/59ac27b0-TiDB Coprocessor 学习笔记.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1021896-topic.md",
+          "tidb-net/59ac27b0-TiDB Coprocessor 学习笔记.md",
+          "docs-cn/faq/manage-cluster-faq.md"
+        ],
+        "answer": "通过 Coprocessor 可以加速查询类请求，但不能直接使用 KV 接口进行 Cache。TiKV 在进行 select 快照读时会调用 coprocessor 请求，而其他操作则需要 TiDB 调用点查接口或 TiDB 进行计算和汇集。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42260.8,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_17",
+        "query": "TiDB 的 PD 内部 etcd 存储结构是什么样的？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档[2]和[3]详细描述了TiDB PD 内部 etcd 的存储结构与机制。",
+        "used_source_ids": [
+          2,
+          3
+        ],
+        "cited_sources": [
+          "tidb-net/1d23050c-PostgreSQL 分库分表架构如何平滑升级到 TiDB 原生分布式数据库.md",
+          "asktug/1014881-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/83e1810e-以TiDB热点问题来谈Region的调度流程.md",
+          "tidb-net/1d23050c-PostgreSQL 分库分表架构如何平滑升级到 TiDB 原生分布式数据库.md",
+          "asktug/1014881-topic.md"
+        ],
+        "answer": "TiDB的PD内部etcd存储结构是基于多版本并发控制(MVCC)来管理元数据，并且默认的compaction间隔为1小时。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 37983.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_18",
+        "query": "TiDB 怎么直接访问 TiKV 的 raw key-value 存储层？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于如何通过启用 TiKV API V2 来访问 TiDB 的 raw key-value 存储层的信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/5f61f0f9-一文搞懂TiDB的闪回（FlashBack）能力.md",
+          "tidb-net/9e8d2ef5-回到过去，找回遗失的珍宝 - TiDB 的历史读功能.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/5f61f0f9-一文搞懂TiDB的闪回（FlashBack）能力.md",
+          "tidb-net/9e8d2ef5-回到过去，找回遗失的珍宝 - TiDB 的历史读功能.md",
+          "docs-cn/releases/release-6.1.0.md"
+        ],
+        "answer": "TiDB 可以通过启用 TiKV API V2，直接访问 TiKV 的 raw key-value 存储层。在 v6.1.0 之前，TiKV 的数据仅存储了客户端传入的原始数据，并只提供基本的 Key Value 读写能力。从 v6.1.0 开始引入的 TiKV API V2 提供了新的 Raw Key Value 存储格式与访问接口，包括以 MVCC 方式存储的数据和根据不同使用方式划分的数据范围，支持单一集群 TiDB、事务 KV 和 RawKV 应用共存。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 46429.9,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_19",
+        "query": "TiDB 内部的分布式事务两阶段提交的代码入口在哪？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "证据1提到了TiKV中MVCC的具体实现解读，其中包括Prewrite阶段，其入口位于src/storage/txn/actions/prewrite.rs文件中的prewrite方法和相关方法；证据2详细描述了TiDB乐观事务模型中的两阶段提交协议。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/0d18201d-TiKV中MVCC的具体实现解读.md",
+          "docs-cn-v8.4/optimistic-transaction.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/0d18201d-TiKV中MVCC的具体实现解读.md",
+          "docs-cn-v8.4/optimistic-transaction.md",
+          "asktug/1038077-topic.md"
+        ],
+        "answer": "TiDB 内部的分布式事务两阶段提交的代码入口在 src/storage/txn/actions/prewrite.rs 中的 prewrite 方法和其委托方法 prewrite_with_generation。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 44441.9,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_20",
+        "query": "TiDB 的 placement driver 内部调度算法源码怎么读？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了关于 TiDB 的 placement driver 内部调度算法源码的相关信息，以及两个证据文档来源 ID (1 和 2) 来支持答案。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/5d4e3b2e-实战复盘：一次 40 分钟的 add index 卡 0 行救援 —— 从 GitHub Issue #65948 看 .md",
+          "docs-cn/sql-statements/sql-statement-show-placement-for.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/5d4e3b2e-实战复盘：一次 40 分钟的 add index 卡 0 行救援 —— 从 GitHub Issue #65948 看 .md",
+          "docs-cn/sql-statements/sql-statement-show-placement-for.md",
+          "docs-cn/tidb-scheduling.md"
+        ],
+        "answer": "TiDB 的 placement driver 内部调度算法源码可以通过阅读 TiKV 集群的管理模块 Placement Driver (PD) 相关文档来理解，如 docs-cn/tidb-scheduling.md 和 tidb-net/5d4e3b2e-实战复盘：一次 40 分钟的 add index 卡 0 行救援 - 从 GitHub Issue #65948 看。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 47680.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_21",
+        "query": "TiDB 的 HNSW 向量索引怎么建，参数怎么调？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "invalid_output",
+        "reason": "invalid_output",
+        "used_source_ids": [],
+        "cited_sources": [],
+        "retrieved_sources": [
+          "tidb-net/338b128a-为什么 AI 应用需要向量检索？TiDB Vector + 大模型的 RAG 架构解析.md",
+          "tidb-net/52d7cae8-TiDB 向量搜索与 AI 集成.md",
+          "tidb-net/0c5672b9-TiDB Vector 抢先体验：用 TiDB 实现以图搜图.md"
+        ],
+        "answer": "",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 51148.9,
+        "verdict": "invalid_output"
+      },
+      {
+        "query_id": "una_22",
+        "query": "TiDB 怎么实现基于 RAG 的知识库检索？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "invalid_output",
+        "reason": "invalid_output",
+        "used_source_ids": [],
+        "cited_sources": [],
+        "retrieved_sources": [
+          "tidb-net/74d9d5b2-TiDB 在智能制造与能源领域：以先进架构解决痛点，支撑多场景创新与发展.md",
+          "tidb-net/7a8862d5-使用 TiDB Vector 搭建 RAG 应用 - TiDB 文档问答小助手.md",
+          "tidb-net/3abdb8d5-全文搜索功能已上线 TiDB Could Serverless（附实践教程）.md"
+        ],
+        "answer": "",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 39108.3,
+        "verdict": "invalid_output"
+      },
+      {
+        "query_id": "una_23",
+        "query": "TiDB 的图数据库查询（像 Neo4j 的 Cypher）怎么写？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "证据 1 和 2 提供了关于 TiDB 和 Neo4j 的比较，包括它们各自的查询方式以及如何在实际场景中使用。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/797ef12b-TiDB vs Neo4j：关系型 vs 图数据库关联查询场景对比.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/797ef12b-TiDB vs Neo4j：关系型 vs 图数据库关联查询场景对比.md",
+          "tidb-net/797ef12b-TiDB vs Neo4j：关系型 vs 图数据库关联查询场景对比.md",
+          "asktug/1048821-topic.md"
+        ],
+        "answer": "TiDB 的图数据库查询可以参考 Neo4j的 Cypher 查询语言来编写。例如，在 TiDB 中使用 TiCDC 可以实现类似 Neo4j 的 Cypher 查询功能。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 36581.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_24",
+        "query": "TiDB 怎么实现全文检索的倒排索引？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档[1]中提到的是HTAP实现的相关内容，不是关于TiDB全文检索的具体方法；文档[2]明确说明了如何创建全文索引，而文档[3]则回答了如果不需要高级搜索功能，是否应该使用TiDB的FULLTEXT INDEX。",
+        "used_source_ids": [
+          2,
+          3
+        ],
+        "cited_sources": [
+          "docs-cn/ai/guides/vector-search-full-text-search-sql.md",
+          "tidb-net/ace8a7a8-TiDB vs Elasticsearch：全文检索与复杂查询场景全面对比.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/c11cf89a-开源分布式数据库 TiDB 架构以及HTAP 的实现.md",
+          "docs-cn/ai/guides/vector-search-full-text-search-sql.md",
+          "tidb-net/ace8a7a8-TiDB vs Elasticsearch：全文检索与复杂查询场景全面对比.md"
+        ],
+        "answer": "TiDB 实现全文检索的倒排索引的方法是创建全文索引时指定索引名称，默认情况下使用第一个被索引列的名称作为索引名。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 39202.1,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_25",
+        "query": "TiDB 支持时序数据的降采样和保留策略吗？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "查询没有提及TiDB是否支持时序数据的降采样和保留策略",
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "asktug/1056000-topic.md",
+          "docs-cn/faq/sql-faq.md",
+          "docs-cn-v8.4/faq/sql-faq.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1056000-topic.md",
+          "docs-cn/faq/sql-faq.md",
+          "docs-cn-v8.4/faq/sql-faq.md"
+        ],
+        "answer": "没有找到关于TiDB支持时序数据降采样和保留策略的信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 37533.4,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "una_26",
+        "query": "TiDB 怎么对接 Hadoop 生态做离线分析？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了对接 Hadoop 生态做离线分析的具体方式",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/9f000c95-Pinterest 选择采用 TiDB.md",
+          "tidb-net/668e625b-同盾科技 x TiDB丨实时数据架构为风控智能决策保驾护航.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/9f000c95-Pinterest 选择采用 TiDB.md",
+          "tidb-net/668e625b-同盾科技 x TiDB丨实时数据架构为风控智能决策保驾护航.md",
+          "tidb-net/4d8dfbe6-TiDB vs HBase：海量数据随机读写场景对比实测.md"
+        ],
+        "answer": "TiDB 怎么对接 Hadoop 生态做离线分析？可以通过使用 TiSpark 进行数据访问，并通过 Hive 表将快照导出到 S3，然后由客户端用于离线分析。另外，在某些场景下也可以考虑将数据迁移到 TiDB，通过 Data Migration (DM) 工具进行批量迁移，再导入 TiDB。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40670.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_27",
+        "query": "TiDB 支持地理空间查询的 PostGIS 扩展吗？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/7dc4da0d-Postgres Citus 分片数据库平滑迁移 TiDB 完整实操方案（含 PostGIS 空间字段迁移踩坑）.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/7dc4da0d-Postgres Citus 分片数据库平滑迁移 TiDB 完整实操方案（含 PostGIS 空间字段迁移踩坑）.md",
+          "tidb-net/7dc4da0d-Postgres Citus 分片数据库平滑迁移 TiDB 完整实操方案（含 PostGIS 空间字段迁移踩坑）.md",
+          "tidb-net/7dc4da0d-Postgres Citus 分片数据库平滑迁移 TiDB 完整实操方案（含 PostGIS 空间字段迁移踩坑）.md"
+        ],
+        "answer": "TiDB 自建集群支持 GEOMETRY 字段和基础 ST 系列空间函数，但不支持 SPATIAL 空间索引。因此在大数据量场景下，所有空间过滤条件都会触发全表扫描，无法使用 TiDB 的地理空间查询扩展。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41865.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_28",
+        "query": "TiDB 怎么实现消息队列的订阅推送？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/4d0a8096-【精选实践】TiDB 在喜马拉雅推送系统中的实践.md",
+          "tidb-net/7e0c810c-携程国际业务动态实时标签处理平台实践.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/4d0a8096-【精选实践】TiDB 在喜马拉雅推送系统中的实践.md",
+          "tidb-net/7e0c810c-携程国际业务动态实时标签处理平台实践.md",
+          "tidb-net/61b72e76-干货分享丨携程国际业务动态实时标签处理平台实践.md"
+        ],
+        "answer": "TiDB 实现消息队列的订阅推送主要通过设备管理存储和绑定服务来完成 UID 和 Token 的绑定，并使用一个接口直接推送给业务方，之后经过消息队列处理并转化为第三方 token 发送至应用订阅的消息队列。携程国际业务则采用主动 Push 方式实现实时流式数据处理，适用于主动触达场景的数据不需要落地。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 39420.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_29",
+        "query": "TiDB 的机器学习模型推理接口怎么调用？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/7a8862d5-使用 TiDB Vector 搭建 RAG 应用 - TiDB 文档问答小助手.md",
+          "tidb-net/d07b432f-基于阿里云ECS部署的TiDB 2.1.14升级到4.0.0-rc实践.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/7a8862d5-使用 TiDB Vector 搭建 RAG 应用 - TiDB 文档问答小助手.md",
+          "tidb-net/d07b432f-基于阿里云ECS部署的TiDB 2.1.14升级到4.0.0-rc实践.md",
+          "tidb-net/89d3a79d-TiDB在个推的落地实践 _ 解决热点难题，提升性能超千倍.md"
+        ],
+        "answer": "TiDB 的机器学习模型推理接口需要根据具体的使用场景和文档进行调用，具体调用方法可能因 TiDB 版本而异。建议查阅 TiDB 相关的官方文档或联系技术支持获取详细信息。从提供的三段内容来看，关于如何调用 TiDB 机器学习模型推理接口的信息并不在其中任何一个段落中。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 39202.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_30",
+        "query": "TiDB 怎么实现文档数据库的 JSON 全文检索？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档 1 和文档 2 提供了关于 TiDB 全文搜索功能的详细信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/ai/guides/vector-search-full-text-search-sql.md",
+          "tidb-net/58f8ca7c-TiDB vs Weaviate：RAG 知识库向量数据库 vs TiDB Vector 对比.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/ai/guides/vector-search-full-text-search-sql.md",
+          "tidb-net/58f8ca7c-TiDB vs Weaviate：RAG 知识库向量数据库 vs TiDB Vector 对比.md",
+          "docs-cn/ai/guides/vector-search-full-text-search-python.md"
+        ],
+        "answer": "TiDB 提供了使用 SQL 进行全文搜索的功能，无需进行 embedding 过程。文档支持多种语言，并可以自动选择最佳文本分析器实现按相关性排序。所有 SQL 功能都可以与全文搜索结合使用，包括预过滤、后过滤、分组和关联查询等。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 45851.1,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_31",
+        "query": "Python 的 GIL 是什么？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "insufficient_evidence",
+        "reason": "提供的文档内容与问题无关",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1026509-topic.md",
+          "tidb-net/f65f667c-用“多人团购”理解Percolator协议.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1026509-topic.md",
+          "tidb-net/f65f667c-用“多人团购”理解Percolator协议.md",
+          "tidb-net/b6d840f2-TIDB：分布式事务算法Percolator学习笔记.md"
+        ],
+        "answer": "无相关信息回答问题",
+        "attempt": 2,
+        "rewritten_queries": [
+          "Python 中的全局 Interpreter Lock（GIL）是什么？"
+        ],
+        "elapsed_ms": 56473.0,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "una_32",
+        "query": "Kubernetes 的 Pod 和 Deployment 有什么区别？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于 Kubernetes 中的 Pod 和 Deployment 的基本解释，并且对比了它们之间的主要区别。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/69c5c968-TiDB 唐刘：AI 编程缺失的抽象层.md",
+          "tidb-net/9b93fb27-高效编排有状态应用——TiDB 的云原生实践与思考.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/69c5c968-TiDB 唐刘：AI 编程缺失的抽象层.md",
+          "tidb-net/9b93fb27-高效编排有状态应用——TiDB 的云原生实践与思考.md",
+          "tidb-net/253ebae8-云原生时代运营商数据库选型：分布式、弹性伸缩与多活高可用架构.md"
+        ],
+        "answer": "Kubernetes 中的 Pod 和 Deployment 是不同的概念。Pod 是容器化的部署单元，而 Deployment 可以看作是用于管理多个 Pod 的一个抽象概念，它能实现对这些 Pod 的自动伸缩和更新。关于 Kubernetes 的 Pod 和 Deployment 有什么区别？可以参考以上文档内容来理解这两个术语的不同含义。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42181.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_33",
+        "query": "Redis 的 RDB 和 AOF 持久化有什么区别？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了对Redis RDB和AOF的区别解释",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/968d574f-vivo 数据库与存储平台的建设和探索.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/968d574f-vivo 数据库与存储平台的建设和探索.md",
+          "tidb-net/968d574f-vivo 数据库与存储平台的建设和探索.md",
+          "tidb-net/9b1b57bf-使用 TiKV 构建分布式类 Redis 服务.md"
+        ],
+        "answer": "Redis的RDB和AOF持久化的主要区别在于：RDB在数据断点时进行快照式复制，而AOF则是在每条命令执行时追加日志记录。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 36469.5,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_34",
+        "query": "Docker 的镜像和容器有什么区别？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了关于 Docker 是一种开源的容器化技术的信息，以及它如何将应用程序及其依赖项打包到一个轻量级的、可移植的容器中，从而在不同的环境中部署和运行应用的能力。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/52bf40fc-在k8s上部署tidb数据库.md",
+          "asktug/1013342-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/52bf40fc-在k8s上部署tidb数据库.md",
+          "asktug/1013342-topic.md",
+          "tidb-net/17db139b-tidb这种把数据库放入docker是否是个好主意。.md"
+        ],
+        "answer": "Docker 的镜像和容器有什么区别？Docker 是一种开源的容器化技术，它允许开发者将应用程序及其依赖项打包到一个轻量级的、可移植的容器中。通过Docker，开发者可以轻松地在不同的环境中部署和运行应用，同时确保应用的兼容性和稳定性。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40101.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_35",
+        "query": "HTTP 和 HTTPS 的区别是什么？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档提供了关于 HTTP/2 和 HTTPS 的信息，并且它们之间的对比是可以通过 Wireshark 解析协议来理解的。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/d6dd3716-刘奇：能否掌控复杂性，决定着分布式数据库的生死存亡.md",
+          "tidb-net/7f8c0794-深入了解 gRPC：协议.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/d6dd3716-刘奇：能否掌控复杂性，决定着分布式数据库的生死存亡.md",
+          "tidb-net/7f8c0794-深入了解 gRPC：协议.md",
+          "tidb-net/7f8c0794-深入了解 gRPC：协议.md"
+        ],
+        "answer": "HTTP/2 是一个二进制协议，可读性较低，但可以通过工具如 Wireshark 进行解析。HTTPS 加密 HTTP 流量以保护数据的安全，区别在于 HTTP 使用的是不加密的连接（http://），而 HTTPS 使用了 SSL/TLS 证书对流量进行加密（https://)。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 38815.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_36",
+        "query": "TiDB 的 audit log 审计日志怎么配置？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "证据1和证据2提供了关于如何在TiDB中配置审计日志的详细信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/a65b4d96-分布式数据库的安全合规怎么做？加密_审计_访问控制完整方案.md",
+          "asktug/1058683-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/a65b4d96-分布式数据库的安全合规怎么做？加密_审计_访问控制完整方案.md",
+          "asktug/1058683-topic.md",
+          "tidb-net/0629c299-一个 39.3T 的集群从TiDB v3.1.0迁移升级到 TiDB v7.1.2 的实践.md"
+        ],
+        "answer": "审计日志配置可以通过 INSTALL PLUGIN audit_log SONAME 'audit_log.so'; SET GLOBAL audit_log_events = 'general,table_access,admin'; SET GLOBAL audit_log_handler = 'file'; SET GLOBAL audit_log_file = '/var/log/tidb/audit.log' 进行。TiCDC 用于数据同步，不适用于完整审计。企业版支持通过配置 security.enable-audit=true 来开启审计功能并输出到 tidb-audit.log，默认情况下审计会记录所有 SQL，生产环境建议按需过滤。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42120.8,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_37",
+        "query": "TiDB 怎么对接 LDAP 做统一认证？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "文档中明确提到 TiDB 支持通过 LDAP 协议对接 AD，提供相关插件，并推荐查看用户文档以获取更多信息。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/releases/release-7.1.0.md",
+          "docs-cn-v8.4/releases/release-7.1.0.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/releases/release-7.1.0.md",
+          "docs-cn-v8.4/releases/release-7.1.0.md",
+          "tidb-net/0c020739-SQL Server的Windows认证、AD集成和SSRS报表服务，迁移后怎么替代？.md"
+        ],
+        "answer": "TiDB 支持通过 LDAP 协议对接 AD 实现统一认证，并提供了 `authentication_ldap_sasl` 和 `authentication_ldap_simple` 两种插件。可以参考用户文档来配置和使用这些功能。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42717.8,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_38",
+        "query": "TiDB 的资源组（resource group）怎么和 K8s 集成？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "提供了关于如何通过 TiDB Operator 和自定义类型的使用来与 Kubernetes 集成的信息",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/68d83791-TiDB on Kubernetes 最佳实践.md",
+          "tidb-net/95f35f0c-将TiDB各服务组件混布到物理机集群和K8S环境.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/68d83791-TiDB on Kubernetes 最佳实践.md",
+          "tidb-net/95f35f0c-将TiDB各服务组件混布到物理机集群和K8S环境.md",
+          "tidb-net/68d83791-TiDB on Kubernetes 最佳实践.md"
+        ],
+        "answer": "TiDB 的资源组（resource group）可以通过使用 TiDB Operator 和自定义类型与 K8s 集成。比如用户可以提交资源定义到 K8s 中，如需要一个 TiDB 集群或监控对象等。证据来源于文档1和2。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 46406.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_39",
+        "query": "TiDB 的列存引擎支持 update 吗？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": "证据1提到了TiFlash不支持主键或唯一性约束下的更新，并且使用了ETL去重和融合新老数据的方法来实现更新操作。证据2进一步说明了为什么多数列存引擎不支持更新以及TIChas可能采用的解决方案。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/2d33d7db-TiDB 新版本：更稳、更快、更好的数据库体验.md",
+          "tidb-net/3fa1e4ec-TiFlash：并非另一个 T + 1 列存数据库丨TiDB工具.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/2d33d7db-TiDB 新版本：更稳、更快、更好的数据库体验.md",
+          "tidb-net/3fa1e4ec-TiFlash：并非另一个 T + 1 列存数据库丨TiDB工具.md",
+          "docs-cn/faq/tidb-faq.md"
+        ],
+        "answer": "TiFlash作为TiDB的列存引擎，默认情况下并不支持更新操作。虽然多数列存引擎不支持主键或唯一性约束下的更新，但为了实现高效的数据处理和一致性，TiFlash可能采用了其他方法如ETL去重融合新老数据，然后批量导入的方式。这使得实时同步和分析变得困难。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 44607.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "una_40",
+        "query": "TiDB 怎么做跨地域的异步容灾？",
+        "category": "unanswerable",
+        "expected_status": "insufficient_evidence",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/3755c292-TiDB 助力万亿城商行：构建未来金融核心系统.md",
+          "tidb-net/64f735ec-数据库容灾方案怎么选？同城双活_两地三中心_多云容灾对比.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/3755c292-TiDB 助力万亿城商行：构建未来金融核心系统.md",
+          "tidb-net/64f735ec-数据库容灾方案怎么选？同城双活_两地三中心_多云容灾对比.md",
+          "tidb-net/02b18e02-告别 MySQL 分库分表， 重庆富民银行通过 TiDB 实现批量场景降本提效.md"
+        ],
+        "answer": "TiDB 提供了同城双活和异地灾备方案来实现金融级高可用两地三中心方案，对于跨地域的异步容灾，可以通过 TiCDC 实现数据变更同步到异地从库中以提供备份支持，减少对写入性能的影响。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40124.1,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_1",
+        "query": "TiDB 是不是不支持在线加索引？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "证据1说明了TiDB不支持在线加索引，证据2提到TiDB当前不支持全文索引但是可能会支持，在线加索引和虚拟索引不在支持范围内",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1010009-topic.md",
+          "asktug/1023980-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1010009-topic.md",
+          "asktug/1023980-topic.md",
+          "asktug/1010009-topic.md"
+        ],
+        "answer": "TiDB 不支持在线加索引和虚拟索引功能。但 TiDB 支持模拟索引的功能，并且有插件 HypoPG 提供一个模拟索引的功能来校验索引的有效性。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 42914.3,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_2",
+        "query": "TiDB 有没有办法设置 TTL 自动清理过期数据，还是说根本不支持？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档[1] 提到 TTL 可以周期性地自动检查并清理表中的过期数据来节省存储空间和提升性能。文档[2] 也确认了这一说法，并进一步说明了可以通过 TTL 属性或定时任务实现自动清理过期数据。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/time-to-live.md",
+          "asktug/1039943-topic.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/time-to-live.md",
+          "asktug/1039943-topic.md",
+          "tidb-net/b559e7d7-TiDB vs Weaviate：AI Agent 记忆管理场景向量数据库对比实测.md"
+        ],
+        "answer": "TiDB 支持通过 TTL 属性或定时任务实现自动清理过期数据。可以通过为表设置 TTL 属性并周期性地检查和清理表中的过期数据来节省存储空间、提升性能。也可以使用 TiFlash 列存加速过期扫描，对于大规模的过期数据，这种方法更有效。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41020.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_3",
+        "query": "TiDB 是不是不能做全量备份？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档提供了关于 TiDB 支持全量备份的方式的信息，包括快照数据备份",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/0b34c357-直击备份恢复的痛点：基于 TiDB Binlog 的快速时间点恢复.md",
+          "docs-cn/br/backup-and-restore-overview.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/0b34c357-直击备份恢复的痛点：基于 TiDB Binlog 的快速时间点恢复.md",
+          "docs-cn/br/backup-and-restore-overview.md",
+          "docs-cn-v8.4/br/backup-and-restore-overview.md"
+        ],
+        "answer": "TiDB 支持全量备份的方式有快照数据备份，因此 TiDB 是可以做全量备份的。相关内容可以在文档 tidb-net/0b34c357-直击备份恢复的痛点：基于 TiDB Binlog 的快速时间点恢复.md 和 docs-cn-v8.4/br/backup-and-restore-overview.md 中找到。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40788.9,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_4",
+        "query": "TiDB 的查询计划缓存功能是不是已经废弃了？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1018860-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1018860-topic.md",
+          "asktug/1018860-topic.md",
+          "docs-cn/releases/release-5.4.0.md"
+        ],
+        "answer": "tidb对查询缓存功能默认是关闭的，在v7.5.0版本后兼容mysql8.0，默认会禁用查询缓存功能。tidb支持小表缓存，这个功能类似于查询缓存，但是并不建议在生产环境中使用查询缓存功能。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 40370.3,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_5",
+        "query": "TiDB 好像不支持分区表裁剪吧？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "insufficient_evidence",
+        "reason": "当前信息未明确回答TiDB是否支持分区表裁剪",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1022184-topic.md",
+          "asktug/1010484-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1022184-topic.md",
+          "asktug/1010484-topic.md",
+          "docs-cn/best-practices/tidb-partitioned-tables-best-practices.md"
+        ],
+        "answer": "",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 32905.6,
+        "verdict": "correct_refusal"
+      },
+      {
+        "query_id": "mk_6",
+        "query": "TiDB 是不是没有类似 EXPLAIN 的功能？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1010009-topic.md",
+          "docs-cn/sql-statements/sql-statement-explain-analyze.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1010009-topic.md",
+          "docs-cn/sql-statements/sql-statement-explain-analyze.md",
+          "asktug/1011402-topic.md"
+        ],
+        "answer": "TiDB 不支持虚拟索引功能，但是可以使用 `EXPLAIN ANALYZE` 来观察表的统计数据，并通过模拟创建索引来检查索引的有效性。对于是否包含伪造统计信息的功能，目前不清楚 TiDB 是否集成实现了类似 PostgreSQL 的 HypoPG 相关功能。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 37340.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_7",
+        "query": "TiDB 的 FLASHBACK 恢复功能是不是只支持老版本？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "证据1和证据2都讨论了TiDB的多种数据恢复方式以及FLASHBACK 恢复的功能，没有提及只支持老版本",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/48cfb837-TiDB 数据库误删除应急恢复指南：误删不恐慌.md",
+          "docs-cn/sql-statements/sql-statement-flashback-cluster.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/48cfb837-TiDB 数据库误删除应急恢复指南：误删不恐慌.md",
+          "docs-cn/sql-statements/sql-statement-flashback-cluster.md",
+          "asktug/1035679-topic.md"
+        ],
+        "answer": "TiDB 的 FLASHBACK 恢复功能不只支持老版本。从文档来看，FLASHBACK TABLE 和 RECOVER TABLE 分别适用于不同的误操作场景，FLASHBACK CLUSTER 则用于集群恢复。虽然官方文档提到在 TiDB v7.1.0 中使用 `FLASHBACK CLUSTER` 可能会出现问题，并建议使用快照备份与恢复，但并未明确表示 FLASHBACK 恢复功能只支持老版本。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 44708.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_8",
+        "query": "TiDB 是不是不能给表加多个 TiFlash 副本？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档[1] 提到需要 alter table a set tiflash replica 1 来增加 TiFlash 副本，而文档[2] 描述了一个无法为表添加多个 TiFlash 副本的问题。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1034392-topic.md",
+          "asktug/1028070-topic.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1034392-topic.md",
+          "asktug/1028070-topic.md",
+          "tidb-net/2227fd45-TiFlash Proxy 模块介绍.md"
+        ],
+        "answer": "TiDB 是不能给表加多个 TiFlash 副本的，通过 ALTER TABLE t SET TIFLASH REPLICA 1 只能增加一个 TiFlash 副本。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41983.3,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_9",
+        "query": "TiDB 的统计信息是不是只能手动收集，不能自动？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "证据内容说明了 TiDB 收集统计信息的方式及注意事项。",
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "docs-cn-v8.4/statistics.md",
+          "docs-cn/statistics.md",
+          "docs-cn/extended-statistics.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn-v8.4/statistics.md",
+          "docs-cn/statistics.md",
+          "docs-cn/extended-statistics.md"
+        ],
+        "answer": "目前 TiDB 收集统计信息为全量收集，可以手动通过 ANALYZE TABLE 语句来收集，并且提供了一些语法选项如 WITH NUM BUCKETS 和 WITH TOPN 来控制统计信息的收集行为。同时文档也提到自动更新不会记录手动 `ANALYZE` 时输入的配置项，因此需要用户自行手动设置定时任务来收集统计信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 46912.4,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_10",
+        "query": "TiDB 是不是不支持在 TiKV 上做计算下推？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/09cc69f4-PCTP考试学习笔记之一：深入TIDB体系架构（下）.md",
+          "docs-cn-v8.4/predicate-push-down.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/09cc69f4-PCTP考试学习笔记之一：深入TIDB体系架构（下）.md",
+          "docs-cn-v8.4/predicate-push-down.md",
+          "docs-cn/functions-and-operators/functions-and-operators-overview.md"
+        ],
+        "answer": "TiDB 可以将一些计算下推到 TiKV 上执行，例如特定的表达式。但是，并不是所有的 SQL 查询都支持这种下推操作。具体取决于查询能否优化为只涉及一个 Region 的计算，以及 TiKV 是否能够处理相关用户变量和表达式的值。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 36375.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_11",
+        "query": "TiDB 有没有 AUTO_RANDOM 这种不太常见的主键类型？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档[1]提到TiDB对大事务的简单拆分，建议使用auto_random特性避免连续性带来的单 region 写热点问题。文档[2]则明确指出在建立聚簇索引表时指定主键类型为AUTO_RANDOM，并使用雪花算法生成的随机数字作为主键。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/4c730436-TiDB 对大事务的简单拆分.md",
+          "asktug/1022733-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/4c730436-TiDB 对大事务的简单拆分.md",
+          "asktug/1022733-topic.md",
+          "tidb-net/81f11679-TiDB 如何做到无限扩展和保证节点 id 唯一.md"
+        ],
+        "answer": "TiDB支持AUTO_RANDOM作为自增主键类型来解决热点问题，并将其数据打散分布到不同的region中。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 35471.7,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_12",
+        "query": "TiDB 支持 SAVEPOINT 这种少见的事务特性吗？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/sql-statements/sql-statement-savepoint.md",
+          "tidb-net/28e4db56-分布式数据库事务隔离级别详解？TiDB RC_RR_Snapshot 选择指南.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/sql-statements/sql-statement-savepoint.md",
+          "tidb-net/28e4db56-分布式数据库事务隔离级别详解？TiDB RC_RR_Snapshot 选择指南.md",
+          "tidb-net/da5c889f-TiDB v6.0 - 6.6 新特性解读.md"
+        ],
+        "answer": "TiDB 支持 SAVEPOINT 特性，但不支持与 TiDB Binlog 一起使用，也不支持在关闭 tidb_constraint_check_in_place_pessimistic 的悲观事务中使用。相关信息来自文档和 MySQL 迁移指南。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41291.1,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_13",
+        "query": "TiDB 有没有缓存表（CACHE TABLE）这种功能，好像很少人用？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档中有关于TiDB的小表缓存和查询缓存的信息，并且用户提问了关于TiDB是否有缓存表功能的问题",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/cached-tables.md",
+          "docs-cn-v8.4/cached-tables.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/cached-tables.md",
+          "docs-cn-v8.4/cached-tables.md",
+          "asktug/1018860-topic.md"
+        ],
+        "answer": "TiDB 提供了小表缓存功能来提高读取小型表和静态全局表的性能，但并没有提到查询缓存的功能。用户可以使用小表缓存来优化某些场景下的 SQL 性能提升，如 Flink join 一些配置表时延迟从10ms降低到2ms左右。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 41639.7,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_14",
+        "query": "TiDB 支持 WITH RECURSIVE 递归查询吗，这个好像比较冷门？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "证据[1] 提到 TiDB 支持使用 `WITH` 语句实现递归或非递归查询，这表明 TiDB 支持 WITH RECURSIVE 递归查询。证据[2] 描述了冷热数据存储功能，并提及可以使用公共表表达式来处理树形数据查询需求。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "asktug/1043653-topic.md",
+          "tidb-net/6af509e7-数据库冷热数据存储技术解读：主流方案对比.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1043653-topic.md",
+          "tidb-net/6af509e7-数据库冷热数据存储技术解读：主流方案对比.md",
+          "docs-cn/releases/release-5.1.0.md"
+        ],
+        "answer": "TiDB 支持 WITH RECURSIVE 递归查询吗，这个好像比较冷门？这在 TiDB 的新功能中有所提及，可以通过 `WITH` 语句使用公共表表达式来实现递归或非递归查询。文档指出了 TiDB 使用 MySQL 8 中的公共表表达式（CTE）的能力来处理树形数据查询需求。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 49391.2,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_15",
+        "query": "TiDB 有没有扩展统计信息这种高级功能？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/extended-statistics.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/extended-statistics.md",
+          "docs-cn/extended-statistics.md",
+          "asktug/1011402-topic.md"
+        ],
+        "answer": "TiDB 默认不包含扩展统计信息，但可以通过启用并创建所需的扩展统计信息对象来收集。虽然没有伪造统计信息的功能，但可以手动调整以满足特定需求。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 44154.6,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_16",
+        "query": "TiDB 支持 SELECT INTO 导出查询结果吗？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "共提供了三份文档来源用于回答问题，其中两份详细描述了 `IMPORT INTO ... FROM SELECT` 的功能及其性能提升；第三份文档提供了关于 `SELECT` 语句的使用说明。",
+        "used_source_ids": [
+          1,
+          2,
+          3
+        ],
+        "cited_sources": [
+          "docs-cn/releases/release-8.0.0.md",
+          "docs-cn-v8.4/releases/release-8.0.0.md",
+          "docs-cn/sql-statements/sql-statement-import-into.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/releases/release-8.0.0.md",
+          "docs-cn-v8.4/releases/release-8.0.0.md",
+          "docs-cn/sql-statements/sql-statement-import-into.md"
+        ],
+        "answer": "TiDB 支持通过 `IMPORT INTO ... FROM SELECT` 将查询结果导入到一张空的 TiDB 目标表中，其性能最高可达 `INSERT INTO ...SELECT` 的 8 倍，可以大幅缩短导入所需的时间。关于 SELECT 导出查询结果的问题，文档没有直接提及是否支持，但提供了一些 SQL 操作说明。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 57595.0,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_17",
+        "query": "TiDB 有没有 FLASHBACK CLUSTER 这种整集群回退的功能？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档提供了关于 TiDB 6.6.0 版本中 `FLASHBACK CLUSTER TO TIMESTAMP` 命令的具体信息和功能细节。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn/releases/release-6.6.0.md",
+          "docs-cn-v8.4/releases/release-6.6.0.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn/releases/release-6.6.0.md",
+          "docs-cn-v8.4/releases/release-6.6.0.md",
+          "docs-cn/releases/release-6.6.0.md"
+        ],
+        "answer": "TiDB 提供了通过 `FLASHBACK CLUSTER TO TIMESTAMP` 命令来回退整个集群的功能，支持撤销 DDL 操作，并在分钟级别内快速回退集群，可以在指定的 Garbage Collection (GC) 生命周期时间内回退到特定的时间点。更多信息参考用户文档。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 54666.9,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_18",
+        "query": "TiDB 支持 SEQUENCE 序列对象吗？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": null,
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "docs-cn-v8.4/ticdc/ticdc-overview.md",
+          "docs-cn/information-schema/information-schema-sequences.md"
+        ],
+        "retrieved_sources": [
+          "docs-cn-v8.4/ticdc/ticdc-overview.md",
+          "docs-cn/information-schema/information-schema-sequences.md",
+          "docs-cn/sql-statements/sql-statement-create-sequence.md"
+        ],
+        "answer": "TiDB 不支持在 TiDB 中创建 SEQUENCE 的 DDL 操作和 SEQUENCE 函数，但是使用 SEQUENCE 函数的 DML 操作可以正确地同步。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 37889.9,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_19",
+        "query": "TiDB 有没有 QUERY WATCH 这种拦截慢查询的功能？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "文档内容明确提到 TiDB 的 QUERY WATCH 功能以及它的使用场景和应用场景。",
+        "used_source_ids": [
+          2,
+          3
+        ],
+        "cited_sources": [
+          "docs-cn/releases/release-8.1.0.md",
+          "tidb-net/90e27aa0-TiDB 慢查询日志分析.md"
+        ],
+        "retrieved_sources": [
+          "asktug/1039719-topic.md",
+          "docs-cn/releases/release-8.1.0.md",
+          "tidb-net/90e27aa0-TiDB 慢查询日志分析.md"
+        ],
+        "answer": "TiDB 提供了 QUERY WATCH 功能用于拦截慢查询的功能，这个功能可以在用户文档中找到详细信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 36659.5,
+        "verdict": "false_acceptance"
+      },
+      {
+        "query_id": "mk_20",
+        "query": "TiDB 支持 RECOVER TABLE 恢复被 drop 的表吗？",
+        "category": "miss_kill",
+        "expected_status": "answered",
+        "status": "answered",
+        "reason": "证据 1 和 2 都提到了 TiDB 的恢复方式以及 br 备份的具体限制。",
+        "used_source_ids": [
+          1,
+          2
+        ],
+        "cited_sources": [
+          "tidb-net/48cfb837-TiDB 数据库误删除应急恢复指南：误删不恐慌.md",
+          "asktug/1043655-topic.md"
+        ],
+        "retrieved_sources": [
+          "tidb-net/48cfb837-TiDB 数据库误删除应急恢复指南：误删不恐慌.md",
+          "asktug/1043655-topic.md",
+          "asktug/1043655-topic.md"
+        ],
+        "answer": "TiDB 支持使用 RECOVER TABLE 恢复被 drop 的表，但是恢复需要基于具体的 DDL JOB ID，并且不能覆盖原有表的数据。官方文档提到只能向空表还原。关于备份恢复到同一个集群的不同表中，目前只有 br 备份只支持恢复到原表名里，不能恢复到其他表中的信息。",
+        "attempt": 1,
+        "rewritten_queries": [],
+        "elapsed_ms": 52507.3,
+        "verdict": "false_acceptance"
+      }
+    ]
+  }
+}

@@ -28,6 +28,16 @@ corpora/tidb/
 # `llm_eval.py --sample/--quick` 覆盖就无任何恢复通道（该文件确实差点丢过）。
 # 评测数字就是证据链，没有理由忽略；如需排除临时大文件，单独加 ignore 规则。
 
+# 例外（2026-10-15）：W3 生成层原始明细含**语料正文原文**，不入库
+#   `gen_100.jsonl` 每条记录都带 `context`（AskTUG 帖子正文 / 官方文档段落原文）
+#   与 `reference_answer`（AskTUG 答案原文）→ 等于绕过上面 corpora/tidb/ 那条
+#   「语料本体不入库」的规则（同内容、换文件；git 历史不可逆，提交后删不干净）。
+#   数字证据保留在 experiments/generation_eval/summary.json；复现走 scripts/eval_generation_tidb.py。
+#   原始文件本地保留（未删）：
+#   D:/1base/computer/Agent/DevRoot/mcp-rag-hub/experiments/generation_eval/gen_100.jsonl
+#   （同目录的 judge_100.jsonl 只有 query + 短理由、refusal_60.jsonl 的 answer 最长 329 字，均不含原文，正常入库。）
+experiments/generation_eval/gen_100.jsonl
+
 # 备份文件
 *.bak
 
