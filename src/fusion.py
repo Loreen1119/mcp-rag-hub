@@ -234,13 +234,15 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(message)s")
 
     from src.data_pipeline import process_directory
-    from src.retrievers import BM25Retriever, VectorRetriever
+    from src.retrievers import BM25Retriever
     from src.graph_retriever import GraphRetriever
+    from src.pipeline import open_vector_retriever
 
     # 1. 加载文档 & 建索引
     chunks = process_directory()
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks)
+    # 走规范入口：不带 corpus_hash 的旧写法会在主库另建 nohash 集合、白跑一遍全量 embedding
+    vector = open_vector_retriever(chunks)
     graph_retriever = GraphRetriever(chunks)
 
     pipeline = FusionPipeline()

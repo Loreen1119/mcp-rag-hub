@@ -87,6 +87,33 @@ def corpus_collection_name(corpus: str, model_name: str) -> str:
     return name
 
 
+def open_vector_retriever(chunks, rebuild: bool = False) -> VectorRetriever:
+    """按「主库索引」的规范契约构造 VectorRetriever（复用而非重建）。
+
+    ⚠️ **corpus_hash 与 collection 名必须成对给出**，这是 _get_or_build_collection
+    摘要校验的两个必需条件：
+    ``meta["corpus_hash"] == self.corpus_hash`` 且 ``existing.count() == len(chunks)``。
+
+    只传 collection_name、不传 corpus_hash 时 ``self.corpus_hash`` 退化为空串，
+    校验必然失败 → 删集合 + 重嵌入全部 chunk，并顺手把 metadata 里的 corpus_hash
+    覆盖成空串 → **之后所有走 get_pipeline() 的评测/服务都会跟着再重建一次**。
+    2026-10-15 那次「延迟画像跑了 78.9 分钟、其中 76 分钟在重建 10.4 万 chunk」
+    就是这个漏参数造成的静默坑（`scripts/reproduce_latency.py` 当时那样写的）。
+
+    所有**脚本 / 演示 / 诊断**入口一律走这里，不要在调用点各自拼参数。
+    """
+    from config import CHROMA_PERSIST_DIR
+
+    meta = compute_index_meta()
+    return VectorRetriever(
+        chunks,
+        persist_dir=CHROMA_PERSIST_DIR,
+        rebuild=rebuild,
+        corpus_hash=meta["corpus_hash"],
+        collection_name=corpus_collection_name(meta["corpus"], EMBEDDING_MODEL),
+    )
+
+
 def get_pipeline(
     docs_dir=None,
     chunk_size=None,

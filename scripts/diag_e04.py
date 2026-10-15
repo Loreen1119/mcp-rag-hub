@@ -13,7 +13,8 @@ if str(_PROJECT_ROOT) not in sys.path:
 logging.basicConfig(level=logging.WARNING)
 
 from src.data_pipeline import process_directory
-from src.retrievers import BM25Retriever, VectorRetriever
+from src.pipeline import open_vector_retriever
+from src.retrievers import BM25Retriever
 from src.fusion import FusionPipeline
 from config import (
     BM25_TOP_K,
@@ -35,7 +36,9 @@ chunks = process_directory()
 print(f"chunks total = {len(chunks)}")
 
 bm25 = BM25Retriever(chunks)
-vector = VectorRetriever(chunks)
+# ⚠️ 走规范入口：旧写法 VectorRetriever(chunks) 不带 corpus_hash → 摘要校验必败，
+# 会在主库 chroma_db 里另建一个 nohash 集合（10.4 万 chunk 白跑一遍，且 nohash 不被 GC）。
+vector = open_vector_retriever(chunks)
 
 b = bm25.search(QUERY, top_k=BM25_TOP_K)
 v = vector.search(QUERY, top_k=VECTOR_TOP_K)

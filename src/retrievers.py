@@ -105,6 +105,23 @@ class BM25Retriever:
 # ChromaDB 向量检索器
 # ============================================================
 
+# 索引实际生效的 HNSW 距离函数（**唯一真相来源**，复用判据只认它）。
+#
+# 为什么是 l2 而不是代码一直声称的 cosine：**chromadb 0.6.3 完全忽略
+# create_collection(metadata={"hnsw:space": "cosine"})** —— 探针实测（临时集合，
+# 2026-10-15）：传 cosine 后 `collection.configuration_json.hnsw_configuration.space`
+# 仍是 `"l2"`（默认值），`metadata` 里只是原样留了一个不生效的字符串键。
+# 也就是说本仓库所有历史向量集合（tidb / fastapi-zh / knowledge_base__*）
+# **都是 L2 索引**，此前注释、docs/ 与简历素材里「cosine 距离」的说法不成立。
+#
+# 因此判据必须读 configuration（chroma 自己维护的权威配置），而不是那个
+# 只剩遗留语义的 metadata 键；`Collection.modify()` 还会无条件剥离
+# `hnsw:space`（CollectionCommon._validate_modify_request 直接 raise），
+# 依赖它的判据任何人改一次 name/metadata 就会永久失效。
+#
+# ⚠️ 改这个常量 = 索引语义变化，必须全量重建 + 重跑全部检索评测。
+INDEX_METRIC = "l2"
+
 
 class VectorRetriever:
     """手动 embedding + ChromaDB 持久化存储的语义检索器。
@@ -265,17 +282,44 @@ class VectorRetriever:
     def _collection_signature(self, schema_version: int) -> dict:
         """返回可写入 collection metadata 的摘要信息。
 
-        hnsw:space=cosine 既让 HNSW 使用 cosine 距离（与 search() 的
-        similarity = 1 - distance 语义一致），也写入 metadata 供复用校验，
-        避免已有 collection 配置不一致时被误复用。
+        ⚠️ `hnsw:space` 在这里是**遗留键**：chroma 0.6.3 不会据它设置 HNSW
+        （实测无效，见 INDEX_METRIC 注释），并且 `Collection.modify()` 会剥离它。
+        它的值直接取自 INDEX_METRIC，只为让「写进 metadata 的」与「实际生效的」
+        不再分叉（曾经 metadata 写 cosine、configuration 实际 l2）；**复用判据不读它**，
+        一律以 configuration 为准（见 `_read_index_metric`）。
         """
         return {
-            "hnsw:space": "cosine",
+            "hnsw:space": INDEX_METRIC,
             "corpus_hash": self.corpus_hash,
             "chunk_count": len(self.chunks),
             "chunk_id_count": len(self._by_id),
             "schema_version": str(schema_version),
         }
+
+    @staticmethod
+    def _read_index_metric(collection: "chromadb.Collection") -> Optional[str]:
+        """读集合实际生效的 HNSW 距离函数；**读不到返回 None**（调用方按 fail-closed 处理）。
+
+        来源优先级：
+        1. `collection.configuration_json`（chroma 自己维护的权威配置，0.6.x 为
+           `{"hnsw_configuration": {"space": ...}}`，旧版键名可能是 `hnsw`）；
+        2. 降级：遗留 metadata 键 `hnsw:space`（老版本 chroma 会把它落到 HNSW 配置里）。
+        两条都拿不到 → None → 触发重建。**宁可白重建一次，也不误复用度量不一致的索引**：
+        重建只是浪费时间，错误复用是数据正确性问题，两者代价不对等。
+        """
+        try:
+            cfg = collection.configuration_json or {}
+        except Exception:  # 版本差异 / 属性缺失
+            cfg = {}
+        if isinstance(cfg, dict):
+            for key in ("hnsw_configuration", "hnsw"):
+                node = cfg.get(key)
+                if isinstance(node, dict):
+                    space = node.get("space")
+                    if isinstance(space, str) and space:
+                        return space
+        legacy = (collection.metadata or {}).get("hnsw:space")
+        return legacy if isinstance(legacy, str) and legacy else None
 
     def _get_or_build_collection(
         self, collection_name: str, chunks: List[Chunk], schema_version: int
@@ -297,21 +341,25 @@ class VectorRetriever:
             # 历史 bug：构建时把 chunk_count 写进 metadata，但 add 失败时留下
             # "声明 45 条 / 实际 0 条"的空壳集合，摘要匹配导致静默复用、向量检索恒返回 0。
             # count() 是唯一能当场抓住这种分裂的判据。
-            if (
-                meta.get("hnsw:space") == "cosine"
-                and meta.get("schema_version") == str(schema_version)
+            #
+            # 距离函数以 configuration 为准（读不到即 None → fail-closed 重建），
+            # 不再依赖会被 modify() 剥离的 metadata 键 hnsw:space。
+            metric = self._read_index_metric(existing)
+            summary_ok = (
+                meta.get("schema_version") == str(schema_version)
                 and meta.get("corpus_hash") == self.corpus_hash
                 and meta.get("chunk_count") == len(chunks)
                 and meta.get("chunk_id_count") == len(self._by_id)
                 and existing.count() == len(chunks)
-            ):
+            )
+            if metric == INDEX_METRIC and summary_ok:
                 logger.info(
                     "复用已有 ChromaDB 集合（摘要匹配，无重建）: %s", collection_name
                 )
                 return existing
             logger.info(
-                "ChromaDB 集合摘要不匹配（schema/corpus hash/chunk 数变化），重建: %s",
-                collection_name,
+                "ChromaDB 集合不复用（距离函数实测 %s / 期望 %s；其余摘要匹配=%s）→ 重建: %s",
+                metric, INDEX_METRIC, summary_ok, collection_name,
             )
             try:
                 self.client.delete_collection(collection_name)
@@ -419,7 +467,11 @@ class VectorRetriever:
         if results["ids"] and results["ids"][0]:
             for i, chunk_id in enumerate(results["ids"][0]):
                 distance = results["distances"][0][i]
-                # ChromaDB cosine distance → similarity: sim = 1 - distance
+                # ⚠️ 这里的 `1 - distance` 沿用了「Chroma 用 cosine distance」的旧假设，
+                # 但**实测索引是 L2**（见 INDEX_METRIC 注释：chroma 0.6.3 忽略
+                # metadata 的 hnsw:space）。因此该 score 并非余弦相似度，
+                # **只可用于排序，不得当相似度绝对值用**（下游 RRF 只用排名、
+                # CE 重排用自己的分数，故当前链路不受影响）。
                 similarity = 1.0 - distance
                 document = results["documents"][0][i]
                 metadata = results["metadatas"][0][i]
@@ -457,8 +509,14 @@ if __name__ == "__main__":
         raise SystemExit(1)
 
     # 2. 初始化两路检索器
+    # 走规范入口（src.pipeline.open_vector_retriever）：corpus_hash 与 collection 名
+    # 成对给出才能命中复用分支；裸 VectorRetriever(chunks) 只传默认值 → 摘要校验必败，
+    # 会在主库另建 nohash 集合并把 10.4 万 chunk 重嵌入一遍。
+    # 这里在 __main__ 内延迟 import，避免 src.pipeline ↔ src.retrievers 的模块级循环。
+    from src.pipeline import open_vector_retriever
+
     bm25 = BM25Retriever(chunks)
-    vector = VectorRetriever(chunks)
+    vector = open_vector_retriever(chunks)
 
     # 3. 测试查询
     queries = [
