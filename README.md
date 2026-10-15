@@ -212,11 +212,11 @@ mcp-rag-hub/
 BM25 / 向量 / 图检索 / RRF 四项合计仅 **56 ms**，**CE 精排占 99.8%**：单条全链路 12.8 秒中 CE 占 12.76 秒。  
 2026-09-18 落地「RRF 后截断到 30 候选再送 CE」（`CE_CANDIDATE_K=30`）后复测：**12.76s → 7.30s（降约 43%）**，top-5 精度零回归。
 
-> ⚠️ 上述延迟为 **fastapi-zh（1445 chunk）** 语料上的实测；**TiDB 10 万级索引下的延迟画像尚未复测**（见 `EVAL_REPORT.md` 待补节）。
+> ⚠️ 上述延迟为 **fastapi-zh（1445 chunk）** 语料上的实测；**TiDB 10 万级索引下的延迟画像已于 2026-10-15 复测**：Pipeline Total **7647 ms**、**CE 精排占 91.4%**（分阶段均值 bm25 592 / vector 63 / rrf 0.19 / ce_rerank 6992 ms），见 [`EVAL_REPORT.md`](EVAL_REPORT.md) 第九节。两套绝对值**不可直接比**（chunk 量差 70 倍），可比的是结构性结论「CE 是绝对瓶颈」。
 
-### 生成侧：状态
+### 生成侧：已实测
 
-生成层三维指标（Faithfulness / Answer Relevancy / Context Recall）**尚未在 TiDB 语料上重测**，计划用 7B 裁判跑（裁判金标 100 条已就绪：`data/judge_gold_100.jsonl`）。在此之前，**任何生成层数字都不可引用**。
+生成层三维指标（Faithfulness / Answer Relevancy / Context Recall）**已在 TiDB 语料上重测**（2026-10-15，100 条 Judge 金标，7B 裁判 / 3B 生成）：**0.785 / 0.761 / 0.568**，生成 100 条失败 0 / 空答 0。端到端拒答（真实 agent 链路）**正确拒答仅 10.5%（4/38）**、`miss_kill` 误杀 **5%（1/20）** —— 拒答能力弱是已知短板。**旧 fastapi-zh 的生成层数字一律仍不可引用**；详见 [`EVAL_REPORT.md`](EVAL_REPORT.md) 第八、九节。
 
 **知识图谱检索（可选实验）**：用 LLM 抽取实体三元组、构建有向知识图谱，作为混合检索的一路补充。`ENABLE_KG` 开关控制。当前在**小规模、同主题语料**上未带来检索提升（独立评估见 [KG 消融实验笔记](journal/KG消融实验-2026-08-04.md)），因此默认关闭——它展示的是「多路召回设计」的扩展能力，而非当前主推的检索路线。
 
@@ -227,7 +227,7 @@ BM25 / 向量 / 图检索 / RRF 四项合计仅 **56 ms**，**CE 精排占 99.8%
 | 语言            | Python 3.11+                                                       |
 | Embedding     | BAAI/bge-small-zh-v1.5（512 维，中文优化）                                 |
 | Cross-Encoder | BAAI/bge-reranker-base（中文优化）                                       |
-| 向量库           | ChromaDB（HNSW 索引, cosine 距离）                                       |
+| 向量库           | ChromaDB（HNSW 索引, L2 距离）                                       |
 | 关键词检索         | rank-bm25 + jieba 分词                                               |
 | 图检索           | NetworkX 实体共现图 + 子图遍历                                              |
 | 融合            | RRF（Reciprocal Rank Fusion, k=60）                                  |

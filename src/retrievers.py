@@ -467,11 +467,11 @@ class VectorRetriever:
         if results["ids"] and results["ids"][0]:
             for i, chunk_id in enumerate(results["ids"][0]):
                 distance = results["distances"][0][i]
-                # ⚠️ 这里的 `1 - distance` 沿用了「Chroma 用 cosine distance」的旧假设，
-                # 但**实测索引是 L2**（见 INDEX_METRIC 注释：chroma 0.6.3 忽略
-                # metadata 的 hnsw:space）。因此该 score 并非余弦相似度，
-                # **只可用于排序，不得当相似度绝对值用**（下游 RRF 只用排名、
-                # CE 重排用自己的分数，故当前链路不受影响）。
+                # ⚠️ score = 1 − L2 距离，**不是相似度**：索引实际是 L2（见 INDEX_METRIC
+                # 注释：chroma 0.6.3 忽略 metadata 的 hnsw:space），所以这个「similarity」
+                # 只有排序意义，不得当相似度绝对值用、更不得做跨 query 的阈值判断。
+                # 下游 RRF 只用排名、CE 用自己的分数、拒答判定走 LLM 输出，
+                # 因此当前链路不受影响（2026-10-15 全链路排查确认）。
                 similarity = 1.0 - distance
                 document = results["documents"][0][i]
                 metadata = results["metadatas"][0][i]
