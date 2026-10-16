@@ -1,0 +1,328 @@
+{
+  "_doc": "Judge 校准（②）的冻结抽样。分层规则与 seed 在人工标注之前确定，不得事后调整；判定维度只用 faithfulness（≥阈值记正）+ 同批加判 answer_relevancy；context_recall 因 7b 分布塌缩（≥0.8 仅 13/100）不作 Kappa。",
+  "created": "2026-10-16",
+  "seed": 42,
+  "stratify_by": "judge_7b.faithfulness",
+  "binarize_rule": "score >= 0.8 -> 忠实（正）; else 不忠实（负）",
+  "n_each_stratum": 15,
+  "population": {
+    "positive": 42,
+    "negative": 58,
+    "total": 100
+  },
+  "human_scale": {
+    "faithfulness": [
+      "忠实",
+      "不忠实",
+      "拿不准"
+    ],
+    "answer_relevancy": [
+      "切题",
+      "不切题",
+      "拿不准"
+    ],
+    "拿不准处理": "不计入 Kappa 分母，单独报条数"
+  },
+  "selected": [
+    {
+      "order": 1,
+      "id": "judge_001",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 218,
+      "context_len": 703
+    },
+    {
+      "order": 2,
+      "id": "judge_002",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 271,
+      "context_len": 740
+    },
+    {
+      "order": 3,
+      "id": "judge_003",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 315,
+      "context_len": 859
+    },
+    {
+      "order": 4,
+      "id": "judge_006",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 206,
+      "context_len": 1289
+    },
+    {
+      "order": 5,
+      "id": "judge_008",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.9,
+      "answer_len": 273,
+      "context_len": 1238
+    },
+    {
+      "order": 6,
+      "id": "judge_015",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 163,
+      "context_len": 1056
+    },
+    {
+      "order": 7,
+      "id": "judge_018",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 333,
+      "context_len": 2034
+    },
+    {
+      "order": 8,
+      "id": "judge_020",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 485,
+      "context_len": 1393
+    },
+    {
+      "order": 9,
+      "id": "judge_021",
+      "stratum": "正",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 138,
+      "context_len": 1278
+    },
+    {
+      "order": 10,
+      "id": "judge_023",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 182,
+      "context_len": 760
+    },
+    {
+      "order": 11,
+      "id": "judge_025",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.4,
+      "answer_len": 308,
+      "context_len": 919
+    },
+    {
+      "order": 12,
+      "id": "judge_029",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.0,
+      "answer_len": 276,
+      "context_len": 1578
+    },
+    {
+      "order": 13,
+      "id": "judge_040",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 287,
+      "context_len": 1085
+    },
+    {
+      "order": 14,
+      "id": "judge_043",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 324,
+      "context_len": 918
+    },
+    {
+      "order": 15,
+      "id": "judge_045",
+      "stratum": "正",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_recall": 0.7,
+      "answer_len": 189,
+      "context_len": 887
+    },
+    {
+      "order": 16,
+      "id": "judge_048",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 192,
+      "context_len": 1312
+    },
+    {
+      "order": 17,
+      "id": "judge_049",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 408,
+      "context_len": 1111
+    },
+    {
+      "order": 18,
+      "id": "judge_051",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.4,
+      "answer_len": 132,
+      "context_len": 1294
+    },
+    {
+      "order": 19,
+      "id": "judge_052",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 491,
+      "context_len": 1056
+    },
+    {
+      "order": 20,
+      "id": "judge_054",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.9,
+      "context_recall": 0.7,
+      "answer_len": 285,
+      "context_len": 943
+    },
+    {
+      "order": 21,
+      "id": "judge_056",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 174,
+      "context_len": 883
+    },
+    {
+      "order": 22,
+      "id": "judge_057",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 454,
+      "context_len": 1231
+    },
+    {
+      "order": 23,
+      "id": "judge_067",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.4,
+      "context_recall": 0.7,
+      "answer_len": 130,
+      "context_len": 684
+    },
+    {
+      "order": 24,
+      "id": "judge_070",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 308,
+      "context_len": 1142
+    },
+    {
+      "order": 25,
+      "id": "judge_071",
+      "stratum": "负",
+      "faithfulness": 0.7,
+      "answer_relevancy": 0.4,
+      "context_recall": 0.7,
+      "answer_len": 309,
+      "context_len": 1045
+    },
+    {
+      "order": 26,
+      "id": "judge_076",
+      "stratum": "正",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9,
+      "context_recall": 0.7,
+      "answer_len": 156,
+      "context_len": 1027
+    },
+    {
+      "order": 27,
+      "id": "judge_087",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 454,
+      "context_len": 1571
+    },
+    {
+      "order": 28,
+      "id": "judge_090",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7,
+      "context_recall": 0.7,
+      "answer_len": 204,
+      "context_len": 1255
+    },
+    {
+      "order": 29,
+      "id": "judge_099",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.7,
+      "answer_len": 416,
+      "context_len": 1090
+    },
+    {
+      "order": 30,
+      "id": "judge_100",
+      "stratum": "正",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7,
+      "context_recall": 1.0,
+      "answer_len": 397,
+      "context_len": 942
+    }
+  ]
+}

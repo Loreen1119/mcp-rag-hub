@@ -1,0 +1,198 @@
+{
+  "_doc": "人工标注（单标注者=项目作者）。来源：判题表逐条填写 + 聊天里的完整版，两处交叉核对 14/14 一致、0 冲突。",
+  "created": "2026-10-16",
+  "rater": "single-author",
+  "scale": {
+    "faithfulness": [
+      "忠实",
+      "不忠实"
+    ],
+    "answer_relevancy": [
+      "切题",
+      "不切题"
+    ]
+  },
+  "note": "未使用「拿不准」，故 Kappa 分母 = 30 全量。",
+  "by_order": {
+    "1": {
+      "id": "judge_001",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "2": {
+      "id": "judge_002",
+      "stratum": "负",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "3": {
+      "id": "judge_003",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "4": {
+      "id": "judge_006",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "5": {
+      "id": "judge_008",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "6": {
+      "id": "judge_015",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "7": {
+      "id": "judge_018",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "不切题"
+    },
+    "8": {
+      "id": "judge_020",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "9": {
+      "id": "judge_021",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "10": {
+      "id": "judge_023",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "11": {
+      "id": "judge_025",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "12": {
+      "id": "judge_029",
+      "stratum": "负",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "13": {
+      "id": "judge_040",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "不切题"
+    },
+    "14": {
+      "id": "judge_043",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "不切题"
+    },
+    "15": {
+      "id": "judge_045",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "16": {
+      "id": "judge_048",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "17": {
+      "id": "judge_049",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "18": {
+      "id": "judge_051",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "19": {
+      "id": "judge_052",
+      "stratum": "负",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "20": {
+      "id": "judge_054",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "21": {
+      "id": "judge_056",
+      "stratum": "负",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "22": {
+      "id": "judge_057",
+      "stratum": "负",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "23": {
+      "id": "judge_067",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "24": {
+      "id": "judge_070",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "25": {
+      "id": "judge_071",
+      "stratum": "负",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "26": {
+      "id": "judge_076",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "27": {
+      "id": "judge_087",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "28": {
+      "id": "judge_090",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    },
+    "29": {
+      "id": "judge_099",
+      "stratum": "正",
+      "faith": "不忠实",
+      "rel": "切题"
+    },
+    "30": {
+      "id": "judge_100",
+      "stratum": "正",
+      "faith": "忠实",
+      "rel": "切题"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "faithfulness": {
+    "spearman_answer_len_vs_score": 0.1265,
+    "p_perm_answer_len_vs_score": 0.21,
+    "spearman_context_len_vs_score": 0.0562,
+    "p_perm_context_len_vs_score": 0.578
+  },
+  "answer_relevancy": {
+    "spearman_answer_len_vs_score": 0.1137,
+    "p_perm_answer_len_vs_score": 0.2586,
+    "spearman_context_len_vs_score": 0.0338,
+    "p_perm_context_len_vs_score": 0.7323
+  },
+  "context_recall": {
+    "spearman_answer_len_vs_score": -0.0408,
+    "p_perm_answer_len_vs_score": 0.6827,
+    "spearman_context_len_vs_score": -0.0363,
+    "p_perm_context_len_vs_score": 0.7227
+  }
+}
