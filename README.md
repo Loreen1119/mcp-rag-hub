@@ -205,7 +205,7 @@ mcp-rag-hub/
 ### 失败模式分布（主集 375）
 
 召回缺失 **114** / 排序压制 **112** / none **118** / 应拒答未拒答 **30** / 拒答误杀 **1**。  
-术语鸿沟抽检 50 条：**54%** 存在，但按来源极不均匀 —— AskTUG **80%**、文档事实 **11%**（后者 query 本就照页面写）。定义见 [`data/failure_mode_spec.md`](data/failure_mode_spec.md)。
+术语鸿沟抽检 50 条：**54%** 存在，但按来源极不均匀 —— AskTUG **80%**、文档事实 **11%**（后者 query 本就照页面写）。定义见 [`data/failure_mode_spec.md`](data/failure_mode_spec.md)；**逐条案例见 [`data/failure_cases.md`](data/failure_cases.md)**（确定性复算生成，CI 校验文档与复算一致）。
 
 ### 延迟画像（CE 是绝对瓶颈）
 

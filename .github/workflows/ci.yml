@@ -39,6 +39,11 @@ jobs:
       - name: 复算冻结基线 + 校验评测集形状
         run: python -m pytest tests/test_regression_replay.py tests/test_eval_set_schema.py -q
 
+      - name: 失败案例文档与复算必须一致（单一来源，防手改漂移）
+        run: |
+          python -m scripts.export_failure_cases
+          git diff --exit-code -- data/failure_cases.md
+
   unit:
     name: 单元/集成层（pytest 全量）
     runs-on: ubuntu-latest
