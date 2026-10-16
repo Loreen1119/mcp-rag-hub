@@ -1,0 +1,330 @@
+{
+  "generated_at": "2026-10-16T18:18:25",
+  "ce_scope": "all",
+  "index": {
+    "corpus": "tidb",
+    "embedding_model": "BAAI/bge-small-zh-v1.5",
+    "collection": "kb__tidb__bge-small-zh-v1.5__v2"
+  },
+  "eval_set": {
+    "file": "data\\eval_set.jsonl",
+    "retrieval_records": 0,
+    "ce_records": 375
+  },
+  "criteria": {
+    "hit": "检索结果 slug（metadata.source 文件名 stem）∈ golden_slugs",
+    "hit@5": "top-5 内至少一个 golden slug 命中；不可答类不计入",
+    "ce_candidate_k": 30,
+    "ce_threshold_default": 0.3,
+    "ce_scope": "subset=分层抽 200 条；all=全部有 golden 样本。档 4/5 的分母随该值变化。",
+    "hit_recompute": "汇总时按当前 golden 从落盘排名重算命中，不使用记录中的 hit 标志"
+  },
+  "stages": {
+    "4_ce": {
+      "subset_size": 335,
+      "evaluated": 335,
+      "hit@5": 0.3134,
+      "mrr@10": 0.2067,
+      "mrr_note": "新跑的记录：mrr@10 在**全部候选**（<=CE_CANDIDATE）上算，与其它档可比。⚠️ 旧记录（本改造之前）只拿 top-5 算，其实等于 MRR@5，数值偏低、与其它档不可比。",
+      "by_source": {
+        "asktug": {
+          "n": 148,
+          "hit@5": 0.1081
+        },
+        "doc_fact": {
+          "n": 167,
+          "hit@5": 0.485
+        },
+        "miss_kill": {
+          "n": 20,
+          "hit@5": 0.4
+        }
+      },
+      "ce_scored_total": 375,
+      "ce_scored_miss_kill": 20,
+      "ce_scored_unanswerable": 40,
+      "ce_top1_score_distribution": {
+        "miss_kill": {
+          "n": 20,
+          "min": 0.9386,
+          "p10": 0.9949,
+          "median": 0.9991,
+          "max": 0.9999,
+          "share_ge_0.99": 0.95
+        },
+        "unanswerable": {
+          "n": 40,
+          "min": 0.0009,
+          "p10": 0.9443,
+          "median": 0.9966,
+          "max": 0.9999,
+          "share_ge_0.99": 0.675
+        },
+        "answerable_asktug_doc_fact": {
+          "n": 335,
+          "min": 0.9386,
+          "p10": 0.9944,
+          "median": 0.9991,
+          "max": 1.0,
+          "share_ge_0.99": 0.9582
+        }
+      }
+    },
+    "5_reject_sweep": [
+      {
+        "threshold": 0.3,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.4,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.5,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.6,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.7,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.05,
+        "reject_correct_n": "2/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.9,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.1,
+        "reject_correct_n": "4/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      {
+        "threshold": 0.95,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.15,
+        "reject_correct_n": "6/40",
+        "net_hit_rate": 0.3104,
+        "net_hit_n": "104/335",
+        "answered_n": 334
+      },
+      {
+        "threshold": 0.97,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.175,
+        "reject_correct_n": "7/40",
+        "net_hit_rate": 0.3075,
+        "net_hit_n": "103/335",
+        "answered_n": 332
+      },
+      {
+        "threshold": 0.98,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.225,
+        "reject_correct_n": "9/40",
+        "net_hit_rate": 0.3015,
+        "net_hit_n": "101/335",
+        "answered_n": 330
+      },
+      {
+        "threshold": 0.99,
+        "reject_false_kill_rate": 0.05,
+        "reject_false_kill_n": "1/20",
+        "reject_correct_rate": 0.325,
+        "reject_correct_n": "13/40",
+        "net_hit_rate": 0.2866,
+        "net_hit_n": "96/335",
+        "answered_n": 321
+      },
+      {
+        "threshold": 0.995,
+        "reject_false_kill_rate": 0.15,
+        "reject_false_kill_n": "3/20",
+        "reject_correct_rate": 0.475,
+        "reject_correct_n": "19/40",
+        "net_hit_rate": 0.2537,
+        "net_hit_n": "85/335",
+        "answered_n": 295
+      },
+      {
+        "threshold": 0.999,
+        "reject_false_kill_rate": 0.45,
+        "reject_false_kill_n": "9/20",
+        "reject_correct_rate": 0.75,
+        "reject_correct_n": "30/40",
+        "net_hit_rate": 0.1522,
+        "net_hit_n": "51/335",
+        "answered_n": 184
+      }
+    ],
+    "5_reject_sweep_note": {
+      "A_default": {
+        "threshold": 0.3,
+        "reject_false_kill_rate": 0.0,
+        "reject_false_kill_n": "0/20",
+        "reject_correct_rate": 0.025,
+        "reject_correct_n": "1/40",
+        "net_hit_rate": 0.3134,
+        "net_hit_n": "105/335",
+        "answered_n": 335
+      },
+      "candidates": [
+        {
+          "threshold": 0.3,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.025,
+          "reject_correct_n": "1/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.4,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.025,
+          "reject_correct_n": "1/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.5,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.6,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.7,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.05,
+          "reject_correct_n": "2/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.9,
+          "reject_false_kill_rate": 0.0,
+          "reject_false_kill_n": "0/20",
+          "reject_correct_rate": 0.1,
+          "reject_correct_n": "4/40",
+          "net_hit_rate": 0.3134,
+          "net_hit_n": "105/335",
+          "answered_n": 335
+        },
+        {
+          "threshold": 0.95,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.15,
+          "reject_correct_n": "6/40",
+          "net_hit_rate": 0.3104,
+          "net_hit_n": "104/335",
+          "answered_n": 334
+        },
+        {
+          "threshold": 0.97,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.175,
+          "reject_correct_n": "7/40",
+          "net_hit_rate": 0.3075,
+          "net_hit_n": "103/335",
+          "answered_n": 332
+        },
+        {
+          "threshold": 0.98,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.225,
+          "reject_correct_n": "9/40",
+          "net_hit_rate": 0.3015,
+          "net_hit_n": "101/335",
+          "answered_n": 330
+        },
+        {
+          "threshold": 0.99,
+          "reject_false_kill_rate": 0.05,
+          "reject_false_kill_n": "1/20",
+          "reject_correct_rate": 0.325,
+          "reject_correct_n": "13/40",
+          "net_hit_rate": 0.2866,
+          "net_hit_n": "96/335",
+          "answered_n": 321
+        },
+        {
+          "threshold": 0.995,
+          "reject_false_kill_rate": 0.15,
+          "reject_false_kill_n": "3/20",
+          "reject_correct_rate": 0.475,
+          "reject_correct_n": "19/40",
+          "net_hit_rate": 0.2537,
+          "net_hit_n": "85/335",
+          "answered_n": 295
+        },
+        {
+          "threshold": 0.999,
+          "reject_false_kill_rate": 0.45,
+          "reject_false_kill_n": "9/20",
+          "reject_correct_rate": 0.75,
+          "reject_correct_n": "30/40",
+          "net_hit_rate": 0.1522,
+          "net_hit_n": "51/335",
+          "answered_n": 184
+        }
+      ]
+    }
+  }
+}
