@@ -1,0 +1,68 @@
+name: CI
+
+# 两层分工（对应 journal 里的 S1 收尾）：
+#   1) replay  回放层 —— 只读仓库里已入库的产物 JSONL，复算「README / 面经 / 简历引用的指标」，
+#              与 tests/regression_baselines.json 冻结的值对比。不装模型、不联网、秒级完成。
+#   2) unit    单元/集成层 —— pytest 全量（含建临时向量集合的集成测试，需要 embedding 模型）。
+#
+# 不上 CI 的一层：本地全量重跑（重建 10.4 万 chunk 索引 / 跑 3b-7b 生成与裁判 / 延迟画像）
+#  —— 那是「离线评测」，机器要求与耗时不匹配 runner，只在本地按 journal 的执行单跑。
+#  另：corpora/tidb 不入库，所以「golden 源文件是否真的存在」这类校验也只能本地跑（见 failure_mode_spec 第五节）。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    name: 回放层（基线可复算 + 评测集 schema）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 只装 pytest（故意的：回放层不许依赖模型栈）
+        run: python -m pip install --upgrade pip pytest
+
+      - name: 复算冻结基线 + 校验评测集形状
+        run: python -m pytest tests/test_regression_replay.py tests/test_eval_set_schema.py -q
+
+  unit:
+    name: 单元/集成层（pytest 全量）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: 缓存 HF 模型（bge-small-zh-v1.5 等，首次运行时下载）
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: 装 CPU 版 torch（默认会拉 CUDA 依赖，白多 1.5G+ 和好几分钟）
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: 安装依赖
+        run: python -m pip install -r requirements.txt pytest
+
+      - name: 全量测试
+        run: python -m pytest tests/ -q

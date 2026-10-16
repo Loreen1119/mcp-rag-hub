@@ -1,0 +1,123 @@
+{
+  "_doc": [
+    "回归基线 —— 单一来源。这里的每个数字都必须能从「指定的那一份产物文件」确定性复算出来。",
+    "为什么要绑 sha256：CI 回放层读的是仓库里已有的产物 JSONL。产物被重跑覆盖后，断言如果不跟着变，测试会静默测到另一份文件还显示绿 —— 那是假绿。所以每个产物先校验 sha256，产物一变就红，且报错里直接给出「复算得到的新值」，逼着显式改基线。",
+    "改基线的规矩：sha256 与 expected（含 expect_hits）必须同一次改完，不允许只改一个。",
+    "tolerance 默认 0.0：指标是从同一份文件复算出来的（分子分母都是整数），不存在跨轮波动。只有把基线有意重绑到「新一批实测产物」时，才允许放宽（如 0.02 当告警阈值），此时必须在 note 写明是哪一批、样本量多少 —— 引用必须连样本量一起写。",
+    "口径红线：候选截断到 30 才是在产配置，K=50 是**实验构造的对照臂**，不得写成「从 50 优化到 30」。另外 k50_prod 的 K=30 复算值（0.3284）与 baseline_ladder/ce_scores.jsonl 的 0.3254 是**不同批次**，不得混报。"
+  ],
+  "denominator_note": "主集 Hit@5 分母 335 = 375 条主集里「有 golden 的非不可答样本」；40 条不可答不进检索分母。",
+  "frozen_artifacts": [
+    {
+      "path": "data/eval_set.jsonl",
+      "sha256": "7e45f0b637f7fcfbaba687d7f14e1b010eda64f6fd91e7974da534ae19f21ede",
+      "note": "主集 375 条，v0.1 冻结。改它必须走解冻流程（data/failure_mode_spec.md 第五节：解冻 → 修 → 版本 +0.1 → 记 corrections_vX_Y → 重跑），并同步更新本表的 sha256。"
+    },
+    {
+      "path": "data/eval_set_version.jsonl",
+      "sha256": "944dca5c796071f1bb1d4395c244043b4cb4cee790d2525fae74961e145ca85d",
+      "note": "版本混淆独立探针集 31 条；不与主集 Hit@5 混报。"
+    },
+    {
+      "path": "data/eval_set_FROZEN.json",
+      "sha256": "013216081717295a1779f1dd6c91239fd441574d5b28c072377d79b26c570a51",
+      "note": "冻结清单（version=0.1 / total_main=375 / total_version_probe=31 / corrections_v0_1 三条）。"
+    },
+    {
+      "path": "data/judge_gold_100.jsonl",
+      "sha256": "3137e810a7c7b79ab2a6f5fa17f21e7d20a788cf28097226eda03cef3b7506e0",
+      "note": "生成层三维的 Judge 金标 100 条（带 reference_answer，Context Recall 需要它）。"
+    },
+    {
+      "path": "data/failure_mode_term_gap_sample50.json",
+      "sha256": "3d9b7b6edbf25d5829fb426a13461241b270f1683411926d0c883b4ed5f46738",
+      "note": "术语鸿沟抽检 50 条（seed=42）逐条判定；27/50 = 54% 已回填 root_cause。"
+    }
+  ],
+  "baselines": [
+    {
+      "name": "bm25_hit@5",
+      "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
+      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "metric": "stage_hit@5",
+      "stage": "bm25",
+      "denominator": 335,
+      "expect_hits": 102,
+      "expected": 0.3045,
+      "tolerance": 0.0,
+      "note": "[X] 无优化基线（单路 BM25，召回 20）。"
+    },
+    {
+      "name": "vector_hit@5",
+      "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
+      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "metric": "stage_hit@5",
+      "stage": "vector",
+      "denominator": 335,
+      "expect_hits": 88,
+      "expected": 0.2627,
+      "tolerance": 0.0,
+      "note": "向量单路**低于** BM25（本语料的反直觉点，被追问时要能解释）。"
+    },
+    {
+      "name": "rrf_hit@5",
+      "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
+      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "metric": "stage_hit@5",
+      "stage": "rrf",
+      "denominator": 335,
+      "expect_hits": 109,
+      "expected": 0.3254,
+      "tolerance": 0.0,
+      "note": "[Y] 在产配置（BM25 20 + 向量 20 → RRF）。"
+    },
+    {
+      "name": "ce_hit@5_生产批2026-10-14",
+      "artifact": "experiments/baseline_ladder/ce_scores.jsonl",
+      "sha256": "5b0c15d92488b274d1613982df9f240e925e8053a30736fafb9bc1a6f6835321",
+      "metric": "ce_top_hit@5",
+      "denominator": 335,
+      "expect_hits": 109,
+      "expected": 0.3254,
+      "tolerance": 0.0,
+      "note": "CE 精排（候选截断 30）生产批：与 RRF 逐位相同（+27/−27 净 0）。注意本文件缺 ce_candidates，只能按自带 ce_top 复算。"
+    },
+    {
+      "name": "ce_hit@5_K50_不截断",
+      "artifact": "experiments/baseline_ladder/k50_prod/ce_scores.jsonl",
+      "sha256": "57a3253a39fb3a19d085987a97dc2bac3968e1a408fef1838859b4f9d907379d",
+      "metric": "ce_candidates_hit@5",
+      "rrf_rank_max": null,
+      "denominator": 335,
+      "expect_hits": 105,
+      "expected": 0.3134,
+      "tolerance": 0.0,
+      "note": "对照臂：候选池 ≤40 < 50，K=50 等价于「不截断」。"
+    },
+    {
+      "name": "ce_hit@5_K30_截断至30",
+      "artifact": "experiments/baseline_ladder/k50_prod/ce_scores.jsonl",
+      "sha256": "57a3253a39fb3a19d085987a97dc2bac3968e1a408fef1838859b4f9d907379d",
+      "metric": "ce_candidates_hit@5",
+      "rrf_rank_max": 30,
+      "denominator": 335,
+      "expect_hits": 110,
+      "expected": 0.3284,
+      "tolerance": 0.0,
+      "note": "在产配置（候选截断至 30，对照臂 K=50）。与上一行同文件、同批：截断后 Hit@5 反而 +1.5pt。"
+    }
+  ],
+  "extra_checks": {
+    "primary_distribution": {
+      "artifact": "data/eval_set.jsonl",
+      "expected": {
+        "召回缺失": 114,
+        "排序压制": 112,
+        "none": 118,
+        "应拒答未拒答": 30,
+        "拒答误杀": 1
+      },
+      "note": "主集 375 条 failure_mode.primary 分布（合计 375）。这 5 个数是面试直接报的，冻结住。"
+    }
+  }
+}
