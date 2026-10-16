@@ -1,6 +1,7 @@
 {
   "_doc": [
     "回归基线 —— 单一来源。这里的每个数字都必须能从「指定的那一份产物文件」确定性复算出来。",
+    "sha256 算的是「CRLF 归一成 LF 之后」的字节：本机 core.autocrlf=true 会把工作区变成 CRLF，而仓库 blob（CI 在 Linux 检出的那份）是 LF —— 不归一的话本地与 CI 必然对不上，闸门会红在换行符上而不是真实的产物变化上（2026-10-16 第一次 CI 就是这么红的）。",
     "为什么要绑 sha256：CI 回放层读的是仓库里已有的产物 JSONL。产物被重跑覆盖后，断言如果不跟着变，测试会静默测到另一份文件还显示绿 —— 那是假绿。所以每个产物先校验 sha256，产物一变就红，且报错里直接给出「复算得到的新值」，逼着显式改基线。",
     "改基线的规矩：sha256 与 expected（含 expect_hits）必须同一次改完，不允许只改一个。",
     "tolerance 默认 0.0：指标是从同一份文件复算出来的（分子分母都是整数），不存在跨轮波动。只有把基线有意重绑到「新一批实测产物」时，才允许放宽（如 0.02 当告警阈值），此时必须在 note 写明是哪一批、样本量多少 —— 引用必须连样本量一起写。",
@@ -10,27 +11,27 @@
   "frozen_artifacts": [
     {
       "path": "data/eval_set.jsonl",
-      "sha256": "7e45f0b637f7fcfbaba687d7f14e1b010eda64f6fd91e7974da534ae19f21ede",
+      "sha256": "4b9b3c594efa8834fd65417b95bff771a16e5fd40dee119952cf0384d9568580",
       "note": "主集 375 条，v0.1 冻结。改它必须走解冻流程（data/failure_mode_spec.md 第五节：解冻 → 修 → 版本 +0.1 → 记 corrections_vX_Y → 重跑），并同步更新本表的 sha256。"
     },
     {
       "path": "data/eval_set_version.jsonl",
-      "sha256": "944dca5c796071f1bb1d4395c244043b4cb4cee790d2525fae74961e145ca85d",
+      "sha256": "d3b29201c87239a69c7c51299edcdfc03d7ca1a17b182ba3b5a42c89b04e3987",
       "note": "版本混淆独立探针集 31 条；不与主集 Hit@5 混报。"
     },
     {
       "path": "data/eval_set_FROZEN.json",
-      "sha256": "013216081717295a1779f1dd6c91239fd441574d5b28c072377d79b26c570a51",
+      "sha256": "59bba367c4207d24ff2cbd075eb255dac782f87b15b87e5150e7e0ba34ce6b6f",
       "note": "冻结清单（version=0.1 / total_main=375 / total_version_probe=31 / corrections_v0_1 三条）。"
     },
     {
       "path": "data/judge_gold_100.jsonl",
-      "sha256": "3137e810a7c7b79ab2a6f5fa17f21e7d20a788cf28097226eda03cef3b7506e0",
+      "sha256": "d0be70fafe635dd849182099eb900b5aea95777b1ad7784f3b72ea5bd06454a1",
       "note": "生成层三维的 Judge 金标 100 条（带 reference_answer，Context Recall 需要它）。"
     },
     {
       "path": "data/failure_mode_term_gap_sample50.json",
-      "sha256": "3d9b7b6edbf25d5829fb426a13461241b270f1683411926d0c883b4ed5f46738",
+      "sha256": "b9dadf99fcbbb00a5c84b5315a1752fff284791d1579b78a12ccc32dbced22cd",
       "note": "术语鸿沟抽检 50 条（seed=42）逐条判定；27/50 = 54% 已回填 root_cause。"
     }
   ],
@@ -38,7 +39,7 @@
     {
       "name": "bm25_hit@5",
       "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
-      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "sha256": "5c5da08963988811f8fa6baa607be539c5f906b8de3399204053bec0f7953566",
       "metric": "stage_hit@5",
       "stage": "bm25",
       "denominator": 335,
@@ -50,7 +51,7 @@
     {
       "name": "vector_hit@5",
       "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
-      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "sha256": "5c5da08963988811f8fa6baa607be539c5f906b8de3399204053bec0f7953566",
       "metric": "stage_hit@5",
       "stage": "vector",
       "denominator": 335,
@@ -62,7 +63,7 @@
     {
       "name": "rrf_hit@5",
       "artifact": "experiments/baseline_ladder/retrieval_375.jsonl",
-      "sha256": "bfaaaf89c600690268e5ba94207ce0527e4d72d71c8a613726e1d95298585e17",
+      "sha256": "5c5da08963988811f8fa6baa607be539c5f906b8de3399204053bec0f7953566",
       "metric": "stage_hit@5",
       "stage": "rrf",
       "denominator": 335,
@@ -74,7 +75,7 @@
     {
       "name": "ce_hit@5_生产批2026-10-14",
       "artifact": "experiments/baseline_ladder/ce_scores.jsonl",
-      "sha256": "5b0c15d92488b274d1613982df9f240e925e8053a30736fafb9bc1a6f6835321",
+      "sha256": "df1d6265bbd3c85fe8a767fe2589353305c83631854af2838f2c5ca4e602f1f0",
       "metric": "ce_top_hit@5",
       "denominator": 335,
       "expect_hits": 109,
@@ -85,7 +86,7 @@
     {
       "name": "ce_hit@5_K50_不截断",
       "artifact": "experiments/baseline_ladder/k50_prod/ce_scores.jsonl",
-      "sha256": "57a3253a39fb3a19d085987a97dc2bac3968e1a408fef1838859b4f9d907379d",
+      "sha256": "db1fa2c27afac13403e57096a19c0d858c4e35436e91efecf37150f3227cde8c",
       "metric": "ce_candidates_hit@5",
       "rrf_rank_max": null,
       "denominator": 335,
@@ -97,7 +98,7 @@
     {
       "name": "ce_hit@5_K30_截断至30",
       "artifact": "experiments/baseline_ladder/k50_prod/ce_scores.jsonl",
-      "sha256": "57a3253a39fb3a19d085987a97dc2bac3968e1a408fef1838859b4f9d907379d",
+      "sha256": "db1fa2c27afac13403e57096a19c0d858c4e35436e91efecf37150f3227cde8c",
       "metric": "ce_candidates_hit@5",
       "rrf_rank_max": 30,
       "denominator": 335,

@@ -42,11 +42,16 @@ _FROZEN = _BASELINES["frozen_artifacts"]
 
 
 def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for block in iter(lambda: fh.read(1 << 20), b""):
-            digest.update(block)
-    return digest.hexdigest()
+    """算产物的 sha256 —— **先把 CRLF 归一成 LF 再算**。
+
+    为什么必须归一（2026-10-16 第一次 CI 就红在这里）：
+    本机 `core.autocrlf=true` 时，检出到工作区的是 CRLF，而仓库里的 blob（也就是 CI 在
+    Linux 上检出的那份）是 LF。不归一的话，本地算出的哈希在 CI 上**必然**不匹配 ——
+    回放层就会红在「换行符平台差异」上，而不是红在真实的产物变化上，假阳性把这道闸门废掉。
+    归一之后，Windows 本地与 Linux CI 对同一份 blob 得到同一个哈希。
+    """
+    raw = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def _read_jsonl(rel_path: str) -> list[dict]:
