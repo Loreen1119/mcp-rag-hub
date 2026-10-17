@@ -36,6 +36,78 @@
 | <img src="screenshots/ui-refusal.png" width="330" alt="拒答态：知识库信息不足，未生成答案"/> | <img src="screenshots/ui-degraded.png" width="330" alt="降级态：回答生成服务暂不可用，但照常展示检索证据"/> |
 |                   黄色告警 + 拒答原因，证据卡片带 `CE Score`（本例 0.0296）                   |                             红色告警 + 故障原因，**照常展示检索到的原文证据**                            |
 
+## 架构
+
+三个入口共用一条检索管线 —— 界面、HTTP 接口、MCP 工具都走同一份 `src/pipeline.py` 单例，不存在"某条路径另有一份实现"：
+
+```mermaid
+flowchart LR
+    subgraph E["入口层"]
+        UI["Streamlit<br/>app.py :8501"]
+        API["HTTP API<br/>api.py :8010"]
+        MCP["MCP Server<br/>stdio"]
+    end
+
+    subgraph O["编排"]
+        AGENT["LangGraph Agent<br/>analyze → retrieve → check<br/>结果不足则 rewrite 再检索"]
+    end
+
+    subgraph R["召回（各 top-20）"]
+        BM["BM25<br/>jieba + rank-bm25"]
+        VEC["向量<br/>bge-small-zh / ChromaDB"]
+        KG["知识图谱<br/>NetworkX（默认关）"]
+    end
+
+    subgraph S["融合与精排"]
+        RRF["RRF 融合 k=60"]
+        TRUNC["候选截断至 30"]
+        CE["Cross-Encoder<br/>bge-reranker-base"]
+    end
+
+    subgraph G["生成与校验"]
+        LLM["LLM 生成<br/>qwen2.5:3b / DeepSeek"]
+        VAL["AnswerValidator<br/>answered / insufficient_evidence<br/>/ generation_unavailable"]
+    end
+
+    UI --> AGENT
+    API --> AGENT
+    API -.->|直调检索层| BM
+    API -.->|直调检索层| VEC
+    MCP -.->|直调检索层| BM
+    MCP -.->|直调检索层| VEC
+
+    AGENT --> BM
+    AGENT --> VEC
+    AGENT --> KG
+    BM --> RRF
+    VEC --> RRF
+    KG --> RRF
+    RRF --> TRUNC
+    TRUNC --> CE
+    CE --> AGENT
+    AGENT --> LLM
+    LLM --> VAL
+    VAL --> UI
+    VAL --> API
+```
+
+> **虚线 = 跳过 agent 编排、直调检索层**（`/search` 的 `mode` 与 MCP 的 `search_knowledge` 走这条，不经生成与校验）；**实线 = 完整链路**。
+>
+> 检索配置是**冻结**的（深度 20+20、候选截断至 30）：`depth50x50` 消融已证加深召回是负收益，瓶颈在 CE 判别力而不是召回量。图上的数字都是实测值，出处见 [`EVAL_REPORT.md`](EVAL_REPORT.md)。
+
+Agent 状态机（`python agent.py --diagram` 可复现）：
+
+```mermaid
+stateDiagram-v2
+    [*] --> analyze_query
+    analyze_query --> retrieve
+    retrieve --> check_results
+    check_results --> generate_answer: 结果充足
+    check_results --> rewrite_query: 结果不足 & attempt < 2
+    rewrite_query --> retrieve
+    generate_answer --> [*]
+```
+
 ## 快速开始
 
 **前提**：Python 3.11+。知识库语料放在 `corpora/<语料名>/` 目录，首次运行会自动解析并构建索引。切换语料用环境变量 `MCP_RAG_CORPUS`（每份语料使用独立的 Chroma 集合，互不覆盖；详见 [corpora/README.md](corpora/README.md)）。
