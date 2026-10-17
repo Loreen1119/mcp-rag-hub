@@ -1,0 +1,312 @@
+{
+  "_doc": "路径一：bge-reranker 句级支持度作为忠实度的客观代理指标。设计在打分前定死：12 条留出（分层 6 正 6 负，seed 见 holdout_seed）+ 18 条扫阈值；句级取 top-3 chunk 均值（不用 top-1 max）；判据 = 留出 κ≥0.5 且 CI 下限>0.2。🔴 循环依赖：所用 reranker 即生产链路 CE，被判上下文也是它自己挑的 → 分数系统性偏高，只能作相对信号，不得当绝对忠实度报。人工标注为单标注者（系统作者）。",
+  "created": "2026-10-17",
+  "reranker_model": "BAAI/bge-reranker-base",
+  "holdout_seed": 20261017,
+  "n_total": 30,
+  "n_scan": 18,
+  "n_holdout": 12,
+  "threshold_grid": [
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9
+  ],
+  "scan_best": {
+    "threshold": 0.9,
+    "kappa": 0.0917,
+    "positive_rate": 0.1111
+  },
+  "holdout": {
+    "kappa": 0.5,
+    "kappa_ci95": [
+      0.0,
+      1.0
+    ],
+    "auc": 0.6667,
+    "human_positive_rate": 0.5,
+    "proxy_positive_rate": 0.25,
+    "confusion": {
+      "TP": 3,
+      "FP": 0,
+      "FN": 3,
+      "TN": 6
+    },
+    "ids": [
+      "judge_001",
+      "judge_003",
+      "judge_008",
+      "judge_020",
+      "judge_025",
+      "judge_029",
+      "judge_045",
+      "judge_049",
+      "judge_056",
+      "judge_057",
+      "judge_070",
+      "judge_087"
+    ]
+  },
+  "pass_criteria": {
+    "kappa_min": 0.5,
+    "ci_lower_min": 0.2
+  },
+  "passes": false,
+  "verdict": "无信号：句级支持度代理在留出集上未达判据，不换阈值/不换聚合方式重试",
+  "items": [
+    {
+      "id": "judge_001",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.7892,
+      "n_sent": 4,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_002",
+      "human": 0,
+      "split": "scan",
+      "support": 0.8237,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_003",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.7922,
+      "n_sent": 6,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_006",
+      "human": 0,
+      "split": "scan",
+      "support": 0.7893,
+      "n_sent": 4,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_008",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.5749,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_015",
+      "human": 1,
+      "split": "scan",
+      "support": 0.757,
+      "n_sent": 3,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_018",
+      "human": 0,
+      "split": "scan",
+      "support": 0.4429,
+      "n_sent": 7,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_020",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.5795,
+      "n_sent": 8,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_021",
+      "human": 1,
+      "split": "scan",
+      "support": 0.7953,
+      "n_sent": 2,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_023",
+      "human": 1,
+      "split": "scan",
+      "support": 0.9786,
+      "n_sent": 3,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_025",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.9937,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_029",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.6085,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_040",
+      "human": 1,
+      "split": "scan",
+      "support": 0.4379,
+      "n_sent": 7,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_043",
+      "human": 1,
+      "split": "scan",
+      "support": 0.4408,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_045",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.9905,
+      "n_sent": 4,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_048",
+      "human": 1,
+      "split": "scan",
+      "support": 0.6511,
+      "n_sent": 3,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_049",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.922,
+      "n_sent": 8,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_051",
+      "human": 1,
+      "split": "scan",
+      "support": 0.6832,
+      "n_sent": 2,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_052",
+      "human": 0,
+      "split": "scan",
+      "support": 0.7314,
+      "n_sent": 8,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_054",
+      "human": 1,
+      "split": "scan",
+      "support": 0.9409,
+      "n_sent": 4,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_056",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.8952,
+      "n_sent": 2,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_057",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.6763,
+      "n_sent": 7,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_067",
+      "human": 1,
+      "split": "scan",
+      "support": 0.6206,
+      "n_sent": 3,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_070",
+      "human": 1,
+      "split": "holdout",
+      "support": 0.5224,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_071",
+      "human": 1,
+      "split": "scan",
+      "support": 0.4497,
+      "n_sent": 6,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_076",
+      "human": 1,
+      "split": "scan",
+      "support": 0.7723,
+      "n_sent": 3,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_087",
+      "human": 0,
+      "split": "holdout",
+      "support": 0.3462,
+      "n_sent": 7,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_090",
+      "human": 1,
+      "split": "scan",
+      "support": 0.5453,
+      "n_sent": 5,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_099",
+      "human": 0,
+      "split": "scan",
+      "support": 0.5306,
+      "n_sent": 7,
+      "n_chunk": 3
+    },
+    {
+      "id": "judge_100",
+      "human": 1,
+      "split": "scan",
+      "support": 0.4847,
+      "n_sent": 7,
+      "n_chunk": 3
+    }
+  ],
+  "frozen_sample_ref": "experiments/judge_calibration/frozen_sample.json"
+}
