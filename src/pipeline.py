@@ -25,9 +25,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from config import CORPUS, EMBEDDING_MODEL, ENABLE_KG, INDEX_SCHEMA_VERSION
+from config import CORPUS, EMBEDDING_MODEL, ENABLE_KG
 from src.data_pipeline import process_directory, corpus_hash
 from src.fusion import FusionPipeline
+from src.index_meta import corpus_collection_name as _corpus_collection_name
 from src.retrievers import BM25Retriever, VectorRetriever
 
 logger = logging.getLogger(__name__)
@@ -71,20 +72,13 @@ def compute_index_meta(docs_dir=None, chunk_size=None, chunk_overlap=None) -> di
 
 
 def corpus_collection_name(corpus: str, model_name: str) -> str:
-    """每份语料一个稳定的 collection 名，使多语料索引共存、切换时零重建。
+    """每份语料一个稳定的 collection 名（实现见 `src/index_meta.py`）。
 
-    前缀刻意不用 knowledge_base__：VectorRetriever._gc_stale_collections 只清理
-    该前缀下「hash 与当前不同」的集合，若沿用默认命名，切换语料会把另一份语料的
-    索引直接 GC 掉，每次切回来都要重新 embedding。
+    这里只做再导出：命名规则被 `/health` 等不允许加载模型的路径复用，
+    所以实体放在轻量模块里，`from src.pipeline import corpus_collection_name`
+    的既有调用点保持不变。
     """
-    base = Path(model_name).name
-    name = f"kb__{corpus}__{base}__v{INDEX_SCHEMA_VERSION}"
-    if len(name) > 63:  # Chroma 上限 63 字符，超了就用模型名 hash 压缩
-        import hashlib
-
-        base = hashlib.sha256(model_name.encode()).hexdigest()[:8]
-        name = f"kb__{corpus}__{base}__v{INDEX_SCHEMA_VERSION}"
-    return name
+    return _corpus_collection_name(corpus, model_name)
 
 
 def open_vector_retriever(chunks, rebuild: bool = False) -> VectorRetriever:

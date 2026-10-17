@@ -99,6 +99,36 @@ docker compose up --build                               # 浏览器打开 http:/
 | `get_chunk`        | 按编号获取指定切片的完整内容              |
 | `get_chunk_count`  | 查看知识库切片总数                   |
 
+## HTTP API（服务层）
+
+除了界面和 MCP，还提供一个标准 HTTP 接口 —— 第三方前端可直接接入，`/openapi.json` 就是机器可读的接口契约。
+
+```bash
+uvicorn api:app --host 127.0.0.1 --port 8010    # 或 python api.py
+# Swagger UI: http://127.0.0.1:8010/docs
+```
+
+| 端点 | 说明 |
+|---|---|
+| `GET /health` | 健康检查。**不构建管线、不加载模型**，只读配置 + 索引集合的 `count()`（冷启动不会被拖到 2 分钟） |
+| `POST /query` | 完整 agent 链路（检索 → 质量判断 → 必要时改写 → 生成 → 校验），返回三态 `answered / insufficient_evidence / generation_unavailable` + 检索证据 + 改写历史 |
+| `POST /search` | 只走检索层，`mode` 可选 `bm25 / vector / rrf / ce`，默认 `rrf` |
+| `GET /documents` | 语料清单。**默认按来源目录聚合**，文件清单分页（单页上限 200） |
+
+```bash
+curl -s localhost:8010/health
+curl -s -X POST localhost:8010/search -H "Content-Type: application/json" \
+     -d '{"query":"如何减少 TiDB 的写入热点","mode":"rrf","top_k":5}'
+```
+
+> ⚠️ **三条使用约束**
+> 1. **`mode=ce` 会懒加载 bge-reranker-base（约 1.1 GB，首次 30~60 秒）**，内存 < 4 GB 的机器不要用；默认档 `rrf` 不加载 reranker。
+> 2. **默认端口用 8010 而不是 8000**：8000 常被本机其它服务占用（本项目开发机上就有另一个项目在用），bind 失败会让人误以为是代码问题。
+> 3. **`/health` 刻意不做完整自检**：它不建索引、不加载 embedding，所以 `status=ok` 只代表「索引集合可读」，不代表生成链路可用（后者取决于 Ollama / DeepSeek 是否就绪，见 `/health` 的 `llm_backend`）。
+> 4. **服务层不做容器化**：镜像只含 Streamlit（`Dockerfile` 的 CMD 是单进程），`docker compose up` 只暴露 `8501`。API 请在本机 venv 里跑 —— 为了一个 4 端点的接口再引入 supervisor / 双进程编排，收益不抵复杂度。
+>
+> 本服务不产生新的评测数字；所有指标口径以 [`EVAL_REPORT.md`](EVAL_REPORT.md) 为准（生成层三维是裁判自评、未经人工校准，仅作内部参考）。
+
 ## 项目结构
 
 <details>

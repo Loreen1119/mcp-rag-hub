@@ -27,6 +27,12 @@ datasets>=2.0
 # --- MCP ---
 fastmcp>=2.0,<3.0
 
+# --- HTTP API（服务层, api.py）---
+# 不靠 fastmcp 的传递依赖：传递依赖的版本会随 fastmcp 升级漂移，
+# 而 /openapi.json 与 /docs 是写进 README 的对外契约，链路上要有明确的下界。
+fastapi>=0.115,<1.0
+uvicorn>=0.30,<1.0
+
 # --- Agent ---
 langgraph>=0.2,<1.0
 langgraph-checkpoint>=2.0,<3.0
