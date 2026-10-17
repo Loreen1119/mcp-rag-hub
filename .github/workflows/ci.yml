@@ -59,7 +59,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: hf-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          # key 绑 config.py 而不是 requirements.txt：模型名写在 config 里，
+          # 改依赖（如加一个 fastapi）不该作废模型缓存。此前 key 绑 requirements.txt，
+          # 每改一次依赖 unit job 就要重下 reranker（约 1.1GB），实测 +40s。
+          key: hf-${{ runner.os }}-${{ hashFiles('config.py') }}
+          restore-keys: |
+            hf-${{ runner.os }}-
 
       - name: 装 CPU 版 torch（默认会拉 CUDA 依赖，白多 1.5G+ 和好几分钟）
         run: |
