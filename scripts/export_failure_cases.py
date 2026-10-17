@@ -293,6 +293,10 @@ def render(st: dict) -> str:
     w("")
     w("## 6. 生成层低分样本（judge_100，W3）")
     w("")
+    w("> 🔴 **本节分数来自 7b 裁判自评，未经人工校准**（冻结 30 条盲判：faithfulness κ **+0.0794** / "
+      "relevancy κ **+0.0196**，两版 prompt 均远低于 κ≥0.6，见 `EVAL_REPORT.md` 第九节）→ "
+      "**只用于定位低分样本，不得当已校准指标引用**。")
+    w("")
     judges = load_jsonl(JUDGE)
     def avg(r): return (r["faithfulness"]["score"] + r["answer_relevancy"]["score"] + r["context_recall"]["score"]) / 3
     for r in sorted(judges, key=avg)[:5]:

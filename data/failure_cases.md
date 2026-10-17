@@ -336,6 +336,8 @@
 
 ## 6. 生成层低分样本（judge_100，W3）
 
+> 🔴 **本节分数来自 7b 裁判自评，未经人工校准**（冻结 30 条盲判：faithfulness κ **+0.0794** / relevancy κ **+0.0196**，两版 prompt 均远低于 κ≥0.6，见 `EVAL_REPORT.md` 第九节）→ **只用于定位低分样本，不得当已校准指标引用**。
+
 - **judge_093**（均分 0.30）在安装部署 tidb 过程中，执行 init 过程失败
   - faithfulness 0.7｜relevancy 0.2｜context_recall 0.0
   - 裁判理由（context_recall）：上下文完全不包含参考答案中的任何信息
