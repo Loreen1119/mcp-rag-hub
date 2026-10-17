@@ -1,0 +1,63 @@
+{
+  "_doc": "裁判 v2（rubric 3 档 + 逐条列依据）与人工标注的一致性。冻结二分类：正 = 有依据 / 切题；部分与无/不切题 记负。",
+  "created": "2026-10-16",
+  "judge_model": "qwen2.5:7b",
+  "dims": {
+    "faithfulness": {
+      "n_calibration": 30,
+      "missing_in_calibration": [],
+      "kappa": 0.0794,
+      "kappa_ci95": [
+        -0.0,
+        0.2353
+      ],
+      "po": 0.4333,
+      "pe": 0.3844,
+      "judge_positive_rate": 0.0667,
+      "human_positive_rate": 0.6333,
+      "confusion": {
+        "TP": 2,
+        "FP": 0,
+        "FN": 17,
+        "TN": 11
+      },
+      "auc_ordinal": 0.5933,
+      "label_distribution_scored": {
+        "有依据": 2,
+        "部分有依据": 27,
+        "无依据": 1
+      },
+      "n_scored": 30,
+      "positive_rate_scored": 0.0667,
+      "passes_kappa_0_6": false
+    },
+    "answer_relevancy": {
+      "n_calibration": 30,
+      "missing_in_calibration": [],
+      "kappa": 0.0196,
+      "kappa_ci95": [
+        -0.2264,
+        0.3478
+      ],
+      "po": 0.6667,
+      "pe": 0.66,
+      "judge_positive_rate": 0.7,
+      "human_positive_rate": 0.9,
+      "confusion": {
+        "TP": 19,
+        "FP": 2,
+        "FN": 8,
+        "TN": 1
+      },
+      "auc_ordinal": 0.4938,
+      "label_distribution_scored": {
+        "切题": 21,
+        "部分切题": 5,
+        "不切题": 4
+      },
+      "n_scored": 30,
+      "positive_rate_scored": 0.7,
+      "passes_kappa_0_6": false
+    }
+  }
+}
