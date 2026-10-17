@@ -414,3 +414,5 @@ mcp-rag-hub/
 [`docs/`](docs/README.md) 下有 [项目详解](docs/项目详解.md)（面向非技术读者）·  
 [技术视角详解](docs/技术视角详解.md)（架构与关键数据）·  
 [chapters/](docs/chapters/)（ch01～ch10 逐层实现笔记，含每一步的取舍与被数据推翻的结论）。
+
+[`blog/`](blog/) 放对外长文：[《我把 LLM-as-Judge 校准到失败》](blog/2026-10-17-judge-calibration-failure.md) —— 30 条人工盲判、两版裁判 prompt、一条替代路线全部失败的过程记录，以及为什么最后选择「不报这个数字」。
