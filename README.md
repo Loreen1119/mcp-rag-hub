@@ -417,4 +417,7 @@ mcp-rag-hub/
 [技术视角详解](docs/技术视角详解.md)（架构与关键数据）·  
 [chapters/](docs/chapters/)（ch01～ch10 逐层实现笔记，含每一步的取舍与被数据推翻的结论）。
 
-[`blog/`](blog/) 放对外长文：[《我把 LLM-as-Judge 校准到失败》](blog/2026-10-17-judge-calibration-failure.md) —— 30 条人工盲判、两版裁判 prompt、一条替代路线全部失败的过程记录，以及为什么最后选择「不报这个数字」。
+[`blog/`](blog/) 放对外长文：
+
+- [《我把 LLM-as-Judge 校准到失败》](blog/2026-10-17-judge-calibration-failure.md) —— 30 条人工盲判、两版裁判 prompt、一条替代路线全部失败的过程记录，以及为什么最后选择「不报这个数字」。
+- [《把「慢」拆到毫秒》](blog/2026-10-18-latency-profile-and-bottleneck.md) —— 分阶段延迟画像、用对照臂拿到 −19.0% 的取舍过程、以及「到哪里该停手」的上限判断（CE 候选池 192/335、池内保真率 59.9%、±2pt 在这个样本量上不可检）。
