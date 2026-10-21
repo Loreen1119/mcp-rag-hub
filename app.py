@@ -6,6 +6,11 @@ Streamlit 前端 — RAG 知识检索系统交互界面。
 
 from __future__ import annotations
 
+import os
+
+# 服务路径 CE 超时：取 CE P95 7973ms ≈ 2 倍。必须在 import config/pipe 之前设。
+os.environ.setdefault("MCP_RAG_CE_TIMEOUT_MS", "15000")
+
 import streamlit as st
 from pathlib import Path
 

@@ -35,9 +35,14 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from pathlib import Path
 from typing import Callable, Literal, Optional
+
+# 服务路径 CE 超时：取 CE P95 7973ms ≈ 2 倍。必须在 import config 之前设，
+# 否则 config 已读完 env 再改无效。setdefault 允许用户显式覆盖。
+os.environ.setdefault("MCP_RAG_CE_TIMEOUT_MS", "15000")
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field

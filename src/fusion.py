@@ -9,12 +9,15 @@ from __future__ import annotations
 
 import logging
 import threading
+import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from typing import List
 
 from sentence_transformers import CrossEncoder
 
-from config import RRF_K, CROSS_ENCODER_MODEL, CE_TOP_K, BM25_TOP_K, VECTOR_TOP_K, CE_CANDIDATE_K, ENABLE_RERANKER
+from config import RRF_K, CROSS_ENCODER_MODEL, CE_TOP_K, BM25_TOP_K, VECTOR_TOP_K, CE_CANDIDATE_K, ENABLE_RERANKER, CE_TIMEOUT_MS
 from src.models import Chunk, RetrievalResult
 
 logger = logging.getLogger(__name__)
@@ -93,12 +96,64 @@ class CrossEncoderReranker:
     Bi-Encoder（第 3 章的 VectorRetriever）把 query 和 doc 分别编码再算相似度，
     快但粗糙。Cross-Encoder 把 query+doc 拼接后做一次完整注意力计算，
     准但慢。所以策略是：Bi-Encoder 粗筛 Top-20，Cross-Encoder 精排 Top-5。
+
+    超时降级（2026-10-21）：
+    - predict 用 ThreadPoolExecutor(max_workers=1) 包裹，future.result(timeout) 等待。
+    - 超时后退回候选原序（RRF 顺序）取 top_k，标 ce_timeout=True，不写 ce_score/ce_rank。
+    - Python 杀不掉已启动的线程，超时只是「不再等」；单进程 Streamlit 场景可接受。
+    - 熔断：连续 _CIRCUIT_BREAKER_THRESHOLD 次超时后，后续调用直接跳过 CE
+      （走原序降级），避免高频超时堆积线程。冷却 _CIRCUIT_COOLDOWN_S 秒后恢复尝试。
     """
+
+    # 熔断参数
+    _CIRCUIT_BREAKER_THRESHOLD = 3   # 连续超时 N 次触发熔断
+    _CIRCUIT_COOLDOWN_S = 30.0       # 熔断后冷却秒数，冷却后恢复尝试
 
     def __init__(self, model_name: str = CROSS_ENCODER_MODEL):
         logger.info("加载 Cross-Encoder 模型: %s", model_name)
         self.model = CrossEncoder(model_name)
         logger.info("Cross-Encoder 加载完成")
+        self._consecutive_timeouts = 0
+        self._circuit_broken_until = 0.0  # time.monotonic() 时间戳
+
+    def _is_circuit_broken(self) -> bool:
+        """检查熔断是否激活。"""
+        return time.monotonic() < self._circuit_broken_until
+
+    def _record_timeout(self) -> None:
+        """记录一次超时，必要时触发熔断。"""
+        self._consecutive_timeouts += 1
+        if self._consecutive_timeouts >= self._CIRCUIT_BREAKER_THRESHOLD:
+            self._circuit_broken_until = time.monotonic() + self._CIRCUIT_COOLDOWN_S
+            logger.warning(
+                "CE 熔断触发：连续 %d 次超时，冷却 %.0f 秒",
+                self._consecutive_timeouts, self._CIRCUIT_COOLDOWN_S,
+            )
+
+    def _record_success(self) -> None:
+        """成功时重置超时计数。"""
+        self._consecutive_timeouts = 0
+
+    def _fallback_original_order(
+        self,
+        candidates: List[RetrievalResult],
+        top_k: int,
+    ) -> List[RetrievalResult]:
+        """超时/熔断降级：退回候选原序（RRF 顺序）取 top_k。"""
+        results: List[RetrievalResult] = []
+        for candidate in candidates[:top_k]:
+            meta = dict(candidate.chunk.metadata)
+            meta["ce_timeout"] = True
+            results.append(RetrievalResult(
+                chunk=Chunk(
+                    content=candidate.chunk.content,
+                    metadata=meta,
+                    chunk_id=candidate.chunk.chunk_id,
+                ),
+                score=candidate.score,  # 保留 RRF 分数，不是 CE 分数
+                source="cross_encoder",
+            ))
+        return results
 
     def rerank(
         self,
@@ -115,7 +170,8 @@ class CrossEncoderReranker:
             top_k: 返回数量
 
         Returns:
-            按 CE 得分降序排列的 Top-K 结果，source 标记为 "cross_encoder"
+            按 CE 得分降序排列的 Top-K 结果，source 标记为 "cross_encoder"。
+            超时/熔断时退回候选原序，metadata 含 ce_timeout=True。
         """
         if not candidates:
             return []
@@ -123,13 +179,42 @@ class CrossEncoderReranker:
         # RRF 融合后先截断候选再送 CE：CE 是 query+doc 全注意力，pairs 成本随候选数
         # 线性增长；RRF 已把高相关排在最前，截断到 candidate_cap 对最终 top-5 精度基本
         # 无损，却能显著压低首查延迟（此前 fused 全集 ~55 全量打分）。
-        # 这正是 docstring「Bi-Encoder 粗筛 Top-20 → CE 精排 Top-5」设计意图的本代码落地。
         if candidate_cap and len(candidates) > candidate_cap:
             candidates = candidates[:candidate_cap]
 
+        # 熔断检查：连续超时后直接降级，不再尝试 CE
+        if self._is_circuit_broken():
+            logger.warning("CE 熔断中，跳过重排，退回 RRF 原序")
+            return self._fallback_original_order(candidates, top_k)
+
         # 构造 query-doc pairs
         pairs = [(query, r.chunk.content) for r in candidates]
-        scores = self.model.predict(pairs, show_progress_bar=False)
+
+        # 超时保护：用 ThreadPoolExecutor 包裹 predict
+        # 注意：Python 杀不掉已启动的线程，超时只是「不再等」；
+        # 单进程 Streamlit 场景可接受，但通过熔断防止高频超时堆积。
+        if CE_TIMEOUT_MS > 0:
+            t0 = time.monotonic()
+            executor = ThreadPoolExecutor(max_workers=1)
+            try:
+                future = executor.submit(self.model.predict, pairs, show_progress_bar=False)
+                scores = future.result(timeout=CE_TIMEOUT_MS / 1000.0)
+            except FuturesTimeoutError:
+                elapsed_ms = (time.monotonic() - t0) * 1000
+                self._record_timeout()
+                logger.warning(
+                    "CE 推理超时：query=%r… 候选数=%d 耗时=%.0fms > %dms，退回 RRF 原序",
+                    query[:30], len(candidates), elapsed_ms, CE_TIMEOUT_MS,
+                )
+                return self._fallback_original_order(candidates, top_k)
+            finally:
+                executor.shutdown(wait=False)
+        else:
+            # 离线评测：CE_TIMEOUT_MS=0，永不超时，保持原有行为
+            scores = self.model.predict(pairs, show_progress_bar=False)
+
+        # 成功后重置超时计数（无论哪条路径）
+        self._record_success()
 
         # 配对排序
         scored = list(zip(candidates, scores))

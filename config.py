@@ -111,6 +111,13 @@ MIN_EVIDENCE_COUNT = 1
 LLM_TIMEOUT_SECONDS = 120
 LLM_MAX_RETRIES = 1          # 仅对连接失败 / 超时重试；JSON 解析失败不重试
 
+# Cross-Encoder 推理超时（毫秒）。**默认 0 = 不限制（fail-safe）**。
+# env MCP_RAG_CE_TIMEOUT_MS 可覆盖；服务路径（api.py / app.py）入口处
+# 用 os.environ.setdefault 显式设 15000（CE P95 7973ms ≈ 2 倍），
+# 必须在 import config 之前执行，否则此处已读完 env 再改无效。
+# 硬约束：离线评测脚本不传 = 0 = 永不超时，绝不静默改动已冻结指标。
+CE_TIMEOUT_MS = int(os.environ.get("MCP_RAG_CE_TIMEOUT_MS", "0"))
+
 # ============================================================
 # GraphRAG 参数
 # ============================================================
