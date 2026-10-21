@@ -38,6 +38,7 @@
     python -m scripts.eval_baseline_ladder --stage retrieval
     python -m scripts.eval_baseline_ladder --stage ce
     python -m scripts.eval_baseline_ladder --stage report
+    python -m scripts.eval_baseline_ladder --tag k25test --stage retrieval   # 产物 → experiments/runs/k25test/
 """
 
 from __future__ import annotations
@@ -719,12 +720,19 @@ def main() -> None:
     parser.add_argument("--out-dir", default=None,
                         help="产物目录（默认 experiments/baseline_ladder）。"
                              "实验请另指定（如 experiments/baseline_ladder/depth50），避免覆盖既有产物。")
+    parser.add_argument("--tag", default=None, metavar="NAME",
+                        help="实验标签：产物落到 experiments/runs/<NAME>/，"
+                             "**不覆盖** experiments/baseline_ladder/（冻结产物的来源）。"
+                             "示例：--tag k25test → experiments/runs/k25test/")
     args = parser.parse_args()
 
     # 实验参数生效（只改本进程的全局，不动 config.py）
     if args.out_dir:
         p = Path(args.out_dir)
         OUT_DIR = p if p.is_absolute() else (ROOT / p)
+    elif args.tag:
+        OUT_DIR = ROOT / "experiments" / "runs" / args.tag
+    if args.out_dir or args.tag:
         RETRIEVAL_RECORDS = OUT_DIR / "retrieval_375.jsonl"
         CE_RECORDS = OUT_DIR / "ce_scores.jsonl"
         SUMMARY_FILE = OUT_DIR / "summary.json"

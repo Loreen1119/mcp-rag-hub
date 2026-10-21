@@ -391,6 +391,16 @@ mcp-rag-hub/
 
 生成层三维指标（Faithfulness / Answer Relevancy / Context Recall）**已在 TiDB 语料上重测**（2026-10-15，100 条 Judge 金标，7B 裁判 / 3B 生成）：**0.785 / 0.761 / 0.568**。🔴 **但打分裁判未经人工校准**（30 条盲判 κ ≈ 0，见「环境准备」的模型分工说明）→ **这三个数只作内部参考，不得当已校准指标对外引用**；客观计数部分不受影响（生成 100 条失败 0 / 空答 0）。端到端拒答（真实 agent 链路）**正确拒答仅 10.5%（4/38）**、`miss_kill` 误杀 **5%（1/20）** —— 拒答能力弱是已知短板。**旧 fastapi-zh 的生成层数字一律仍不可引用**；详见 [`EVAL_REPORT.md`](EVAL_REPORT.md) 第八、九节。
 
+### 评测脚本用法
+
+```bash
+# 用 --tag 跑实验（产物落到 experiments/runs/<tag>/，不覆盖冻结的 baseline_ladder/）
+python -m scripts.eval_baseline_ladder --tag k25test --stage retrieval
+
+# 对比两份评测产物（防退化门禁）：Hit@5 分子/分母 + 丢失/新增命中 id + REGRESSION/OK 判定
+python -m scripts.diff_eval_run experiments/baseline_ladder/retrieval_375.jsonl experiments/runs/k25test/retrieval_375.jsonl --stage rrf
+```
+
 **知识图谱检索（可选实验）**：用 LLM 抽取实体三元组、构建有向知识图谱，作为混合检索的一路补充。`ENABLE_KG` 开关控制。当前在**小规模、同主题语料**上未带来检索提升（独立评估见 [KG 消融实验笔记](journal/KG消融实验-2026-08-04.md)），因此默认关闭——它展示的是「多路召回设计」的扩展能力，而非当前主推的检索路线。
 
 ## 技术栈
