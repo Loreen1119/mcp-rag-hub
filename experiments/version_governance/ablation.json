@@ -1,0 +1,280 @@
+{
+  "meta": {
+    "experiment": "version_governance_ablation",
+    "generated_at": "2026-10-23T17:15:18+08:00",
+    "input_file": "experiments/baseline_ladder/retrieval_375.jsonl",
+    "input_sha256": "5c5da08963988811f8fa6baa607be539c5f906b8de3399204053bec0f7953566",
+    "input_sha256_rule": "CRLF 归一成 LF 之后再算（与 tests/regression_baselines.json 同一算法）。本机 core.autocrlf=true，工作区是 CRLF、仓库 blob 是 LF；不归一会得到另一个值，在 Linux CI 上永远对不上，闸门会红在换行符上而不是真实产物变化上。",
+    "input_records": 375,
+    "denominator": 335,
+    "denominator_rule": "skip unanswerable=True 或无 golden_slugs；命中判定 = candidate.slug ∈ golden_slugs",
+    "stage_used": "rrf",
+    "candidate_granularity": "chunk 级（同一 slug 可重复出现），三档一律不预先去重",
+    "old_version_prefix": "docs-cn-v8.4/",
+    "arms": {
+      "baseline": "rrf 原序（按 rank 升序）取 top-5",
+      "filter": "先剔除 src 以 'docs-cn-v8.4/' 开头的候选，再按原序取 top-5",
+      "decay_0.5": "旧版候选 score×0.5 后按 score 降序稳定重排，取 top-5（仅参考）",
+      "decay_0.9": "旧版候选 score×0.9 后按 score 降序稳定重排，取 top-5（仅参考）"
+    },
+    "metrics": {
+      "hit@5": "top-5 内是否有任一候选 slug ∈ golden_slugs；分母 335",
+      "mrr@10": "首个命中位次 r≤10 取 1/r，否则 0；对 335 条求均值",
+      "ndcg@10": "二值 qrels（gain=1）的 nDCG@10：DCG=Σ gain/log2(rank+1)，IDCG 按 min(|golden|,10) 个相关文档全排最前计算；同一 slug 只在首次出现处计一次 gain。口径来源：BEIR / MTEB 的 nDCG@10 即为二值 qrels 口径，无需分级标注",
+      "ndcg@10_no_dedupe": "同上但不去重 slug（敏感性对照，不作为判据）",
+      "interference_rate": "top-5 中含 'docs-cn-v8.4/' 候选的 query 占比",
+      "version_correct@5": "top-5 内首个命中候选的 src 不以 'docs-cn-v8.4/' 开头才算；未命中记 0。区分「命中与否」与「命中的是不是当前版本」，恒有 version_correct@5 ≤ hit@5"
+    },
+    "stats": {
+      "mcnemar": "exact, two-sided, Binomial(b+c, 0.5)",
+      "bootstrap": "paired, n=10000, seed=20261018, percentile 95% CI"
+    },
+    "no_model_loaded": true,
+    "note": "判据只看 baseline vs filter；decay 两档仅作参考，不参与结论"
+  },
+  "per_arm": {
+    "baseline": {
+      "arm": "baseline",
+      "hit@5_num": 109,
+      "denominator": 335,
+      "hit@5": 0.3253731343283582,
+      "mrr@10": 0.20782871357498237,
+      "ndcg@10": 0.2572849105604591,
+      "ndcg@10_no_dedupe": 0.2595787063084987,
+      "interference_num": 103,
+      "interference_rate": 0.3074626865671642,
+      "version_correct@5_num": 94,
+      "version_correct@5": 0.28059701492537314
+    },
+    "filter": {
+      "arm": "filter",
+      "hit@5_num": 108,
+      "denominator": 335,
+      "hit@5": 0.32238805970149254,
+      "mrr@10": 0.208872305140962,
+      "ndcg@10": 0.2595168968304213,
+      "ndcg@10_no_dedupe": 0.25367885724899064,
+      "interference_num": 0,
+      "interference_rate": 0.0,
+      "version_correct@5_num": 108,
+      "version_correct@5": 0.32238805970149254
+    },
+    "decay_0.5": {
+      "arm": "decay_0.5",
+      "hit@5_num": 108,
+      "denominator": 335,
+      "hit@5": 0.32238805970149254,
+      "mrr@10": 0.20869699123430482,
+      "ndcg@10": 0.25935843677804843,
+      "ndcg@10_no_dedupe": 0.25301290075882665,
+      "interference_num": 7,
+      "interference_rate": 0.020895522388059702,
+      "version_correct@5_num": 108,
+      "version_correct@5": 0.32238805970149254
+    },
+    "decay_0.9": {
+      "arm": "decay_0.9",
+      "hit@5_num": 109,
+      "denominator": 335,
+      "hit@5": 0.3253731343283582,
+      "mrr@10": 0.2104063018242125,
+      "ndcg@10": 0.2599702084835211,
+      "ndcg@10_no_dedupe": 0.25609053910554436,
+      "interference_num": 59,
+      "interference_rate": 0.1761194029850746,
+      "version_correct@5_num": 108,
+      "version_correct@5": 0.32238805970149254
+    }
+  },
+  "baseline_vs_filter": {
+    "hit@5_delta_num": -1,
+    "hit@5_delta_pt": -0.2985074626865647,
+    "base_only": 2,
+    "filter_only": 1,
+    "discordant_pairs": 3,
+    "mcnemar_exact_p": 1.0,
+    "bootstrap": {
+      "n_resamples": 10000,
+      "seed": 20261018,
+      "mean_delta_frac": -0.0029841791044774007,
+      "mean_delta_pt": -0.2984179104477401,
+      "ci95_frac": [
+        -0.014925373134328358,
+        0.005970149253731343
+      ],
+      "ci95_pt": [
+        -1.4925373134328357,
+        0.5970149253731344
+      ],
+      "method": "percentile, paired resampling of query indices"
+    },
+    "lost_hit_ids": [
+      "ask_8",
+      "doc_ops_138"
+    ],
+    "gained_hit_ids": [
+      "doc_sql_14"
+    ],
+    "lost_hit_detail": [
+      {
+        "id": "ask_8",
+        "golden_slugs": [
+          "create-tiflash-replicas"
+        ],
+        "baseline_golden_candidates": [
+          {
+            "rank": 5,
+            "slug": "create-tiflash-replicas",
+            "src": "docs-cn-v8.4/tiflash/create-tiflash-replicas.md"
+          }
+        ],
+        "only_from_old_version": true,
+        "new_version_twin_in_pool": [
+          {
+            "rank": 7,
+            "src": "docs-cn/tiflash/create-tiflash-replicas.md",
+            "in_top5": false
+          },
+          {
+            "rank": 22,
+            "src": "docs-cn/tiflash/create-tiflash-replicas.md",
+            "in_top5": false
+          }
+        ]
+      },
+      {
+        "id": "doc_ops_138",
+        "golden_slugs": [
+          "br-snapshot-architecture"
+        ],
+        "baseline_golden_candidates": [
+          {
+            "rank": 1,
+            "slug": "br-snapshot-architecture",
+            "src": "docs-cn-v8.4/br/br-snapshot-architecture.md"
+          }
+        ],
+        "only_from_old_version": true,
+        "new_version_twin_in_pool": [
+          {
+            "rank": 11,
+            "src": "docs-cn/br/br-snapshot-architecture.md",
+            "in_top5": false
+          }
+        ]
+      }
+    ],
+    "diagnostics": {
+      "baseline_interference_vs_hit": {
+        "interfered_hit": 51,
+        "interfered_miss": 52,
+        "clean_hit": 58,
+        "clean_miss": 174
+      },
+      "old_version_chunks_in_top5": 142,
+      "old_version_chunks_in_pool": 885,
+      "candidates_total": 10028,
+      "filter_removes_frac_of_pool": 0.08825289190267252,
+      "note": "crosstab 说明旧版占位与命中几乎正交：interfered_miss 是过滤白捡的空间，interfered_hit 是过滤会动到的命中，clean_miss 是过滤救不了的部分"
+    },
+    "decay_0.9_delta_pt": 0.0
+  },
+  "version_correct": {
+    "_why": "slug 级 Hit@5 只看「有没有命中同 slug 的页」—— 新旧版同名页都算命中，所以命中来源是哪一版在 Hit@5 里完全看不见。EVAL_REPORT 第六节已明确写过这个陷阱（「收益被指标掩盖」），本节把同一警告用在治理实验上：三档治理洗的是命中来源，不是命中与否。",
+    "definition": "VersionCorrect@5 = top-5 内首个命中候选的 src 不以 'docs-cn-v8.4/' 开头；未命中记 0。分母同 335。因此 VersionCorrect@5 ≤ Hit@5 恒成立。",
+    "per_arm": {
+      "baseline": {
+        "num": 94,
+        "rate": 0.28059701492537314
+      },
+      "filter": {
+        "num": 108,
+        "rate": 0.32238805970149254
+      },
+      "decay_0.5": {
+        "num": 108,
+        "rate": 0.32238805970149254
+      },
+      "decay_0.9": {
+        "num": 108,
+        "rate": 0.32238805970149254
+      }
+    },
+    "vs_baseline": {
+      "delta_pt": 4.179104477611941,
+      "base_only": 0,
+      "arm_only": 14,
+      "discordant_pairs": 14,
+      "mcnemar_exact_p": 0.0001220703125,
+      "applies_to": [
+        "filter",
+        "decay_0.5",
+        "decay_0.9"
+      ],
+      "per_arm_pairs": {
+        "filter": {
+          "base_only": 0,
+          "arm_only": 14,
+          "discordant_pairs": 14,
+          "mcnemar_exact_p": 0.0001220703125
+        },
+        "decay_0.5": {
+          "base_only": 0,
+          "arm_only": 14,
+          "discordant_pairs": 14,
+          "mcnemar_exact_p": 0.0001220703125
+        },
+        "decay_0.9": {
+          "base_only": 0,
+          "arm_only": 14,
+          "discordant_pairs": 14,
+          "mcnemar_exact_p": 0.0001220703125
+        }
+      },
+      "note": "不一致对是否单向可直接从 base_only / arm_only 读出；三个治理臂在这条口径上应当给出同一组不一致对。"
+    },
+    "old_version_hits_in_baseline": {
+      "count": 15,
+      "of_total_hits": 109,
+      "share": 0.13761467889908258,
+      "disposition": {
+        "filter": {
+          "corrected_to_new": 13,
+          "still_old": 0,
+          "lost_hit": 2
+        },
+        "decay_0.5": {
+          "corrected_to_new": 13,
+          "still_old": 0,
+          "lost_hit": 2
+        },
+        "decay_0.9": {
+          "corrected_to_new": 13,
+          "still_old": 1,
+          "lost_hit": 1
+        }
+      },
+      "note": "baseline 的命中里有一批是「靠旧版页命中」：slug 对了、页面过时。三档治理纠正的条数与代价（丢命中）见 disposition。"
+    },
+    "preferred_arm": {
+      "arm": "decay_0.9",
+      "reason": "排序层降权不需要重建索引（省 65~75 min），Hit@5 109/335（与 baseline 持平，零召回代价），VersionCorrect@5 +4.18pt，干扰率 30.7% → 17.6%"
+    },
+    "boundary": [
+      "这不是「召回提升」：被纠正的条数里绝大多数本来就是命中，只是命中页面从旧版换成新版。对外只能说「命中来源版本的正确率」，不得说 Hit@5 提升。",
+      "对版本无关的 query（如「TiDB 架构是什么」）该口径过严 —— 旧版页也能答，只是不理想。",
+      "样本是主集 335，不是 [Z] 探针 31；不得与第六节「危害 19.4% → 9.7%」混报，两者 query 构造方式与分母都不同。",
+      "本口径在既有判据之外补算，不参与 verdict 判定；是否立为正式指标待定。"
+    ]
+  },
+  "verdict": {
+    "judged_arm": "filter",
+    "criterion": "② 提升 <2pt 或 p≥0.05 → 旧版占位不是主因，治理收益有限，转去验证模型规模（reranker-large）",
+    "hit5_delta_pt": -0.2985074626865647,
+    "p_value": 1.0,
+    "passed": false,
+    "conclusion": "在 slug 级 Hit@5 口径下，旧版占位不是主因：filter 相对 baseline -0.30pt、p=1.00，三档均未提升召回。",
+    "scope_limit": "本结论只覆盖「找不找得到」（slug 级 Hit@5）这一个问题。命中来源版本另见 version_correct：那里的方向可能相反，两个口径回答的不是同一个问题 —— 不得互相替代，也不得用其中一条推出「治理有 / 没有价值」。",
+    "next_step": "转去验证模型规模（reranker-large）这一条仍然成立：slug 口径上没有剩余空间；版本正确性上的收益不值得为此重建索引，用排序层降权即可（见 version_correct.preferred_arm）。"
+  }
+}
