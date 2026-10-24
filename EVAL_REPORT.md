@@ -180,6 +180,8 @@
 
 本节全部结果**由已有的逐条结果文件复算**（`experiments/baseline_ladder/retrieval_375.jsonl` 与 `ce_scores.jsonl` 的 `hit@5` 字段），**不重跑任何模型**，因此可离线复现、与回归回放层同源。
 
+> **落盘与守护（2026-10-24）**：本节四组对比已由 `scripts/eval_ladder_significance.py` 复算落盘为 `experiments/baseline_ladder/significance.json`（统计量只 import 复用 `scripts/ablation_version_governance.py`，不另写一份实现），并由 `tests/test_ladder_significance.py` 在 CI 回放层对拍——只装 pytest 即可跑，产物被换或数字被手改都会红。
+
 ### 1. 点估计的误差棒（Wilson 95% CI，335 分母）
 
 | 档 | Hit@5 | 95% CI | 区间 |

@@ -1,0 +1,101 @@
+{
+  "generated_at": "2026-10-24T15:29:35+08:00",
+  "denominator": 335,
+  "bootstrap": {
+    "n_resamples": 10000,
+    "seed": 20261018,
+    "method": "percentile, paired resampling of query indices"
+  },
+  "alpha": 0.05,
+  "pairing": {
+    "pairing_key": "id",
+    "row_order_identical": false,
+    "ce_hit_field": "hit@5"
+  },
+  "inputs": [
+    {
+      "path": "experiments/baseline_ladder/retrieval_375.jsonl",
+      "sha256": "5c5da08963988811f8fa6baa607be539c5f906b8de3399204053bec0f7953566",
+      "denominator": 335
+    },
+    {
+      "path": "experiments/baseline_ladder/ce_scores.jsonl",
+      "sha256": "df1d6265bbd3c85fe8a767fe2589353305c83631854af2838f2c5ca4e602f1f0",
+      "denominator": 335
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "rrf_vs_vector",
+      "base": "vector",
+      "arm": "rrf",
+      "base_hits": 88,
+      "arm_hits": 109,
+      "delta_pt": 6.2687,
+      "ci95_pt": [
+        1.4925,
+        11.0448
+      ],
+      "mcnemar_p": 0.012503,
+      "mcnemar_discordant": 65,
+      "lost": 22,
+      "gained": 43,
+      "significant": true,
+      "ci_crosses_zero": false
+    },
+    {
+      "comparison": "rrf_vs_bm25",
+      "base": "bm25",
+      "arm": "rrf",
+      "base_hits": 102,
+      "arm_hits": 109,
+      "delta_pt": 2.0896,
+      "ci95_pt": [
+        -0.8955,
+        5.0746
+      ],
+      "mcnemar_p": 0.247789,
+      "mcnemar_discordant": 27,
+      "lost": 10,
+      "gained": 17,
+      "significant": false,
+      "ci_crosses_zero": true
+    },
+    {
+      "comparison": "vector_vs_bm25",
+      "base": "bm25",
+      "arm": "vector",
+      "base_hits": 102,
+      "arm_hits": 88,
+      "delta_pt": -4.1791,
+      "ci95_pt": [
+        -9.8507,
+        1.194
+      ],
+      "mcnemar_p": 0.170242,
+      "mcnemar_discordant": 90,
+      "lost": 52,
+      "gained": 38,
+      "significant": false,
+      "ci_crosses_zero": true
+    },
+    {
+      "comparison": "ce_vs_rrf",
+      "base": "rrf",
+      "arm": "ce",
+      "base_hits": 109,
+      "arm_hits": 109,
+      "delta_pt": 0.0,
+      "ci95_pt": [
+        -4.4776,
+        4.4776
+      ],
+      "mcnemar_p": 1.0,
+      "mcnemar_discordant": 54,
+      "lost": 27,
+      "gained": 27,
+      "significant": false,
+      "ci_crosses_zero": true
+    }
+  ]
+}

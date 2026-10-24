@@ -44,6 +44,9 @@ jobs:
           python -m scripts.export_failure_cases
           git diff --exit-code -- data/failure_cases.md
 
+      - name: 检索阶梯配对显著性（复算与 significance.json 对拍）
+        run: python -m pytest tests/test_ladder_significance.py -q
+
   unit:
     name: 单元/集成层（pytest 全量）
     runs-on: ubuntu-latest
